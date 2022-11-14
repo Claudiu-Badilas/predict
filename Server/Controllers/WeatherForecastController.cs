@@ -1,37 +1,29 @@
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Server.DbConfig;
 
 namespace Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly NpgsqlDbConnection _conn;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, NpgsqlDbConnection conn)
         {
             _logger = logger;
+            _conn = conn;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("roles")]
+        public Task<IEnumerable<string>> GetRole()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = 1,
-                Summary = "Summary"
-            })
-            .ToArray();
+            using var conn = _conn.Connect();
+            conn.Open();
+            return conn.QueryAsync<string>("select r.role_name from public.roles r");
         }
     }
 }

@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Server": {
+    "RunApplication": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
