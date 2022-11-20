@@ -1,4 +1,11 @@
-using Server.DbConfig;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Server.Configuration;
+using Server.Repositories.Interfaces;
+using Server.Repositories;
+using Server.Services.Interfaces;
+using Server.Services;
+using System.Text;
 
 namespace Server {
     public class Startup {
@@ -10,13 +17,28 @@ namespace Server {
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
+            services.AddCors();
+
             services.AddSingleton(new NpgsqlDbConnection(_config.GetConnectionString("PostgreSQLConnection")));
+
+            services.AddSingleton<IUserRepository, UserRepository>();
+
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAccountService, AccountService>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options => {
+                   options.TokenValidationParameters = new TokenValidationParameters {
+                       ValidateIssuerSigningKey = true,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
+                       ValidateIssuer = false,
+                       ValidateAudience = false,
+                   };
+               });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
@@ -33,6 +55,7 @@ namespace Server {
                    //.WithOrigins("http://localhost:4200/")
                    );
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
