@@ -15,10 +15,10 @@ namespace Server.Controllers {
         }
 
         [HttpGet("roles")]
-        public Task<IEnumerable<string>> GetRole() {
+        public async Task<IActionResult> GetRole() {
             using var conn = _conn.Connect();
             conn.Open();
-            return conn.QueryAsync<string>("select r.role_name from public.roles r");
+            return Ok(await conn.QueryAsync<string>("select r.role_name from public.roles r"));
         }
     }
 }
