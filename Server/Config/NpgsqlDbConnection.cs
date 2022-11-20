@@ -1,19 +1,15 @@
 ﻿using Npgsql;
 using System.Data;
 
-namespace Server.DbConfig
-{
-    public class NpgsqlDbConnection
-    {
+namespace Server.DbConfig {
+    public class NpgsqlDbConnection {
         private readonly string ConnectionString;
 
-        public NpgsqlDbConnection(string connectionString)
-        {
+        public NpgsqlDbConnection(string connectionString) {
             ConnectionString = connectionString;
         }
 
-        public IDbConnection Connect()
-        {
+        public IDbConnection Connect() {
             return new NpgsqlConnection(ConnectionString);
         }
     }

@@ -1,30 +1,24 @@
 using Server.DbConfig;
 
-namespace Server
-{
-    public class Startup
-    {
+namespace Server {
+    public class Startup {
         private readonly IConfiguration _config;
 
-        public Startup(IConfiguration config)
-        {
+        public Startup(IConfiguration config) {
             _config = config;
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
             services.AddSingleton(new NpgsqlDbConnection(_config.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
 
@@ -41,8 +35,7 @@ namespace Server
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
         }
