@@ -6,6 +6,8 @@ using Server.Repositories;
 using Server.Services.Interfaces;
 using Server.Services;
 using System.Text;
+using Server.Extensions;
+using Server.Middleware;
 
 namespace Server {
     public class Startup {
@@ -28,21 +30,15 @@ namespace Server {
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccountService, AccountService>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-               .AddJwtBearer(options => {
-                   options.TokenValidationParameters = new TokenValidationParameters {
-                       ValidateIssuerSigningKey = true,
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
-                       ValidateIssuer = false,
-                       ValidateAudience = false,
-                   };
-               });
+            services.AddIdentityServices(_config);
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
@@ -56,6 +52,7 @@ namespace Server {
                    );
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
