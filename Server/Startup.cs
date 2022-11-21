@@ -1,4 +1,13 @@
-using Server.DbConfig;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Server.Configuration;
+using Server.Repositories.Interfaces;
+using Server.Repositories;
+using Server.Services.Interfaces;
+using Server.Services;
+using System.Text;
+using Server.Extensions;
+using Server.Middleware;
 
 namespace Server {
     public class Startup {
@@ -10,17 +19,23 @@ namespace Server {
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
+            services.AddCors();
+
             services.AddSingleton(new NpgsqlDbConnection(_config.GetConnectionString("PostgreSQLConnection")));
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAccountService, AccountService>();
+
+            services.AddIdentityServices(_config);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
@@ -32,6 +47,8 @@ namespace Server {
                    .AllowAnyMethod()
                    //.WithOrigins("http://localhost:4200/")
                    );
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
