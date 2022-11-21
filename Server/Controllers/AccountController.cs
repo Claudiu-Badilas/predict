@@ -18,17 +18,17 @@ namespace Server.Controllers {
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> RegisterUser([FromBody] UserRequest registerDto) {
-            if (await _userRepo.IsExistingUser(registerDto.Email)) {
+        public async Task<ActionResult> RegisterUser([FromBody] UserRequest userRequest) {
+            if (await _userRepo.IsExistingUser(userRequest.Email)) {
                 return BadRequest("Email is already used!");
             }
-            await _accService.RegisterUser(registerDto);
+            await _accService.RegisterUser(userRequest);
             return Ok();
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] UserRequest loginDto) {
-            var user = await _accService.LoginUser(loginDto);
+        public async Task<ActionResult> Login([FromBody] UserRequest userRequest) {
+            var user = await _accService.LoginUser(userRequest);
             if (user == null) {
                 return Unauthorized("Invalid Email or Password!");
             }
