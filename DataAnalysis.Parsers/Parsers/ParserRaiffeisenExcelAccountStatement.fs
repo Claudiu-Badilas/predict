@@ -37,7 +37,7 @@ module ParserRaiffeisenExcelAccountStatement =
         | false -> Some (description.Split("|")[1])
 
 
-    let mapTransactions (transaction: RawRevolutParsedTransaction list): RevolutParsedTransaction list =
+    let mapTransactions (transaction: RawParsedTransaction list): ParsedTransaction list =
         transaction
         |> List.indexed
         |> List.map(fun (i, rpt)-> 
@@ -61,7 +61,7 @@ module ParserRaiffeisenExcelAccountStatement =
         | _, _-> None
 
 
-    let getTransactions (excel: WorkBook): RevolutParsedTransaction list =
+    let getTransactions (excel: WorkBook): ParsedTransaction list =
         excel.DefaultWorkSheet.Rows
         |> Seq.toList
         |> List.map (fun row ->
@@ -95,7 +95,7 @@ module ParserRaiffeisenExcelAccountStatement =
         |> List.distinctBy(fun t -> t.Id)
 
 
-    let parseRaiffExcels (excels: WorkBook list): RevolutParsedTransaction list =
+    let parseRaiffExcels (excels: WorkBook list): ParsedTransaction list =
         excels 
         |> List.choose(fun excel -> Some excel)
         |> List.toArray

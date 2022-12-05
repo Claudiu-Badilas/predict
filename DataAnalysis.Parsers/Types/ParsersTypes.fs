@@ -13,16 +13,6 @@ module ParsersTypes =
     type RawParsedTransaction = 
         {
             RegistrationDate: DateTime option
-            TransactionDate: DateTime option
-            DebitAmount: double option
-            CreditAmount: double option
-            Description: string option
-            TransactionType: TransactionType option
-        }
-        
-    type RawRevolutParsedTransaction = 
-        {
-            RegistrationDate: DateTime option
             CompletionDate: DateTime option
             Amount: double option
             Fee: double option
@@ -32,19 +22,8 @@ module ParsersTypes =
             Status: TransactionStatus option
         }
 
-    type ParsedTransaction = 
-        {
-            Id: Guid option
-            RegistrationDate: DateTime option
-            TransactionDate: DateTime option
-            DebitAmount: double option
-            CreditAmount: double option
-            Description: string option
-            TransactionType: TransactionType option
-            CurrencyType: CurrencyType option
-        }
         
-    type RevolutParsedTransaction = 
+    type ParsedTransaction = 
         {
             Id: Guid option
             RegistrationDate: DateTime option
