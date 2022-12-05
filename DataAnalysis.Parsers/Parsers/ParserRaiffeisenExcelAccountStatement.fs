@@ -4,18 +4,12 @@ open IronXL
 open System.Linq
 open System.Text.RegularExpressions
 open System
-open System.Globalization
 open DataAnalysis.Types.ParsersTypes
+open DataAnalysis.Utils
 
-module RaiffeisenExcelAccountStatement =
+module ParserRaiffeisenExcelAccountStatement =
 
     let DATE_REGEX = @"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$";
-
-
-    let convertStringToUTCDate (date: string option): DateTime option =
-        match date with
-        | Some value -> Some (DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToUniversalTime())
-        | _ -> None
 
 
     let checkDescriptionByText (description: string ) (text: string): string list=
@@ -43,34 +37,28 @@ module RaiffeisenExcelAccountStatement =
         | false -> Some (description.Split("|")[1])
 
 
-    let generateUniqueGuid (date: DateTime option) (debit: double option) (credit: double option) (transactionNo: int): Guid option =
-        match date with 
-        | Some value-> 
-            let bytes = BitConverter.GetBytes(value.Ticks)
-            let constant = Double.Parse((transactionNo * 987_654_321).ToString())
-            let bytes2 = 
-                match debit, credit with 
-                | Some debit, Some 0.0 -> BitConverter.GetBytes((debit + constant) * -55_123_456_789.555)
-                | Some 0.0, Some credit -> BitConverter.GetBytes((credit + constant) * 55_123_456_789.555)
-                | _, _ -> [||]
-            Some (new Guid(Array.append bytes bytes2))
-        | None -> None
-
-
     let mapTransactions (transaction: RawParsedTransaction list): ParsedTransaction list =
         transaction
         |> List.indexed
         |> List.map(fun (i, rpt)-> 
             {   
-                Id = generateUniqueGuid rpt.RegistrationDate rpt.DebitAmount rpt.CreditAmount i
+                Id = ParserUtils.generateUniqueGuid rpt.RegistrationDate rpt.Amount i
                 RegistrationDate = rpt.RegistrationDate
-                TransactionDate = rpt.TransactionDate
-                DebitAmount = rpt.DebitAmount
-                CreditAmount = rpt.CreditAmount
+                CompletionDate = rpt.CompletionDate
+                Amount = rpt.Amount
+                Fee = rpt.Fee
                 Description = rpt.Description
                 TransactionType = rpt.TransactionType
+                Currency = rpt.Currency
+                Status = rpt.Status
             }
         )
+
+    let getAmount debit credit =
+        match debit, credit with
+        | Some debit, Some 0.0 -> Some (debit * -1.0)
+        | Some 0.0, Some credit -> Some credit
+        | _, _-> None
 
 
     let getTransactions (excel: WorkBook): ParsedTransaction list =
@@ -87,19 +75,21 @@ module RaiffeisenExcelAccountStatement =
                     let debit = Some (row.Columns.ElementAtOrDefault(2).DoubleValue)
                     let credit = Some (row.Columns.ElementAtOrDefault(3).DoubleValue)
                     let description = row.Columns.LastOrDefault().ToString()
-                    let registrationDate = convertStringToUTCDate (Some date)
+                    let registrationDate = DateTimeUtils.convertStringToUTCDate (Some date) "dd/MM/yyyy"
                     Some {
                         RegistrationDate = registrationDate
-                        TransactionDate = convertStringToUTCDate (Some (row.ElementAtOrDefault(1).ToString()))
-                        DebitAmount = debit
-                        CreditAmount = credit
+                        CompletionDate = DateTimeUtils.convertStringToUTCDate (Some (row.ElementAtOrDefault(1).ToString())) "dd/MM/yyyy"
+                        Amount = getAmount debit credit
+                        Fee = None
+                        Currency = Some CurrencyType.RON
                         Description = getDescription description
                         TransactionType = getTranasctionType debit credit description
+                        Status = Some TransactionStatus.Completed
                     }
         )
         |> List.filter (fun d -> d.IsSome)
         |> List.choose(fun t -> t)
-        |> List.groupBy(fun t -> t.RegistrationDate, t.DebitAmount, t.CreditAmount)
+        |> List.groupBy(fun t -> t.RegistrationDate, t.Amount)
         |> List.map(fun (_, t) -> mapTransactions t )
         |> List.concat
         |> List.distinctBy(fun t -> t.Id)
