@@ -6,15 +6,15 @@ open System
 module ParserConsole =
 
 
+    let getLocalExcels path =
+        Directory.EnumerateFiles(path, "*.xlsx")
+        |> Seq.toArray 
+        |> Array.Parallel.map(fun f -> WorkBook.Load(Path.Combine(path, f)))
+        |> Array.toList
+
+
     [<EntryPoint>]
     let main _ =
-        let folderPath = @"C:\Users\badicl\Desktop\My shortcuts\Extrase-data"
-
-        let excelFiles = 
-            Directory.EnumerateFiles(folderPath, "*.xlsx")
-            |> Seq.toArray 
-            |> Array.Parallel.map(fun f -> WorkBook.Load(Path.Combine(folderPath, f)))
-            |> Array.toList
         
         let transactions = 
             RaiffeisenExcelAccountStatement.parseRaiffExcels excelFiles
