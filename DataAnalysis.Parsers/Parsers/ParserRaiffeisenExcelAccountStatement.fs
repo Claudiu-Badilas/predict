@@ -107,4 +107,5 @@ module ParserRaiffeisenExcelAccountStatement =
             |> List.concat
         )
         |> List.concat
+        |> List.distinctBy(fun t -> t.Id)
 

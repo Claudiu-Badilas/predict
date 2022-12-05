@@ -29,15 +29,15 @@ module ParserConsole =
                 t 
             )
 
-        printfn "%O" raitransactions.Length
-        printfn "%O" revtransactions.Length
+        printfn "raitransactions %O" raitransactions.Length
+        printfn "revtransactions %O" revtransactions.Length
 
         let allTransactions = raitransactions @ revtransactions
 
-        let filtered = 
+        let filtereddublicate = 
             allTransactions
             |> List.distinctBy(fun t -> t.Id)
 
-        printfn "%O" allTransactions.Length
-        printfn "%O" filtered.Length
+        printfn "allTransactions %O" allTransactions.Length
+        printfn "filtereddublicate %O" filtereddublicate.Length
         0
