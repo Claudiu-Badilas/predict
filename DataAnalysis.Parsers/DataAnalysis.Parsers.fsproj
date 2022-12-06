@@ -11,6 +11,7 @@
 		<Compile Include="Utils\ParserUtils.fs" />
 		<Compile Include="Parsers\ParserRaiffeisenExcelAccountStatement.fs" />
 		<Compile Include="Parsers\ParserRevolutExcelAccountStatement.fs" />
+		<Compile Include="Parsers\ParserOrangeMoneyExcelAccountStatement.fs" />
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 

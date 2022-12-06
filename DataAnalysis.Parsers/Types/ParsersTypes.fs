@@ -9,6 +9,8 @@ module ParsersTypes =
     type TransactionType = Spend | Received | InternalTransfer | TopUp | Transfer | FEE | CardPayment | ATM | Exchange | Reward | Refund
 
     type TransactionStatus = Completed | Pending 
+
+    type Provider = Raiffeisen | Revolut | OrangeMoney 
     
     type RawParsedTransaction = 
         {
@@ -34,4 +36,5 @@ module ParsersTypes =
             Description: string option
             TransactionType: TransactionType option
             Status: TransactionStatus option
+            Provider: Provider option
         }

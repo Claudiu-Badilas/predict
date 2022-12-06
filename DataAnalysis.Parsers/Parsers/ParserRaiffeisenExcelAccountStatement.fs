@@ -42,7 +42,7 @@ module ParserRaiffeisenExcelAccountStatement =
         |> List.indexed
         |> List.map(fun (i, rpt)-> 
             {   
-                Id = ParserUtils.generateUniqueGuid rpt.RegistrationDate rpt.Amount i
+                Id = ParserUtils.generateUniqueGuid rpt.RegistrationDate rpt.CompletionDate rpt.Amount i Provider.Raiffeisen
                 RegistrationDate = rpt.RegistrationDate
                 CompletionDate = rpt.CompletionDate
                 Amount = rpt.Amount
@@ -51,6 +51,7 @@ module ParserRaiffeisenExcelAccountStatement =
                 TransactionType = rpt.TransactionType
                 Currency = rpt.Currency
                 Status = rpt.Status
+                Provider = Some Provider.Raiffeisen
             }
         )
 
@@ -95,7 +96,7 @@ module ParserRaiffeisenExcelAccountStatement =
         |> List.distinctBy(fun t -> t.Id)
 
 
-    let parseRaiffExcels (excels: WorkBook list): ParsedTransaction list =
+    let parseExcels (excels: WorkBook list): ParsedTransaction list =
         excels 
         |> List.choose(fun excel -> Some excel)
         |> List.toArray
@@ -107,4 +108,5 @@ module ParserRaiffeisenExcelAccountStatement =
             |> List.concat
         )
         |> List.concat
+        |> List.distinctBy(fun t -> t.Id)
 

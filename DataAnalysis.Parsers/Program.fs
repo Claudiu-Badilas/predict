@@ -7,37 +7,44 @@ module ParserConsole =
 
     let getLocalExcels path =
         Directory.EnumerateFiles(path, "*.xlsx")
-        |> Seq.toArray 
-        |> Array.Parallel.map(fun f -> WorkBook.Load(Path.Combine(path, f)))
-        |> Array.toList
+        |> Seq.toList 
+        |> List.map(fun f -> WorkBook.Load(Path.Combine(path, f)))
 
 
     [<EntryPoint>]
     let main _ =
     
         let raitransactions = 
-            ParserRaiffeisenExcelAccountStatement.parseRaiffExcels (getLocalExcels @"")
+            ParserRaiffeisenExcelAccountStatement.parseExcels (getLocalExcels @"")
             |> List.map(fun t -> 
-                printfn "%O" t.Id.Value
+                printfn "%O" t
                 t 
             )
 
         let revtransactions = 
-            ParserRevolutExcelAccountStatement.parseRevolutExcels (getLocalExcels @"")
+            ParserRevolutExcelAccountStatement.parseExcels (getLocalExcels @"")
             |> List.map(fun t -> 
-                printfn "%O" t.Id.Value
+                printfn "%O" t
+                t 
+            )
+            
+        let omtransactions = 
+            ParserOrangeMoneyExcelAccountStatement.parseExcels (getLocalExcels @"")
+            |> List.map(fun t -> 
+                printfn "%O" t
                 t 
             )
 
-        printfn "%O" raitransactions.Length
-        printfn "%O" revtransactions.Length
+        printfn "omtransactions %O" omtransactions.Length
+        printfn "raitransactions %O" raitransactions.Length
+        printfn "revtransactions %O" revtransactions.Length
 
-        let allTransactions = raitransactions @ revtransactions
+        let allTransactions = raitransactions @ revtransactions @ omtransactions
 
-        let filtered = 
+        let filtereddublicate = 
             allTransactions
             |> List.distinctBy(fun t -> t.Id)
 
-        printfn "%O" allTransactions.Length
-        printfn "%O" filtered.Length
+        printfn "allTransactions %O" allTransactions.Length
+        printfn "filtereddublicate %O" filtereddublicate.Length
         0
