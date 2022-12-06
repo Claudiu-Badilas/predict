@@ -10,12 +10,6 @@ module ParserRevolutExcelAccountStatement =
 
     let DATE_REGEX = @"\d{2}/\d{2}/\d{4}\d{2}:\d{2}:\d{2}([A-Z]{2})";
 
-
-    let checkDescriptionByText (description: string ) (text: string): string list =
-        description.Split("|")
-        |> Array.toList
-        |> List.filter(fun d -> d.Contains(text))
-
     
     let getTranasctionType (transactionType: string ): TransactionType option = 
         match transactionType with
@@ -41,7 +35,7 @@ module ParserRevolutExcelAccountStatement =
         |> List.indexed
         |> List.map(fun (i, rpt)-> 
             {   
-                Id = ParserUtils.generateUniqueGuid rpt.RegistrationDate rpt.Amount i
+                Id = ParserUtils.generateUniqueGuid rpt.RegistrationDate rpt.CompletionDate rpt.Amount i Provider.Revolut
                 RegistrationDate = rpt.RegistrationDate
                 CompletionDate = rpt.CompletionDate
                 Amount = rpt.Amount
@@ -50,6 +44,7 @@ module ParserRevolutExcelAccountStatement =
                 Currency = rpt.Currency
                 Fee =  rpt.Fee
                 Status = rpt.Status
+                Provider = Some Provider.Revolut
             }
         )
 
@@ -81,7 +76,7 @@ module ParserRevolutExcelAccountStatement =
         |> List.distinctBy(fun t -> t.Id)
 
 
-    let parseRevolutExcels (excels: WorkBook list): ParsedTransaction list =
+    let parseExcels (excels: WorkBook list): ParsedTransaction list =
         excels 
         |> List.choose(fun excel -> Some excel)
         |> List.toArray
