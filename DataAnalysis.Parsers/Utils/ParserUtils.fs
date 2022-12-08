@@ -7,17 +7,17 @@ module ParserUtils =
 
     let getCurrency value =
         match value with
-        | "RON" -> Some CurrencyType.RON
-        | "EUR" -> Some CurrencyType.EUR
-        | "USD" -> Some CurrencyType.USD
+        | "RON" -> CurrencyType.RON |> Some
+        | "EUR" -> CurrencyType.EUR |> Some
+        | "USD" -> CurrencyType.USD |> Some
         | _ -> None
         
+
     let getProviderCalculationConstant provider =
         match provider with
         | Provider.Raiffeisen -> 9234236632.4
         | Provider.Revolut -> 23247364.3
         | Provider.OrangeMoney -> 65983543.23
-        | _ -> 1312312.123
 
 
     let generateUniqueGuid (registrationDate: DateTime option) (completitonDate: DateTime option) (amount: double option) (index: int) provider: Guid option =
@@ -30,8 +30,8 @@ module ParserUtils =
         
         match registrationDate, completitonDate with 
         | Some registrationDate, Some completitonDate -> 
-            let bytes = BitConverter.GetBytes(registrationDate.Ticks * completitonDate.Ticks * int64 validAmount )
+            let bytes = BitConverter.GetBytes(registrationDate.Ticks * completitonDate.Ticks * int64 validAmount)
             let bytes2 = BitConverter.GetBytes(validAmount * providerConstant * constant * 55_123_456_789.52325)
-            Some (new Guid(Array.append bytes bytes2))
+            new Guid(Array.append bytes bytes2) |> Some
         | _, _ -> None
 

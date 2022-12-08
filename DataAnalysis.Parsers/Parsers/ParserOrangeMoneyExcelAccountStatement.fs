@@ -14,8 +14,8 @@ module ParserOrangeMoneyExcelAccountStatement =
     
     let getTranasctionType amount = 
         match amount > 0.0 with
-        |  true -> Some TransactionType.TopUp
-        |  false -> Some TransactionType.CardPayment
+        |  true -> TransactionType.TopUp |> Some
+        |  false -> TransactionType.CardPayment |> Some
             
     
     let getDescription (rows: RangeRow list) (index: int) = 
@@ -54,7 +54,7 @@ module ParserOrangeMoneyExcelAccountStatement =
                 Currency = rpt.Currency
                 Fee =  rpt.Fee
                 Status = rpt.Status
-                Provider = Some Provider.OrangeMoney
+                Provider = Provider.OrangeMoney |> Some
             }
         )
 
@@ -75,14 +75,14 @@ module ParserOrangeMoneyExcelAccountStatement =
                  | _ -> 
                      let amount = row.Columns.ElementAtOrDefault(4).DoubleValue
                      Some {
-                         RegistrationDate = DateTimeUtils.convertStringToUTCDate (Some date) "M/d/yyyy h:mm:ss tt"
-                         CompletionDate = DateTimeUtils.convertStringToUTCDate (Some (row.ElementAtOrDefault(1).ToString())) "M/d/yyyy h:mm:ss tt"
-                         Amount = Some amount
+                         RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "M/d/yyyy h:mm:ss tt"
+                         CompletionDate = DateTimeUtils.convertStringToUTCDate (row.ElementAtOrDefault(1).ToString() |> Some) "M/d/yyyy h:mm:ss tt"
+                         Amount = amount |> Some
                          Fee = None
-                         Currency = Some CurrencyType.RON
-                         Description = Some (getDescription rows i) 
+                         Currency = CurrencyType.RON |> Some
+                         Description = getDescription rows i |> Some
                          TransactionType = getTranasctionType amount
-                         Status = Some TransactionStatus.Completed
+                         Status = TransactionStatus.Completed |> Some
                      }
         )
         |> List.filter (fun d -> d.IsSome)
@@ -95,7 +95,6 @@ module ParserOrangeMoneyExcelAccountStatement =
 
     let parseExcels (excels: WorkBook list): ParsedTransaction list =
         excels 
-        |> List.choose(fun excel -> Some excel)
         |> List.toArray
         |> Array.chunkBySize 100
         |> Array.Parallel.map (fun chunk ->

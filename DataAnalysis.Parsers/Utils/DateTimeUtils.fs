@@ -8,6 +8,6 @@ module DateTimeUtils =
 
     let convertStringToUTCDate (date: string option) (pattern: string): DateTime option =
         match date with
-        | Some value -> Some (DateTime.ParseExact(value, pattern, CultureInfo.InvariantCulture).ToUniversalTime())
+        | Some value -> DateTime.ParseExact(value, pattern, CultureInfo.InvariantCulture).ToUniversalTime() |> Some
         | _ -> None
 

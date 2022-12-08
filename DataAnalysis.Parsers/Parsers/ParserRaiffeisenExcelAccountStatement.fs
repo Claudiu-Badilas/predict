@@ -33,8 +33,8 @@ module ParserRaiffeisenExcelAccountStatement =
         let splitedDescription = checkDescriptionByText description "Transfer intre conturi proprii"
 
         match splitedDescription.IsEmpty with
-        | true -> Some (description.Split("|")[0])
-        | false -> Some (description.Split("|")[1])
+        | true -> description.Split("|")[0] |> Some
+        | false -> description.Split("|")[1] |> Some
 
 
     let mapTransactions (transaction: RawParsedTransaction list): ParsedTransaction list =
@@ -51,14 +51,14 @@ module ParserRaiffeisenExcelAccountStatement =
                 TransactionType = rpt.TransactionType
                 Currency = rpt.Currency
                 Status = rpt.Status
-                Provider = Some Provider.Raiffeisen
+                Provider = Provider.Raiffeisen |> Some
             }
         )
 
     let getAmount debit credit =
         match debit, credit with
-        | Some debit, Some 0.0 -> Some (debit * -1.0)
-        | Some 0.0, Some credit -> Some credit
+        | Some debit, Some 0.0 -> debit * -1.0 |> Some
+        | Some 0.0, Some credit -> credit |> Some
         | _, _-> None
 
 
@@ -73,19 +73,19 @@ module ParserRaiffeisenExcelAccountStatement =
                 match Regex.IsMatch(date, DATE_REGEX) with
                 | false -> None
                 | _ -> 
-                    let debit = Some (row.Columns.ElementAtOrDefault(2).DoubleValue)
-                    let credit = Some (row.Columns.ElementAtOrDefault(3).DoubleValue)
+                    let debit = row.Columns.ElementAtOrDefault(2).DoubleValue |> Some
+                    let credit = row.Columns.ElementAtOrDefault(3).DoubleValue |> Some
                     let description = row.Columns.LastOrDefault().ToString()
-                    let registrationDate = DateTimeUtils.convertStringToUTCDate (Some date) "dd/MM/yyyy"
+                    let registrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "dd/MM/yyyy"
                     Some {
                         RegistrationDate = registrationDate
-                        CompletionDate = DateTimeUtils.convertStringToUTCDate (Some (row.ElementAtOrDefault(1).ToString())) "dd/MM/yyyy"
+                        CompletionDate = DateTimeUtils.convertStringToUTCDate (row.ElementAtOrDefault(1).ToString() |> Some) "dd/MM/yyyy"
                         Amount = getAmount debit credit
                         Fee = None
-                        Currency = Some CurrencyType.RON
+                        Currency = CurrencyType.RON |> Some
                         Description = getDescription description
                         TransactionType = getTranasctionType debit credit description
-                        Status = Some TransactionStatus.Completed
+                        Status = TransactionStatus.Completed |> Some
                     }
         )
         |> List.filter (fun d -> d.IsSome)
@@ -98,7 +98,6 @@ module ParserRaiffeisenExcelAccountStatement =
 
     let parseExcels (excels: WorkBook list): ParsedTransaction list =
         excels 
-        |> List.choose(fun excel -> Some excel)
         |> List.toArray
         |> Array.chunkBySize 100
         |> Array.Parallel.map (fun chunk ->

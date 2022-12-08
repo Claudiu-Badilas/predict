@@ -13,20 +13,20 @@ module ParserRevolutExcelAccountStatement =
     
     let getTranasctionType (transactionType: string ): TransactionType option = 
         match transactionType with
-        |  "TOPUP" -> Some TransactionType.TopUp
-        |  "FEE" -> Some TransactionType.FEE
-        |  "ATM" -> Some TransactionType.ATM
-        |  "CARD_PAYMENT" -> Some TransactionType.CardPayment
-        |  "TRANSFER" -> Some TransactionType.Transfer
-        |  "REWARD" -> Some TransactionType.Reward
-        |  "EXCHANGE" -> Some TransactionType.Exchange
-        |  "CARD_REFUND" -> Some TransactionType.Refund
+        |  "TOPUP" -> TransactionType.TopUp |> Some
+        |  "FEE" -> TransactionType.FEE |> Some
+        |  "ATM" -> TransactionType.ATM |> Some
+        |  "CARD_PAYMENT" -> TransactionType.CardPayment |> Some
+        |  "TRANSFER" -> TransactionType.Transfer |> Some
+        |  "REWARD" -> TransactionType.Reward |> Some
+        |  "EXCHANGE" -> TransactionType.Exchange |> Some
+        |  "CARD_REFUND" -> TransactionType.Refund |> Some
         | _ -> None
 
 
     let getTranasctionStatus (transactionType: string ): TransactionStatus option = 
         match transactionType with
-        |  "COMPLETED" -> Some TransactionStatus.Completed
+        |  "COMPLETED" -> TransactionStatus.Completed |> Some
         | _ -> None
             
 
@@ -44,7 +44,7 @@ module ParserRevolutExcelAccountStatement =
                 Currency = rpt.Currency
                 Fee =  rpt.Fee
                 Status = rpt.Status
-                Provider = Some Provider.Revolut
+                Provider = Provider.Revolut |> Some
             }
         )
 
@@ -58,12 +58,12 @@ module ParserRevolutExcelAccountStatement =
             | null -> None
             | _ -> 
                 Some {
-                    RegistrationDate = DateTimeUtils.convertStringToUTCDate (Some date) "M/d/yyyy h:mm:ss tt"
-                    CompletionDate = DateTimeUtils.convertStringToUTCDate (Some (row.ElementAtOrDefault(3).ToString())) "M/d/yyyy h:mm:ss tt"
-                    Amount = Some (row.Columns.ElementAtOrDefault(5).DoubleValue)
-                    Fee = Some (row.Columns.ElementAtOrDefault(6).DoubleValue)
+                    RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "M/d/yyyy h:mm:ss tt"
+                    CompletionDate = DateTimeUtils.convertStringToUTCDate (row.ElementAtOrDefault(3).ToString() |> Some) "M/d/yyyy h:mm:ss tt"
+                    Amount = row.Columns.ElementAtOrDefault(5).DoubleValue |> Some
+                    Fee = row.Columns.ElementAtOrDefault(6).DoubleValue |> Some
                     Currency = ParserUtils.getCurrency (row.Columns.ElementAtOrDefault(7).ToString())
-                    Description = Some (row.Columns.ElementAtOrDefault(4).ToString())
+                    Description = row.Columns.ElementAtOrDefault(4).ToString() |> Some
                     TransactionType = getTranasctionType (row.Columns.ElementAtOrDefault(0).ToString())
                     Status = getTranasctionStatus (row.Columns.ElementAtOrDefault(8).ToString())
                 }
@@ -78,7 +78,6 @@ module ParserRevolutExcelAccountStatement =
 
     let parseExcels (excels: WorkBook list): ParsedTransaction list =
         excels 
-        |> List.choose(fun excel -> Some excel)
         |> List.toArray
         |> Array.chunkBySize 100
         |> Array.Parallel.map (fun chunk ->
