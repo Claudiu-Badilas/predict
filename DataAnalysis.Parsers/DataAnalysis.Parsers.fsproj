@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 		<Compile Include="Types\ParsersTypes.fs" />
+		<Compile Include="Utils\ExcelUtils.fs" />
 		<Compile Include="Utils\DateTimeUtils.fs" />
 		<Compile Include="Utils\ParserUtils.fs" />
 		<Compile Include="Parsers\ParserRaiffeisenExcelAccountStatement.fs" />

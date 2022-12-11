@@ -18,18 +18,18 @@ module ParserOrangeMoneyExcelAccountStatement =
         |  false -> TransactionType.CARD_PAYMENT |> Some
             
     
-    let getDescription (rows: RangeRow list) (index: int) = 
-        [1;2]
+    let getDescription (rows: string [][]) (index: int) = 
+        [1; 2]
         |> List.map(fun v ->
             let nextRowIndex = index + v
             match nextRowIndex < rows.Length with
             | true ->
-                match rows[nextRowIndex].Columns.ElementAtOrDefault(0).ToString() with
-                | "" -> rows[nextRowIndex].Columns.ElementAtOrDefault(3).ToString()
+                match rows[nextRowIndex][0] with
+                | "" -> rows[nextRowIndex][3]
                 | _ -> ""
             | _ -> ""
         )
-        |> List.append [rows[index].Columns.ElementAtOrDefault(3).ToString()]
+        |> List.append [rows[index][3]]
         |> List.fold (+) ""
         
 
@@ -54,28 +54,28 @@ module ParserOrangeMoneyExcelAccountStatement =
 
 
     let getTransactions (excel: WorkBook) userId: ParsedTransaction list =
-        let rows = 
-            excel.DefaultWorkSheet.Rows
-            |> Seq.toList
+        let rows = ExcelUtils.getExcelValues excel
+
         rows
+        |> Seq.toList
         |> List.indexed
         |> List.map (fun (i, row) ->
-            let date = row.ElementAtOrDefault(0).ToString()
+            let date = row[0]
             match date with
             | null -> None
             | _ -> 
                  match Regex.IsMatch(date, DATE_REGEX) with
                  | false -> None
                  | _ -> 
-                     let amount = row.Columns.ElementAtOrDefault(4).DoubleValue
+                     let amount = row[4] |> Some |> ParserUtils.tryGetFloat
                      Some {
                          RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "M/d/yyyy h:mm:ss tt"
-                         CompletionDate = DateTimeUtils.convertStringToUTCDate (row.ElementAtOrDefault(1).ToString() |> Some) "M/d/yyyy h:mm:ss tt"
-                         Amount = amount |> Some
+                         CompletionDate = DateTimeUtils.convertStringToUTCDate (row[1] |> Some) "M/d/yyyy h:mm:ss tt"
+                         Amount = amount
                          Fee = None
                          Currency = CurrencyType.RON |> Some
                          Description = getDescription rows i |> Some
-                         TransactionType = getTranasctionType amount
+                         TransactionType = getTranasctionType amount.Value
                          Status = TransactionStatus.COMPLETED |> Some
                      }
         )

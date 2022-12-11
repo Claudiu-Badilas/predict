@@ -2,9 +2,30 @@
 
 open DataAnalysis.Types.ParsersTypes
 open System
+open System.Globalization
 
 module ParserUtils =
 
+    let tryGetInt (value: string option) =
+        match value with
+        | Some value -> 
+            let isValid, intValue = Int32.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture)
+            match isValid with
+            | true -> intValue |> Some
+            | _ -> None
+        | _ -> None
+
+
+    let tryGetFloat (value: string option) =
+        match value with
+        | Some value -> 
+            let isValid, doubleValue = Double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture)
+            match isValid with
+            | true -> doubleValue |> Some
+            | _ -> None
+        | _ -> None
+
+    
     let getCurrency value =
         match value with
         | "RON" -> CurrencyType.RON |> Some
@@ -23,9 +44,9 @@ module ParserUtils =
     let generateUniqueGuid userId (registrationDate: DateTime option) (completitonDate: DateTime option) (amount: double option) (index: int) provider: Guid option =
         let providerConstant = getProviderCalculationConstant provider
         let validAmount =
-            match amount with
-            | Some 0.0 -> 694587965.34 * (double userId)
-            | _ -> amount.Value * (double userId)
+            match amount.IsSome with
+            | true -> amount.Value * (double userId)
+            | _ -> 694587965.34 * (double userId)
         let constant = Double.Parse(((double index + 1.21487) * 987_654_321.13821).ToString())
         
         match registrationDate, completitonDate with 

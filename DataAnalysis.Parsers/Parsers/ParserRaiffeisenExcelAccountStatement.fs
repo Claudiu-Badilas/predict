@@ -22,10 +22,9 @@ module ParserRaiffeisenExcelAccountStatement =
         let splitedDescription = checkDescriptionByText description "Transfer intre conturi proprii"
 
         match debit, credit, splitedDescription.IsEmpty with
-        | _ , Some 0.0, true -> Some TransactionType.SPEND
-        | Some 0.0, _, true -> Some TransactionType.RECEIVED
+        | Some d , None, true -> Some TransactionType.SPEND
+        | None, Some c, true -> Some TransactionType.RECEIVED
         | _ , _, false -> Some TransactionType.INTERNAL_TRANSFER
-        | None, None, _ -> None
         | _, _, _ -> None
             
 
@@ -58,29 +57,30 @@ module ParserRaiffeisenExcelAccountStatement =
 
     let getAmount debit credit =
         match debit, credit with
-        | Some debit, Some 0.0 -> debit * -1.0 |> Some
-        | Some 0.0, Some credit -> credit |> Some
+        | Some debit, None -> debit * -1.0 |> Some
+        | None, Some credit -> credit |> Some
         | _, _-> None
 
 
     let getTransactions (excel: WorkBook) userId: ParsedTransaction list =
-        excel.DefaultWorkSheet.Rows
+        ExcelUtils.getExcelValues excel
         |> Seq.toList
-        |> List.map (fun row ->
-            let date = row.ElementAtOrDefault(0).ToString()
+        |> List.indexed
+        |> List.map (fun (i, row) ->
+            let date = row[0]
             match date with
             | null -> None
             | _ -> 
                 match Regex.IsMatch(date, DATE_REGEX) with
                 | false -> None
                 | _ -> 
-                    let debit = row.Columns.ElementAtOrDefault(2).DoubleValue |> Some
-                    let credit = row.Columns.ElementAtOrDefault(3).DoubleValue |> Some
-                    let description = row.Columns.LastOrDefault().ToString()
+                    let debit = row[2] |> Some |> ParserUtils.tryGetFloat
+                    let credit = row[3] |> Some |> ParserUtils.tryGetFloat
+                    let description = row[11]
                     let registrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "dd/MM/yyyy"
                     Some {
                         RegistrationDate = registrationDate
-                        CompletionDate = DateTimeUtils.convertStringToUTCDate (row.ElementAtOrDefault(1).ToString() |> Some) "dd/MM/yyyy"
+                        CompletionDate = DateTimeUtils.convertStringToUTCDate (row[1] |> Some) "dd/MM/yyyy"
                         Amount = getAmount debit credit
                         Fee = None
                         Currency = CurrencyType.RON |> Some

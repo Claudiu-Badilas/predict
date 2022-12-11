@@ -51,22 +51,22 @@ module ParserRevolutExcelAccountStatement =
 
 
     let getTransactions (excel: WorkBook) userId: ParsedTransaction list =
-        excel.DefaultWorkSheet.Rows
+        ExcelUtils.getExcelValues excel
         |> Seq.toList
         |> List.map (fun row ->
-            let date = row.ElementAtOrDefault(2).ToString()
+            let date = row[2]
             match date with
             | null -> None
             | _ -> 
                 Some {
                     RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "M/d/yyyy h:mm:ss tt"
-                    CompletionDate = DateTimeUtils.convertStringToUTCDate (row.ElementAtOrDefault(3).ToString() |> Some) "M/d/yyyy h:mm:ss tt"
-                    Amount = row.Columns.ElementAtOrDefault(5).DoubleValue |> Some
-                    Fee = row.Columns.ElementAtOrDefault(6).DoubleValue |> Some
-                    Currency = ParserUtils.getCurrency (row.Columns.ElementAtOrDefault(7).ToString())
-                    Description = row.Columns.ElementAtOrDefault(4).ToString() |> Some
-                    TransactionType = getTranasctionType (row.Columns.ElementAtOrDefault(0).ToString())
-                    Status = getTranasctionStatus (row.Columns.ElementAtOrDefault(8).ToString())
+                    CompletionDate = DateTimeUtils.convertStringToUTCDate (row[3] |> Some) "M/d/yyyy h:mm:ss tt"
+                    Amount = row[5] |> Some |> ParserUtils.tryGetFloat
+                    Fee = row[6] |> Some |> ParserUtils.tryGetFloat
+                    Currency = ParserUtils.getCurrency (row[7])
+                    Description = row[4] |> Some
+                    TransactionType = getTranasctionType (row[0])
+                    Status = getTranasctionStatus (row[8])
                 }
         )
         |> List.filter (fun d -> d.IsSome)
