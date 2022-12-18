@@ -2,11 +2,6 @@
 using static DataAnalysis.Common.Configuration.ConfigurationUtils;
 using DataAnalysis.Repository.Repositories.Interfaces;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataAnalysis.Repository.Models;
 
 namespace DataAnalysis.Repository.Repositories {
@@ -36,7 +31,20 @@ namespace DataAnalysis.Repository.Repositories {
                         @ReferenceId, @ProviderId, @CurrencyId, @StatusId, @TransactionTypeId,
                         @UserId );";
 
-                return await connection.ExecuteAsync(sql, transactions);
+                return await connection.ExecuteAsync(sql, transactions.Select(t => new {
+                    Id = t.Id,
+                    RegistrationDate = t.RegistrationDate.ToString(),
+                    CompletionDate = t.CompletionDate.ToString(),
+                    Amount = t.Amount,
+                    Fee = t.Fee,
+                    Description = t.Description,
+                    ReferenceId = t.ReferenceId,
+                    ProviderId = t.ProviderId,
+                    CurrencyId = t.CurrencyId,
+                    StatusId = t.StatusId,
+                    TransactionTypeId = t.TransactionTypeId,
+                    UserId = t.UserId
+                }));
             };
         }
     }

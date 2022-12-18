@@ -36,20 +36,29 @@ module ParserUtils =
 
     let getProvider provider =
         match provider with
-        | Some Provider.RAIFFEISEN -> "RAIFFEISEN"
-        | Some Provider.REVOLUT -> "REVOLUT"
-        | Some Provider.ORANGE_MONEY -> "ORANGE_MONEY"
-        | _ -> ""
+        | Some Provider.RAIFFEISEN -> "RAIFFEISEN" |> Some
+        | Some Provider.REVOLUT -> "REVOLUT" |> Some
+        | Some Provider.ORANGE_MONEY -> "ORANGE_MONEY" |> Some
+        | _ -> "" |> Some
+
+
+    let format value = "[" + value + "]@"
+
+
+    let formatOption value =
+        match value with
+        | Some value -> string value |> format
+        | _ -> "" |> format
 
 
     let generateUniqueId (userId: int) (registrationDate: DateTime option) (completitonDate: DateTime option) (amount: double option) (index: int) (provider: Provider option) (referenceId: int option) =
-        let userIdentifier = "[" + string userId + "]-"
-        let registrationIdentifier = if registrationDate.IsSome then "[" + registrationDate.Value.ToString("dd/MM/yyyy") + "]-" else ""
-        let completitonIdentifier = if completitonDate.IsSome then "[" + completitonDate.Value.ToString("dd/MM/yyyy") + "]-" else ""
-        let amountIdentifier = if amount.IsSome then "[" + string amount.Value + "]-" else ""
-        let indexIdentifier = "[" + string (index + 1) + "]-"
-        let referenceIdentifier = if referenceId.IsSome then "[" + string referenceId.Value + "]-" else ""
-        let providerIdentifier = if provider.IsSome then "[" + getProvider provider  + "]"  else ""
+        let userIdentifier = string userId |> format
+        let registrationIdentifier = registrationDate |> formatOption
+        let completitonIdentifier = completitonDate |> formatOption
+        let amountIdentifier = amount |> formatOption
+        let indexIdentifier = string (index + 1) |> format
+        let referenceIdentifier = referenceId |> formatOption
+        let providerIdentifier = getProvider provider |> formatOption
 
         userIdentifier + registrationIdentifier + completitonIdentifier + amountIdentifier + 
         indexIdentifier + referenceIdentifier + providerIdentifier 

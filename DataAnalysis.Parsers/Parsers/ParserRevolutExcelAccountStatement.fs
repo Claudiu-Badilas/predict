@@ -41,8 +41,8 @@ module ParserRevolutExcelAccountStatement =
             | _ -> 
                 Some {
                     Id = None
-                    RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "M.d.yyyy h:mm:ss tt"
-                    CompletionDate = DateTimeUtils.convertStringToUTCDate (row[3] |> Some) "M.d.yyyy h:mm:ss tt"
+                    RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "dd.MM.yyyy HH:mm:ss"
+                    CompletionDate = DateTimeUtils.convertStringToUTCDate (row[3] |> Some) "dd.MM.yyyy HH:mm:ss"
                     Amount = row[5] |> Some |> ParserUtils.tryGetDouble
                     Fee = row[6] |> Some |> ParserUtils.tryGetDouble
                     Currency = ParserUtils.getCurrency (row[7])

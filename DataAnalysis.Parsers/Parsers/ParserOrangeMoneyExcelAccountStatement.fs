@@ -49,8 +49,8 @@ module ParserOrangeMoneyExcelAccountStatement =
                      let amount = row[4] |> Some |> ParserUtils.tryGetDouble
                      Some {
                          Id = None
-                         RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "M.d.yyyy h:mm:ss tt"
-                         CompletionDate = DateTimeUtils.convertStringToUTCDate (row[1] |> Some) "M.d.yyyy h:mm:ss tt"
+                         RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "d.M.yyyy h:mm:ss"
+                         CompletionDate = DateTimeUtils.convertStringToUTCDate (row[1] |> Some) "d.M.yyyy h:mm:ss"
                          Amount = amount
                          Fee = None
                          Currency = CurrencyType.RON |> Some
