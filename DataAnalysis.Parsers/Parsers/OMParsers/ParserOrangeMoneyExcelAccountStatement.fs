@@ -1,4 +1,4 @@
-﻿namespace DataAnalysis.Parsers
+﻿namespace DataAnalysis.Parsers.OMParsers
 
 open IronXL
 open System

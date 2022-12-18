@@ -10,8 +10,8 @@ module ExcelUtils =
             |> Array.map(fun row ->
                 row.Columns
                 |> Seq.toArray
-                |> Array.map(fun cel -> 
-                    cel.ToString()
+                |> Array.map(fun cell -> 
+                    string cell
                 ) 
             )
         

@@ -6,7 +6,7 @@ module ParsersTypes =
 
     type CurrencyType = EUR | USD | RON
 
-    type TransactionType = SPEND | RECEIVED | INTERNAL_TRANSFER | TOP_UP | TRANSFER | FEE | CARD_PAYMENT | ATM | EXCHANGE | REWARD | REFUND 
+    type TransactionType = SPEND | RECEIVED | INTERNAL_TRANSFER | TOP_UP | TRANSFER | FEE | CARD_PAYMENT | ATM | EXCHANGE | REWARD | REFUND | BILL_PAYMENT
     
     type TransactionStatus = COMPLETED | PENDING
     
