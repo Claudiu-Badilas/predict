@@ -12,10 +12,10 @@
 		<Compile Include="Utils\ParserUtils.fs" />
 		<Compile Include="DatabaseAccess\Utils\StorerUtils.fs" />
 		<Compile Include="DatabaseAccess\StoreTransactions.fs" />
-		<Compile Include="Parsers\OMParsers\ParserOrangeMoneyPdfAccountStatement.fs" />
-		<Compile Include="Parsers\OMParsers\ParserOrangeMoneyExcelAccountStatement.fs" />
-		<Compile Include="Parsers\ParserRaiffeisenExcelAccountStatement.fs" />
-		<Compile Include="Parsers\ParserRevolutExcelAccountStatement.fs" />
+		<Compile Include="Parsers\AccountStatementParser\OMParsers\ParserOrangeMoneyPdfAccountStatement.fs" />
+		<Compile Include="Parsers\AccountStatementParser\OMParsers\ParserOrangeMoneyExcelAccountStatement.fs" />
+		<Compile Include="Parsers\AccountStatementParser\ParserRevolutExcelAccountStatement.fs" />
+		<Compile Include="Parsers\AccountStatementParser\ParserRaiffeisenExcelAccountStatement.fs" />
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 

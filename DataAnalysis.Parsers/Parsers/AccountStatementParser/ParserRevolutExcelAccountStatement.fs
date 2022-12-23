@@ -1,4 +1,4 @@
-﻿namespace DataAnalysis.Parsers
+﻿namespace DataAnalysis.Parsers.AccountStatementParser
 
 open IronXL
 open System.Linq

@@ -1,4 +1,4 @@
-﻿namespace DataAnalysis.Parsers.OMParsers
+﻿namespace DataAnalysis.Parsers.OMParsers.AccountStatementParser
 
 open System
 open DataAnalysis.Types.ParsersTypes
