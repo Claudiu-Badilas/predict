@@ -22,9 +22,7 @@ module TransactionTypes =
         | UNDEFINED
     
     type TransactionStatus = COMPLETED | PENDING
-    
-    type TransactionProvider = RAIFFEISEN | REVOLUT | ORANGE_MONEY
-        
+            
     type ParsedTransaction = 
         {
             Identifier: string option
@@ -36,6 +34,6 @@ module TransactionTypes =
             Description: string option
             TransactionType: TransactionType option
             Status: TransactionStatus option
-            Provider: TransactionProvider option
+            Provider: Provider option
             ReferenceId: int option
         }

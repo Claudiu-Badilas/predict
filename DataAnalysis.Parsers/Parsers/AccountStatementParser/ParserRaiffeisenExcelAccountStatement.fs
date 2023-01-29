@@ -70,7 +70,7 @@ module ParserRaiffeisenExcelAccountStatement =
                         TransactionType = getTranasctionType debit credit description
                         Status = TransactionStatus.COMPLETED |> Some
                         ReferenceId = None
-                        Provider = TransactionProvider.RAIFFEISEN |> Some
+                        Provider = Provider.RAIFFEISEN |> Some
                     }
         )
         |> List.filter (fun d -> d.IsSome)

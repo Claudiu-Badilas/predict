@@ -36,18 +36,13 @@ module ParserUtils =
         | _ -> None
         
 
-    let getTransactionProvider provider =
+    let getProvider provider =
         match provider with
-        | Some TransactionProvider.RAIFFEISEN -> "RAIFFEISEN" |> Some
-        | Some TransactionProvider.REVOLUT -> "REVOLUT" |> Some
-        | Some TransactionProvider.ORANGE_MONEY -> "ORANGE_MONEY" |> Some
-        | _ -> "" |> Some
-        
-
-    let getReceiptProvider provider =
-        match provider with
-        | Some ReceiptProvider.CARREFOUR -> "CARREFOUR" |> Some
-        | Some ReceiptProvider.KAUFLAND -> "KAUFLAND" |> Some
+        | Some Provider.RAIFFEISEN -> "RAIFFEISEN" |> Some
+        | Some Provider.REVOLUT -> "REVOLUT" |> Some
+        | Some Provider.ORANGE_MONEY -> "ORANGE_MONEY" |> Some
+        | Some Provider.CARREFOUR -> "CARREFOUR" |> Some
+        | Some Provider.KAUFLAND -> "KAUFLAND" |> Some
         | _ -> "" |> Some
 
 
@@ -60,25 +55,25 @@ module ParserUtils =
         | _ -> "" |> format
 
 
-    let generateReceiptUniqueId (userId: int) (date: DateTime option) (amount: double option) (provider: ReceiptProvider option) =
+    let generateReceiptUniqueId (userId: int) (date: DateTime option) (amount: double option) (provider: Provider option) =
         let userIdentifier = string userId |> format
         let dateIdentifier = date |> formatOption
         let amountIdentifier = amount |> formatOption
-        let providerIdentifier = getReceiptProvider provider |> formatOption
+        let providerIdentifier = getProvider provider |> formatOption
 
         let identifier = userIdentifier + dateIdentifier + amountIdentifier + providerIdentifier
         identifier.Substring(0, identifier.Length - 1) |> Some
 
 
     let generateTransactionUniqueId (userId: int) (registrationDate: DateTime option) (completitonDate: DateTime option) 
-        (amount: double option) (index: int) (provider: TransactionProvider option) (referenceId: int option) =
+        (amount: double option) (index: int) (provider: Provider option) (referenceId: int option) =
         let userIdentifier = string userId |> format
         let registrationIdentifier = registrationDate |> formatOption
         let completitonIdentifier = completitonDate |> formatOption
         let amountIdentifier = amount |> formatOption
         let indexIdentifier = string (index + 1) |> format
         let referenceIdentifier = referenceId |> formatOption
-        let providerIdentifier = getTransactionProvider provider |> formatOption
+        let providerIdentifier = getProvider provider |> formatOption
 
         let identifier = userIdentifier + registrationIdentifier + completitonIdentifier + amountIdentifier + indexIdentifier + referenceIdentifier + providerIdentifier 
         identifier.Substring(0, identifier.Length - 1) |> Some

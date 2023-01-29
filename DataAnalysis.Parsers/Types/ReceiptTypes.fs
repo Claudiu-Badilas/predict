@@ -5,8 +5,6 @@ open CommonTypes
 
 module ReceiptTypes =
 
-    type ReceiptProvider = CARREFOUR | KAUFLAND
-
     type QuantityType = BUC | KG
 
     type ParsedProduct = 
@@ -26,6 +24,6 @@ module ReceiptTypes =
             TotalDiscount: double option
             Currency: CurrencyType option
             ParsedProducts: ParsedProduct option list 
-            Provider: ReceiptProvider option
+            Provider: Provider option
         }
 

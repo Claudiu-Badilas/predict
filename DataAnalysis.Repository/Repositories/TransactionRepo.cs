@@ -56,18 +56,18 @@ namespace DataAnalysis.Repository.Repositories {
                         @UserId );";
 
                 return await connection.ExecuteAsync(sql, transactions.Select(t => new {
-                    Identifier = t.Identifier,
+                    t.Identifier,
                     RegistrationDate = t.RegistrationDate.ToString(),
                     CompletionDate = t.CompletionDate.ToString(),
-                    Amount = t.Amount,
-                    Fee = t.Fee,
-                    Description = t.Description,
-                    ReferenceId = t.ReferenceId,
-                    ProviderId = t.ProviderId,
-                    CurrencyId = t.CurrencyId,
-                    StatusId = t.StatusId,
-                    TransactionTypeId = t.TransactionTypeId,
-                    UserId = t.UserId
+                    t.Amount,
+                    t.Fee,
+                    t.Description,
+                    t.ReferenceId,
+                    t.ProviderId,
+                    t.CurrencyId,
+                    t.StatusId,
+                    t.TransactionTypeId,
+                    t.UserId
                 }));
             };
         }

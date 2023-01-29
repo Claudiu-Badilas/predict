@@ -58,7 +58,7 @@ module ParserOrangeMoneyExcelAccountStatement =
                          TransactionType = getTranasctionType amount.Value
                          Status = TransactionStatus.COMPLETED |> Some
                          ReferenceId = row[2] |> Some |> ParserUtils.tryGetInt
-                         Provider = TransactionProvider.ORANGE_MONEY |> Some
+                         Provider = Provider.ORANGE_MONEY |> Some
                      }
         )
         |> List.filter (fun d -> d.IsSome)

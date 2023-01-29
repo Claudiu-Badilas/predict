@@ -68,7 +68,7 @@ module ParserCarrefourPdfReceipt =
         let products = getParsedProducts text
         let dateAndTime = getValue text "Data:" |> Option.bind(fun v -> v.Trim().Split("ORA:") |> Some)
         let dateTime =  DateTimeUtils.convertStringToUTCDate (dateAndTime.Value[0].Trim() + " " + dateAndTime.Value[1].Trim() |> Some) "dd/MM/yyyy HH-mm-ss"
-        let provider = ReceiptProvider.CARREFOUR  |> Some
+        let provider = Provider.CARREFOUR  |> Some
         let total = getValue text "SUBTOTAL" |> ParserUtils.tryGetDouble
         {
             Identifier = generateReceiptUniqueId userId dateTime total provider

@@ -4,6 +4,7 @@ open IronXL
 open DataAnalysis.Types.TransactionTypes
 open DataAnalysis.Utils
 open DataAnalysis.DatabaseAccess
+open DataAnalysis.Types.CommonTypes
 
 module ParserRevolutExcelAccountStatement =
 
@@ -48,7 +49,7 @@ module ParserRevolutExcelAccountStatement =
                     TransactionType = getTranasctionType (row[0])
                     Status = getTranasctionStatus (row[8])      
                     ReferenceId = None
-                    Provider = TransactionProvider.REVOLUT |> Some
+                    Provider = Provider.REVOLUT |> Some
                 }
         )
         |> List.filter (fun d -> d.IsSome)
