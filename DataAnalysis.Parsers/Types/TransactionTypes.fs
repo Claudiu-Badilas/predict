@@ -1,10 +1,9 @@
 ﻿namespace DataAnalysis.Types
 
 open System
+open CommonTypes
 
-module ParsersTypes =
-
-    type CurrencyType = EUR | USD | RON 
+module TransactionTypes =
 
     type TransactionType = 
           SPEND 
@@ -24,8 +23,7 @@ module ParsersTypes =
     
     type TransactionStatus = COMPLETED | PENDING
     
-    type Provider = RAIFFEISEN | REVOLUT | ORANGE_MONEY
-
+    type TransactionProvider = RAIFFEISEN | REVOLUT | ORANGE_MONEY
         
     type ParsedTransaction = 
         {
@@ -38,6 +36,6 @@ module ParsersTypes =
             Description: string option
             TransactionType: TransactionType option
             Status: TransactionStatus option
-            Provider: Provider option
+            Provider: TransactionProvider option
             ReferenceId: int option
         }

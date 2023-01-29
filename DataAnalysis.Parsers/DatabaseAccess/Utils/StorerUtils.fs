@@ -1,7 +1,8 @@
 ﻿namespace DataAnalysis.DatabaseAccess.StorerUtils
 
 open System
-open DataAnalysis.Types.ParsersTypes
+open DataAnalysis.Types.TransactionTypes
+open DataAnalysis.Types.CommonTypes
 
 module StorerUtils =
 
@@ -24,13 +25,13 @@ module StorerUtils =
         | _ -> Nullable()
        
        
-    let getProviderId provider =
+    let getTransactionProviderId provider =
         match provider with
         | Some provider ->
             match provider with
-            | Provider.RAIFFEISEN -> Nullable(1)
-            | Provider.REVOLUT -> Nullable(2)
-            | Provider.ORANGE_MONEY -> Nullable(3)
+            | TransactionProvider.RAIFFEISEN -> Nullable(1)
+            | TransactionProvider.REVOLUT -> Nullable(2)
+            | TransactionProvider.ORANGE_MONEY -> Nullable(3)
         | _ -> Nullable()
         
 

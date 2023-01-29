@@ -1,9 +1,7 @@
 ﻿namespace DataAnalysis.Parsers.AccountStatementParser
 
 open IronXL
-open System.Linq
-open System
-open DataAnalysis.Types.ParsersTypes
+open DataAnalysis.Types.TransactionTypes
 open DataAnalysis.Utils
 open DataAnalysis.DatabaseAccess
 
@@ -41,8 +39,8 @@ module ParserRevolutExcelAccountStatement =
             | _ -> 
                 Some {
                     Identifier = None
-                    RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "dd.MM.yyyy HH:mm:ss"
-                    CompletionDate = DateTimeUtils.convertStringToUTCDate (row[3] |> Some) "dd.MM.yyyy HH:mm:ss"
+                    RegistrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "M/d/yyyy h:mm:ss tt"
+                    CompletionDate = DateTimeUtils.convertStringToUTCDate (row[3] |> Some) "M/d/yyyy h:mm:ss tt"
                     Amount = row[5] |> Some |> ParserUtils.tryGetDouble
                     Fee = row[6] |> Some |> ParserUtils.tryGetDouble
                     Currency = ParserUtils.getCurrency (row[7])
@@ -50,7 +48,7 @@ module ParserRevolutExcelAccountStatement =
                     TransactionType = getTranasctionType (row[0])
                     Status = getTranasctionStatus (row[8])      
                     ReferenceId = None
-                    Provider = Provider.REVOLUT |> Some
+                    Provider = TransactionProvider.REVOLUT |> Some
                 }
         )
         |> List.filter (fun d -> d.IsSome)
@@ -64,14 +62,7 @@ module ParserRevolutExcelAccountStatement =
     let parseExcels userId (excels: WorkBook list) =
         let parsedTransaction =
             excels 
-            |> List.toArray
-            |> Array.chunkBySize 100
-            |> Array.Parallel.map (fun chunk ->
-                chunk 
-                |> Array.toList
-                |> List.map(fun excel -> getTransactions excel userId)
-                |> List.concat
-            )
+            |> List.map(fun excel -> getTransactions excel userId)
             |> List.concat
             |> List.distinctBy(fun t -> t.Identifier)
 

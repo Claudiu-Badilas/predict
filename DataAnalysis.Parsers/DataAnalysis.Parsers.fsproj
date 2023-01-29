@@ -6,12 +6,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="Types\ParsersTypes.fs" />
+		<Compile Include="Types\CommonTypes.fs" />
+		<Compile Include="Types\ReceiptTypes.fs" />
+		<Compile Include="Types\TransactionTypes.fs" />
+		<Compile Include="Utils\PdfUtils.fs" />
 		<Compile Include="Utils\ExcelUtils.fs" />
 		<Compile Include="Utils\DateTimeUtils.fs" />
 		<Compile Include="Utils\ParserUtils.fs" />
 		<Compile Include="DatabaseAccess\Utils\StorerUtils.fs" />
 		<Compile Include="DatabaseAccess\StoreTransactions.fs" />
+		<Compile Include="Parsers\ReceiptParser\ParserKauflandPdfReceipt.fs" />
 		<Compile Include="Parsers\AccountStatementParser\OMParsers\ParserOrangeMoneyPdfAccountStatement.fs" />
 		<Compile Include="Parsers\AccountStatementParser\OMParsers\ParserOrangeMoneyExcelAccountStatement.fs" />
 		<Compile Include="Parsers\AccountStatementParser\ParserRevolutExcelAccountStatement.fs" />

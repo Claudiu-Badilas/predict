@@ -1,9 +1,9 @@
 ﻿namespace DataAnalysis.DatabaseAccess
 
+open System
 open DataAnalysis.Repository.Repositories
 open DataAnalysis.Repository.Models
-open DataAnalysis.Types.ParsersTypes
-open System
+open DataAnalysis.Types.TransactionTypes
 open DataAnalysis.DatabaseAccess.StorerUtils
 
 
@@ -31,7 +31,7 @@ module StoreTransactions =
                     StatusId = StorerUtils.getStatusId t.Status,
                     CurrencyId = StorerUtils.getCurrencyTypeId t.Currency,
                     TransactionTypeId = StorerUtils.getTransactionTypeId t.TransactionType,
-                    ProviderId = StorerUtils.getProviderId t.Provider,
+                    ProviderId = StorerUtils.getTransactionProviderId t.Provider,
                     UserId = Nullable userId
                 )
             )

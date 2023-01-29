@@ -1,10 +1,9 @@
 ﻿namespace DataAnalysis.Parsers.AccountStatementParser
 
 open IronXL
-open System.Linq
 open System.Text.RegularExpressions
-open System
-open DataAnalysis.Types.ParsersTypes
+open DataAnalysis.Types.TransactionTypes
+open DataAnalysis.Types.CommonTypes
 open DataAnalysis.Utils
 open DataAnalysis.DatabaseAccess
 
@@ -26,7 +25,7 @@ module ParserRaiffeisenExcelAccountStatement =
         | Some d, None, true -> TransactionType.SPEND |> Some
         | None, Some c, true -> TransactionType.RECEIVED |> Some
         | _ , _, false -> TransactionType.INTERNAL_TRANSFER |> Some
-        | _, _, _ -> None
+        | _, _, _ ->  TransactionType.UNDEFINED |> Some
             
 
     let getDescription (description: string ): string option = 
@@ -58,7 +57,7 @@ module ParserRaiffeisenExcelAccountStatement =
                 | _ -> 
                     let debit = row[2] |> Some |> ParserUtils.tryGetDouble
                     let credit = row[3] |> Some |> ParserUtils.tryGetDouble
-                    let description = row[11]
+                    let description = try row[11] with | _ -> row[10]
                     let registrationDate = DateTimeUtils.convertStringToUTCDate (date |> Some) "dd/MM/yyyy"
                     Some {
                         Identifier = None
@@ -71,7 +70,7 @@ module ParserRaiffeisenExcelAccountStatement =
                         TransactionType = getTranasctionType debit credit description
                         Status = TransactionStatus.COMPLETED |> Some
                         ReferenceId = None
-                        Provider = Provider.RAIFFEISEN |> Some
+                        Provider = TransactionProvider.RAIFFEISEN |> Some
                     }
         )
         |> List.filter (fun d -> d.IsSome)
@@ -85,14 +84,7 @@ module ParserRaiffeisenExcelAccountStatement =
     let parseExcels userId (excels: WorkBook list) =
         let parsedTransaction =
             excels 
-            |> List.toArray
-            |> Array.chunkBySize 100
-            |> Array.Parallel.map (fun chunk ->
-                chunk 
-                |> Array.toList
-                |> List.map(fun excel -> getTransactions excel userId)
-                |> List.concat
-            )
+            |> List.map(fun excel -> getTransactions excel userId)
             |> List.concat
             |> List.distinctBy(fun t -> t.Identifier)
 
