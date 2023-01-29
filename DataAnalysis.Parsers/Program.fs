@@ -6,6 +6,7 @@ open System
 open DataAnalysis.Parsers.OMParsers
 open DataAnalysis.Parsers.OMParsers.AccountStatementParser
 open DataAnalysis.Parsers.AccountStatementParser
+open DataAnalysis.Parsers.ReceiptParser
 
 module ParserConsole =
 
@@ -24,19 +25,22 @@ module ParserConsole =
     [<EntryPoint>]
     let main _ =
         let userId = 1
-        let raifExcels = getLocalExcels @"C:\Users\badicl\Desktop\My shortcuts\Raiff-Excels"
-        let revExcels = getLocalExcels @"C:\Users\badicl\Desktop\My shortcuts\Revolut-Excels"
-        //let omExcels = getLocalExcels @"C:\Users\Claudiu\Desktop\OM\Excels"
-        let omPdfs = getLocalPdfs @"C:\Users\badicl\Desktop\My shortcuts\OM\PDFs"
 
-        let raitransactions = ParserRaiffeisenExcelAccountStatement.parseExcels userId raifExcels
-        let revtransactions = ParserRevolutExcelAccountStatement.parseExcels userId revExcels
-        let omtransactions = 
-            //ParserOrangeMoneyExcelAccountStatement.parseExcels userId omExcels
-            ParserOrangeMoneyPdfAccountStatement.parsePdfs userId omPdfs
+        //let raifExcels = getLocalExcels @""
+        //let raitransactions = ParserRaiffeisenExcelAccountStatement.parseExcels userId raifExcels
 
+        //let revExcels = getLocalExcels @""
+        //let revtransactions = ParserRevolutExcelAccountStatement.parseExcels userId revExcels
 
-        printfn "%O %O %O" raitransactions revtransactions omtransactions
+        //let omExcels = getLocalExcels @""
+        //let omtransactions = ParserOrangeMoneyExcelAccountStatement.parseExcels userId omExcels
+
+        //let omPdfs = getLocalPdfs @""
+        //let omtransactions = ParserOrangeMoneyPdfAccountStatement.parsePdfs userId omPdfs
+
+        let carrPdfs = getLocalPdfs @""
+        let carrReceipts = ParserCarrefourPdfReceipt.parsePdfs userId carrPdfs
+
 
         printfn "Run succesfully"
         0
