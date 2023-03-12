@@ -92,7 +92,6 @@ module ParserUtils =
                 Description = rpt.Description
                 TransactionType = rpt.TransactionType
                 Currency = rpt.Currency
-                Status = rpt.Status
                 Provider = rpt.Provider
                 ReferenceId = rpt.ReferenceId
             }

@@ -10,7 +10,9 @@ namespace DataAnalysis.Repositories {
         public async Task<bool> IsExistingUser(string email) {
             using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
                 connection.Open();
-                var sql = @"SELECT email FROM platform.users WHERE email = @email;";
+                var sql = @"
+                    SELECT email FROM public.""user"" 
+                    WHERE email = @email;";
 
                 return (await connection.QueryAsync<string>(sql, new { email })).ToList().Count > 0;
             };
@@ -28,10 +30,8 @@ namespace DataAnalysis.Repositories {
                         u.join_date as JoinDate,
                         u.last_login as LastLogin,
                         u.is_active as IsActive,
-                        r.id as RoleId, 
-                        r.role_name as RoleName
-                    FROM platform.users u 
-                    JOIN platform.roles r ON u.role_id = r.id
+                        u.is_admin as IsAdmin
+                    FROM public.""user"" u 
                     WHERE u.email = @email;";
                 return (await connection.QueryAsync<AppUser>(sql, new { email })).FirstOrDefault();
             };
@@ -41,10 +41,10 @@ namespace DataAnalysis.Repositories {
             using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
-                    INSERT INTO platform.users 
-                        (email, password_hash, password_salt, join_date, last_login, is_active, role_id) 
+                    INSERT INTO public.""user"" 
+                        (email, password_hash, password_salt, join_date, last_login, is_active, is_admin) 
                     VALUES
-                        (@Email, @PasswordHash, @PasswordSalt, @JoinDate, @LastLogin, @IsActive, @RoleId);";
+                        (@Email, @PasswordHash, @PasswordSalt, @JoinDate, @LastLogin, @IsActive, @IsAdmin);";
 
                 await connection.ExecuteAsync(sql, user);
             };

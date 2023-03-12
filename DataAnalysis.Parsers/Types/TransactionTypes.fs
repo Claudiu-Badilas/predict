@@ -21,7 +21,6 @@ module TransactionTypes =
         | BALANCE_CHECK
         | UNDEFINED
     
-    type TransactionStatus = COMPLETED | PENDING
             
     type ParsedTransaction = 
         {
@@ -30,10 +29,9 @@ module TransactionTypes =
             CompletionDate: DateTime option
             Amount: double option
             Fee: double option
-            Currency: CurrencyType option
             Description: string option
+            Currency: CurrencyType option
             TransactionType: TransactionType option
-            Status: TransactionStatus option
             Provider: Provider option
             ReferenceId: int option
         }

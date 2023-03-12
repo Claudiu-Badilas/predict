@@ -4,7 +4,7 @@ using DataAnalysis.Repositories.Interfaces;
 using DataAnalysis.Services.Interfaces;
 
 namespace DataAnalysis.Controllers {
-    [Route("api")]
+    [Route("api/v1")]
     public class AccountController : BaseController {
 
         private readonly IAccountService _accService;

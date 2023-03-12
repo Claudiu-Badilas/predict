@@ -7,12 +7,6 @@
         public DateTime? JoinDate { get; set; }
         public DateTime? LastLogin { get; set; }
         public bool? IsActive { get; set; }
-        public int? RoleId { get; set; }
-        public string RoleName { get; set; }
-    }
-
-    public enum Role {
-        ADMIN = 1,
-        USER = 2
+        public bool IsAdmin { get; set; }
     }
 }

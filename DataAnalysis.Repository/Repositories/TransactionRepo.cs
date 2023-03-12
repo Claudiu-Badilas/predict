@@ -6,7 +6,7 @@ using DataAnalysis.Repository.Models;
 
 namespace DataAnalysis.Repository.Repositories {
     public class TransactionRepo : ITransactionRepo {
-        public async Task<IEnumerable<Transaction>> GetTransactionByUserId(int userId) {
+        public async Task<IEnumerable<Transaction>> GetTransactionByUserId(int dataOwnerId) {
             using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
@@ -20,25 +20,24 @@ namespace DataAnalysis.Repository.Repositories {
                         reference_id as ReferenceId, 
                         provider_id as ProviderId, 
                         currency_id as CurrencyId, 
-                        status_id as StatusId, 
                         transaction_type_id as TransactionTypeId, 
-                        user_id as UserId
-                    FROM platform.transactions
-                    WHERE user_id = @UserId;";
+                        data_owner_id as DataOwnerId
+                    FROM public.""transaction""
+                    WHERE data_owner_id = @dataOwnerId;";
 
-                return await connection.QueryAsync<Transaction>(sql, new { UserId = userId });
+                return await connection.QueryAsync<Transaction>(sql, new { dataOwnerId });
             };
         }
 
-        public async Task<IEnumerable<string>> GetTransactionIds(int userId) {
+        public async Task<IEnumerable<string>> GetTransactionIds(int dataOwnerId) {
             using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT identifier 
-                    FROM platform.transactions
-                    WHERE user_id = @UserId;";
+                    FROM public.""transaction""
+                    WHERE data_owner_id = @dataOwnerId;";
 
-                return await connection.QueryAsync<string>(sql, new { UserId = userId });
+                return await connection.QueryAsync<string>(sql, new { dataOwnerId });
             };
         }
 
@@ -46,14 +45,12 @@ namespace DataAnalysis.Repository.Repositories {
             using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
-                    INSERT INTO platform.transactions (
+                    INSERT INTO public.""transaction"" (
                         identifier, registration_date, completition_date, amount, fee, description, 
-                        reference_id, provider_id, currency_id, status_id, transaction_type_id, 
-                        user_id )
+                        reference_id, provider_id, currency_id, transaction_type_id, data_owner_id )
                     VALUES (
                         @Identifier, @RegistrationDate, @CompletionDate, @Amount, @Fee, @Description, 
-                        @ReferenceId, @ProviderId, @CurrencyId, @StatusId, @TransactionTypeId,
-                        @UserId );";
+                        @ReferenceId, @ProviderId, @CurrencyId, @TransactionTypeId, @DataOwnerId );";
 
                 return await connection.ExecuteAsync(sql, transactions.Select(t => new {
                     t.Identifier,
@@ -65,9 +62,8 @@ namespace DataAnalysis.Repository.Repositories {
                     t.ReferenceId,
                     t.ProviderId,
                     t.CurrencyId,
-                    t.StatusId,
                     t.TransactionTypeId,
-                    t.UserId
+                    t.DataOwnerId
                 }));
             };
         }

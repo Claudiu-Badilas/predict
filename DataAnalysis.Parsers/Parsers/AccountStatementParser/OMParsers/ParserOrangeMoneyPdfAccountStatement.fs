@@ -115,7 +115,6 @@ module ParserOrangeMoneyPdfAccountStatement =
                                 Currency = CurrencyType.RON |> Some
                                 Description = getDescription lines i |> Some
                                 TransactionType = getFirstRowDescription line |> getTranasctionType
-                                Status = TransactionStatus.COMPLETED |> Some
                                 ReferenceId = words[2] |> Some |> ParserUtils.tryGetInt
                                 Provider = Provider.ORANGE_MONEY |> Some
                             }

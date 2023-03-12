@@ -24,12 +24,6 @@ module ParserRevolutExcelAccountStatement =
         |  _ -> TransactionType.UNDEFINED |> Some
 
 
-    let getTranasctionStatus (transactionType: string ): TransactionStatus option = 
-        match transactionType with
-        |  "COMPLETED" -> TransactionStatus.COMPLETED |> Some
-        | _ -> None
-
-
     let getTransactions (excel: WorkBook) userId: ParsedTransaction list =
         ExcelUtils.getExcelValues excel
         |> Seq.toList
@@ -47,7 +41,6 @@ module ParserRevolutExcelAccountStatement =
                     Currency = ParserUtils.getCurrency (row[7])
                     Description = row[4] |> Some
                     TransactionType = getTranasctionType (row[0])
-                    Status = getTranasctionStatus (row[8])      
                     ReferenceId = None
                     Provider = Provider.REVOLUT |> Some
                 }

@@ -14,15 +14,6 @@ module StoreTransactions =
         |> List.filter(fun t -> not (storedTransactionIds |> List.exists(fun st -> t.Identifier = st)))
         
 
-    let getStatusId status =
-        match status with
-        | Some status ->
-            match status with
-            | TransactionStatus.COMPLETED -> Nullable(1)
-            | TransactionStatus.PENDING -> Nullable(2)
-        | _ -> Nullable()
-        
-
     let getTransactionTypeId transactionType =
         match transactionType with
         | Some transactionType ->
@@ -43,7 +34,7 @@ module StoreTransactions =
             | TransactionType.UNDEFINED -> Nullable(14)
         | _ -> Nullable()
     
-    let storeTransaction userId (parsedTransactions: ParsedTransaction list) =
+    let storeTransaction dataOwnerId (parsedTransactions: ParsedTransaction list) =
         let transactionRepo = new TransactionRepo()
         let transactions = 
             parsedTransactions
@@ -56,16 +47,15 @@ module StoreTransactions =
                     Amount = StorerUtils.getNullableFloatFromOption t.Amount,
                     Fee = StorerUtils.getNullableFloatFromOption t.Fee,
                     Description = t.Description.Value,
-                    StatusId = getStatusId t.Status,
                     CurrencyId = StorerUtils.getCurrencyTypeId t.Currency,
                     TransactionTypeId = getTransactionTypeId t.TransactionType,
                     ProviderId = StorerUtils.getTransactionProviderId t.Provider,
-                    UserId = Nullable userId
+                    DataOwnerId = dataOwnerId
                 )
             )
 
         let storedTransactionIds = 
-            transactionRepo.GetTransactionIds(userId).Result
+            transactionRepo.GetTransactionIds(dataOwnerId).Result
             |> Seq.toList
 
         let filteredTransactions = filterDublicates storedTransactionIds transactions
