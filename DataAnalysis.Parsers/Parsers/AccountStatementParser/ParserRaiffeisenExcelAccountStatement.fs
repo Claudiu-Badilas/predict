@@ -60,7 +60,6 @@ module ParserRaiffeisenExcelAccountStatement =
                         Currency = CurrencyType.RON |> Some
                         Description = description |> Some
                         TransactionType = getTranasctionType debit credit description
-                        Status = TransactionStatus.COMPLETED |> Some
                         ReferenceId = None
                         Provider = Provider.RAIFFEISEN |> Some
                     }

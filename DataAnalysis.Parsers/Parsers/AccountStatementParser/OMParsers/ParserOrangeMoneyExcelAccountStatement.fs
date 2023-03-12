@@ -56,7 +56,6 @@ module ParserOrangeMoneyExcelAccountStatement =
                          Currency = CurrencyType.RON |> Some
                          Description = getDescription rows i |> Some
                          TransactionType = getTranasctionType amount.Value
-                         Status = TransactionStatus.COMPLETED |> Some
                          ReferenceId = row[2] |> Some |> ParserUtils.tryGetInt
                          Provider = Provider.ORANGE_MONEY |> Some
                      }
