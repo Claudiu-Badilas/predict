@@ -1,0 +1,24 @@
+<table>
+  <tr *ngFor="let tran of transactions">
+    {{
+      tran.id
+    }}
+    |
+    {{
+      tran.registrationDate
+    }}
+    |{{
+      tran.amount
+    }}
+    |
+    {{
+      tran.provider
+    }}|
+    {{
+      tran.currency
+    }}|
+    {{
+      tran.description
+    }}
+  </tr>
+</table>
