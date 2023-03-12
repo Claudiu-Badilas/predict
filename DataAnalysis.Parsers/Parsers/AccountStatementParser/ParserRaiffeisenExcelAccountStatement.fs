@@ -26,14 +26,6 @@ module ParserRaiffeisenExcelAccountStatement =
         | None, Some c, true -> TransactionType.RECEIVED |> Some
         | _ , _, false -> TransactionType.INTERNAL_TRANSFER |> Some
         | _, _, _ ->  TransactionType.UNDEFINED |> Some
-            
-
-    let getDescription (description: string ): string option = 
-        let splitedDescription = checkDescriptionByText description "Transfer intre conturi proprii"
-
-        match splitedDescription.IsEmpty with
-        | true -> description.Split("|")[0] |> Some
-        | false -> description.Split("|")[1] |> Some
 
 
     let getAmount debit credit =
@@ -66,9 +58,8 @@ module ParserRaiffeisenExcelAccountStatement =
                         Amount = getAmount debit credit
                         Fee = None
                         Currency = CurrencyType.RON |> Some
-                        Description = getDescription description
+                        Description = description |> Some
                         TransactionType = getTranasctionType debit credit description
-                        Status = TransactionStatus.COMPLETED |> Some
                         ReferenceId = None
                         Provider = Provider.RAIFFEISEN |> Some
                     }

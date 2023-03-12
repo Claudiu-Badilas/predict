@@ -14,7 +14,7 @@ namespace DataAnalysis.Repository.Models {
         public IEnumerable<PurchasedProduct> Products { get; set; }
         public int? CurrencyId { get; set; }
         public int? ProviderId { get; set; }
-        public int UserId { get; set; }
+        public int DataOwnerId { get; set; }
     }
 
     public class PurchasedProduct {

@@ -46,7 +46,7 @@ module StoreReceipts =
         )
 
 
-    let storeReceipts userId (parsedReceipts: ParsedReceipt list) =
+    let storeReceipts dataOwnerId (parsedReceipts: ParsedReceipt list) =
         let receiptRepo = new ReceiptRepo()
         let receipts = 
             parsedReceipts
@@ -59,12 +59,12 @@ module StoreReceipts =
                     Products = mapPurchasedProducts r.ParsedProducts,
                     CurrencyId =  StorerUtils.getCurrencyTypeId r.Currency,
                     ProviderId = StorerUtils.getTransactionProviderId r.Provider,
-                    UserId = userId
+                    DataOwnerId = dataOwnerId
                 )
             )
 
         let storedReceiptsIds = 
-            receiptRepo.GetReceiptByUserId(userId).Result
+            receiptRepo.GetReceiptByUserId(dataOwnerId).Result
             |> Seq.toList
 
         let filteredReceipts = filterDublicates storedReceiptsIds receipts
@@ -72,7 +72,7 @@ module StoreReceipts =
         storingResp.Result
 
         let allStoredReceiptsIds = 
-            receiptRepo.GetReceiptByUserId(userId).Result
+            receiptRepo.GetReceiptByUserId(dataOwnerId).Result
             |> Seq.toList
         
         let purchasedProducts =

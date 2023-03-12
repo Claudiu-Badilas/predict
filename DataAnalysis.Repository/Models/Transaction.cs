@@ -14,19 +14,8 @@ namespace DataAnalysis.Repository.Models {
         public int? CurrencyId { get; set; }
         public string Description { get; set; }
         public int? TransactionTypeId { get; set; }
-        public int? StatusId { get; set; }
         public int? ProviderId { get; set; }
         public int? ReferenceId { get; set; }
-        public int? UserId { get; set; }
+        public int DataOwnerId { get; set; }
     }
-
-    public enum CurrencyType { EUR = 1, USD = 2, RON = 3 }
-
-    public enum TransactionType {
-        SPEND = 1, RECEIVED = 2, INTERNAL_TRANSFER = 3, TOP_UP = 4, TRANSFER = 5, FEE = 6, CARD_PAYMENT = 7, ATM = 8, EXCHANGE = 9, REWARD = 10, REFUND = 11
-    }
-
-    public enum TransactionStatus { COMPLETED = 1, PENDING = 2 }
-
-    public enum Provider { RAIFFEISEN = 1, REVOLUT = 2, ORANGE_MONEY = 3 }
 }

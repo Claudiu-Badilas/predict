@@ -23,7 +23,7 @@ namespace DataAnalysis.Services {
                 JoinDate = DateTime.UtcNow,
                 LastLogin = DateTime.UtcNow,
                 IsActive = true,
-                RoleId = (int)Role.USER
+                IsAdmin = false
             });
         }
 
@@ -40,8 +40,7 @@ namespace DataAnalysis.Services {
                 JoinDate = user.JoinDate,
                 LastLogin = user.LastLogin,
                 IsActive = user.IsActive,
-                RoleId = user.RoleId,
-                RoleName = user.RoleName,
+                IsAdmin = user.IsAdmin
             };
         }
 

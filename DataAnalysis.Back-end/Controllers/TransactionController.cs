@@ -5,7 +5,7 @@ using DataAnalysis.Services.Interfaces;
 using DataAnalysis.Repository.Repositories.Interfaces;
 
 namespace DataAnalysis.Controllers {
-    [Route("api")]
+    [Route("api/v1")]
     public class TransactionController : BaseController {
 
         private readonly ITransactionRepo _transactionRepo;

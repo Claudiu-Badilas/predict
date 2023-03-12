@@ -24,7 +24,7 @@ module ParserConsole =
 
     [<EntryPoint>]
     let main _ =
-        let userId = 1
+        let dataOwnerId = 1
 
         //let raifExcels = getLocalExcels @""
         //let raitransactions = ParserRaiffeisenExcelAccountStatement.parseExcels userId raifExcels
