@@ -27,19 +27,19 @@ module ParserConsole =
         let dataOwnerId = 1
 
         //let raifExcels = getLocalExcels @""
-        //let raitransactions = ParserRaiffeisenExcelAccountStatement.parseExcels userId raifExcels
+        //let raitransactions = ParserRaiffeisenExcelAccountStatement.parseExcels dataOwnerId raifExcels
 
         //let revExcels = getLocalExcels @""
-        //let revtransactions = ParserRevolutExcelAccountStatement.parseExcels userId revExcels
+        //let revtransactions = ParserRevolutExcelAccountStatement.parseExcels dataOwnerId revExcels
 
         //let omExcels = getLocalExcels @""
-        //let omtransactions = ParserOrangeMoneyExcelAccountStatement.parseExcels userId omExcels
+        //let omtransactions = ParserOrangeMoneyExcelAccountStatement.parseExcels dataOwnerId omExcels
 
         //let omPdfs = getLocalPdfs @""
-        //let omtransactions = ParserOrangeMoneyPdfAccountStatement.parsePdfs userId omPdfs
+        //let omtransactions = ParserOrangeMoneyPdfAccountStatement.parsePdfs dataOwnerId omPdfs
 
         let carrPdfs = getLocalPdfs @""
-        let carrReceipts = ParserCarrefourPdfReceipt.parsePdfs userId carrPdfs
+        let carrReceipts = ParserCarrefourPdfReceipt.parsePdfs dataOwnerId carrPdfs
 
 
         printfn "Run succesfully"
