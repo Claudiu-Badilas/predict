@@ -1,26 +1,19 @@
-// *,
-// *:before,
-// *:after {
-//   padding: 0;
-//   margin: 0;
-//   box-sizing: border-box;
-// }
-
 .background {
   background: linear-gradient(-45deg, #f1c5b8, #d9e7ff, #e3ffe7);
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
   height: 100vh !important;
-}
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 }
 
@@ -33,7 +26,6 @@ form {
   top: 50%;
   left: 50%;
   border-radius: 10px;
-  //backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 20px rgba(8, 7, 16, 0.3);
   padding: 20px 35px;
@@ -94,31 +86,4 @@ button {
     background: linear-gradient(210deg, #92fe9d 0%, #00c9ff 100%);
     color: white;
   }
-}
-.tooltip {
-  position: relative;
-  display: inline-block;
-  background-color: red;
-
-  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  //color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
 }
