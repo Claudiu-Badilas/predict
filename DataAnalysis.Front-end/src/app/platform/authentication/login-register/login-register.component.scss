@@ -17,8 +17,7 @@
   }
 }
 
-form {
-  height: 520px;
+.form {
   width: 400px;
   background-color: rgba(255, 255, 255, 1);
   position: relative;
@@ -29,6 +28,13 @@ form {
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 20px rgba(8, 7, 16, 0.3);
   padding: 20px 35px;
+
+  &-login {
+    height: 520px;
+  }
+  &-register {
+    height: 620px;
+  }
 }
 
 label * {
@@ -84,5 +90,13 @@ button {
   &:hover {
     background: linear-gradient(210deg, #92fe9d 0%, #00c9ff 100%);
     color: white;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover {
+    color: #00c9ff;
   }
 }

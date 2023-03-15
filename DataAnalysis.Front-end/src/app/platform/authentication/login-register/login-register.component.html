@@ -2,8 +2,11 @@
   <form
     [formGroup]="credentialForm"
     (ngSubmit)="onSubmitChanges(credentialForm)"
+    class="form"
   >
-    <h3 class="text-center">Login Here</h3>
+    <h3 class="text-center">
+      {{ getInputValue("authenticationAction") }} Here
+    </h3>
     <label for="email">Email</label>
     <input
       class="form-control"
@@ -12,14 +15,14 @@
       name="emailId"
       formControlName="email"
       [ngClass]="{
-        'is-invalid': isValidateInputValue(credentialForm, 'email')
+        'is-invalid': isValidateInputValue('email')
       }"
     />
     <span
-      *ngIf="isValidateInputValue(credentialForm, 'email')"
+      *ngIf="isValidateInputValue('email')"
       class="invalid-feedback d-flex position-absolute"
     >
-      {{ getInputValidationError(credentialForm, "email") }}
+      {{ getInputValidationError("email") }}
     </span>
     <label for="password">Password</label>
     <input
@@ -29,20 +32,44 @@
       name="passwordId"
       formControlName="password"
       [ngClass]="{
-        'is-invalid': isValidateInputValue(credentialForm, 'password')
+        'is-invalid': isValidateInputValue('password')
       }"
     />
     <span
-      *ngIf="isValidateInputValue(credentialForm, 'password')"
+      *ngIf="isValidateInputValue('password')"
       class="invalid-feedback d-flex position-absolute"
     >
-      {{ getInputValidationError(credentialForm, "password") }}
+      {{ getInputValidationError("password") }}
     </span>
+
+    <div *ngIf="isRegisterFromSelected()">
+      <label for="confirmPassword">Confirm Password</label>
+      <input
+        class="form-control"
+        type="confirmPassword"
+        placeholder="Password"
+        name="confirmPasswordId"
+        formControlName="confirmPassword"
+        [ngClass]="{
+          'is-invalid': isValidateInputValue('confirmPassword')
+        }"
+      />
+      <span
+        *ngIf="isValidateInputValue('confirmPassword')"
+        class="invalid-feedback d-flex position-absolute"
+      >
+        {{ getInputValidationError("confirmPassword") }}
+      </span>
+    </div>
     <button class="" type="submit" [disabled]="credentialForm.invalid">
-      Log In
+      {{ getInputValue("authenticationAction") }}
     </button>
+
     <div class="mt-3">
-      You don't have an account, start journey with us from<b> here</b>
+      {{ getInputValue("authenticationMessage") }}
+      <span class="clickable" (click)="onChangeAuthAction()">
+        <b> here</b>
+      </span>
     </div>
   </form>
 </div>
