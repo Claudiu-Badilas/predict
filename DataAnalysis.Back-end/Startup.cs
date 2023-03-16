@@ -37,15 +37,13 @@ namespace DataAnalysis {
             }
             app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseCors(builder =>
                builder.AllowAnyOrigin()
                    .AllowAnyHeader()
                    .AllowAnyMethod()
-                   //.WithOrigins("http://localhost:4200/")
+                   .WithOrigins("http://localhost:4200/")
                    );
 
             app.UseAuthentication();

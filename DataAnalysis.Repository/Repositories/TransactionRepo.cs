@@ -6,26 +6,29 @@ using DataAnalysis.Repository.Models;
 
 namespace DataAnalysis.Repository.Repositories {
     public class TransactionRepo : ITransactionRepo {
-        public async Task<IEnumerable<Transaction>> GetTransactionByUserId(int dataOwnerId) {
+        public async Task<IEnumerable<TransactionResponse>> GetTransactionByUserId(int dataOwnerId) {
             using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT 
-                        id as Identifier, 
-                        registration_date::timestamp as RegistrationDate, 
-                        completition_date::timestamp as CompletitionDate, 
-                        amount as Amount, 
-                        fee as Fee, 
-                        description as Description, 
-                        reference_id as ReferenceId, 
-                        provider_id as ProviderId, 
-                        currency_id as CurrencyId, 
-                        transaction_type_id as TransactionTypeId, 
+                        t.id as Id, 
+                        t.registration_date::timestamp as RegistrationDate, 
+                        t.completition_date::timestamp as CompletitionDate, 
+                        t.amount as Amount, 
+                        t.fee as Fee, 
+                        t.description as Description, 
+                        t.reference_id as ReferenceId, 
+                        p.""name""  as Provider, 
+                        c.""type""  as Currency, 
+                        tt.""type""  as TransactionType, 
                         data_owner_id as DataOwnerId
-                    FROM public.""transaction""
+                    FROM public.""transaction"" t
+                    JOIN public.currency c ON c.id = t.currency_id
+                    JOIN public.provider p ON p.id = t.provider_id 
+                    JOIN public.transaction_type tt ON tt.id = t.transaction_type_id  
                     WHERE data_owner_id = @dataOwnerId;";
 
-                return await connection.QueryAsync<Transaction>(sql, new { dataOwnerId });
+                return await connection.QueryAsync<TransactionResponse>(sql, new { dataOwnerId });
             };
         }
 

@@ -14,9 +14,9 @@ namespace DataAnalysis.Controllers {
             _transactionRepo = transactionRepo;
         }
 
-        [HttpGet("transactions/{userId}")]
-        public async Task<ActionResult> Login([FromRoute] int userId) {
-            var transactions = await _transactionRepo.GetTransactionByUserId(userId);
+        [HttpGet("transactions/{dataOwnerId}")]
+        public async Task<ActionResult> Login([FromRoute] int dataOwnerId) {
+            var transactions = await _transactionRepo.GetTransactionByUserId(dataOwnerId);
 
             return Ok(transactions);
         }
