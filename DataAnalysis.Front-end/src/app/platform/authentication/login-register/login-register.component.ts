@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CustomValidators } from 'src/app/shared/validators/custom-validator';
 import { AuthenticationAction } from './models/authentication-actions.enum';
+import * as fromAppStore from 'src/app/store/app-state.reducer';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../actions/authentication.actions';
 
 @Component({
   selector: 'app-login-register',
@@ -13,7 +16,10 @@ export class LoginRegisterComponent {
   registerMessage: string = `You do not have an account, start journey with us from`;
   loginMessage: string = `You already have an account, just log in from`;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private store: Store<fromAppStore.AppState>,
+    private formBuilder: FormBuilder
+  ) {
     this.credentialForm = this.formBuilder.group({
       authenticationAction: new FormControl(AuthenticationAction.Login),
       authenticationMessage: new FormControl(this.registerMessage),
@@ -39,13 +45,19 @@ export class LoginRegisterComponent {
   }
 
   onSubmitChanges(form: FormGroup) {
-    console.log('form', form.controls);
+    const credentials = {
+      email: form.controls['email'].value,
+      password: form.controls['password'].value,
+    };
+    if (!this.isRegisterFromSelected()) {
+      this.store.dispatch(AuthActions.login(credentials));
+    } else {
+      this.store.dispatch(AuthActions.register(credentials));
+    }
   }
 
   onChangeAuthAction() {
-    if (
-      this.getInputValue('authenticationAction') === AuthenticationAction.Login
-    ) {
+    if (!this.isRegisterFromSelected()) {
       this.credentialForm.addControl(
         'confirmPassword',
         new FormControl(null, [CustomValidators.minLength(4)])
