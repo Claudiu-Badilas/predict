@@ -81,17 +81,13 @@ button {
   height: 60px;
 
   &:hover {
-    background: linear-gradient(210deg, #92fe9d 0%, #00c9ff 100%);
+    background: linear-gradient(210deg, #40ca4e 0%, #2996b5 100%);
   }
 
   &.disabled,
   &:disabled {
     background: linear-gradient(210deg, #e1ffe4 0%, #c8f3ff 100%);
     pointer-events: none;
-  }
-
-  &:active {
-    background: linear-gradient(210deg, #46d955 0%, #1b96b8 100%);
   }
 }
 
@@ -101,4 +97,20 @@ button {
   &:hover {
     color: #00c9ff;
   }
+}
+
+.password-input {
+  position: relative;
+}
+.password-input input {
+  border: none;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.password-input img {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  opacity: 0.2;
 }

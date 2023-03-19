@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { CustomValidators } from 'src/app/shared/validators/custom-validator';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { AuthenticationValidators } from 'src/app/platform/authentication/login-register/validators/authentication-validator';
 import { AuthenticationAction } from './models/authentication-actions.enum';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { select, Store } from '@ngrx/store';
@@ -15,22 +20,35 @@ import * as NavigationAction from 'src/app/store/navigation-state/navigation.act
   styleUrls: ['./login-register.component.scss'],
 })
 export class LoginRegisterComponent {
-  credentialForm: FormGroup;
   registerMessage: string = `You do not have an account, start journey with us from`;
   loginMessage: string = `You already have an account, just log in from`;
-  isRegisterFromSelected: boolean = false;
+  isRegisterActive: boolean = false;
+  isVisiblePassword: boolean = false;
+
+  credentialForm: FormGroup = this.formBuilder.group(
+    {
+      authenticationAction: new FormControl(AuthenticationAction.Login),
+      authenticationMessage: new FormControl(this.registerMessage),
+      email: new FormControl('', [
+        Validators.required,
+        AuthenticationValidators.email,
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        AuthenticationValidators.minLength(4),
+      ]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        AuthenticationValidators.minLength(4),
+      ]),
+    },
+    { validators: AuthenticationValidators.identityRevealedValidator }
+  );
 
   constructor(
     private store: Store<fromAppStore.AppState>,
     private formBuilder: FormBuilder
   ) {
-    this.credentialForm = this.formBuilder.group({
-      authenticationAction: new FormControl(AuthenticationAction.Login),
-      authenticationMessage: new FormControl(this.registerMessage),
-      email: new FormControl('', [CustomValidators.email]),
-      password: new FormControl('', [CustomValidators.minLength(4)]),
-      confirmPassword: new FormControl('', [CustomValidators.minLength(4)]),
-    });
     combineLatest([
       this.store.pipe(select(fromState.getRouterUrl)),
       this.store.pipe(select(fromState.selectRouteNestedParams)),
@@ -46,7 +64,7 @@ export class LoginRegisterComponent {
         switch (authAction) {
           case AuthenticationAction.Login:
           case AuthenticationAction.Register:
-            this.isRegisterFromSelected =
+            this.isRegisterActive =
               authAction === AuthenticationAction.Register;
             this.updateCredentialForm();
             break;
@@ -60,8 +78,9 @@ export class LoginRegisterComponent {
       });
   }
 
-  isValidateInputValue(inputName: string) {
+  isInvalidInput(inputName: string) {
     return (
+      this.getInputValue(inputName) &&
       this.credentialForm.get(inputName).invalid &&
       (!this.credentialForm.get(inputName).pristine ||
         this.credentialForm.get(inputName).dirty)
@@ -81,7 +100,7 @@ export class LoginRegisterComponent {
       email: form.controls['email'].value,
       password: form.controls['password'].value,
     };
-    if (!this.isRegisterFromSelected) {
+    if (!this.isRegisterActive) {
       this.store.dispatch(AuthActions.login(credentials));
     } else {
       this.store.dispatch(AuthActions.register(credentials));
@@ -92,10 +111,10 @@ export class LoginRegisterComponent {
     this.credentialForm.reset();
     this.credentialForm.patchValue({
       ...this.credentialForm,
-      authenticationAction: !this.isRegisterFromSelected
+      authenticationAction: !this.isRegisterActive
         ? AuthenticationAction.Login
         : AuthenticationAction.Register,
-      authenticationMessage: !this.isRegisterFromSelected
+      authenticationMessage: !this.isRegisterActive
         ? this.registerMessage
         : this.loginMessage,
     });
@@ -105,11 +124,38 @@ export class LoginRegisterComponent {
     this.store.dispatch(
       NavigationAction.navigateTo({
         route: `/authentication/${
-          !this.isRegisterFromSelected
+          !this.isRegisterActive
             ? AuthenticationAction.Register
             : AuthenticationAction.Login
         }`,
       })
     );
+  }
+
+  isFormInvalid() {
+    if (
+      this.getInputValue('authenticationAction') ===
+      AuthenticationAction.Register
+    ) {
+      return (
+        this.isInvalidInput('email') === null ||
+        this.isInvalidInput('password') === null ||
+        this.isInvalidInput('confirmPassword') === null ||
+        this.isInvalidInput('email') ||
+        this.isInvalidInput('password') ||
+        this.isInvalidInput('confirmPassword') ||
+        this.credentialForm.errors?.['isMatchPasswords']
+      );
+    }
+    return (
+      this.isInvalidInput('email') === null ||
+      this.isInvalidInput('password') === null ||
+      this.isInvalidInput('email') ||
+      this.isInvalidInput('password')
+    );
+  }
+
+  onChangePasswordInputType() {
+    this.isVisiblePassword = !this.isVisiblePassword;
   }
 }
