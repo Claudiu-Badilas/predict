@@ -13,6 +13,7 @@ import * as AuthActions from '../actions/authentication.actions';
 import { combineLatest, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import * as fromState from 'src/app/store/app-state.reducer';
 import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
+import { AuthenticationUtils } from '../utils/authentication.utils';
 
 @Component({
   selector: 'app-login-register',
@@ -67,6 +68,12 @@ export class LoginRegisterComponent implements OnDestroy {
         switch (authAction) {
           case AuthenticationAction.Login:
           case AuthenticationAction.Register:
+            if (AuthenticationUtils.isTokenValid()) {
+              this.store.dispatch(
+                NavigationAction.navigateTo({ route: '/transactions/1' })
+              );
+              break;
+            }
             this.isRegisterActive =
               authAction === AuthenticationAction.Register;
             this.updateCredentialForm();

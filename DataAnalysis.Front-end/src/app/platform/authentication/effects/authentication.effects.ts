@@ -1,21 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {
-  catchError,
-  debounceTime,
-  filter,
-  first,
-  map,
-  mergeMap,
-  skipWhile,
-  switchMap,
-} from 'rxjs/operators';
-import { combineLatest, EMPTY, of } from 'rxjs';
-
-import { select, Store } from '@ngrx/store';
+import { first, map, switchMap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 import { AuthenticationService } from '../../services/authentication.service';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
-import { navigateTo } from 'src/app/store/navigation-state/navigation.actions';
+import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
 import * as AuthActions from '../actions/authentication.actions';
 import { AuthenticationUtils } from '../utils/authentication.utils';
 
@@ -32,14 +21,20 @@ export class AuthenticationEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.login),
-        switchMap((action) => {
-          return this._authService
-            .login({ email: action.email, password: action.password })
-            .pipe(first());
+        switchMap(({ email, password }) => {
+          return this._authService.login({ email, password }).pipe(first());
         }),
         map((response) => {
-          console.log('🚀 ~  response:', response);
           AuthenticationUtils.saveToken(response.token);
+          if (!AuthenticationUtils.isTokenValid(response.token)) {
+            this.store.dispatch(
+              NavigationAction.navigateTo({ route: '/authentication/login' })
+            );
+          } else {
+            this.store.dispatch(
+              NavigationAction.navigateTo({ route: '/transactions/1' })
+            );
+          }
         })
       ),
     { dispatch: false }
@@ -49,10 +44,8 @@ export class AuthenticationEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.register),
-        switchMap((action) => {
-          return this._authService
-            .register({ email: action.email, password: action.password })
-            .pipe(first());
+        switchMap(({ email, password }) => {
+          return this._authService.register({ email, password }).pipe(first());
         })
       ),
     { dispatch: false }

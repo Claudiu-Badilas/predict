@@ -6,19 +6,19 @@ export namespace AuthenticationUtils {
   }
 
   export function getToken(): string {
-    return localStorage.getItem('jwt-toke');
+    return localStorage.getItem('jwt-token');
   }
 
   export function logOut(): void {
     localStorage.removeItem('jwt-token');
   }
 
-  export function isTokenValid(): boolean {
+  export function isTokenValid(token: string = null): boolean {
     const jwtHelper = new JwtHelperService();
-    const token = getToken();
+    token = token ?? getToken();
     if (
       token &&
-      jwtHelper.decodeToken(token).sub &&
+      jwtHelper.decodeToken(token).nameid &&
       !jwtHelper.isTokenExpired(token)
     ) {
       return true;
