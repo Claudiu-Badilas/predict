@@ -6,10 +6,8 @@ import { Observable } from 'rxjs';
 export class AuthenticationService {
   constructor(private http: HttpClient) {}
 
-  public login(user: any): Observable<HttpResponse<any>> {
-    return this.http.post<any>(`server/api/v1/login`, user, {
-      observe: 'response',
-    });
+  public login(user: any): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(`server/api/v1/login`, user);
   }
 
   public register(user: any): Observable<any> {

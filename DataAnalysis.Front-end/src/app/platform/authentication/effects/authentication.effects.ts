@@ -17,6 +17,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { navigateTo } from 'src/app/store/navigation-state/navigation.actions';
 import * as AuthActions from '../actions/authentication.actions';
+import { AuthenticationUtils } from '../utils/authentication.utils';
 
 const ERROR_MSG = 'Some problems occurred, please refresh the page!';
 @Injectable()
@@ -35,6 +36,10 @@ export class AuthenticationEffects {
           return this._authService
             .login({ email: action.email, password: action.password })
             .pipe(first());
+        }),
+        map((response) => {
+          console.log('🚀 ~  response:', response);
+          AuthenticationUtils.saveToken(response.token);
         })
       ),
     { dispatch: false }
