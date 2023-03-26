@@ -23,6 +23,7 @@
     "@ngrx/router-store": "^15.4.0",
     "@ngrx/store": "^15.4.0",
     "bootstrap": "^5.2.3",
+    "primeng": "^15.2.1",
     "rxjs": "~7.5.0",
     "zone.js": "~0.12.0"
   },

@@ -16,6 +16,9 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { NavigationEffects } from './store/navigation-state/navigation.effects';
 import * as fromAppStore from './store/app-state.reducer';
 import { AuthenticationEffects } from './platform/authentication/effects/authentication.effects';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,13 +28,15 @@ import { AuthenticationEffects } from './platform/authentication/effects/authent
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    BrowserAnimationsModule,
     TransactionModule,
     AuthenticationModule,
     StoreModule.forRoot(fromAppStore.appReducer),
     EffectsModule.forRoot([NavigationEffects, AuthenticationEffects]),
     StoreRouterConnectingModule.forRoot(),
+    ToastModule,
   ],
   bootstrap: [AppComponent],
-  providers: [TransactionService, AuthenticationService],
+  providers: [TransactionService, AuthenticationService, MessageService],
 })
 export class AppModule {}
