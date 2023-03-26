@@ -2,13 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  template: `<router-outlet></router-outlet> `,
+  template: `
+    <app-toast></app-toast>
+    <router-outlet></router-outlet>
+  `,
   styles: [],
 })
-export class AppComponent {
-  title = 'client';
-
-  constructor() {}
-
-  ngOnInit(): void {}
-}
+export class AppComponent {}

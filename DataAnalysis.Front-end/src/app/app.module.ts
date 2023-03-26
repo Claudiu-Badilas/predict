@@ -16,9 +16,10 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { NavigationEffects } from './store/navigation-state/navigation.effects';
 import * as fromAppStore from './store/app-state.reducer';
 import { AuthenticationEffects } from './platform/authentication/effects/authentication.effects';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastNotificationEffects } from './platform/toast-notifications/effects/toast-notification.effects';
+import { ToastNotificationModule } from './platform/toast-notifications/toast-notification.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,11 +33,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TransactionModule,
     AuthenticationModule,
     StoreModule.forRoot(fromAppStore.appReducer),
-    EffectsModule.forRoot([NavigationEffects, AuthenticationEffects]),
+    EffectsModule.forRoot([
+      NavigationEffects,
+      AuthenticationEffects,
+      ToastNotificationEffects,
+    ]),
     StoreRouterConnectingModule.forRoot(),
-    ToastModule,
+    ToastNotificationModule,
   ],
   bootstrap: [AppComponent],
-  providers: [TransactionService, AuthenticationService, MessageService],
+  providers: [TransactionService, AuthenticationService],
 })
 export class AppModule {}
