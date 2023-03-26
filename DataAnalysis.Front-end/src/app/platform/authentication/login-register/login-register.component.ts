@@ -10,7 +10,14 @@ import { AuthenticationAction } from './models/authentication-actions.enum';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { select, Store } from '@ngrx/store';
 import * as AuthActions from '../actions/authentication.actions';
-import { combineLatest, debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  filter,
+  first,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import * as fromState from 'src/app/store/app-state.reducer';
 import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
 import { AuthenticationUtils } from '../utils/authentication.utils';
@@ -65,25 +72,8 @@ export class LoginRegisterComponent implements OnDestroy {
       )
       .subscribe(([, params]) => {
         const authAction: AuthenticationAction = params['auth-type'];
-        switch (authAction) {
-          case AuthenticationAction.Login:
-          case AuthenticationAction.Register:
-            if (AuthenticationUtils.isTokenValid()) {
-              this.store.dispatch(
-                NavigationAction.navigateTo({ route: '/transactions/1' })
-              );
-              break;
-            }
-            this.isRegisterActive =
-              authAction === AuthenticationAction.Register;
-            this.updateCredentialForm();
-            break;
-          default:
-            this.store.dispatch(
-              NavigationAction.navigateTo({ route: '/authentication/login' })
-            );
-            break;
-        }
+        this.isRegisterActive = authAction === AuthenticationAction.Register;
+        this.updateCredentialForm();
       });
   }
 
