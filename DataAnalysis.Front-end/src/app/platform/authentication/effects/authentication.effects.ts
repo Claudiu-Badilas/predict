@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { debounceTime, filter, first, map, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  filter,
+  first,
+  map,
+  switchMap,
+} from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AuthenticationService } from '../../services/authentication.service';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
@@ -8,11 +15,17 @@ import * as NavigationAction from 'src/app/store/navigation-state/navigation.act
 import * as AuthActions from '../actions/authentication.actions';
 import { AuthenticationUtils } from '../utils/authentication.utils';
 import * as fromState from 'src/app/store/app-state.reducer';
+import { EMPTY, of } from 'rxjs';
+import * as ToastActions from '../../toast-notifications/actions/toast-notification.actions';
+import { ToastType } from '../../toast-notifications/models/toast-type.model';
+import { MessageService } from 'primeng/api';
 
 @Injectable()
 export class AuthenticationEffects {
   constructor(
     private actions$: Actions,
+    private messageService: MessageService,
+
     private _authService: AuthenticationService,
     private store: Store<fromAppStore.AppState>
   ) {}
@@ -37,7 +50,17 @@ export class AuthenticationEffects {
       this.actions$.pipe(
         ofType(AuthActions.login),
         switchMap(({ email, password }) =>
-          this._authService.login({ email, password }).pipe(first())
+          this._authService.login({ email, password }).pipe(
+            first(),
+            catchError((error) => {
+              this.store.dispatch(
+                ToastActions.showToast({
+                  message: error.error,
+                })
+              );
+              return EMPTY;
+            })
+          )
         ),
         map(({ token }) => {
           AuthenticationUtils.saveToken(token);
@@ -56,7 +79,21 @@ export class AuthenticationEffects {
       this.actions$.pipe(
         ofType(AuthActions.register),
         switchMap(({ email, password }) =>
-          this._authService.register({ email, password }).pipe(first())
+          this._authService.register({ email, password }).pipe(
+            first(),
+            catchError((error) => {
+              console.log(
+                '🚀 ~ file: authentication.effects.ts:85 ~ AuthenticationEffects ~ catchError ~ error:',
+                error
+              );
+              this.store.dispatch(
+                ToastActions.showToast({
+                  message: error.error,
+                })
+              );
+              return EMPTY;
+            })
+          )
         )
       ),
     { dispatch: false }

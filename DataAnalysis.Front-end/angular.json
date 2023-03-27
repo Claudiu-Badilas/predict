@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "DataAnalysis.Front-end": {
+    "DataAnalysis": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -25,6 +25,9 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeng/resources/themes/saga-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
@@ -61,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "DataAnalysis.Front-end:build:production"
+              "browserTarget": "DataAnalysis:build:production"
             },
             "development": {
-              "browserTarget": "DataAnalysis.Front-end:build:development"
+              "browserTarget": "DataAnalysis:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "DataAnalysis.Front-end:build"
+            "browserTarget": "DataAnalysis:build"
           }
         },
         "test": {
@@ -83,6 +86,9 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeng/resources/themes/saga-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
