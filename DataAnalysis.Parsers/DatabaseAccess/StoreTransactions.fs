@@ -6,7 +6,6 @@ open DataAnalysis.Repository.Models
 open DataAnalysis.Types.TransactionTypes
 open DataAnalysis.DatabaseAccess.StorerUtils
 
-
 module StoreTransactions =
     
     let filterDublicates (storedTransactionIds: string list) (transactions: Transaction list) =
@@ -53,14 +52,27 @@ module StoreTransactions =
                     DataOwnerId = dataOwnerId
                 )
             )
+        printfn "Total parsed transactions -> %i" transactions.Length
+        if not transactions.IsEmpty then
+            let providerId = transactions[0].ProviderId.Value
+            let storedTransactionIds = 
+                transactionRepo.GetTransactionIds(dataOwnerId, providerId)    
+                |> Async.AwaitTask
+                |> Async.RunSynchronously
+                |> Seq.toList
+            printfn "Total transactions from db -> %i for provider -> %i" storedTransactionIds.Length providerId
 
-        let storedTransactionIds = 
-            transactionRepo.GetTransactionIds(dataOwnerId).Result
-            |> Seq.toList
-
-        let filteredTransactions = filterDublicates storedTransactionIds transactions
-        let storingResp = transactionRepo.StoreTransactions(filteredTransactions)
-        storingResp.Result
-
+            let filteredTransactions = filterDublicates storedTransactionIds transactions
+            printfn "Total transactions for storing -> %i" filteredTransactions.Length
+            if not filteredTransactions.IsEmpty then
+                transactionRepo.StoreTransactions(filteredTransactions)
+                |> Async.AwaitTask
+                |> Async.RunSynchronously
+            else
+                printfn "No transactions for storing"
+                0
+        else 
+            printfn "No parsed transactions"
+            0
         
 

@@ -12,7 +12,8 @@ module ParserConsole =
 
     let getLocalExcels path =
         Directory.EnumerateFiles(path, "*.xlsx")
-        |> Seq.toList 
+        |> Seq.append(Directory.EnumerateFiles(path, "*.xls"))
+        |> Seq.toList
         |> List.map(fun f -> Path.Combine(path, f) |> WorkBook.Load)
 
 

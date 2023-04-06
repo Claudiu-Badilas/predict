@@ -39,7 +39,7 @@ module ParserRaiffeisenExcelAccountStatement =
         ExcelUtils.getExcelValues excel
         |> Seq.toList
         |> List.indexed
-        |> List.map (fun (i, row) ->
+        |> List.choose (fun (i, row) ->
             let date = row[0]
             match date with
             | null -> None
@@ -64,8 +64,6 @@ module ParserRaiffeisenExcelAccountStatement =
                         Provider = Provider.RAIFFEISEN |> Some
                     }
         )
-        |> List.filter (fun d -> d.IsSome)
-        |> List.choose(fun t -> t)
         |> List.groupBy(fun t -> t.RegistrationDate, t.Amount)
         |> List.map(fun (_, t) -> ParserUtils.mapTransactions t userId )
         |> List.concat

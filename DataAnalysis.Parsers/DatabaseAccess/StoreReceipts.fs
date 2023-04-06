@@ -3,7 +3,6 @@
 open System
 open DataAnalysis.Repository.Repositories
 open DataAnalysis.Repository.Models
-open DataAnalysis.Types.TransactionTypes
 open DataAnalysis.DatabaseAccess.StorerUtils
 open DataAnalysis.Types.ReceiptTypes
 
@@ -64,15 +63,22 @@ module StoreReceipts =
             )
 
         let storedReceiptsIds = 
-            receiptRepo.GetReceiptByUserId(dataOwnerId).Result
+            receiptRepo.GetReceiptByUserId(dataOwnerId)
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
             |> Seq.toList
 
         let filteredReceipts = filterDublicates storedReceiptsIds receipts
-        let storingResp = receiptRepo.StoreReceipts(filteredReceipts)
-        storingResp.Result
+
+        let storingResp = 
+            receiptRepo.StoreReceipts(filteredReceipts)
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
 
         let allStoredReceiptsIds = 
-            receiptRepo.GetReceiptByUserId(dataOwnerId).Result
+            receiptRepo.GetReceiptByUserId dataOwnerId
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
             |> Seq.toList
         
         let purchasedProducts =
@@ -81,12 +87,15 @@ module StoreReceipts =
                 let foundReceipt = 
                     allStoredReceiptsIds 
                     |> List.find(fun storedReceipt -> receipt.Identifier = storedReceipt.Identifier)
-                let da =
-                    receipt.Products
-                    |> Seq.toList
-                    |> List.map(fun product -> mapPurchasedProduct product foundReceipt.Id)
-                da
+                receipt.Products
+                |> Seq.toList
+                |> List.map(fun product -> mapPurchasedProduct product foundReceipt.Id)
             )
             |> List.concat
-        let storingResponse = receiptRepo.StorePurchasedProducts(purchasedProducts)
-        storingResponse.Result
+
+        let storingResponse = 
+            receiptRepo.StorePurchasedProducts(purchasedProducts)
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
+
+        storingResponse

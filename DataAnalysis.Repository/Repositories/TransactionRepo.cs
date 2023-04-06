@@ -32,15 +32,16 @@ namespace DataAnalysis.Repository.Repositories {
             };
         }
 
-        public async Task<IEnumerable<string>> GetTransactionIds(int dataOwnerId) {
+        public async Task<IEnumerable<string>> GetTransactionIds(int dataOwnerId, int providerId) {
             using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT identifier 
-                    FROM public.""transaction""
-                    WHERE data_owner_id = @dataOwnerId;";
+                    FROM public.""transaction"" t
+                    WHERE t.data_owner_id = @dataOwnerId
+                        AND t.provider_id = @providerId;";
 
-                return await connection.QueryAsync<string>(sql, new { dataOwnerId });
+                return await connection.QueryAsync<string>(sql, new { dataOwnerId, providerId });
             };
         }
 
