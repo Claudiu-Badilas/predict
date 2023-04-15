@@ -1,15 +1,8 @@
 ﻿using FluentMigrator;
-using FluentMigrator.Builders;
-using FluentMigrator.Builder;
-using FluentMigrator.Expressions;
-using FluentMigrator.Model;
-using FluentMigrator.Postgres;
-using FluentMigrator.Infrastructure;
-using FluentMigrator.Runner.Initialization;
 
 namespace Configuration.Context {
 
-    [Migration(202106280001)]
+    [Migration(202304150001)]
     public class InitialUserTables_202304150001 : Migration {
         public override void Down() {
             Delete.Table("user2");
