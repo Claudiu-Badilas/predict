@@ -1,4 +1,4 @@
-import { TransactionService } from '../services/transaction.service';
+import { TransactionService } from 'src/app/modules/transaction-module/services/transaction.service';
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs';
 

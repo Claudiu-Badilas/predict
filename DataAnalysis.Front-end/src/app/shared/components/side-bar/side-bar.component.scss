@@ -1,0 +1,28 @@
+:host {
+  ::ng-deep button {
+    margin-right: 0.25em;
+  }
+
+  ::ng-deep .p-sidebar .p-sidebar-content {
+    padding: 0;
+  }
+
+  ::ng-deep.p-accordion .p-accordion-content {
+    padding: 0;
+    border: none;
+    background: red;
+    color: red;
+  }
+
+  ::ng-deep .p-component-overlay-enter {
+    //animation: none !important;
+  }
+
+  ::ng-deep .p-component-overlay {
+    background-color: transparent !important;
+    transition-duration: none !important;
+  }
+}
+.background {
+  background-color: red;
+}
