@@ -5,6 +5,7 @@ open DataAnalysis.Repository.Repositories
 open DataAnalysis.Repository.Models
 open DataAnalysis.DatabaseAccess.StorerUtils
 open DataAnalysis.Types.ReceiptTypes
+open DataAnalysis.Common.Configuration
 
 module StoreReceipts =
     
@@ -46,7 +47,8 @@ module StoreReceipts =
 
 
     let storeReceipts dataOwnerId (parsedReceipts: ParsedReceipt list) =
-        let receiptRepo = new ReceiptRepo()
+        let envConfig = EnvironmentConfiguration()
+        let receiptRepo = new ReceiptRepo(envConfig)
         let receipts = 
             parsedReceipts
             |> List.map(fun r ->

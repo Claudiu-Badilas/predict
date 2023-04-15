@@ -1,13 +1,20 @@
 ﻿using Dapper;
-using static DataAnalysis.Common.Configuration.ConfigurationUtils;
 using DataAnalysis.Repository.Repositories.Interfaces;
 using Npgsql;
 using DataAnalysis.Repository.Models;
+using DataAnalysis.Common.Configuration;
 
 namespace DataAnalysis.Repository.Repositories {
     public class TransactionRepo : ITransactionRepo {
+
+        private string _npsqlConnectionString;
+
+        public TransactionRepo(IEnvironmentConfiguration envConfig) {
+            _npsqlConnectionString = envConfig.GetNpsqlConnectionString();
+        }
+
         public async Task<IEnumerable<TransactionResponse>> GetTransactionByUserId(int dataOwnerId) {
-            using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT 
@@ -33,7 +40,7 @@ namespace DataAnalysis.Repository.Repositories {
         }
 
         public async Task<IEnumerable<string>> GetTransactionIds(int dataOwnerId, int providerId) {
-            using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT identifier 
@@ -46,7 +53,7 @@ namespace DataAnalysis.Repository.Repositories {
         }
 
         public async Task<int> StoreTransactions(IEnumerable<Transaction> transactions) {
-            using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     INSERT INTO public.""transaction"" (

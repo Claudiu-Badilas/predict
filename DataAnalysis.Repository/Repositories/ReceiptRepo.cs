@@ -1,13 +1,20 @@
 ﻿using DataAnalysis.Repository.Models;
 using DataAnalysis.Repository.Repositories.Interfaces;
 using Npgsql;
-using static DataAnalysis.Common.Configuration.ConfigurationUtils;
 using Dapper;
+using DataAnalysis.Common.Configuration;
 
 namespace DataAnalysis.Repository.Repositories {
     public class ReceiptRepo : IReceiptRepo {
+
+        private string _npsqlConnectionString;
+
+        public ReceiptRepo(IEnvironmentConfiguration envConfig) {
+            _npsqlConnectionString = envConfig.GetNpsqlConnectionString();
+        }
+
         public async Task<IEnumerable<Receipt>> GetReceiptByUserId(int dataOwnerId) {
-            using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT 
@@ -21,7 +28,7 @@ namespace DataAnalysis.Repository.Repositories {
         }
 
         public async Task<int> StoreReceipts(IEnumerable<Receipt> receipts) {
-            await using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            await using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 var sql = @"
                 INSERT INTO public.receipt
                     (identifier, ""date"", total_price, total_discount, provider_id, currency_id, data_owner_id)
@@ -46,9 +53,9 @@ namespace DataAnalysis.Repository.Repositories {
                 });
             }
         }
-        
+
         public async Task<int> StorePurchasedProducts(IEnumerable<PurchasedProduct> purchasedProducts) {
-            await using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            await using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 var sql = @"
                 INSERT INTO public.purchased_product
                 (""name"", price, quantity, vat, quantity_type_id, receipt_id)
