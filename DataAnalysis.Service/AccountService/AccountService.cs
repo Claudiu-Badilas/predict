@@ -14,7 +14,7 @@ namespace DataAnalysis.Service.AccountService {
         public async Task RegisterUser(UserRequest userRequest) {
             using var hmac = new HMACSHA512();
 
-            await _userRepo.AddUser(new AppUser {
+            var id = await _userRepo.StoreUser(new AppUser {
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(userRequest.Password)),
                 PasswordSalt = hmac.Key,
                 Email = userRequest.Email,
@@ -22,6 +22,12 @@ namespace DataAnalysis.Service.AccountService {
                 LastLogin = DateTime.UtcNow,
                 IsActive = true,
                 IsAdmin = false
+            });
+
+            await _userRepo.StoreDataOwner(new DataOwner {
+                Name = userRequest.Email,
+                CreationDate = DateTime.UtcNow,
+                UserId = id,
             });
         }
 

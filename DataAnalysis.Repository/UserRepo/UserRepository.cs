@@ -44,16 +44,17 @@ namespace DataAnalysis.Repository.UserRepo {
             };
         }
 
-        public async Task AddUser(AppUser user) {
+        public async Task<int> StoreUser(AppUser user) {
             using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     INSERT INTO public.""user"" 
                         (email, password_hash, password_salt, join_date, last_login, is_active, is_admin) 
                     VALUES
-                        (@Email, @PasswordHash, @PasswordSalt, @JoinDate, @LastLogin, @IsActive, @IsAdmin);";
+                        (@Email, @PasswordHash, @PasswordSalt, @JoinDate, @LastLogin, @IsActive, @IsAdmin)
+                    RETURNING id;";
 
-                await connection.ExecuteAsync(sql, user);
+                return await connection.ExecuteScalarAsync<int>(sql, user);
             };
         }
 
@@ -80,11 +81,26 @@ namespace DataAnalysis.Repository.UserRepo {
                 var sql = @"
                     SELECT 
 	                    do2.id as Id,
-	                    do2.""name"" as Name
+	                    do2.""name"" as Name,
+	                    do2.creation_date as CreationDate,
+	                    do2.user_id as UserId
                     FROM public.data_owner do2 
                     JOIN public.""user"" u ON u.id = do2.user_id
                     WHERE u.id = @userId;";
                 return await connection.QueryAsync<DataOwner>(sql, new { userId });
+            };
+        }
+
+        public async Task<int> StoreDataOwner(DataOwner owner) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
+                connection.Open();
+                var sql = @"
+                    INSERT INTO public.data_owner
+                        (name, creation_date, user_id) 
+                    VALUES 
+                        (@Name, @CreationDate, @UserId)
+                    RETURNING id;";
+                return await connection.ExecuteAsync(sql, owner);
             };
         }
     }
