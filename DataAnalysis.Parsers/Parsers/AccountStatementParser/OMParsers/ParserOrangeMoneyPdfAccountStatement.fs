@@ -96,7 +96,7 @@ module ParserOrangeMoneyPdfAccountStatement =
                 let lines = group.Split("\n")
                 lines
                 |> Array.indexed
-                |> Array.map(fun (i, line) -> 
+                |> Array.choose(fun (i, line) -> 
                     let words = line.Split(" ")
                     let date = words[0]
                     match date with
@@ -124,8 +124,6 @@ module ParserOrangeMoneyPdfAccountStatement =
         )
         |> Array.concat
         |> Array.toList
-        |> List.filter (fun d -> d.IsSome)
-        |> List.choose(fun t -> t)
         |> List.groupBy(fun t -> t.RegistrationDate, t.Amount)
         |> List.map(fun (_, t) -> ParserUtils.mapTransactions t userId )
         |> List.concat

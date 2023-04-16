@@ -2,6 +2,7 @@
 using Npgsql;
 using DataAnalysis.Common.Configuration;
 using DataAnalysis.Repository.TransactionRepo.Models;
+using DataAnalysis.Repository.ReceiptRepo.Models;
 
 namespace DataAnalysis.Repository.TransactionRepo {
     public class TransactionRepo : ITransactionRepo {
@@ -58,22 +59,32 @@ namespace DataAnalysis.Repository.TransactionRepo {
                     INSERT INTO public.""transaction"" (
                         identifier, registration_date, completition_date, amount, fee, description, 
                         reference_id, provider_id, currency_id, transaction_type_id, data_owner_id )
-                    VALUES (
-                        @Identifier, @RegistrationDate, @CompletionDate, @Amount, @Fee, @Description, 
-                        @ReferenceId, @ProviderId, @CurrencyId, @TransactionTypeId, @DataOwnerId );";
+                    VALUES(
+                        unnest(@identifiers),
+                        unnest(@registrationDates),
+                        unnest(@completionDates),
+                        unnest(@amounts),
+                        unnest(@fees),
+                        unnest(@descriptions),
+                        unnest(@reference_ids),
+                        unnest(@provider_ids),
+                        unnest(@currency_ids),
+                        unnest(@transaction_type_ids),
+                        unnest(@data_owner_ids)
+                    );";
 
                 return await connection.ExecuteAsync(sql, transactions.Select(t => new {
-                    t.Identifier,
-                    t.RegistrationDate,
-                    t.CompletionDate,
-                    t.Amount,
-                    t.Fee,
-                    t.Description,
-                    t.ReferenceId,
-                    t.ProviderId,
-                    t.CurrencyId,
-                    t.TransactionTypeId,
-                    t.DataOwnerId
+                    identifiers = transactions.Select(x => x.Identifier).ToList(),
+                    registrationDates = transactions.Select(x => x.RegistrationDate).ToList(),
+                    completionDates = transactions.Select(x => x.CompletionDate).ToList(),
+                    amounts = transactions.Select(x => x.Amount).ToList(),
+                    fees = transactions.Select(x => x.Fee).ToList(),
+                    descriptions = transactions.Select(x => x.Description).ToList(),
+                    reference_ids = transactions.Select(x => x.ReferenceId).ToList(),
+                    provider_ids = transactions.Select(x => x.ProviderId).ToList(),
+                    currency_ids = transactions.Select(x => x.CurrencyId).ToList(),
+                    transaction_type_ids = transactions.Select(x => x.TransactionTypeId).ToList(),
+                    data_owner_ids = transactions.Select(x => x.DataOwnerId).ToList()
                 }));
             };
         }
