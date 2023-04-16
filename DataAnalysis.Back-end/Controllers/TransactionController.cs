@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DataAnalysis.Controllers.Models;
-using DataAnalysis.Repositories.Interfaces;
-using DataAnalysis.Services.Interfaces;
-using DataAnalysis.Repository.Repositories.Interfaces;
+using DataAnalysis.Repository.TransactionRepo;
 
 namespace DataAnalysis.Controllers {
     [Route("api/v1")]

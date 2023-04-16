@@ -1,11 +1,11 @@
 ﻿namespace DataAnalysis.DatabaseAccess
 
 open System
-open DataAnalysis.Repository.Repositories
-open DataAnalysis.Repository.Models
 open DataAnalysis.Types.TransactionTypes
 open DataAnalysis.DatabaseAccess.StorerUtils
 open DataAnalysis.Common.Configuration
+open DataAnalysis.Repository.TransactionRepo.Models
+open DataAnalysis.Repository.TransactionRepo
 
 module StoreTransactions =
     

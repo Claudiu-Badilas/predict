@@ -1,6 +1,6 @@
-﻿using DataAnalysis.Models;
+﻿using DataAnalysis.Repository.UserRepo.Models;
 
-namespace DataAnalysis.Repositories.Interfaces {
+namespace DataAnalysis.Repository.UserRepo {
     public interface IUserRepository {
         Task<bool> IsExistingUser(string email);
         Task<AppUser> GetUserByEmail(string email);

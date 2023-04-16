@@ -1,5 +1,7 @@
-﻿namespace DataAnalysis.Controllers.Models {
-    public class UserResponse {
+﻿namespace DataAnalysis.Repository.UserRepo.Models
+{
+    public class UserResponse
+    {
         public int? Id { get; set; }
         public string Email { get; set; }
         public DateTime? JoinDate { get; set; }

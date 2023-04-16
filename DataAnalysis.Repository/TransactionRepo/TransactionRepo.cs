@@ -1,10 +1,9 @@
 ﻿using Dapper;
-using DataAnalysis.Repository.Repositories.Interfaces;
 using Npgsql;
-using DataAnalysis.Repository.Models;
 using DataAnalysis.Common.Configuration;
+using DataAnalysis.Repository.TransactionRepo.Models;
 
-namespace DataAnalysis.Repository.Repositories {
+namespace DataAnalysis.Repository.TransactionRepo {
     public class TransactionRepo : ITransactionRepo {
 
         private string _npsqlConnectionString;

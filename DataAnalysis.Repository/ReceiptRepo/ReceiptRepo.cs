@@ -1,10 +1,9 @@
-﻿using DataAnalysis.Repository.Models;
-using DataAnalysis.Repository.Repositories.Interfaces;
-using Npgsql;
+﻿using Npgsql;
 using Dapper;
 using DataAnalysis.Common.Configuration;
+using DataAnalysis.Repository.ReceiptRepo.Models;
 
-namespace DataAnalysis.Repository.Repositories {
+namespace DataAnalysis.Repository.ReceiptRepo {
     public class ReceiptRepo : IReceiptRepo {
 
         private string _npsqlConnectionString;

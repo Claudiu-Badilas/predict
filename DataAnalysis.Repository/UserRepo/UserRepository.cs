@@ -1,10 +1,9 @@
-﻿using DataAnalysis.Models;
-using Dapper;
-using DataAnalysis.Repositories.Interfaces;
+﻿using Dapper;
 using Npgsql;
 using DataAnalysis.Common.Configuration;
+using DataAnalysis.Repository.UserRepo.Models;
 
-namespace DataAnalysis.Repositories {
+namespace DataAnalysis.Repository.UserRepo {
     public class UserRepository : IUserRepository {
 
         private string _npsqlConnectionString;

@@ -3,10 +3,11 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using DataAnalysis.Services.Interfaces;
-using DataAnalysis.Controllers.Models;
 using DataAnalysis.Common.Configuration;
+using DataAnalysis.Repository.UserRepo.Models;
 
-namespace DataAnalysis.Services {
+namespace DataAnalysis.Services
+{
     public class TokenService : ITokenService {
         private readonly SymmetricSecurityKey _key;
 

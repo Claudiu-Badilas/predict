@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAnalysis.Repository.Models {
+namespace DataAnalysis.Repository.TransactionRepo.Models {
     public class Transaction {
         public int? Id { get; set; }
         public string Identifier { get; set; }

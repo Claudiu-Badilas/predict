@@ -1,5 +1,7 @@
-﻿namespace DataAnalysis.Models {
-    public class AppUser {
+﻿namespace DataAnalysis.Repository.UserRepo.Models
+{
+    public class AppUser
+    {
         public int? Id { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }

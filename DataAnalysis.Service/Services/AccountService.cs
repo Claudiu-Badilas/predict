@@ -1,11 +1,11 @@
-﻿using DataAnalysis.Controllers.Models;
-using DataAnalysis.Models;
-using DataAnalysis.Repositories.Interfaces;
+﻿using DataAnalysis.Repository.UserRepo;
+using DataAnalysis.Repository.UserRepo.Models;
 using DataAnalysis.Services.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace DataAnalysis.Services {
+namespace DataAnalysis.Services
+{
     public class AccountService : IAccountService {
         private readonly IUserRepository _userRepo;
 

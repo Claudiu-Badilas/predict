@@ -1,5 +1,4 @@
-﻿using DataAnalysis.Controllers.Models;
-using DataAnalysis.Models;
+﻿using DataAnalysis.Repository.UserRepo.Models;
 
 namespace DataAnalysis.Services.Interfaces {
     public interface IAccountService {
