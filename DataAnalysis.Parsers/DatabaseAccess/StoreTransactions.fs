@@ -5,6 +5,7 @@ open DataAnalysis.Repository.Repositories
 open DataAnalysis.Repository.Models
 open DataAnalysis.Types.TransactionTypes
 open DataAnalysis.DatabaseAccess.StorerUtils
+open DataAnalysis.Common.Configuration
 
 module StoreTransactions =
     
@@ -34,7 +35,7 @@ module StoreTransactions =
         | _ -> Nullable()
     
     let storeTransaction dataOwnerId (parsedTransactions: ParsedTransaction list) =
-        let transactionRepo = new TransactionRepo()
+        let transactionRepo = new TransactionRepo(EnvironmentConfiguration())
         let transactions = 
             parsedTransactions
             |> List.map(fun t ->

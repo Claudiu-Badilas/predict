@@ -1,17 +1,20 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using DataAnalysis.Common.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using static DataAnalysis.Common.Configuration.ConfigurationUtils;
 
 namespace DataAnalysis.Extensions {
     public static class IdentityServiceExtensions {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services,
-            IConfiguration config) {
+        public static IServiceCollection AddIdentityServices(
+            this IServiceCollection services,
+            IConfiguration config,
+            EnvironmentConfiguration envConfig
+            ) {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenKey)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(envConfig.GetJWTKey())),
                         ValidateIssuer = false,
                         ValidateAudience = false,
                     };

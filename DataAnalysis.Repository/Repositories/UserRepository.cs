@@ -2,13 +2,19 @@
 using Dapper;
 using DataAnalysis.Repositories.Interfaces;
 using Npgsql;
-using static DataAnalysis.Common.Configuration.ConfigurationUtils;
+using DataAnalysis.Common.Configuration;
 
 namespace DataAnalysis.Repositories {
     public class UserRepository : IUserRepository {
 
+        private string _npsqlConnectionString;
+
+        public UserRepository(IEnvironmentConfiguration envConfig) {
+            _npsqlConnectionString = envConfig.GetNpsqlConnectionString();
+        }
+
         public async Task<bool> IsExistingUser(string email) {
-            using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT email FROM public.""user"" 
@@ -19,7 +25,7 @@ namespace DataAnalysis.Repositories {
         }
 
         public async Task<AppUser> GetUserByEmail(string email) {
-            using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     SELECT 
@@ -38,7 +44,7 @@ namespace DataAnalysis.Repositories {
         }
 
         public async Task AddUser(AppUser user) {
-            using (var connection = new NpgsqlConnection(NpsqlConnectionString)) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
                     INSERT INTO public.""user"" 

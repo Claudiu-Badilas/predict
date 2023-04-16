@@ -6,6 +6,7 @@ using DataAnalysis.Extensions;
 using DataAnalysis.Middleware;
 using DataAnalysis.Repository.Repositories;
 using DataAnalysis.Repository.Repositories.Interfaces;
+using DataAnalysis.Common.Configuration;
 
 namespace DataAnalysis {
     public class Startup {
@@ -28,7 +29,9 @@ namespace DataAnalysis {
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccountService, AccountService>();
 
-            services.AddIdentityServices(_config);
+            services.AddSingleton<IEnvironmentConfiguration, EnvironmentConfiguration>();
+
+            services.AddIdentityServices(_config, new EnvironmentConfiguration());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
