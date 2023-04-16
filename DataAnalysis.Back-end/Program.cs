@@ -1,7 +1,12 @@
+using DataAnalysis.Extensions;
+
 namespace DataAnalysis {
     public class Program {
         public static void Main(string[] args) {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+                .Build()
+                .MigrateDatabase()
+                .Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

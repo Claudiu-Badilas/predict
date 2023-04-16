@@ -65,8 +65,8 @@ namespace DataAnalysis.Repository.Repositories {
 
                 return await connection.ExecuteAsync(sql, transactions.Select(t => new {
                     t.Identifier,
-                    RegistrationDate = t.RegistrationDate.ToString(),
-                    CompletionDate = t.CompletionDate.ToString(),
+                    t.RegistrationDate,
+                    t.CompletionDate,
                     t.Amount,
                     t.Fee,
                     t.Description,

@@ -7,14 +7,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="FluentMigrator.Runner.Postgres" Version="3.3.2" />
-		<PackageReference Include="FluentMigrator.Runner" Version="3.2.17" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.7" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\DataAnalysis.Repository\DataAnalysis.Repository.csproj" />
-		<ProjectReference Include="..\DataAnalysis.Service\DataAnalysis.Service.csproj" />
+	  <ProjectReference Include="..\DataAnalysis.Repository\DataAnalysis.Repository.csproj" />
+	  <ProjectReference Include="..\DataAnalysis.Service\DataAnalysis.Service.csproj" />
 	</ItemGroup>
 
 </Project>
