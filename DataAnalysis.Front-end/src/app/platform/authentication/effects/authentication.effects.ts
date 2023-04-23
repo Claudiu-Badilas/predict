@@ -63,12 +63,14 @@ export class AuthenticationEffects {
           )
         ),
         map(({ token }) => {
-          AuthenticationUtils.saveToken(token);
-          const route = AuthenticationUtils.isTokenValid(token)
-            ? '/transactions/1'
-            : '/authentication/login';
+          if (AuthenticationUtils.isTokenValid(token)) {
+            AuthenticationUtils.saveToken(token);
+            return NavigationAction.navigateTo({ route: 'transactions/1' });
+          }
 
-          return NavigationAction.navigateTo({ route });
+          return NavigationAction.navigateTo({
+            route: 'authentication/login',
+          });
         })
       ),
     { dispatch: false }
@@ -82,10 +84,6 @@ export class AuthenticationEffects {
           this._authService.register({ email, password }).pipe(
             first(),
             catchError((error) => {
-              console.log(
-                '🚀 ~ file: authentication.effects.ts:85 ~ AuthenticationEffects ~ catchError ~ error:',
-                error
-              );
               this.store.dispatch(
                 ToastActions.showToast({
                   message: error.error,
@@ -95,6 +93,21 @@ export class AuthenticationEffects {
             })
           )
         )
+      ),
+    { dispatch: false }
+  );
+
+  logout$ = createEffect(
+    () =>
+      this.store.pipe(select(fromState.getRouterUrl)).pipe(
+        debounceTime(500),
+        filter((url) => url && url.includes('logout')),
+        map(() => {
+          AuthenticationUtils.logOut();
+          return NavigationAction.navigateTo({
+            route: '/authentication/login',
+          });
+        })
       ),
     { dispatch: false }
   );

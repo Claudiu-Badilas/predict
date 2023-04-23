@@ -10,17 +10,9 @@ import { AuthenticationAction } from './models/authentication-actions.enum';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { select, Store } from '@ngrx/store';
 import * as AuthActions from '../actions/authentication.actions';
-import {
-  combineLatest,
-  debounceTime,
-  filter,
-  first,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { combineLatest, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import * as fromState from 'src/app/store/app-state.reducer';
 import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
-import { AuthenticationUtils } from '../utils/authentication.utils';
 
 @Component({
   selector: 'app-login-register',

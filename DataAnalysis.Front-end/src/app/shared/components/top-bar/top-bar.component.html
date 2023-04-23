@@ -10,13 +10,17 @@
           <div class="d-flex align-items-center">
             <img class="luncher" src="assets/top-bar/launcher.png" alt="" />
             <div>
-              {{ modules[0] }}
+              {{ modules[0].name }}
             </div>
           </div>
         </div>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem *ngFor="let option of modules">
-            {{ option }}
+          <button
+            ngbDropdownItem
+            *ngFor="let option of modules"
+            (click)="onNavigateTo(option.url)"
+          >
+            {{ option.name }}
           </button>
         </div>
       </div>
@@ -35,8 +39,12 @@
         </div>
 
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem *ngFor="let option of settings">
-            {{ option }}
+          <button
+            ngbDropdownItem
+            *ngFor="let option of settings"
+            (click)="onNavigateTo(option.url)"
+          >
+            {{ option.name }}
           </button>
         </div>
       </div>

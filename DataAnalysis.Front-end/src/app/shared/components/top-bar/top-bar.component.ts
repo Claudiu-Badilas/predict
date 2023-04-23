@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as fromAppStore from 'src/app/store/app-state.reducer';
+import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
 
 @Component({
   selector: 'app-top-bar',
@@ -6,6 +9,23 @@ import { Component } from '@angular/core';
   styleUrls: ['./top-bar.component.scss'],
 })
 export class TopBarComponent {
-  modules = ['Transactions', 'Receipts', 'Health'];
-  settings = ['Settings', 'Log out'];
+  modules = [
+    { name: 'Transactions', url: 'transactions' },
+    { name: 'Receipts', url: 'receipts' },
+    { name: 'Health', url: 'health' },
+  ];
+
+  settings = [
+    { name: 'Settings', url: 'settings' },
+    { name: 'Log out', url: 'authentication/logout' },
+  ];
+  constructor(private store: Store<fromAppStore.AppState>) {}
+
+  onNavigateTo(url: string) {
+    this.store.dispatch(
+      NavigationAction.navigateTo({
+        route: url,
+      })
+    );
+  }
 }
