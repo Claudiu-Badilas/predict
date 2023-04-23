@@ -1,38 +1,20 @@
-<p-sidebar
-  [(visible)]="display"
-  [baseZIndex]="10000"
-  [transitionOptions]="'100ms'"
-  style="width: 40%"
->
-  <h1 style="font-weight: normal" class="pl-3">Owners</h1>
-  <p-accordion [activeIndex]="0">
-    <p-accordionTab header="Header I">
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-        explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
-        odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-        voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non
-        numquam eius modi.
-      </p>
-    </p-accordionTab>
-    <p-accordionTab header="Header II">
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-        explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
-        odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-        voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non
-        numquam eius modi.
-      </p>
-    </p-accordionTab>
-  </p-accordion>
-</p-sidebar>
+<div *ngIf="isFullSize" class="sidebar">
+  <div>
+    <ng-content select="[filters-full-size]"></ng-content>
+  </div>
+  <div class="arrows" (click)="toggleSidebar()">
+    <img src="assets/icons/side-bar/arrows.png" alt="" />
+  </div>
+</div>
+<div *ngIf="!isFullSize" class="sidebar-partial-size">
+  <div>
+    <ng-content select="[filters-partial-size]"></ng-content>
+  </div>
+  <div class="arrows" (click)="toggleSidebar()">
+    <img src="assets/icons/side-bar/arrows.png" alt="" />
+  </div>
+</div>
 
-<p-button
-  type="button"
-  (click)="display = true"
-  icon="pi pi-arrow-right"
-></p-button>
+<div [ngClass]="{ content: isFullSize, 'content-full': !isFullSize }">
+  <ng-content select="[main-content]"></ng-content>
+</div>

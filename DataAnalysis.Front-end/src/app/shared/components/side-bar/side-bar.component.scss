@@ -1,28 +1,82 @@
-:host {
-  ::ng-deep button {
-    margin-right: 0.25em;
+@import "src/app/shared/styles/colors.scss";
+
+.sidebar {
+  background-color: $cyan-800;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: all 0.3s ease;
+  width: 300px;
+  color: $bs-white;
+  margin-top: 50px;
+
+  img {
+    transform: rotate(-180deg);
+    left: 255px;
   }
 
-  ::ng-deep .p-sidebar .p-sidebar-content {
-    padding: 0;
-  }
+  &-partial-size {
+    background-color: $cyan-800;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease;
+    width: 50px;
+    color: $bs-white;
+    margin-top: 50px;
 
-  ::ng-deep.p-accordion .p-accordion-content {
-    padding: 0;
-    border: none;
-    background: red;
-    color: red;
-  }
+    &:hover {
+      width: 300px;
 
-  ::ng-deep .p-component-overlay-enter {
-    //animation: none !important;
-  }
+      img {
+        left: 255px;
+        transition: all 0.3s ease;
+      }
+    }
 
-  ::ng-deep .p-component-overlay {
-    background-color: transparent !important;
-    transition-duration: none !important;
+    img {
+      transform: rotate(0deg);
+      left: 5px;
+    }
   }
 }
-.background {
-  background-color: red;
+
+.sidebar .sidebar-partial-size ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  margin-left: 300px;
+  padding: 20px;
+}
+
+.content-full {
+  margin-left: 50px;
+  padding: 20px;
+}
+
+.arrows {
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  bottom: 50px;
+  left: 0px;
+  padding: 5px 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $cyan-700;
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    bottom: 0px;
+    filter: invert(100%);
+  }
 }

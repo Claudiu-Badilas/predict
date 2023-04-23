@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { PrimeNGConfig } from 'primeng/api';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-side-bar',
@@ -7,9 +6,9 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./side-bar.component.scss'],
 })
 export class SideBarComponent {
-  constructor(private primengConfig: PrimeNGConfig) {}
-  display = true;
-  ngOnInit() {
-    this.primengConfig.ripple = true;
+  isFullSize = true;
+
+  toggleSidebar() {
+    this.isFullSize = !this.isFullSize;
   }
 }
