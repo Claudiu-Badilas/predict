@@ -10,12 +10,28 @@
   width: 100%;
 
   .logo {
-    margin: 10px 100px 10px 40px;
-    max-width: 180px;
-    max-height: 40px;
-    width: auto;
-    height: auto;
+    &-img {
+      margin: 10px 10px 10px 30px;
+      //max-width: 180px;
+      max-height: 40px;
+      //width: auto;
+      //height: auto;
+    }
+
+    //background-color: #fff;
+    //border: 1px solid #ccc;
+    &-name {
+      font-family: fantasy;
+      font-size: 26px;
+      //font-weight: bold;
+      color: white;
+      //text-transform: uppercase;
+      //margin: 0;
+    }
+    //padding: 10px;
+    //text-align: center;
   }
+
   .luncher {
     margin: 7px 8px 7px 8px;
     max-width: 30px;
