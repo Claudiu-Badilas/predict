@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { first } from 'rxjs';
+import { GraficRambursare } from '../models/mortgage.model';
 import { MortgageService } from '../services/mortgage.service';
 
 @Component({
@@ -8,13 +9,13 @@ import { MortgageService } from '../services/mortgage.service';
   styleUrls: ['./mortgage.component.scss'],
 })
 export class MortgageComponent {
-  transactions: any[] = [];
+  transactions: GraficRambursare[] = [];
 
   constructor(private readonly _mortgageService: MortgageService) {
     this._mortgageService
       .getMortgages()
       .pipe(first())
-      .subscribe((res: any[]) => {
+      .subscribe((res) => {
         this.transactions = res;
       });
   }
