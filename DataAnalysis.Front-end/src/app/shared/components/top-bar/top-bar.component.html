@@ -1,52 +1,18 @@
 <div class="wrapper">
-  <div class="top-bar">
+  <div class="top-bar d-flex align-items-center justify-content-between">
     <div class="logo d-flex align-items-center">
       <img class="logo-img" src="favicon.ico" alt="" />
       <div class="logo-name">SMART Analysis</div>
     </div>
-    <div class="dropdown">
-      <div ngbDropdown class="d-inline-block" placement="bottom-start">
-        <div id="module-dropdown" ngbDropdownToggle>
-          <div class="d-flex align-items-center">
-            <img class="luncher" src="assets/top-bar/launcher.png" alt="" />
-            <div>
-              {{ modules[0].name }}
-            </div>
-          </div>
-        </div>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button
-            ngbDropdownItem
-            *ngFor="let option of modules"
-            (click)="onNavigateTo(option.url)"
-          >
-            {{ option.name }}
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="right-dropdown">
-      <div ngbDropdown class="d-inline-block" placement="bottom-end">
-        <div id="settings-dropdown" ngbDropdownToggle>
-          <div class="d-flex align-items-center">
-            <img
-              class="account-avatar"
-              src="assets/top-bar/profile.png"
-              alt=""
-            />
-          </div>
-        </div>
-
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button
-            ngbDropdownItem
-            *ngFor="let option of settings"
-            (click)="onNavigateTo(option.url)"
-          >
-            {{ option.name }}
-          </button>
-        </div>
-      </div>
+    <div class="d-flex">
+      <button
+        class="btn mx-3"
+        style=""
+        *ngFor="let option of modules"
+        (click)="onNavigateTo(option.url)"
+      >
+        {{ option.name }}
+      </button>
     </div>
   </div>
 </div>

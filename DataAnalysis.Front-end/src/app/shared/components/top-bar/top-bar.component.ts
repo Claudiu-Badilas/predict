@@ -14,12 +14,10 @@ export class TopBarComponent {
     { name: 'Transactions', url: 'transactions' },
     { name: 'Receipts', url: 'receipts' },
     { name: 'Health', url: 'health' },
-  ];
-
-  settings = [
     { name: 'Settings', url: 'settings' },
     { name: 'Log out', url: 'authentication/logout' },
   ];
+
   constructor(private store: Store<fromAppStore.AppState>) {}
 
   onNavigateTo(url: string) {

@@ -1,111 +1,39 @@
 @import "src/app/shared/styles/colors.scss";
 
-.top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: $cyan-900;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
-  z-index: 9999;
-}
-
-.logo {
-  &-img {
-    margin: 10px 20px 10px 30px;
-    max-height: 40px;
-  }
-
-  &-name {
-    font-family: fantasy;
-    font-size: 26px;
-    word-spacing: 5px;
-    letter-spacing: 1px;
-    color: $bs-white;
-  }
-}
-
-.dropdown {
-  position: relative;
-  right: 200px;
-
-  .luncher {
-    margin: 7px 8px 7px 8px;
-    max-width: 30px;
-    max-height: 30px;
-    width: auto;
-    height: auto;
-  }
-
-  #module-dropdown {
-    color: $bs-white;
-    font-size: 21px;
-    padding: 0px 90px 0px 10px;
-
-    &:active {
-      background-color: $cyan-800;
-    }
-  }
-}
-
-.dropdown,
-.dropup {
-  &-menu {
-    background-color: $cyan-800;
-    border-radius: initial;
-
-    .dropdown-item {
-      padding: 10px 100px 10px 50px;
-      background-color: $cyan-800;
-      color: $bs-white;
-      font-size: 19px;
-
-      &:hover {
-        background-color: $cyan-500;
-      }
-
-      &:active {
-        background-color: $cyan-700;
-      }
-    }
-  }
-
-  &-toggle {
-    cursor: pointer;
-
-    &::after {
-      display: none;
-    }
-  }
-}
-
-.right-dropdown {
-  position: relative;
-  left: 200px;
-
-  .account-avatar {
-    margin: 7px 8px 7px 8px;
-    max-width: 30px;
-    max-height: 30px;
-    width: auto;
-    height: auto;
-  }
-
-  #settings-dropdown {
-    color: $bs-white;
-    padding: 3px 50px 3px 10px;
-
-    &:active {
-      background-color: $cyan-800;
-    }
-  }
-}
-
 .wrapper {
   margin-bottom: 50px;
   height: 100%;
   overflow: auto;
+
+  .top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $cyan-900;
+    height: 50px;
+    z-index: 9999;
+
+    .logo {
+      &-img {
+        margin: 10px 20px 10px 30px;
+        max-height: 40px;
+      }
+
+      &-name {
+        font-family: fantasy;
+        font-size: 26px;
+        word-spacing: 5px;
+        letter-spacing: 1px;
+        color: $bs-white;
+      }
+    }
+
+    button {
+      background-color: #024955;
+      border: none;
+      color: white;
+      font-size: 21px;
+    }
+  }
 }
