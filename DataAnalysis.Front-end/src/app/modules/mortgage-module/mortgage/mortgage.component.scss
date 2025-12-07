@@ -1,0 +1,16 @@
+div.m-2 {
+  height: 95vh;
+  max-height: calc(100% - 100px);
+  overflow-y: auto;
+}
+
+table thead {
+  position: sticky;
+  top: 0;
+  background-color: #343a40;
+  z-index: 1;
+}
+
+table thead tr {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

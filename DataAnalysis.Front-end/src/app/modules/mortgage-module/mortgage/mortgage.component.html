@@ -1,0 +1,75 @@
+<div *ngFor="let grafic of transactions" class="m-2">
+  <div *ngIf="!!rateSelectate?.length">
+    <button class="btn btn-primary mb-2" (click)="toggleDetails()">
+      {{ showDetails ? "Hide details" : "Show details" }}
+    </button>
+    <div *ngIf="showDetails">
+      <div>
+        Rata
+        {{ rata.nrCtr }}{{ rata.dataPlatii | date : "yyyy-MM-dd" }}
+        {{ rata.totalRata }}
+      </div>
+      <div *ngIf="!!anticipate?.length">
+        Anticipat
+        <div *ngFor="let anticipat of anticipate">
+          {{ anticipat.nrCtr }}{{ anticipat.dataPlatii | date : "yyyy-MM-dd" }}
+          {{ anticipat.rataCredit }}
+        </div>
+      </div>
+    </div>
+    <div>
+      Total: {{ rata.totalRata }} + {{ totalAnticipate }} = {{ total }} leusteni
+      || Dobanda salvata {{ totalDobandaSalvata }}
+    </div>
+  </div>
+
+  <div class="m-2">
+    <table class="table table-light">
+      <thead>
+        <!-- <tr>
+          <th scope="col">{{ grafic.name }}</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr> -->
+        <tr>
+          <th scope="col">Selected</th>
+          <th scope="col">Nr.</th>
+          <th scope="col">Data Plății</th>
+          <th scope="col">Rată Credit</th>
+          <th scope="col">Rată Dobândă</th>
+          <th scope="col">Comision Administrare</th>
+          <th scope="col">Costuri Asigurare</th>
+          <th scope="col">Comision Gestiune</th>
+          <th scope="col">Dobândă Recalculată</th>
+          <th scope="col">Total Rată</th>
+          <th scope="col">Sold Rest Plată</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rata of grafic.rate">
+          <td>
+            <input [id]="rata.nrCtr" type="checkbox" (click)="onSelect(rata)" />
+          </td>
+          <td>{{ rata.nrCtr }}</td>
+          <td>{{ rata.dataPlatii | date : "yyyy-MM-dd" }}</td>
+          <td>{{ rata.rataCredit }}</td>
+          <td>{{ rata.rataDobanda }}</td>
+          <td>{{ rata.comisionAdministrare }}</td>
+          <td>{{ rata.costuruAsigurare }}</td>
+          <td>{{ rata.comisionGestiune }}</td>
+          <td>{{ rata.dobadaRecalculata }}</td>
+          <td>{{ rata.totalRata }}</td>
+          <td>{{ rata.soldRestPlata }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

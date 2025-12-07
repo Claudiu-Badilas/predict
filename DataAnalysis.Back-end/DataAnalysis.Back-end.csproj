@@ -13,6 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DataAnalysis.Parsers\DataAnalysis.Parsers.fsproj" />
 		<ProjectReference Include="..\DataAnalysis.Repository\DataAnalysis.Repository.csproj" />
 		<ProjectReference Include="..\DataAnalysis.Service\DataAnalysis.Service.csproj" />
 	</ItemGroup>

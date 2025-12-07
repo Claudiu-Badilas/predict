@@ -8,19 +8,26 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'mortgage',
+    loadChildren: () =>
+      import('./modules/mortgage-module/mortgage.module').then(
+        (m) => m.MortgageModule
+      ),
+  },
+  {
     path: 'transactions',
     loadChildren: () =>
       import('./modules/transaction-module/transaction.module').then(
         (m) => m.TransactionModule
       ),
   },
-  {
-    path: 'authentication',
-    loadChildren: () =>
-      import('./platform/authentication/authentication.module').then(
-        (m) => m.AuthenticationModule
-      ),
-  },
+  // {
+  //   path: 'authentication',
+  //   loadChildren: () =>
+  //     import('./platform/authentication/authentication.module').then(
+  //       (m) => m.AuthenticationModule
+  //     ),
+  // },
   {
     path: '**',
     redirectTo: '',
