@@ -1,0 +1,32 @@
+<div class="m-2">
+  <table class="table table-light">
+    <thead>
+      <tr>
+        <th scope="col">Nr. Contract</th>
+        <th scope="col">Data Plății</th>
+        <th scope="col">Rată Credit</th>
+        <th scope="col">Rată Dobândă</th>
+        <th scope="col">Comision Administrare</th>
+        <th scope="col">Costuri Asigurare</th>
+        <th scope="col">Comision Gestiune</th>
+        <th scope="col">Dobândă Recalculată</th>
+        <th scope="col">Total Rată</th>
+        <th scope="col">Sold Rest Plată</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tran of transactions">
+        <td>{{ tran.nrCtr }}</td>
+        <td>{{ tran.dataPlatii | date : "yyyy-MM-dd" }}</td>
+        <td>{{ tran.rataCredit }}</td>
+        <td>{{ tran.rataDobanda }}</td>
+        <td>{{ tran.comisionAdministrare }}</td>
+        <td>{{ tran.costuruAsigurare }}</td>
+        <td>{{ tran.comisionGestiune }}</td>
+        <td>{{ tran.dobadaRecalculata }}</td>
+        <td>{{ tran.totalRata }}</td>
+        <td>{{ tran.soldRestPlata }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
