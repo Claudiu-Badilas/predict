@@ -9,6 +9,7 @@
 		<Compile Include="Types\CommonTypes.fs" />
 		<Compile Include="Types\ReceiptTypes.fs" />
 		<Compile Include="Types\HealthTypes.fs" />
+		<Compile Include="Types\MortgageTypes.fs" />
 		<Compile Include="Types\TransactionTypes.fs" />
 		<Compile Include="Utils\PdfUtils.fs" />
 		<Compile Include="Utils\ExcelUtils.fs" />
@@ -18,6 +19,7 @@
 		<Compile Include="DatabaseAccess\StoreTransactions.fs" />
 		<Compile Include="DatabaseAccess\StoreReceipts.fs" />
 		<Compile Include="DatabaseAccess\StoreHearthRate.fs" />
+		<Compile Include="Parsers\Mortgage\BCR\BCRMortgageMapper.fs" />
 		<Compile Include="Parsers\AccountStatementParser\OMParsers\ParserOrangeMoneyPdfAccountStatement.fs" />
 		<Compile Include="Parsers\AccountStatementParser\OMParsers\ParserOrangeMoneyExcelAccountStatement.fs" />
 		<Compile Include="Parsers\AccountStatementParser\ParserRevolutExcelAccountStatement.fs" />

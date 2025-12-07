@@ -64,8 +64,10 @@ module ParserConsole =
         //let carrPdfs = getLocalPdfs @"r"
         //let carrReceipts = ParserCarrefourPdfReceipt.parsePdfs dataOwnerId carrPdfs
         
-        let heartRatecsv = getLocalCsvs @""
-        let rates = ParserZeppLifeHeartRate.parseCsvs dataOwnerId heartRatecsv
+        //let heartRatecsv = getLocalCsvs @""
+        //let rates = ParserZeppLifeHeartRate.parseCsvs dataOwnerId heartRatecsv
+
+        let results = BCRMortgageMapper.getBcrMorgages()
 
         printfn "Run succesfully"
         0
