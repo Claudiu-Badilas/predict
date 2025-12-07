@@ -14,13 +14,13 @@ const routes: Routes = [
         (m) => m.TransactionModule
       ),
   },
-  {
-    path: 'authentication',
-    loadChildren: () =>
-      import('./platform/authentication/authentication.module').then(
-        (m) => m.AuthenticationModule
-      ),
-  },
+  // {
+  //   path: 'authentication',
+  //   loadChildren: () =>
+  //     import('./platform/authentication/authentication.module').then(
+  //       (m) => m.AuthenticationModule
+  //     ),
+  // },
   {
     path: '**',
     redirectTo: '',
