@@ -1,8 +1,32 @@
 <div *ngFor="let grafic of transactions" class="m-2">
+  <div *ngIf="!!rateSelectate?.length">
+    <button class="btn btn-primary mb-2" (click)="toggleDetails()">
+      {{ showDetails ? "Hide details" : "Show details" }}
+    </button>
+    <div *ngIf="showDetails">
+      <div>
+        Rata
+        {{ rata.nrCtr }}{{ rata.dataPlatii | date : "yyyy-MM-dd" }}
+        {{ rata.totalRata }}
+      </div>
+      <div *ngIf="!!anticipate?.length">
+        Anticipat
+        <div *ngFor="let anticipat of anticipate">
+          {{ anticipat.nrCtr }}{{ anticipat.dataPlatii | date : "yyyy-MM-dd" }}
+          {{ anticipat.rataCredit }}
+        </div>
+      </div>
+    </div>
+    <div>
+      Total: {{ rata.totalRata }} + {{ totalAnticipate }} = {{ total }} leusteni
+      || Dobanda salvata {{ totalDobandaSalvata }}
+    </div>
+  </div>
+
   <div class="m-2">
     <table class="table table-light">
       <thead>
-        <tr>
+        <!-- <tr>
           <th scope="col">{{ grafic.name }}</th>
           <th scope="col"></th>
           <th scope="col"></th>
@@ -13,8 +37,10 @@
           <th scope="col"></th>
           <th scope="col"></th>
           <th scope="col"></th>
-        </tr>
+          <th scope="col"></th>
+        </tr> -->
         <tr>
+          <th scope="col">Selected</th>
           <th scope="col">Nr.</th>
           <th scope="col">Data Plății</th>
           <th scope="col">Rată Credit</th>
@@ -29,6 +55,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let rata of grafic.rate">
+          <td>
+            <input [id]="rata.nrCtr" type="checkbox" (click)="onSelect(rata)" />
+          </td>
           <td>{{ rata.nrCtr }}</td>
           <td>{{ rata.dataPlatii | date : "yyyy-MM-dd" }}</td>
           <td>{{ rata.rataCredit }}</td>
