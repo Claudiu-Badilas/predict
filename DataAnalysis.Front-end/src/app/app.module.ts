@@ -45,7 +45,6 @@ import { MortgageModule } from './modules/mortgage-module/mortgage.module';
     StoreRouterConnectingModule.forRoot(),
     ToastNotificationModule,
     TopBarModule,
-    SideBarModule,
     MortgageModule,
   ],
   bootstrap: [AppComponent],
