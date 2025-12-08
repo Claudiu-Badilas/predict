@@ -18,14 +18,12 @@ import * as fromState from 'src/app/store/app-state.reducer';
 import { EMPTY, of } from 'rxjs';
 import * as ToastActions from '../../toast-notifications/actions/toast-notification.actions';
 import { ToastType } from '../../toast-notifications/models/toast-type.model';
-import { MessageService } from 'primeng/api';
-
+ 
 @Injectable()
 export class AuthenticationEffects {
   constructor(
     private actions$: Actions,
-    private messageService: MessageService,
-
+ 
     private _authService: AuthenticationService,
     private store: Store<fromAppStore.AppState>
   ) {}

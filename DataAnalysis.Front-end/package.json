@@ -25,7 +25,6 @@
     "@ngrx/router-store": "^20.1.0",
     "@ngrx/store": "^20.1.0",
     "bootstrap": "^4.6.2",
-    "primeng": "^20.2.0",
     "rxjs": "^7.8.1",
     "tslib": "^2.4.0",
     "zone.js": "^0.15.1"

@@ -4,8 +4,7 @@ import { Component } from '@angular/core';
     selector: 'app-toast',
     template: `
     <div class="card">
-      <p-toast></p-toast>
-    </div>
+     </div>
   `,
     styleUrls: ['./toast-notification.component.scss'],
     standalone: false
