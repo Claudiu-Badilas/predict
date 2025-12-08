@@ -11,7 +11,7 @@ export class TransactionService {
 
   getTransactions(): Observable<any[]> {
     return this.httpClient
-      .get<any[]>('/server/api/v1/transactions/1')
+      .get<any[]>('https://localhost:8080/api/v1/transactions/1')
       .pipe(map((response) => response));
   }
 }

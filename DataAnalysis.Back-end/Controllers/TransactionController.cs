@@ -17,18 +17,14 @@ namespace DataAnalysis.Controllers {
         }
 
         [HttpGet("transactions/{dataOwnerId}")]
-        [Authorize]
         public async Task<ActionResult> GetTransactions(
             [FromHeader] string Authorization,
             [FromRoute] int dataOwnerId
             ) {
 
-            var user = await _authService.GetUser(Authorization);
-            if (!user.HasAccessToDataOwner(dataOwnerId)) {
-                return BadRequest("You do not have access to the current Data Owner!");
-            }
 
-            return Ok(await _transactionRepo.GetTransactionByUserIdAndOwnerId(user.Id.Value, dataOwnerId));
+
+            return Ok(await _transactionRepo.GetTransactionByUserIdAndOwnerId(2, dataOwnerId));
         }
     }
 }
