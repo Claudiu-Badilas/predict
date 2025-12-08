@@ -15,9 +15,10 @@ import * as fromState from 'src/app/store/app-state.reducer';
 import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
 
 @Component({
-  selector: 'app-login-register',
-  templateUrl: './login-register.component.html',
-  styleUrls: ['./login-register.component.scss'],
+    selector: 'app-login-register',
+    templateUrl: './login-register.component.html',
+    styleUrls: ['./login-register.component.scss'],
+    standalone: false
 })
 export class LoginRegisterComponent implements OnDestroy {
   private ngUnsubscribe$: Subject<void> = new Subject<void>();

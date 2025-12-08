@@ -4,9 +4,10 @@ import { GraficRambursare, Rata } from '../models/mortgage.model';
 import { MortgageService } from '../services/mortgage.service';
 
 @Component({
-  selector: 'app-mortgage',
-  templateUrl: './mortgage.component.html',
-  styleUrls: ['./mortgage.component.scss'],
+    selector: 'app-mortgage',
+    templateUrl: './mortgage.component.html',
+    styleUrls: ['./mortgage.component.scss'],
+    standalone: false
 })
 export class MortgageComponent {
   transactions: GraficRambursare[] = [];

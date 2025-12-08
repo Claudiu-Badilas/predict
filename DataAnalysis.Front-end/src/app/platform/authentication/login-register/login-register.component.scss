@@ -1,5 +1,3 @@
-@import "src/app/shared/styles/colors.scss";
-
 .background {
   background-size: 400% 400%;
   height: 99.83vh !important;
@@ -60,7 +58,7 @@ button {
   margin-top: 40px;
   width: 100%;
   background: linear-gradient(210deg, #00c9ff 0%, #92fe9d 100%);
-  color: $bs-white;
+  color: white;
   font-size: 18px;
   font-weight: 600;
   border-radius: 50px;

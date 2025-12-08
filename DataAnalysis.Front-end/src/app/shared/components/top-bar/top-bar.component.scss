@@ -1,5 +1,3 @@
-@import "src/app/shared/styles/colors.scss";
-
 .wrapper {
   margin-bottom: 50px;
   height: 100%;
@@ -10,7 +8,7 @@
     top: 0;
     left: 0;
     right: 0;
-    background-color: $cyan-900;
+    background-color: #024955;
     height: 50px;
     z-index: 9999;
 
@@ -25,7 +23,7 @@
         font-size: 26px;
         word-spacing: 5px;
         letter-spacing: 1px;
-        color: $bs-white;
+        color: white;
       }
     }
 

@@ -1,14 +1,12 @@
-@import "src/app/shared/styles/colors.scss";
-
 .sidebar {
-  background-color: $cyan-800;
+  background-color: #036475;
   height: 100%;
   position: fixed;
   left: 0;
   top: 0;
   transition: all 0.3s ease;
   width: 300px;
-  color: $bs-white;
+  color: white;
   margin-top: 50px;
 
   img {
@@ -17,14 +15,14 @@
   }
 
   &-partial-size {
-    background-color: $cyan-800;
+    background-color: #036475;
     height: 100%;
     position: fixed;
     left: 0;
     top: 0;
     transition: all 0.3s ease;
     width: 50px;
-    color: $bs-white;
+    color: white;
     margin-top: 50px;
 
     &:hover {
@@ -69,7 +67,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $cyan-700;
+    background-color: #047f94;
   }
 
   img {
