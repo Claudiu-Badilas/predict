@@ -4,7 +4,7 @@
   <ng-container filters-partial-size> </ng-container>
 
   <ng-container main-content
-    ><div class="m-3">
+    ><div>
       <div class="header-cards mb-3 d-flex gap-3">
         <!-- Card 1 -->
         <div class="card divided-card flex-fill shadow-sm p-3">
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      @for (grafic of transactions; track grafic) {
+      @for (grafic of transactions; track grafic.name) {
       <div>
         @if (!!rateSelectate?.length) {
         <div>
@@ -69,19 +69,6 @@
         <div class="scrollable-container">
           <table class="table">
             <thead>
-              <!-- <tr>
-          <th scope="col">{{ grafic.name }}</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-        </tr> -->
               <tr>
                 <th scope="col">Selected</th>
                 <th scope="col">Nr.</th>
@@ -97,7 +84,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (rata of grafic.rate; track rata) {
+              @for (rata of grafic.rate; track rata.nrCtr) {
               <tr>
                 <td>
                   <input
