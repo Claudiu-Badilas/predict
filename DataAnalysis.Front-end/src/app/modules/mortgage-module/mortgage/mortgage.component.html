@@ -1,32 +1,40 @@
-<div *ngFor="let grafic of transactions" class="m-2">
-  <div *ngIf="!!rateSelectate?.length">
-    <button class="btn btn-primary mb-2" (click)="toggleDetails()">
-      {{ showDetails ? "Hide details" : "Show details" }}
-    </button>
-    <div *ngIf="showDetails">
+@for (grafic of transactions; track grafic) {
+  <div class="m-2">
+    @if (!!rateSelectate?.length) {
       <div>
-        Rata
-        {{ rata.nrCtr }}{{ rata.dataPlatii | date : "yyyy-MM-dd" }}
-        {{ rata.totalRata }}
-      </div>
-      <div *ngIf="!!anticipate?.length">
-        Anticipat
-        <div *ngFor="let anticipat of anticipate">
-          {{ anticipat.nrCtr }}{{ anticipat.dataPlatii | date : "yyyy-MM-dd" }}
-          {{ anticipat.rataCredit }}
+        <button class="btn btn-primary mb-2" (click)="toggleDetails()">
+          {{ showDetails ? "Hide details" : "Show details" }}
+        </button>
+        @if (showDetails) {
+          <div>
+            <div>
+              Rata
+              {{ rata.nrCtr }}{{ rata.dataPlatii | date : "yyyy-MM-dd" }}
+              {{ rata.totalRata }}
+            </div>
+            @if (!!anticipate?.length) {
+              <div>
+                Anticipat
+                @for (anticipat of anticipate; track anticipat) {
+                  <div>
+                    {{ anticipat.nrCtr }}{{ anticipat.dataPlatii | date : "yyyy-MM-dd" }}
+                    {{ anticipat.rataCredit }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+        <div>
+          Total: {{ rata.totalRata }} + {{ totalAnticipate }} = {{ total }} leusteni
+          || Dobanda salvata {{ totalDobandaSalvata }}
         </div>
       </div>
-    </div>
-    <div>
-      Total: {{ rata.totalRata }} + {{ totalAnticipate }} = {{ total }} leusteni
-      || Dobanda salvata {{ totalDobandaSalvata }}
-    </div>
-  </div>
-
-  <div class="m-2">
-    <table class="table table-light">
-      <thead>
-        <!-- <tr>
+    }
+    <div class="m-2">
+      <table class="table table-light">
+        <thead>
+          <!-- <tr>
           <th scope="col">{{ grafic.name }}</th>
           <th scope="col"></th>
           <th scope="col"></th>
@@ -54,22 +62,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let rata of grafic.rate">
-          <td>
-            <input [id]="rata.nrCtr" type="checkbox" (click)="onSelect(rata)" />
-          </td>
-          <td>{{ rata.nrCtr }}</td>
-          <td>{{ rata.dataPlatii | date : "yyyy-MM-dd" }}</td>
-          <td>{{ rata.rataCredit }}</td>
-          <td>{{ rata.rataDobanda }}</td>
-          <td>{{ rata.comisionAdministrare }}</td>
-          <td>{{ rata.costuruAsigurare }}</td>
-          <td>{{ rata.comisionGestiune }}</td>
-          <td>{{ rata.dobadaRecalculata }}</td>
-          <td>{{ rata.totalRata }}</td>
-          <td>{{ rata.soldRestPlata }}</td>
-        </tr>
+        @for (rata of grafic.rate; track rata) {
+          <tr>
+            <td>
+              <input [id]="rata.nrCtr" type="checkbox" (click)="onSelect(rata)" />
+            </td>
+            <td>{{ rata.nrCtr }}</td>
+            <td>{{ rata.dataPlatii | date : "yyyy-MM-dd" }}</td>
+            <td>{{ rata.rataCredit }}</td>
+            <td>{{ rata.rataDobanda }}</td>
+            <td>{{ rata.comisionAdministrare }}</td>
+            <td>{{ rata.costuruAsigurare }}</td>
+            <td>{{ rata.comisionGestiune }}</td>
+            <td>{{ rata.dobadaRecalculata }}</td>
+            <td>{{ rata.totalRata }}</td>
+            <td>{{ rata.soldRestPlata }}</td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
 </div>
+}

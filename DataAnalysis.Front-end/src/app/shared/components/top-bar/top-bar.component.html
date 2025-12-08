@@ -5,14 +5,15 @@
       <div class="logo-name">SMART Analysis</div>
     </div>
     <div class="d-flex">
-      <button
-        class="btn mx-3"
-        style=""
-        *ngFor="let option of modules"
-        (click)="onNavigateTo(option.url)"
-      >
-        {{ option.name }}
-      </button>
+      @for (option of modules; track option) {
+        <button
+          class="btn mx-3"
+          style=""
+          (click)="onNavigateTo(option.url)"
+          >
+          {{ option.name }}
+        </button>
+      }
     </div>
   </div>
 </div>
