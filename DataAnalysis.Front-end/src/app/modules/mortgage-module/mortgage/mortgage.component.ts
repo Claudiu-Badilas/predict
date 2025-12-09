@@ -17,7 +17,12 @@ export class MortgageComponent {
       .getMortgages()
       .pipe(first())
       .subscribe((res) => {
-        this.transactions = res;
+        this.transactions = [
+          {
+            name: 'string',
+            rate: res[0].rate.slice(0, 50),
+          },
+        ];
         // this.rateSelectate = res[0].rate.slice(0, 7);
       });
   }

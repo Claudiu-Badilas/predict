@@ -1,0 +1,165 @@
+/* Container Styles */
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 280px;
+  margin: 2rem auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, sans-serif;
+}
+
+/* Date Input Styles */
+.date-picker {
+  padding: 0.25rem;
+  font-size: 0.95rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  outline: none;
+  caret-color: transparent; /* Disables text cursor */
+  width: 150px;
+}
+
+/* Disable text selection and typing */
+.date-picker {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Prevent keyboard input */
+.date-picker:read-only {
+  background-color: #ffffff;
+}
+
+/* Hover State */
+.date-picker:hover:not(:disabled) {
+  border-color: #9ca3af;
+  background: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Focus State */
+.date-picker:focus:not(:disabled) {
+  border-color: #3b82f6;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1),
+    0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Disabled State */
+.date-picker:disabled {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Date Picker Icon Styling */
+.date-picker::-webkit-calendar-picker-indicator {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.date-picker:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  background-color: #f3f4f6;
+}
+
+.date-picker:focus::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  background-color: #eff6ff;
+}
+
+.date-picker:disabled::-webkit-calendar-picker-indicator {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Firefox specific styling */
+.date-picker::-moz-focus-inner {
+  border: 0;
+}
+
+/* Animation for selection */
+@keyframes selectPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.date-picker:focus {
+  animation: selectPulse 0.3s ease;
+}
+
+/* Value display styling */
+.date-picker::before {
+  content: attr(placeholder);
+  color: #6b7280;
+}
+
+.date-picker:valid::before {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .date-picker-container {
+    max-width: 100%;
+    margin: 1.5rem;
+  }
+
+  .date-picker {
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* For non-webkit browsers */
+.date-picker {
+  -moz-appearance: textfield;
+  appearance: none;
+}
+
+/* Custom calendar icon wrapper (optional) */
+.date-picker-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.date-picker-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.date-picker-wrapper:hover::after {
+  opacity: 1;
+}
