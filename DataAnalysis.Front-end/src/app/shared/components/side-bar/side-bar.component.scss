@@ -4,7 +4,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  transition: all 0.3s ease;
+
   width: 300px;
   color: white;
   margin-top: 50px;
@@ -20,7 +20,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    transition: all 0.3s ease;
+
     width: 50px;
     color: white;
     margin-top: 50px;
@@ -42,13 +42,11 @@
 .content {
   margin-left: 300px;
   padding: 20px;
-  transition: all 0.3s ease;
 }
 
 .content-full {
   margin-left: 50px;
   padding: 20px;
-  transition: all 0.3s ease;
 }
 
 /* ----- ARROW STYLES ----- */
