@@ -1,12 +1,14 @@
 <div class="date-picker-container">
-  <label>Select a date:</label
-  ><input
+  @if(!!label) {
+  <label class="m-0">{{ label }}</label>
+  }
+  <input
     class="date-picker"
     type="date"
     [(ngModel)]="selectedDate"
     [min]="minDate"
     [max]="maxDate"
-    [disabled]="false"
+    [disabled]="disabled"
     (ngModelChange)="onDateChange($event)"
     (keydown)="preventTyping($event)"
     (keypress)="preventTyping($event)"

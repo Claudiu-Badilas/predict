@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  input,
+  Output,
+  output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -7,15 +14,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   selector: 'date-picker',
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.scss'],
+  standalone: true,
   imports: [CommonModule, FormsModule, NgbModule],
 })
 export class DatePickerComponent {
-  selectedDate: string | null = '2025-12-08'; // will hold the picked date
-  minDate = '2025-12-01';
-  maxDate = '2055-12-31';
+  @Input({ required: true }) selectedDate: string;
+  @Input({ required: true }) minDate: string;
+  @Input({ required: true }) maxDate: string;
+  @Input() label: string;
+  @Input() disabled: boolean = false;
 
-  onDateChange(newDate: string) {
-    // emit value
+  @Output() selectedDateChange = new EventEmitter<string>();
+
+  onDateChange(date: string) {
+    this.selectedDateChange.emit(date);
   }
 
   preventTyping(event: KeyboardEvent | ClipboardEvent) {
