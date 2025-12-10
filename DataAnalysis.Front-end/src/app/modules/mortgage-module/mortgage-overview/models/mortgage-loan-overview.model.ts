@@ -14,6 +14,7 @@ export type OverviewLoanRate = {
   dobadaRecalculata: number | null;
   totalRata: number | null;
   soldRestPlata: number | null;
+  nextRate: boolean;
   selected: boolean;
   disabled: boolean;
   color: string;
@@ -31,11 +32,15 @@ export function mapBaseRepaymentScheduleToOverview(
 ): OverviewRepaymentSchedule | null {
   if (!base) return null;
 
+  let availableNextRate = false;
+
   const overviewLoanRates: OverviewLoanRate[] = base.rate.map((r) => {
     const disabled = JsDateUtils.isBefore(
       DateUtils.fromStringToJsDate(r.dataPlatii.split('T')[0]),
       startDate
     );
+    const nextRate = !availableNextRate && !disabled;
+    if (nextRate) availableNextRate = true;
 
     const selected = selectedLoanRates.some((s) => s === r.nrCtr);
     return {
@@ -49,9 +54,10 @@ export function mapBaseRepaymentScheduleToOverview(
       dobadaRecalculata: r.dobadaRecalculata,
       totalRata: r.totalRata,
       soldRestPlata: r.soldRestPlata,
-      selected: !disabled && selected,
-      disabled,
-      color: disabled ? Colors.GRAY_200 : selected ? Colors.GREEN_100 : 'white',
+      nextRate,
+      selected: (!disabled && selected) || nextRate,
+      disabled: disabled || nextRate,
+      color: getColor(disabled, nextRate, selected),
     } as OverviewLoanRate;
   });
 
@@ -59,4 +65,14 @@ export function mapBaseRepaymentScheduleToOverview(
     name: base.name,
     overviewLoanRates,
   } as OverviewRepaymentSchedule;
+}
+function getColor(
+  disabled: boolean,
+  nextRate: boolean,
+  selected: boolean
+): string {
+  if (disabled) return Colors.GRAY_200;
+  if (nextRate) return Colors.BLUE_100;
+  if (selected) return Colors.GREEN_100;
+  return 'white';
 }
