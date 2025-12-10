@@ -27,11 +27,12 @@
       }
     }
 
-    button {
-      background-color: #c61a54;
-      border: none;
+    .option {
       color: white;
       font-size: 21px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0px 20px;
     }
   }
 }

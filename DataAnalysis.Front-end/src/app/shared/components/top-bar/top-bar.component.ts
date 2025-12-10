@@ -11,7 +11,7 @@ import * as NavigationAction from 'src/app/store/navigation-state/navigation.act
 })
 export class TopBarComponent {
   modules = [
-    { name: 'BCR Mortgage', url: 'mortgage-loan' },
+    { name: 'Mortgage Loan', url: 'mortgage-loan/overview' },
     { name: 'Transactions', url: 'transactions' },
     { name: 'Receipts', url: 'receipts' },
     { name: 'Health', url: 'health' },
