@@ -5,7 +5,7 @@ import { DatePickerComponent } from 'src/app/shared/components/date-picker/date-
 import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import { MortgageRoutingModule } from './mortgage.routing';
-import { MortgageComponent } from './mortgage/mortgage.component';
+import { MortgageComponent } from './mortgage.component';
 
 @NgModule({
   imports: [

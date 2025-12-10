@@ -1,7 +1,7 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MortgageModule } from './mortgage.module';
-import { MortgageComponent } from './mortgage/mortgage.component';
+import { MortgageComponent } from './mortgage.component';
 
 const routes: Routes = [
   {

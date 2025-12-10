@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { first } from 'rxjs';
-import { GraficRambursare, Rata } from '../models/mortgage.model';
-import { MortgageService } from '../services/mortgage.service';
+import { GraficRambursare, Rata } from './models/mortgage.model';
+import { MortgageService } from './services/mortgage.service';
 
 @Component({
   selector: 'app-mortgage',
