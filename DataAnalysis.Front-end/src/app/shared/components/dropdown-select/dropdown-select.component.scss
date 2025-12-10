@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+button[ngbDropdownToggle] {
+  height: 40px;
+  background-color: white !important;
+  text-align: left;
+}

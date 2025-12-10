@@ -1,0 +1,17 @@
+<div ngbDropdown class="w-100">
+  <button
+    class="btn w-100 bg-white border rounded-2 text-start"
+    id="dropdownMenu"
+    ngbDropdownToggle
+  >
+    {{ selectedItem || placeholder }}
+  </button>
+
+  <div ngbDropdownMenu aria-labelledby="dropdownMenu" class="w-100">
+    @for (item of items; track item) {
+    <button class="dropdown-item" (click)="selectItem(item)">
+      {{ item }}
+    </button>
+    }
+  </div>
+</div>

@@ -1,70 +1,49 @@
 <app-side-bar>
-  <ng-container filters-full-size
-    ><app-toggle-button
-      [options]="['Overview', 'Detailed', 'Simulation']"
-      [selected]="'Overview'"
-      (selectionChange)="onSelectionChange($event)"
+  <ng-container filters-full-size>
+    <div class="space">
+      <app-toggle-button
+        [options]="['Overview', 'Detailed', 'Simulation']"
+        [selected]="'Overview'"
+        (selectionChange)="onSelectionChange($event)"
+      />
+    </div>
+    <app-dropdown-select
+      class="space"
+      [items]="dropDownSelectOptions$ | async"
+      [selectedItem]="selectedRepaymentScheduleName$ | async"
+      placeholder="No Selection"
+      (selectionChange)="onDropdownSelected($event)"
     />
-
-    <date-picker
-      [label]="'Select a date'"
-      [selectedDate]="'2025-10-10'"
-      [minDate]="'2025-12-01'"
-      [maxDate]="'2055-12-01'"
-    ></date-picker>
+    <div class="space">
+      <date-picker
+        [label]="'Select start date'"
+        [selectedDate]="overviewStartDate$ | async"
+        [minDate]="'2025-12-01'"
+        [maxDate]="'2055-12-01'"
+        (selectedDateChange)="onSelectedDateChange($event)"
+      />
+    </div>
   </ng-container>
 
   <ng-container filters-partial-size> </ng-container>
 
   <ng-container main-content
     ><div>
-      <div class="header-cards">
-        <div class="divided-card">
-          <div class="section">
-            <p class="label">Total Rata</p>
-            <p class="value">
-              {{ rata?.totalRata != null ? rata.totalRata.toFixed(2) : "0.00" }}
-            </p>
-          </div>
-          <div class="divider"></div>
-          <div class="section right">
-            <p class="label">Total Anticipate</p>
-            <p class="value">
-              {{
-                totalAnticipate != null ? totalAnticipate.toFixed(2) : "0.00"
-              }}
-            </p>
-          </div>
-        </div>
-
-        <div class="divided-card">
-          <div class="section">
-            <p class="label">Dobândă Salvată</p>
-            <p class="value increase">
-              {{
-                totalDobandaSalvata != null
-                  ? totalDobandaSalvata.toFixed(2)
-                  : "0.00"
-              }}
-            </p>
-          </div>
-          <div class="divider"></div>
-          <div class="section right">
-            <p class="label">Total Final de Plata</p>
-            <p class="value decrease">
-              {{ total != null ? total.toFixed(2) : "0.00" }}
-              ({{ total != null ? (total / 2).toFixed(2) : "0.00" }})
-            </p>
-          </div>
-        </div>
-      </div>
-
-      @for (grafic of transactions; track grafic.name) {
+      <app-overview-mortgage-loan-header
+        [overviewLoanRates]="overviewLoanRates$ | async"
+      />
       <div class="scrollable-container mt-3">
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Selected</th>
+              <th scope="col">
+                <app-checkbox
+                  label="Select All"
+                  [checked]="false"
+                  [disabled]="false"
+                  (valueChange)="onSelectAllLoanRates($event)"
+                />
+              </th>
               <th scope="col">Nr.</th>
               <th scope="col">Data Plății</th>
               <th scope="col">Rată Credit</th>
@@ -78,13 +57,15 @@
             </tr>
           </thead>
           <tbody>
-            @for (rata of grafic.rate; track rata.nrCtr) {
-            <tr>
+            @for (rata of (selectedRepaymentSchedule$ | async
+            )?.overviewLoanRates ?? []; track rata.nrCtr) {
+            <tr [ngStyle]="{ 'background-color': rata.color }">
               <td>
-                <input
+                <app-checkbox
                   [id]="rata.nrCtr"
-                  type="checkbox"
-                  (click)="onSelect(rata)"
+                  [checked]="rata.selected"
+                  [disabled]="rata.disabled"
+                  (valueChange)="onSelect(rata)"
                 />
               </td>
               <td>{{ rata.nrCtr }}</td>
@@ -102,7 +83,6 @@
           </tbody>
         </table>
       </div>
-      }
     </div>
   </ng-container>
 </app-side-bar>

@@ -1,0 +1,55 @@
+<div class="header-cards">
+  <div class="divided-card">
+    <div class="section">
+      <p class="label">Total Rata</p>
+      <p class="value">
+        {{ rata?.totalRata != null ? rata.totalRata.toFixed(2) : "0.00" }}
+      </p>
+    </div>
+    <div class="divider"></div>
+    <div class="section right">
+      <p class="label">Total Anticipate</p>
+      <p class="value">
+        {{ totalAnticipate != null ? totalAnticipate.toFixed(2) : "0.00" }}
+      </p>
+    </div>
+  </div>
+
+  <div class="divided-card">
+    <div class="section">
+      <p class="label">Dobândă Salvată</p>
+      <p class="value increase">
+        {{
+          totalDobandaSalvata != null ? totalDobandaSalvata.toFixed(2) : "0.00"
+        }}
+      </p>
+    </div>
+    <div class="divider"></div>
+    <div class="section right">
+      <p class="label">Total Final de Plata</p>
+      <p class="value decrease">
+        {{ total != null ? total.toFixed(2) : "0.00" }}
+        ({{ total != null ? (total / 2).toFixed(2) : "0.00" }})
+      </p>
+    </div>
+  </div>
+  <div class="divided-card">
+    <div class="section">
+      <p class="label">Sold Rest Inainte Plata</p>
+      <p class="value decrease">
+        {{ rata != null ? rata.soldRestPlata.toFixed(2) : "0.00" }}
+      </p>
+    </div>
+    <div class="divider"></div>
+    <div class="section right">
+      <p class="label">Sold Rest dupa Plata</p>
+      <p class="value increase">
+        {{
+          lastAnticipat != null
+            ? lastAnticipat.soldRestPlata.toFixed(2)
+            : "0.00"
+        }}
+      </p>
+    </div>
+  </div>
+</div>

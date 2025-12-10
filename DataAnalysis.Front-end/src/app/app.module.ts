@@ -21,9 +21,8 @@ import { NavigationEffects } from 'src/app/store/navigation-state/navigation.eff
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastNotificationEffects } from 'src/app/platform/toast-notifications/effects/toast-notification.effects';
 import { ToastNotificationModule } from 'src/app/platform/toast-notifications/toast-notification.module';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
-import { MortgageService } from './modules/mortgage-module/services/mortgage.service';
 import { MortgageModule } from './modules/mortgage-module/mortgage.module';
+import { MortgageService } from './modules/mortgage-module/services/mortgage.service';
 
 @NgModule({
   declarations: [AppComponent],
