@@ -1,0 +1,20 @@
+<div class="toggle-wrapper d-flex">
+  <div class="toggle-background"></div>
+
+  <div
+    class="toggle-option"
+    *ngFor="let option of options; let i = index"
+    [ngClass]="{ active: option === _selected() }"
+    (click)="select(option)"
+  >
+    {{ option }}
+  </div>
+
+  <div
+    class="toggle-slider"
+    [style.width.%]="100 / options.length"
+    [style.transform]="
+      'translateX(' + options.indexOf(_selected()) * 100 + '%)'
+    "
+  ></div>
+</div>
