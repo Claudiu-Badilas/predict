@@ -8,7 +8,7 @@
     </div>
     <div class="divider"></div>
     <div class="section right">
-      <p class="label">Total Anticipate</p>
+      <p class="label">Total Plata Anticipata</p>
       <p class="value">
         {{ totalAnticipate != null ? totalAnticipate.toFixed(2) : "0.00" }}
       </p>
@@ -26,7 +26,7 @@
     </div>
     <div class="divider"></div>
     <div class="section right">
-      <p class="label">Total Final de Plata</p>
+      <p class="label">Total de Plata</p>
       <p class="value decrease">
         {{ total != null ? total.toFixed(2) : "0.00" }}
         ({{ total != null ? (total / 2).toFixed(2) : "0.00" }})
@@ -35,14 +35,14 @@
   </div>
   <div class="divided-card">
     <div class="section">
-      <p class="label">Sold Rest Inainte Plata</p>
+      <p class="label">Sold Inainte Plata</p>
       <p class="value decrease">
         {{ rata != null ? rata.soldRestPlata.toFixed(2) : "0.00" }}
       </p>
     </div>
     <div class="divider"></div>
     <div class="section right">
-      <p class="label">Sold Rest dupa Plata</p>
+      <p class="label">Sold dupa Plata</p>
       <p class="value increase">
         {{
           lastAnticipat != null

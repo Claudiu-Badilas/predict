@@ -59,7 +59,10 @@
           <tbody>
             @for (rata of (selectedRepaymentSchedule$ | async
             )?.overviewLoanRates ?? []; track rata.nrCtr) {
-            <tr [ngStyle]="{ 'background-color': rata.color }">
+            <tr
+              [ngStyle]="{ 'background-color': rata.color }"
+              [ngClass]="{ faded: rata.disabled && !rata.nextRate }"
+            >
               <td>
                 <app-checkbox
                   [id]="rata.nrCtr"
