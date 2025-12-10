@@ -25,7 +25,6 @@ import { MortgageService } from '../services/mortgage.service';
 })
 export class MortgageOverviewComponent {
   transactions: GraficRambursare[] = [];
-  state = 'Overview';
 
   constructor(
     private store: Store<fromAppStore.AppState>,
@@ -35,13 +34,7 @@ export class MortgageOverviewComponent {
       .getMortgages()
       .pipe(first())
       .subscribe((res) => {
-        this.transactions = [
-          {
-            name: 'string',
-            rate: res[0].rate.slice(0, 50),
-          },
-        ];
-        // this.rateSelectate = res[0].rate.slice(0, 7);
+        this.transactions = res;
       });
   }
 
