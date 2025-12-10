@@ -6,8 +6,15 @@
       [selected]="'Overview'"
       (selectionChange)="onSelectionChange($event)"
     />
+    <app-dropdown-select
+      class="m-1"
+      [items]="fruits"
+      placeholder="Pick a fruit"
+      (selectionChange)="onFruitSelected($event)"
+    />
 
     <date-picker
+      class="m-1"
       [label]="'Select a date'"
       [selectedDate]="'2025-10-10'"
       [minDate]="'2025-12-01'"
