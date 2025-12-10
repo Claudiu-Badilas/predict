@@ -24,6 +24,7 @@ import { ToastNotificationModule } from 'src/app/platform/toast-notifications/to
 import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
 import { MortgageService } from './modules/mortgage-module/services/mortgage.service';
 import { MortgageModule } from './modules/mortgage-module/mortgage.module';
+import { MortgageEffects } from './modules/mortgage-module/state-management/mortgage.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +42,7 @@ import { MortgageModule } from './modules/mortgage-module/mortgage.module';
       NavigationEffects,
       AuthenticationEffects,
       ToastNotificationEffects,
+      MortgageEffects,
     ]),
     StoreRouterConnectingModule.forRoot(),
     ToastNotificationModule,

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { first } from 'rxjs';
-import { GraficRambursare, Rata } from './models/mortgage.model';
-import { MortgageService } from './services/mortgage.service';
+import { Store } from '@ngrx/store';
+import * as MortgageActions from 'src/app/modules/mortgage-module/state-management/mortgage.actions';
+import * as fromMortgage from 'src/app/modules/mortgage-module/state-management/mortgage.reducer';
 
 @Component({
   selector: 'app-mortgage',
@@ -10,64 +10,7 @@ import { MortgageService } from './services/mortgage.service';
   standalone: false,
 })
 export class MortgageComponent {
-  transactions: GraficRambursare[] = [];
-  state = 'Overview';
-
-  constructor(private readonly _mortgageService: MortgageService) {
-    this._mortgageService
-      .getMortgages()
-      .pipe(first())
-      .subscribe((res) => {
-        this.transactions = [
-          {
-            name: 'string',
-            rate: res[0].rate.slice(0, 50),
-          },
-        ];
-        // this.rateSelectate = res[0].rate.slice(0, 7);
-      });
-  }
-
-  rateSelectate: Rata[] = [];
-
-  onSelect(rata: Rata) {
-    const index = this.rateSelectate.findIndex((r) => r.nrCtr === rata.nrCtr);
-
-    if (index !== -1) {
-      this.rateSelectate.splice(index, 1);
-    } else {
-      this.rateSelectate.push(rata);
-    }
-
-    this.rateSelectate = this.rateSelectate.sort((a, b) => a.nrCtr - b.nrCtr);
-  }
-
-  get anySelected(): boolean {
-    return this.rateSelectate.length > 0;
-  }
-
-  get rata() {
-    return this.rateSelectate[0] || null;
-  }
-
-  get anticipate() {
-    return this.rateSelectate.slice(1);
-  }
-
-  get totalAnticipate() {
-    return (this.anticipate ?? [])
-      .map((a) => a.rataCredit)
-      .reduce((sum, val) => sum + val, 0);
-  }
-
-  get totalDobandaSalvata() {
-    return (this.anticipate ?? []).reduce(
-      (sum, val) => sum + (val.totalRata - val.rataCredit),
-      0
-    );
-  }
-
-  get total() {
-    return (this.rata?.totalRata ?? 0) + this.totalAnticipate;
+  constructor(private readonly store: Store<fromMortgage.MortgageState>) {
+    this.store.dispatch(MortgageActions.loadRepaymentSchedules());
   }
 }

@@ -1,12 +1,12 @@
+import { Params } from '@angular/router';
+import * as fromRouter from '@ngrx/router-store';
+import { getRouterSelectors, RouterReducerState } from '@ngrx/router-store';
 import {
   ActionReducerMap,
   createFeatureSelector,
   createSelector,
 } from '@ngrx/store';
-import { getRouterSelectors, RouterReducerState } from '@ngrx/router-store';
-import * as fromRouter from '@ngrx/router-store';
 import { RouterState } from './navigation-state/router-serializer';
-import { Params } from '@angular/router';
 
 export interface AppState {
   router: fromRouter.RouterReducerState<RouterState>;

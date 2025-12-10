@@ -11,7 +11,7 @@ export type Rata = {
   soldRestPlata: number | null;
 };
 
-export type GraficRambursare = {
+export type RepaymentSchedule = {
   name: string;
   rate: Rata[];
 };

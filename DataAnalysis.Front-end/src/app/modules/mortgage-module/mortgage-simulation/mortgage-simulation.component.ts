@@ -6,7 +6,7 @@ import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.modul
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
-import { GraficRambursare } from '../models/mortgage.model';
+import { RepaymentSchedule } from '../models/mortgage.model';
 
 @Component({
   selector: 'app-mortgage-simulation',
@@ -15,7 +15,7 @@ import { GraficRambursare } from '../models/mortgage.model';
   styleUrls: ['./mortgage-simulation.component.scss'],
 })
 export class MortgageSimulationComponent {
-  transactions: GraficRambursare[] = [];
+  transactions: RepaymentSchedule[] = [];
 
   constructor(private store: Store<fromAppStore.AppState>) {}
 

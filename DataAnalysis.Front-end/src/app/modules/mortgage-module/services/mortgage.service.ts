@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { GraficRambursare } from '../models/mortgage.model';
+import { RepaymentSchedule } from '../models/mortgage.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +10,9 @@ import { GraficRambursare } from '../models/mortgage.model';
 export class MortgageService {
   constructor(private httpClient: HttpClient) {}
 
-  getMortgages(): Observable<GraficRambursare[]> {
+  getRepaymentSchedules(): Observable<RepaymentSchedule[]> {
     return this.httpClient
-      .get<GraficRambursare[]>('https://localhost:8080/api/v1/mortgage/bcr')
+      .get<RepaymentSchedule[]>('https://localhost:8080/api/v1/mortgage/bcr')
       .pipe(map((response) => response));
   }
 }

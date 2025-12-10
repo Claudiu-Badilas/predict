@@ -60,7 +60,7 @@
         </div>
       </div>
 
-      @for (grafic of transactions; track grafic.name) {
+      @for (schedule of repaymentSchedules$ | async; track schedule.name) {
       <div class="scrollable-container mt-3">
         <table class="table">
           <thead>
@@ -79,7 +79,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (rata of grafic.rate; track rata.nrCtr) {
+            @for (rata of schedule.rate; track rata.nrCtr) {
             <tr>
               <td>
                 <input
