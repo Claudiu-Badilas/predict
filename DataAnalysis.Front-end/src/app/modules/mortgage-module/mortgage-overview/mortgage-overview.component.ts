@@ -11,6 +11,7 @@ import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/t
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
 import { Rata } from '../models/mortgage.model';
+import { OverviewMortgageLoanHeaderComponent } from './components/overview-mortgage-loan-header/overview-mortgage-loan-header.component';
 
 @Component({
   selector: 'app-mortgage-overview',
@@ -20,6 +21,7 @@ import { Rata } from '../models/mortgage.model';
     DatePickerComponent,
     ToggleButtonComponent,
     DropdownSelectComponent,
+    OverviewMortgageLoanHeaderComponent,
   ],
   templateUrl: './mortgage-overview.component.html',
   styleUrls: ['./mortgage-overview.component.scss'],
@@ -37,7 +39,9 @@ export class MortgageOverviewComponent {
   overviewStartDate$ = this.store
     .select(fromMortgage.getOverviewStartDate)
     .pipe(map((date) => DateUtils.fromJsDateToString(date)));
-
+  overviewLoanRates$ = this.selectedRepaymentSchedule$.pipe(
+    map((srs) => srs?.overviewLoanRates?.filter((r) => r.selected) ?? [])
+  );
   constructor(private readonly store: Store<fromMortgage.MortgageState>) {}
 
   onSelectionChange(module: string) {
