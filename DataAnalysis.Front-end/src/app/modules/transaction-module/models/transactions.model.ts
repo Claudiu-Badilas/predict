@@ -1,3 +1,4 @@
+import { Colors } from 'src/app/shared/styles/colors';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 
 export interface TransactionResponse {
@@ -26,6 +27,7 @@ export class TransactionDomain {
   referenceId: number | null;
 
   serviceProvider: string;
+  color: string;
 
   constructor(res: TransactionResponse) {
     Object.assign(this, res);
@@ -38,5 +40,6 @@ export class TransactionDomain {
     );
 
     this.serviceProvider = res.description?.split('|')[0] ?? null;
+    this.color = this.amount > 0 ? Colors.GREEN_100 : 'white';
   }
 }
