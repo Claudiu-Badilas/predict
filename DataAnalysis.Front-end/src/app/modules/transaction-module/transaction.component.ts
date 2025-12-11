@@ -36,6 +36,9 @@ export class TransactionComponent {
   monthlyTransactionsChart$ = this.store.select(
     fromTransactions.getMonthlyTransactionsChart
   );
+  dailyTransactionsChart$ = this.store.select(
+    fromTransactions.getDailyTransactionsChart
+  );
 
   constructor(private readonly store: Store<fromTransactions.State>) {
     this.store.dispatch(TransactionsActions.loadTransactions());

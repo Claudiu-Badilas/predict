@@ -39,6 +39,11 @@
       />
     </div>
     <div class="mt-3">
+      <app-highcharts-wrapper
+        [chartOptions]="dailyTransactionsChart$ | async"
+      />
+    </div>
+    <div class="mt-3">
       <app-transaction-table />
     </div>
   </ng-container>

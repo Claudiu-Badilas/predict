@@ -9,6 +9,7 @@ import * as TransactionsActions from 'src/app/modules/transaction-module/actions
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { TransactionDomain } from '../models/transactions.model';
 import { MonthlyTransactionChartUtils } from '../utils/monthly-transactions.chart.util';
+import { DailyTransactionChartUtils } from '../utils/daily-transactions.chart.util';
 
 export interface State {
   transactions: TransactionDomain[];
@@ -23,7 +24,7 @@ const initialState: State = {
   transactions: [],
   startDate: DateUtils.getStartOfTheYear({ subtractYears: 0 }),
   endDate: new Date(),
-  selectedProvider: 'No Selection',
+  selectedProvider: 'RAIFFEISEN',
   selectedServiceProvider: 'No Selection',
   searchTerm: null,
 };
@@ -147,4 +148,11 @@ export const getMonthlyTransactionsChart = createSelector(
   getEndDate,
   getAvailableTransactionsBySearchTerm,
   MonthlyTransactionChartUtils.getChart
+);
+
+export const getDailyTransactionsChart = createSelector(
+  getStartDate,
+  getEndDate,
+  getAvailableTransactionsBySearchTerm,
+  DailyTransactionChartUtils.getChart
 );
