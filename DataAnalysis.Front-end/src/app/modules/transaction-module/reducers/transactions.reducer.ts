@@ -13,12 +13,14 @@ export interface State {
   transactions: TransactionDomain[];
   startDate: Date;
   endDate: Date;
+  selectedServiceProvider: string;
 }
 
 const initialState: State = {
   transactions: [],
-  startDate: DateUtils.getStartOfTheYear({ subtractYears: 0 }),
+  startDate: DateUtils.getStartOfTheYear({ subtractYears: 10 }),
   endDate: new Date(),
+  selectedServiceProvider: null,
 };
 
 const transactionsReducer = createReducer(
@@ -31,7 +33,14 @@ const transactionsReducer = createReducer(
     ...state,
     startDate,
     endDate,
-  }))
+  })),
+  on(
+    TransactionsActions.selectedServiceProviderChanged,
+    (state, { serviceProvider }) => ({
+      ...state,
+      selectedServiceProvider: serviceProvider,
+    })
+  )
 );
 
 export function reducer(state: State, action: Action) {
@@ -53,4 +62,20 @@ export const getEndDate = createSelector(
 export const getTransactions = createSelector(
   getTransactionsState,
   (state) => state.transactions
+);
+
+export const getSelectedServiceProvider = createSelector(
+  getTransactionsState,
+  (state) => state.selectedServiceProvider
+);
+
+export const getAvailableTransactions = createSelector(
+  getTransactions,
+  getSelectedServiceProvider,
+  (transactions, selectedServiceProvider) =>
+    transactions.filter(
+      (t) =>
+        selectedServiceProvider === null ||
+        t.serviceProvider === selectedServiceProvider
+    )
 );

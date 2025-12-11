@@ -7,6 +7,14 @@
         (valueChanged)="handleRangeChange($event)"
       ></app-date-range-picker>
     </div>
+    <div class="space">
+      <app-dropdown-select
+        [items]="dropDownSelectOptions$ | async"
+        [selectedItem]="selectedServiceProvider$ | async"
+        placeholder="No Selection"
+        (selectionChange)="onDropdownSelected($event)"
+      />
+    </div>
   </ng-container>
   <ng-container filters-partial-size> </ng-container>
 

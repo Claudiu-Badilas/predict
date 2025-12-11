@@ -9,6 +9,7 @@ import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.modul
 import { TransactionsEffects } from './effects/transactions.effects';
 import { TransactionComponent } from './transaction.component';
 import { TransactionRoutingModule } from './transaction.routing';
+import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { TransactionRoutingModule } from './transaction.routing';
     RangeSelectorComponent,
     StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
     EffectsModule.forFeature([TransactionsEffects]),
+    DropdownSelectComponent,
   ],
   declarations: [TransactionComponent],
   exports: [TransactionComponent],

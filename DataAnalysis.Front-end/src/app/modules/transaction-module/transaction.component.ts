@@ -19,7 +19,13 @@ export class TransactionComponent {
     .select(fromTransactions.getEndDate)
     .pipe(map((d) => DateUtils.fromJsDateToString(d)));
 
-  transactions$ = this.store.select(fromTransactions.getTransactions);
+  transactions$ = this.store.select(fromTransactions.getAvailableTransactions);
+  dropDownSelectOptions$ = this.store
+    .select(fromTransactions.getTransactions)
+    .pipe(map((t) => [...new Set(t.map((x) => x.serviceProvider))]));
+  selectedServiceProvider$ = this.store
+    .select(fromTransactions.getSelectedServiceProvider)
+    .pipe(map((val) => val ?? 'No Selection'));
 
   constructor(private readonly store: Store<fromTransactions.State>) {
     this.store.dispatch(TransactionsActions.loadTransactions());
@@ -33,5 +39,13 @@ export class TransactionComponent {
       })
     );
     this.store.dispatch(TransactionsActions.loadTransactions());
+  }
+
+  onDropdownSelected(value: string) {
+    this.store.dispatch(
+      TransactionsActions.selectedServiceProviderChanged({
+        serviceProvider: value,
+      })
+    );
   }
 }
