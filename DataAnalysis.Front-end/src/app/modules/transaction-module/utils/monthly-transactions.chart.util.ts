@@ -50,7 +50,7 @@ export namespace MonthlyTransactionChartUtils {
     });
 
     return {
-      chart: { type: 'column' },
+      chart: { zooming: { type: 'xy' } },
       title: { text: 'Monthly Transactions', align: 'left' },
       xAxis: { categories },
       yAxis: { title: { text: 'Amount (RON)' } },

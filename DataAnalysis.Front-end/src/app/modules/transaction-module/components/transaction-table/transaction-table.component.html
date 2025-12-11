@@ -2,29 +2,29 @@
   <table class="table">
     <thead>
       <tr>
-        <th class="col-2">Date</th>
-        <th class="col-2">Amount</th>
-        <th class="col-2">Ignored</th>
-        <th class="col-2">Service Provider</th>
-        <th class="col-4">Description</th>
+        <th scope="col">Date</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Currency</th>
+        <th scope="col">Ignored</th>
+        <th scope="col">Service Provider</th>
       </tr>
     </thead>
     <tbody>
       @for (tran of transactions$ | async; track tran.id) {
       <tr [ngStyle]="{ 'background-color': tran.color }">
-        <td class="col-2">
+        <td scope="col">
           {{ tran.registrationDate | date : "dd-MMM-yyyy" }}
         </td>
-        <td class="col-2">{{ tran.amount }}</td>
-        <td class="col-2">
+        <td scope="col">{{ tran.amount }}</td>
+        <td scope="col">{{ tran.currency }}</td>
+        <td scope="col">
           <app-checkbox
             [id]="tran.id"
             [checked]="tran.ignored"
             [disabled]="true"
           />
         </td>
-        <td class="col-2">{{ tran.serviceProvider }}</td>
-        <td class="col-4">{{ tran.description }}</td>
+        <td scope="col">{{ tran.serviceProvider }}</td>
       </tr>
       }
     </tbody>
