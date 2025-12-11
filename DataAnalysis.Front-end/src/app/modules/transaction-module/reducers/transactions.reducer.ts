@@ -114,16 +114,16 @@ export const getAvailableTransactionsByServiceProvider = createSelector(
 
 export const getAvailableTransactionsBySearchTerm = createSelector(
   getAvailableTransactionsByServiceProvider,
-  getSelectedServiceProvider,
   getSearchTerm,
-  (transactions, selectedServiceProvider, searchTerm) =>
+  (transactions, searchTerm) =>
     transactions.filter((t) =>
       !!searchTerm
         ? searchTerm
             .toLowerCase()
             .split(',')
+            .map((t) => t.trim())
             .filter((t) => !!t && t !== '')
-            .some((term) => t.description.toLowerCase().includes(term.trim()))
+            .some((term) => t.description.toLowerCase().includes(term))
         : transactions
     )
 );
