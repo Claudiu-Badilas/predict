@@ -8,3 +8,8 @@ button[ngbDropdownToggle] {
   background-color: white !important;
   text-align: left;
 }
+
+div[ngbDropdownMenu] {
+  max-height: 300px;
+  overflow-y: auto;
+}
