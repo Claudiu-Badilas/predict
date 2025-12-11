@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (tran of transactions; track tran) {
+          @for (tran of transactions$ | async; track tran) {
           <tr>
             <td>{{ tran.registrationDate | date : "dd-MM-yyyy" }}</td>
             <td>{{ tran.amount }}</td>

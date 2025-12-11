@@ -1,6 +1,7 @@
-import { TransactionService } from 'src/app/modules/transaction-module/services/transaction.service';
-import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs';
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as TransactionsActions from 'src/app/modules/transaction-module/actions/transactions.actions';
+import * as fromTransactions from 'src/app/modules/transaction-module/reducers/transactions.reducer';
 
 @Component({
   selector: 'app-transaction',
@@ -8,9 +9,8 @@ import { first } from 'rxjs';
   styleUrls: ['./transaction.component.scss'],
   standalone: false,
 })
-export class TransactionComponent implements OnInit {
-  transactions: any[] = [];
-  ngOnInit(): void {}
+export class TransactionComponent {
+  transactions$ = this.store.select(fromTransactions.getTransactions);
 
   startDate = '2025-01-01';
   endDate = '2026-02-01';
@@ -19,12 +19,7 @@ export class TransactionComponent implements OnInit {
     console.log('Range updated:', value);
   }
 
-  constructor(private _transactionService: TransactionService) {
-    this._transactionService
-      .getTransactions()
-      .pipe(first())
-      .subscribe((res) => {
-        this.transactions = res;
-      });
+  constructor(private readonly store: Store<fromTransactions.State>) {
+    this.store.dispatch(TransactionsActions.loadTransactions());
   }
 }
