@@ -4,6 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import * as fromTransactions from 'src/app/modules/transaction-module/reducers/transactions.reducer';
+import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
 import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
@@ -23,6 +24,7 @@ import { TransactionRoutingModule } from './transaction.routing';
     EffectsModule.forFeature([TransactionsEffects]),
     DropdownSelectComponent,
     TransactionHeaderComponent,
+    CheckboxComponent,
   ],
   declarations: [TransactionComponent],
   exports: [TransactionComponent],

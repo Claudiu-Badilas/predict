@@ -28,6 +28,7 @@ export class TransactionDomain {
 
   serviceProvider: string;
   color: string;
+  ignored: boolean;
 
   constructor(res: TransactionResponse) {
     Object.assign(this, res);
@@ -40,6 +41,13 @@ export class TransactionDomain {
     );
 
     this.serviceProvider = res.description?.split('|')[0] ?? null;
-    this.color = this.amount > 0 ? Colors.GREEN_100 : 'white';
+    this.ignored = this.description.includes(
+      'Transfer intre conturile proprii'
+    );
+    this.color = this.ignored
+      ? Colors.GRAY_100
+      : this.amount > 0
+      ? Colors.GREEN_100
+      : 'white';
   }
 }

@@ -11,7 +11,9 @@ export class TransactionHeaderComponent {
   @Input({ required: true }) transactions: TransactionDomain[];
 
   get incomes() {
-    return this.transactions.filter((t) => t.amount > 0);
+    return this.transactions
+      .filter((t) => !t.ignored)
+      .filter((t) => t.amount > 0);
   }
 
   get totalIncome() {
@@ -19,7 +21,9 @@ export class TransactionHeaderComponent {
   }
 
   get payments() {
-    return this.transactions.filter((t) => t.amount < 0);
+    return this.transactions
+      .filter((t) => !t.ignored)
+      .filter((t) => t.amount < 0);
   }
 
   get totalPayment() {
