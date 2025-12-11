@@ -29,7 +29,10 @@
   <ng-container filters-partial-size> </ng-container>
 
   <ng-container main-content>
-    <div class="scrollable-container">
+    <app-transaction-header
+      [transactions]="transactions$ | async"
+    ></app-transaction-header>
+    <div class="scrollable-container mt-3">
       <table class="table">
         <thead>
           <tr>

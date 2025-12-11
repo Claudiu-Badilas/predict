@@ -10,10 +10,6 @@ import { OverviewLoanRate } from '../../models/overview-mortgage-loan.model';
 export class OverviewMortgageLoanHeaderComponent {
   @Input({ required: true }) overviewLoanRates: OverviewLoanRate[];
 
-  get anySelected(): boolean {
-    return this.overviewLoanRates.length > 0;
-  }
-
   get rata() {
     return this.overviewLoanRates.find((r) => r.nextRate) || null;
   }

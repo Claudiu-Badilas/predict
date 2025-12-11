@@ -5,11 +5,12 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import * as fromTransactions from 'src/app/modules/transaction-module/reducers/transactions.reducer';
 import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
+import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { TransactionHeaderComponent } from './components/transaction-header/transaction-header.component';
 import { TransactionsEffects } from './effects/transactions.effects';
 import { TransactionComponent } from './transaction.component';
 import { TransactionRoutingModule } from './transaction.routing';
-import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-sele
     StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
     EffectsModule.forFeature([TransactionsEffects]),
     DropdownSelectComponent,
+    TransactionHeaderComponent,
   ],
   declarations: [TransactionComponent],
   exports: [TransactionComponent],
