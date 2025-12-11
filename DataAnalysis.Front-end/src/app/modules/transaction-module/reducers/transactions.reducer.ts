@@ -25,6 +25,11 @@ const transactionsReducer = createReducer(
   on(TransactionsActions.setTransactionsSuccess, (state, { transactions }) => ({
     ...state,
     transactions,
+  })),
+  on(TransactionsActions.dateRangeChanged, (state, { startDate, endDate }) => ({
+    ...state,
+    startDate,
+    endDate,
   }))
 );
 

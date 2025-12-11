@@ -21,11 +21,17 @@ export class TransactionComponent {
 
   transactions$ = this.store.select(fromTransactions.getTransactions);
 
-  handleRangeChange(value: any) {
-    console.log('Range updated:', value);
+  constructor(private readonly store: Store<fromTransactions.State>) {
+    this.store.dispatch(TransactionsActions.loadTransactions());
   }
 
-  constructor(private readonly store: Store<fromTransactions.State>) {
+  handleRangeChange(value: any) {
+    this.store.dispatch(
+      TransactionsActions.dateRangeChanged({
+        startDate: value.startDate,
+        endDate: value.endDate,
+      })
+    );
     this.store.dispatch(TransactionsActions.loadTransactions());
   }
 }

@@ -8,3 +8,8 @@ export const setTransactionsSuccess = createAction(
   '[Transactions] Set Transactions Success',
   props<{ transactions: any[] }>()
 );
+
+export const dateRangeChanged = createAction(
+  '[Transactions] Date Range Changed',
+  props<{ startDate: Date; endDate: Date }>()
+);
