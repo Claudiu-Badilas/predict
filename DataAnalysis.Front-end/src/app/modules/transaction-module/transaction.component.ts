@@ -22,10 +22,12 @@ export class TransactionComponent {
   transactions$ = this.store.select(fromTransactions.getAvailableTransactions);
   dropDownSelectOptions$ = this.store
     .select(fromTransactions.getTransactions)
-    .pipe(map((t) => [...new Set(t.map((x) => x.serviceProvider))]));
-  selectedServiceProvider$ = this.store
-    .select(fromTransactions.getSelectedServiceProvider)
-    .pipe(map((val) => val ?? 'No Selection'));
+    .pipe(
+      map((t) => ['No Selection', ...new Set(t.map((x) => x.serviceProvider))])
+    );
+  selectedServiceProvider$ = this.store.select(
+    fromTransactions.getSelectedServiceProvider
+  );
 
   constructor(private readonly store: Store<fromTransactions.State>) {
     this.store.dispatch(TransactionsActions.loadTransactions());

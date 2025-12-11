@@ -20,7 +20,7 @@ const initialState: State = {
   transactions: [],
   startDate: DateUtils.getStartOfTheYear({ subtractYears: 10 }),
   endDate: new Date(),
-  selectedServiceProvider: null,
+  selectedServiceProvider: 'No Selection',
 };
 
 const transactionsReducer = createReducer(
@@ -75,7 +75,7 @@ export const getAvailableTransactions = createSelector(
   (transactions, selectedServiceProvider) =>
     transactions.filter(
       (t) =>
-        selectedServiceProvider === null ||
+        selectedServiceProvider === 'No Selection' ||
         t.serviceProvider === selectedServiceProvider
     )
 );

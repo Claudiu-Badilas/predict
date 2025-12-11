@@ -1,6 +1,10 @@
 :host {
   display: block;
   width: 100%;
+
+  .dropdown-item {
+    padding: 3px 0 !important;
+  }
 }
 
 button[ngbDropdownToggle] {
@@ -9,7 +13,22 @@ button[ngbDropdownToggle] {
   text-align: left;
 }
 
-div[ngbDropdownMenu] {
-  max-height: 300px;
+/* Optional: Smooth scroll for dropdown */
+div[ngbDropdownMenu] div {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+}
+
+div[ngbDropdownMenu] div::-webkit-scrollbar {
+  width: 6px;
+}
+
+div[ngbDropdownMenu] div::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 3px;
+}
+
+.options-scrollable-container {
+  max-height: 500px;
   overflow-y: auto;
 }
