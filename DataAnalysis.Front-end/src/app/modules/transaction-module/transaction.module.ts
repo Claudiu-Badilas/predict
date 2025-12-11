@@ -12,6 +12,7 @@ import { TransactionHeaderComponent } from './components/transaction-header/tran
 import { TransactionsEffects } from './effects/transactions.effects';
 import { TransactionComponent } from './transaction.component';
 import { TransactionRoutingModule } from './transaction.routing';
+import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { TransactionRoutingModule } from './transaction.routing';
     DropdownSelectComponent,
     TransactionHeaderComponent,
     CheckboxComponent,
+    HighchartWrapperComponent,
   ],
   declarations: [TransactionComponent],
   exports: [TransactionComponent],
