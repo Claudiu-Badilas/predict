@@ -91,7 +91,7 @@ export const getSearchTerm = createSelector(
   (state) => state.searchTerm
 );
 
-export const getAvailableProviderTransactions = createSelector(
+export const getAvailableTransactionsByProvider = createSelector(
   getTransactions,
   getSelectedProvider,
   (transactions, selectedProvider) =>
@@ -101,15 +101,42 @@ export const getAvailableProviderTransactions = createSelector(
     )
 );
 
-export const getAvailableTransactions = createSelector(
-  getAvailableProviderTransactions,
+export const getAvailableTransactionsByServiceProvider = createSelector(
+  getAvailableTransactionsByProvider,
+  getSelectedServiceProvider,
+  (transactions, selectedServiceProvider) =>
+    transactions.filter(
+      (t) =>
+        selectedServiceProvider === 'No Selection' ||
+        t.serviceProvider === selectedServiceProvider
+    )
+);
+
+export const getAvailableTransactionsBySearchTerm = createSelector(
+  getAvailableTransactionsByServiceProvider,
   getSelectedServiceProvider,
   getSearchTerm,
   (transactions, selectedServiceProvider, searchTerm) =>
     transactions.filter((t) =>
       !!searchTerm
-        ? t.description.toLowerCase().includes(searchTerm.toLowerCase())
-        : selectedServiceProvider === 'No Selection' ||
-          t.serviceProvider === selectedServiceProvider
+        ? searchTerm
+            .toLowerCase()
+            .split(',')
+            .filter((t) => !!t && t !== '')
+            .some((term) => t.description.toLowerCase().includes(term.trim()))
+        : transactions
     )
+);
+
+export const getAvailableTransactions = createSelector(
+  getAvailableTransactionsBySearchTerm,
+  (transactions) => {
+    const seen = new Set<string>();
+    return transactions.filter((tx) => {
+      const sig = JSON.stringify(tx);
+      if (seen.has(sig)) return false;
+      seen.add(sig);
+      return true;
+    });
+  }
 );
