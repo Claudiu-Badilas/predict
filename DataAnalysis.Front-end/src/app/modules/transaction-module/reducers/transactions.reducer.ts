@@ -8,6 +8,7 @@ import {
 import * as TransactionsActions from 'src/app/modules/transaction-module/actions/transactions.actions';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { TransactionDomain } from '../models/transactions.model';
+import { MonthlyTransactionChartUtils } from '../utils/monthly-transactions.chart.util';
 
 export interface State {
   transactions: TransactionDomain[];
@@ -139,4 +140,11 @@ export const getAvailableTransactions = createSelector(
       return true;
     });
   }
+);
+
+export const getMonthlyTransactionsChart = createSelector(
+  getStartDate,
+  getEndDate,
+  getAvailableTransactionsBySearchTerm,
+  MonthlyTransactionChartUtils.getChart
 );
