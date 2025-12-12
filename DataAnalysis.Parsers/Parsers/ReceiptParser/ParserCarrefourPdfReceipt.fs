@@ -65,27 +65,39 @@ module ParserCarrefourPdfReceipt =
 
 
     let getReceipt (pdf: PdfReader) userId: ParsedReceipt =
-        let text = PdfUtils.getTextFromPdf pdf
-        let products = getParsedProducts text
-        let dateAndTime = getValue text "Data:" |> Option.bind(fun v -> v.Trim().Split("ORA:") |> Some)
-        let dateTime =  DateTimeUtils.convertStringToUTCDate (dateAndTime.Value[0].Trim() + " " + dateAndTime.Value[1].Trim() |> Some) "dd/MM/yyyy HH-mm-ss"
-        let provider = Provider.CARREFOUR  |> Some
-        let total = getValue text "SUBTOTAL" |> ParserUtils.tryGetDouble
-        {
-            Identifier = generateReceiptUniqueId userId dateTime total provider
-            Date = dateTime
-            TotalPrice = total
-            TotalDiscount = getValue text "economisit" |> Option.bind(fun v -> v.Split(" ")[0] |> Some) |> ParserUtils.tryGetDouble
-            Currency = CurrencyType.RON |> Some
-            ParsedProducts = products
-            Provider = provider
-        }
+        try
+            let text = PdfUtils.getTextFromPdf pdf
+            let products = getParsedProducts text
+            let dateAndTime = getValue text "Data:" |> Option.bind(fun v -> v.Trim().Split("ORA:") |> Some)
+            let dateTime =  DateTimeUtils.convertStringToUTCDate (dateAndTime.Value[0].Trim() + " " + dateAndTime.Value[1].Trim() |> Some) "dd/MM/yyyy HH-mm-ss"
+            let provider = Provider.CARREFOUR  |> Some
+            let total = getValue text "SUBTOTAL" |> ParserUtils.tryGetDouble
+            {
+                Identifier = generateReceiptUniqueId userId dateTime total provider
+                Date = dateTime
+                TotalPrice = total
+                TotalDiscount = getValue text "economisit" |> Option.bind(fun v -> v.Split(" ")[0] |> Some) |> ParserUtils.tryGetDouble
+                Currency = CurrencyType.RON |> Some
+                ParsedProducts = products
+                Provider = provider
+            }
+        with e -> 
+            {
+                Identifier = None
+                Date = None
+                TotalPrice = None
+                TotalDiscount = None
+                Currency = None
+                ParsedProducts = []
+                Provider = None
+            }
     
     
     let parsePdfs dataOwnerId (pdfs: PdfReader list) =
         let parsedTransaction =
             pdfs 
             |> List.map(fun pdf -> getReceipt pdf dataOwnerId)
+            |> List.filter(fun pdf -> pdf.Identifier.IsNone)
             |> List.distinctBy(fun t -> t.Identifier)
         
         StoreReceipts.storeReceipts dataOwnerId parsedTransaction

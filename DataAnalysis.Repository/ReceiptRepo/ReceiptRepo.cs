@@ -2,11 +2,12 @@
 using Dapper;
 using DataAnalysis.Common.Configuration;
 using DataAnalysis.Repository.ReceiptRepo.Models;
+using DataAnalysis.Repository.ReceiptRepo.Models.Response;
 
 namespace DataAnalysis.Repository.ReceiptRepo {
     public class ReceiptRepo : IReceiptRepo {
 
-        private string _npsqlConnectionString;
+        private readonly string _npsqlConnectionString;
 
         public ReceiptRepo(IEnvironmentConfiguration envConfig) {
             _npsqlConnectionString = envConfig.GetNpsqlConnectionString();
@@ -23,6 +24,46 @@ namespace DataAnalysis.Repository.ReceiptRepo {
                     WHERE data_owner_id = @dataOwnerId;";
 
                 return await connection.QueryAsync<Receipt>(sql, new { dataOwnerId });
+            };
+        }
+
+        public async Task<List<ReceiptResponse>> GetReceipts() {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
+                connection.Open();
+                var sql = @"
+                    SELECT
+	                    r.id as Id,
+	                    r.""date"" as Date,
+	                    r.total_price as TotalPrice,
+	                    r.total_discount as TotalDiscout,
+	                    r.description as Description,
+	                    p.""name"" as Provider,
+	                    c.""type"" as currency
+                    FROM public.receipt r
+                    JOIN public.currency c ON c.id = r.currency_id 
+                    JOIN public.provider p ON p.id = r.provider_id;";
+
+                return (await connection.QueryAsync<ReceiptResponse>(sql, new { })).ToList();
+            };
+        }
+
+        public async Task<IEnumerable<PurchasedProductResponse>> GetPurchedProductsByReceiptsIds(List<int> receiptIds) {
+            using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
+                connection.Open();
+                var sql = @"
+                    SELECT 
+                        pp.id as Id, 
+                        pp.""name"" as Name, 
+                        pp.price as Price, 
+                        pp.vat as VAT, 
+                        pp.quantity as Quantity, 
+                        qt.type as QuantityType, 
+                        pp.receipt_id as ReceiptId
+                    FROM public.purchased_product pp
+                    JOIN public.quantity_type qt on qt.id = quantity_type_id
+                    WHERE pp.receipt_id = ANY(@receiptIds);";
+
+                return await connection.QueryAsync<PurchasedProductResponse>(sql, new { receiptIds });
             };
         }
 

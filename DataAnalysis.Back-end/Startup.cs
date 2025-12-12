@@ -44,6 +44,7 @@ namespace DataAnalysis {
             services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<IAccountService, AccountService>();
             services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IReceiptsService, ReceiptsService>();
 
             services.AddSingleton<IEnvironmentConfiguration, EnvironmentConfiguration>();
 
