@@ -41,7 +41,8 @@ namespace DataAnalysis.Repository.ReceiptRepo {
 	                    c.""type"" as currency
                     FROM public.receipt r
                     JOIN public.currency c ON c.id = r.currency_id 
-                    JOIN public.provider p ON p.id = r.provider_id;";
+                    JOIN public.provider p ON p.id = r.provider_id
+                    order by r.""date"" desc;";
 
                 return (await connection.QueryAsync<ReceiptResponse>(sql, new { })).ToList();
             };
