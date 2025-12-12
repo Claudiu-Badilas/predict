@@ -1,0 +1,38 @@
+<div class="card receipts-container">
+  <table class="table receipts-table">
+    <thead>
+      <tr>
+        <th>Provider</th>
+        <th>Date</th>
+        <th>Total Price</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (receipt of receipts; track receipt.id) {
+      <tr>
+        <td>{{ receipt.provider }}</td>
+        <td>{{ receipt.date | date : "dd-MM-yyyy" }}</td>
+        <td>{{ receipt.totalPrice }}</td>
+        <td>
+          <button class="toggle-btn" (click)="toggle(receipt.id)">
+            {{ expanded.has(receipt.id) ? "▲" : "▼" }}
+          </button>
+        </td>
+      </tr>
+
+      @if (expanded.has(receipt.id)) {
+      <tr class="product-row">
+        <td colspan="4">
+          <ul class="product-list">
+            @for (product of receipt.products; track product.id) {
+            <li>{{ product.name }}</li>
+            }
+          </ul>
+        </td>
+      </tr>
+      } }
+    </tbody>
+  </table>
+</div>

@@ -9,6 +9,7 @@ import { ReceiptsEffects } from './effects/receipts.effects';
 import { ReceiptsComponent } from './receipts.component';
 import { ReceiptsRoutingModule } from './receipts.routing';
 import { ReceiptsService } from './services/receipts.service';
+import { ReceiptListComponent } from './components/receipts-list/receipts-list/receipts-list.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ReceiptsService } from './services/receipts.service';
     SideBarModule,
     StoreModule.forFeature('ReceiptsState', fromReceipts.reducer),
     EffectsModule.forFeature([ReceiptsEffects]),
+    ReceiptListComponent,
   ],
   declarations: [ReceiptsComponent],
   exports: [ReceiptsComponent],

@@ -4,15 +4,6 @@
   <ng-container filters-partial-size> </ng-container>
 
   <ng-container main-content>
-    @for(receipt of receipts$ | async; track receipt.id){
-    <ul>
-      <div>
-        {{ receipt.date | date : "dd-MM-yyyy" }} - {{ receipt.totalPrice }}
-      </div>
-      @for(product of receipt.products; track product.id){
-      <li>{{ product.name }}</li>
-      }
-    </ul>
-    }</ng-container
-  >
+    <app-receipts-list [receipts]="receipts$ | async" />
+  </ng-container>
 </app-side-bar>
