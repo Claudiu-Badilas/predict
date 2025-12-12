@@ -27,7 +27,7 @@ namespace DataAnalysis.Repository.ReceiptRepo {
             };
         }
 
-        public async Task<List<ReceiptResponse>> GetReceipts() {
+        public async Task<List<ReceiptResponse>> GetReceipts(DateTime startDate, DateTime endDate) {
             using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
                 connection.Open();
                 var sql = @"
@@ -42,9 +42,12 @@ namespace DataAnalysis.Repository.ReceiptRepo {
                     FROM public.receipt r
                     JOIN public.currency c ON c.id = r.currency_id 
                     JOIN public.provider p ON p.id = r.provider_id
-                    order by r.""date"" desc;";
+                    WHERE 
+                        r.""date"" >= @startDate
+                        AND r.""date"" <= @endDate
+                    ORDER BY r.""date"" desc;";
 
-                return (await connection.QueryAsync<ReceiptResponse>(sql, new { })).ToList();
+                return (await connection.QueryAsync<ReceiptResponse>(sql, new { startDate, endDate })).ToList();
             };
         }
 

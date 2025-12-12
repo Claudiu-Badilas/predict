@@ -1,5 +1,6 @@
 ﻿using DataAnalysis.Service.AuthorizationService;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAnalysis.Controllers;
 
@@ -15,8 +16,12 @@ public class ReceiptsController : BaseController {
     }
 
     [HttpGet("")]
-    public async Task<ActionResult> GetReceipts([FromHeader] string Authorization) {
-        return Ok(await _receiptService.GetReceips());
+    public async Task<ActionResult> GetReceipts(
+        [FromHeader] string Authorization,
+        [FromQuery, Required] string startDate,
+        [FromQuery, Required] string endDate
+    ) {
+        return Ok(await _receiptService.GetReceips(DateTime.Parse(startDate), DateTime.Parse(endDate)));
     }
 
 }

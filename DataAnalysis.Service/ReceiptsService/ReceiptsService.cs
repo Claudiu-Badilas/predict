@@ -11,8 +11,8 @@ public class ReceiptsService : IReceiptsService {
         _receiptRepo = receiptRepo;
     }
 
-    public async Task<List<ReceiptResponse>> GetReceips() {
-        var receipts = await _receiptRepo.GetReceipts();
+    public async Task<List<ReceiptResponse>> GetReceips(DateTime startDate, DateTime endDate) {
+        var receipts = await _receiptRepo.GetReceipts(startDate, endDate);
         var products = await _receiptRepo.GetPurchedProductsByReceiptsIds(receipts.Select(r => r.Id).ToList());
 
         foreach (var receipt in receipts) {

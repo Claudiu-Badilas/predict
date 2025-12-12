@@ -3,5 +3,5 @@
 namespace DataAnalysis.Service.AuthorizationService;
 
 public interface IReceiptsService {
-    Task<List<ReceiptResponse>> GetReceips();
+    Task<List<ReceiptResponse>> GetReceips(DateTime startDate, DateTime endDate);
 }
