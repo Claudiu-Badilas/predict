@@ -12,25 +12,7 @@ import { DateUtils } from 'src/app/shared/utils/date.utils';
   standalone: false,
 })
 export class ReceiptsComponent {
-  startDate$ = this.store
-    .select(fromReceipts.getStartDate)
-    .pipe(map((d) => DateUtils.fromJsDateToString(d)));
-  endDate$ = this.store
-    .select(fromReceipts.getEndDate)
-    .pipe(map((d) => DateUtils.fromJsDateToString(d)));
-  receipts$ = this.store.select(fromReceipts.getReceipts);
-
   constructor(private readonly store: Store<fromReceipts.State>) {
-    this.store.dispatch(ReceiptsActions.loadReceipts());
-  }
-
-  handleRangeChange(value: any) {
-    this.store.dispatch(
-      ReceiptsActions.dateRangeChanged({
-        startDate: value.startDate,
-        endDate: value.endDate,
-      })
-    );
     this.store.dispatch(ReceiptsActions.loadReceipts());
   }
 }
