@@ -4,8 +4,8 @@
       <app-date-range-picker
         [startDate]="startDate$ | async"
         [endDate]="endDate$ | async"
-        minDate="2018-01-01"
-        maxDate="2030-01-01"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
         (valueChanged)="handleRangeChange($event)"
       />
     </div>

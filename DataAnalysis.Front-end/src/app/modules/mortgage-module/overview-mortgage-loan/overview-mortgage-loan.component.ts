@@ -38,15 +38,17 @@ export class OverviewMortgageLoanComponent {
   dropDownSelectOptions$ = this.store
     .select(fromMortgageLoan.getRepaymentSchedules)
     .pipe(map((rs) => rs.map((r) => r.name)));
-  overviewStartDate$ = this.store
-    .select(fromMortgageLoan.getOverviewStartDate)
-    .pipe(map((date) => DateUtils.fromJsDateToString(date)));
+  overviewStartDate$ = this.store.select(fromMortgageLoan.getOverviewStartDate);
   overviewLoanRates$ = this.selectedRepaymentSchedule$.pipe(
     map((srs) => srs?.overviewLoanRates?.filter((r) => r.selected) ?? [])
   );
+
   constructor(
     private readonly store: Store<fromMortgageLoan.MortgageLoanState>
   ) {}
+
+  minDate = new Date('2025-12-01');
+  maxDate = new Date('2055-12-01');
 
   onSelectionChange(module: string) {
     this.store.dispatch(
@@ -62,12 +64,8 @@ export class OverviewMortgageLoanComponent {
     );
   }
 
-  onSelectedDateChange(date: string) {
-    this.store.dispatch(
-      MortgageLoanActions.startDateChanged({
-        date: DateUtils.fromStringToJsDate(date),
-      })
-    );
+  onSelectedDateChange(date: Date) {
+    this.store.dispatch(MortgageLoanActions.startDateChanged({ date }));
   }
 
   onSelectAllLoanRates(value: boolean) {

@@ -1,6 +1,6 @@
 <app-side-bar>
-  <ng-container filters-full-size
-    ><div class="space">
+  <ng-container filters-full-size>
+    <div class="space">
       <app-toggle-button
         [options]="['Summary', 'Products']"
         [selected]="'Summary'"
@@ -11,7 +11,7 @@
       <app-date-range-picker
         [startDate]="startDate$ | async"
         [endDate]="endDate$ | async"
-        minDate="2021-12-01"
+        [minDate]="minDate"
         [maxDate]="now"
         (valueChanged)="handleRangeChange($event)"
       />

@@ -1,8 +1,8 @@
-import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
+import { DateRangePicker } from './models/date-range-picker.model';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule, DatePickerComponent],
@@ -11,30 +11,27 @@ import { DatePickerComponent } from '../date-picker/date-picker.component';
   styleUrls: ['./date-range-picker.component.scss'],
 })
 export class RangeSelectorComponent {
-  @Input({ required: true }) startDate: string;
-  @Input({ required: true }) endDate: string;
-  @Input({ required: true }) minDate: string;
-  @Input({ required: true }) maxDate: string;
+  @Input({ required: true }) startDate: Date;
+  @Input({ required: true }) endDate: Date;
+  @Input({ required: true }) minDate: Date;
+  @Input({ required: true }) maxDate: Date;
 
-  @Output() valueChanged = new EventEmitter<{
-    startDate: Date;
-    endDate: Date;
-  }>();
+  @Output() valueChanged = new EventEmitter<DateRangePicker>();
 
-  onStartDateChange(date: string) {
+  onStartDateChange(date: Date) {
     this.startDate = date;
     this.emitChanges();
   }
 
-  onEndDateChange(date: string) {
+  onEndDateChange(date: Date) {
     this.endDate = date;
     this.emitChanges();
   }
 
   emitChanges() {
     this.valueChanged.emit({
-      startDate: DateUtils.fromStringToJsDate(this.startDate),
-      endDate: DateUtils.fromStringToJsDate(this.endDate),
-    });
+      startDate: this.startDate,
+      endDate: this.endDate,
+    } as DateRangePicker);
   }
 }

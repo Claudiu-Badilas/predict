@@ -1,17 +1,17 @@
 <div class="d-flex flex-column">
   <div class="d-flex align-items-center pickers">
     <date-picker
-      [selectedDate]="startDate"
+      [initialDate]="startDate"
       [minDate]="minDate"
       [maxDate]="endDate"
-      (selectedDateChange)="onStartDateChange($event)"
+      (dateChange)="onStartDateChange($event)"
     ></date-picker>
 
     <date-picker
-      [selectedDate]="endDate"
+      [initialDate]="endDate"
       [minDate]="startDate"
       [maxDate]="maxDate"
-      (selectedDateChange)="onEndDateChange($event)"
+      (dateChange)="onEndDateChange($event)"
     ></date-picker>
   </div>
 </div>

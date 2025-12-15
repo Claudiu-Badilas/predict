@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import * as TransactionsActions from 'src/app/modules/transaction-module/actions/transactions.actions';
 import * as fromTransactions from 'src/app/modules/transaction-module/reducers/transactions.reducer';
-import { DateUtils } from 'src/app/shared/utils/date.utils';
 
 @Component({
   selector: 'app-transaction',
@@ -12,12 +11,8 @@ import { DateUtils } from 'src/app/shared/utils/date.utils';
   standalone: false,
 })
 export class TransactionComponent {
-  startDate$ = this.store
-    .select(fromTransactions.getStartDate)
-    .pipe(map((d) => DateUtils.fromJsDateToString(d)));
-  endDate$ = this.store
-    .select(fromTransactions.getEndDate)
-    .pipe(map((d) => DateUtils.fromJsDateToString(d)));
+  startDate$ = this.store.select(fromTransactions.getStartDate);
+  endDate$ = this.store.select(fromTransactions.getEndDate);
 
   transactions$ = this.store.select(fromTransactions.getAvailableTransactions);
   providerDropDownSelectOptions$ = this.store
@@ -43,6 +38,9 @@ export class TransactionComponent {
   constructor(private readonly store: Store<fromTransactions.State>) {
     this.store.dispatch(TransactionsActions.loadTransactions());
   }
+
+  minDate = new Date('2018-01-01');
+  maxDate = new Date('2030-01-01');
 
   handleRangeChange(value: any) {
     this.store.dispatch(

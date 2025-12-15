@@ -15,13 +15,15 @@
       (selectionChange)="onDropdownSelected($event)"
     />
     <div class="space">
-      <date-picker
-        [label]="'Select start date'"
-        [selectedDate]="overviewStartDate$ | async"
-        [minDate]="'2025-12-01'"
-        [maxDate]="'2055-12-01'"
-        (selectedDateChange)="onSelectedDateChange($event)"
-      />
+      <div class="d-flex">
+        <div>Select start date</div>
+        <date-picker
+          [initialDate]="overviewStartDate$ | async"
+          [minDate]="minDate"
+          [maxDate]="maxDate"
+          (dateChange)="onSelectedDateChange($event)"
+        />
+      </div>
     </div>
   </ng-container>
 

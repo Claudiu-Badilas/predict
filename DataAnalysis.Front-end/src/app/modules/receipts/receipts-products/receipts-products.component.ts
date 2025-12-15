@@ -26,12 +26,8 @@ import * as NavigationAction from 'src/app/store/navigation-state/navigation.act
   styleUrl: './receipts-products.component.scss',
 })
 export class ReceiptsProductsComponent {
-  startDate$ = this.store
-    .select(fromReceipts.getStartDate)
-    .pipe(map((d) => DateUtils.fromJsDateToString(d)));
-  endDate$ = this.store
-    .select(fromReceipts.getEndDate)
-    .pipe(map((d) => DateUtils.fromJsDateToString(d)));
+  startDate$ = this.store.select(fromReceipts.getStartDate);
+  endDate$ = this.store.select(fromReceipts.getEndDate);
   dailyPurchasedProductChart$ = this.store.select(
     fromReceipts.getDailyPurchasedProductChart
   );
@@ -39,7 +35,8 @@ export class ReceiptsProductsComponent {
     fromReceipts.getProductPriceTrendChartUtils
   );
 
-  now = DateUtils.fromJsDateToString(new Date());
+  minDate = new Date('2021-01-01');
+  now = new Date();
 
   constructor(private readonly store: Store<fromReceipts.State>) {
     this.store.dispatch(ReceiptsActions.loadReceipts());
