@@ -29,5 +29,10 @@
         [chartOptions]="dailyPurchasedProductChart$ | async"
       />
     </div>
+    <div class="mt-3">
+      <app-highcharts-wrapper
+        [chartOptions]="productPriceTrendChartUtils$ | async"
+      />
+    </div>
   </ng-container>
 </app-side-bar>

@@ -35,6 +35,9 @@ export class ReceiptsProductsComponent {
   dailyPurchasedProductChart$ = this.store.select(
     fromReceipts.getDailyPurchasedProductChart
   );
+  productPriceTrendChartUtils$ = this.store.select(
+    fromReceipts.getProductPriceTrendChartUtils
+  );
 
   now = DateUtils.fromJsDateToString(new Date());
 
