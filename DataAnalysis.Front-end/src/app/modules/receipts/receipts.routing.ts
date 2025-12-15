@@ -1,9 +1,10 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationGuard } from 'src/app/platform/authentication/guard/authentication.guard';
+import { ReceiptsProductsComponent } from './receipts-products/receipts-products.component';
+import { ReceiptsSummaryComponent } from './receipts-summary/receipts-summary.component';
 import { ReceiptsComponent } from './receipts.component';
 import { ReceiptsModule } from './receipts.module';
-import { ReceiptsSummaryComponent } from './receipts-summary/receipts-summary.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,10 @@ const routes: Routes = [
       {
         path: 'summary',
         component: ReceiptsSummaryComponent,
+      },
+      {
+        path: 'products',
+        component: ReceiptsProductsComponent,
       },
     ],
   },
