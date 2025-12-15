@@ -24,7 +24,12 @@
             [disabled]="true"
           />
         </td>
-        <td scope="col">{{ tran.serviceProvider }}</td>
+        <td
+          scope="col"
+          [innerHTML]="
+            tran.serviceProvider | boldSearch : (searchTerm$ | async)
+          "
+        ></td>
       </tr>
       }
     </tbody>

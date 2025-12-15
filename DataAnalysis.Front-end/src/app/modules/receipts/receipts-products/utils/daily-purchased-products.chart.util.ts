@@ -14,6 +14,7 @@ export namespace DailyPurchasedProductChartUtils {
         x: p.purchasedDate.valueOf(),
         y: Number(p.price.toFixed(2)),
         date: DateUtils.fromJsDateToString(p.purchasedDate),
+        name: p.name,
       }));
     };
 
@@ -28,7 +29,7 @@ export namespace DailyPurchasedProductChartUtils {
       tooltip: {
         formatter: function () {
           return `
-            <b>${this.series.name}</b><br/>
+            <b>${(this as any).name}</b><br/>
             Date: <b>${(this as any).point.date}</b><br/>
             Amount: <b>${(this as any).point.y}</b>
           `;
