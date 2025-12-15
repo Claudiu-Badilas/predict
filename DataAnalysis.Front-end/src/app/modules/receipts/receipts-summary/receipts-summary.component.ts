@@ -9,7 +9,7 @@ import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.modul
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import * as NavigationAction from 'src/app/store/navigation-state/navigation.actions';
-import { ReceiptListComponent } from '../components/receipts-list/receipts-list/receipts-list.component';
+import { ReceiptListComponent } from './components/receipts-list/receipts-list.component';
 
 @Component({
   selector: 'app-receipts-summary',
