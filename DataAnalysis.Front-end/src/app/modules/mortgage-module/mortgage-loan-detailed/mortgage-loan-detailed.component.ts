@@ -8,12 +8,12 @@ import * as NavigationAction from 'src/app/store/navigation-state/navigation.act
 import { RepaymentSchedule } from '../models/mortgage.model';
 
 @Component({
-  selector: 'app-detailed-mortgage-loan',
+  selector: 'app-mortgage-loan-detailed',
   imports: [CommonModule, SideBarModule, ToggleButtonComponent],
-  templateUrl: './detailed-mortgage-loan.component.html',
-  styleUrls: ['./detailed-mortgage-loan.component.scss'],
+  templateUrl: './mortgage-loan-detailed.component.html',
+  styleUrl: './mortgage-loan-detailed.component.scss',
 })
-export class DetailedMortgageLoanComponent {
+export class MortgageLoanDetailedComponent {
   transactions: RepaymentSchedule[] = [];
 
   constructor(private store: Store<fromAppStore.AppState>) {}
