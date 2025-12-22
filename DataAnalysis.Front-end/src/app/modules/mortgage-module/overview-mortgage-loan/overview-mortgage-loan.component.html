@@ -2,7 +2,7 @@
   <ng-container filters-full-size>
     <div class="space">
       <app-toggle-button
-        [options]="['Overview', 'Detailed', 'Simulation']"
+        [options]="['Overview', 'Detailed']"
         [selected]="'Overview'"
         (selectionChange)="onSelectionChange($event)"
       />
@@ -21,6 +21,7 @@
           [initialDate]="overviewStartDate$ | async"
           [minDate]="minDate"
           [maxDate]="maxDate"
+          [openSide]="'right'"
           (dateChange)="onSelectedDateChange($event)"
         />
       </div>

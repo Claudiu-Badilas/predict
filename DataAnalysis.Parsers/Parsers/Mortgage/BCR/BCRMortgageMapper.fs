@@ -13,8 +13,10 @@ module BCRMortgageMapper =
 
     let getLocalPdfs path =
         Directory.EnumerateFiles(path, "*.pdf")
-        |> Seq.toArray 
-        |> Array.map(fun f -> (Path.GetFileName(f), new PdfReader(Path.Combine(path, f))))
+        |> Seq.toArray
+        |> Array.map (fun f ->
+            (Path.GetFileNameWithoutExtension(f), new PdfReader(f))
+        )
 
 
     let tryGetDouble (value: string option) =
@@ -43,10 +45,6 @@ module BCRMortgageMapper =
             let ok, dt = DateTime.TryParseExact(v, format, culture, DateTimeStyles.None)
             if ok then Some dt else None
         | None -> None
-
-
-    let getFileName (filePath: string) =
-        Path.GetFileName(filePath)
 
 
     let getMorgageDetails (pdf: PdfReader): Rata list =
