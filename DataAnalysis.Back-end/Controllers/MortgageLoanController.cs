@@ -1,5 +1,5 @@
-﻿using DataAnalysis.Parsers.ReceiptParser;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Predict.Reader.Mortgage;
 
 namespace DataAnalysis.Controllers;
 

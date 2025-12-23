@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IronXL.Excel" Version="2022.12.11262" />
+		<PackageReference Include="iTextSharp" Version="5.5.13.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="Types\CommonTypes.fs" />
+		<Compile Include="Types\ReceiptTypes.fs" />
+		<Compile Include="Types\HealthTypes.fs" />
+		<Compile Include="Types\MortgageTypes.fs" />
+		<Compile Include="Types\TransactionTypes.fs" />
+		<Compile Include="Utils\PdfUtils.fs" />
+		<Compile Include="Utils\ExcelUtils.fs" />
+		<Compile Include="Utils\DateTimeUtils.fs" />
+		<Compile Include="Utils\ParserUtils.fs" />
+		<Compile Include="DatabaseAccess\Utils\StorerUtils.fs" />
+		<Compile Include="DatabaseAccess\StoreTransactions.fs" />
+		<Compile Include="DatabaseAccess\StoreReceipts.fs" />
+		<Compile Include="DatabaseAccess\StoreHearthRate.fs" />
+		<Compile Include="Readers\Mortgage\BCR\BCRMortgageMapper.fs" />
+		<Compile Include="Readers\AccountStatement\OM\OrangeMoneyPdfAccountStatement.fs" />
+		<Compile Include="Readers\AccountStatement\OM\OrangeMoneyExcelAccountStatement.fs" />
+		<Compile Include="Readers\AccountStatement\RevolutExcelAccountStatement.fs" />
+		<Compile Include="Readers\AccountStatement\RaiffeisenExcelAccountStatement.fs" />
+		<Compile Include="Readers\Receipt\CarrefourPdfReceipt.fs" />
+		<Compile Include="Readers\Health\ZeppLifeHeartRate.fs" />
+		<Compile Include="Program.fs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DataAnalysis.Repository\DataAnalysis.Repository.csproj" />
+	</ItemGroup>
+
+</Project>

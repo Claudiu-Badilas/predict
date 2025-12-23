@@ -5,13 +5,13 @@ VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAnalysis.Back-end", "DataAnalysis.Back-end\DataAnalysis.Back-end.csproj", "{DBAE4715-15B6-4161-A40B-599D28A35B41}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "DataAnalysis.Parsers", "DataAnalysis.Parsers\DataAnalysis.Parsers.fsproj", "{DCF4C26C-F996-4E11-BB71-CC171FBF3B75}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAnalysis.Repository", "DataAnalysis.Repository\DataAnalysis.Repository.csproj", "{B97CB6F7-F3F1-4AD2-BA7A-1FE84D557B56}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAnalysis.Service", "DataAnalysis.Service\DataAnalysis.Service.csproj", "{2105D7FC-B82D-4F05-A3E2-806B5EAEC81B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalysis.Common", "DataAnalysis.Common\DataAnalysis.Common.csproj", "{4CB84C33-5AE5-4A6E-84A7-0066CF067626}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAnalysis.Common", "DataAnalysis.Common\DataAnalysis.Common.csproj", "{4CB84C33-5AE5-4A6E-84A7-0066CF067626}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Predict.Readers", "Predict.Readers\Predict.Readers.fsproj", "{9911A7B7-48D3-4931-8BA9-FF71F004CDB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,6 @@ Global
 		{DBAE4715-15B6-4161-A40B-599D28A35B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBAE4715-15B6-4161-A40B-599D28A35B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBAE4715-15B6-4161-A40B-599D28A35B41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCF4C26C-F996-4E11-BB71-CC171FBF3B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCF4C26C-F996-4E11-BB71-CC171FBF3B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCF4C26C-F996-4E11-BB71-CC171FBF3B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCF4C26C-F996-4E11-BB71-CC171FBF3B75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B97CB6F7-F3F1-4AD2-BA7A-1FE84D557B56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B97CB6F7-F3F1-4AD2-BA7A-1FE84D557B56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B97CB6F7-F3F1-4AD2-BA7A-1FE84D557B56}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{4CB84C33-5AE5-4A6E-84A7-0066CF067626}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CB84C33-5AE5-4A6E-84A7-0066CF067626}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CB84C33-5AE5-4A6E-84A7-0066CF067626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9911A7B7-48D3-4931-8BA9-FF71F004CDB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9911A7B7-48D3-4931-8BA9-FF71F004CDB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9911A7B7-48D3-4931-8BA9-FF71F004CDB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9911A7B7-48D3-4931-8BA9-FF71F004CDB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

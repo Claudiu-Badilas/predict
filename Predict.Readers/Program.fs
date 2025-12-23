@@ -1,0 +1,68 @@
+﻿open System.IO
+open IronXL
+open iTextSharp.text.pdf
+open Predict.Readers.AccountStatement
+open Predict.Reader.ReceiptParser
+open Predict.Reader.HealthParser
+open Predict.Reader.Mortgage
+
+module ParserConsole =
+
+    let getLocalExcels path =
+        Directory.EnumerateFiles(path, "*.xlsx")
+        |> Seq.append(Directory.EnumerateFiles(path, "*.xls"))
+        |> Seq.toList
+        |> List.map(fun f -> Path.Combine(path, f) |> WorkBook.Load)
+
+
+    let getLocalPdfs path =
+        Directory.EnumerateFiles(path, "*.pdf")
+        |> Seq.toList 
+        |> List.map(fun f -> new PdfReader(Path.Combine(path, f)))
+   
+   
+    let getLocalCsvs path =
+        Directory.EnumerateFiles(path, "*.csv")
+        |> Seq.toList 
+        |> List.map(fun f -> new StreamReader(f))
+        
+    let getLocalJsons path =
+        Directory.EnumerateFiles(path, "*.json")
+        |> Seq.toList 
+        |> List.map(fun f -> new StreamReader(f))
+
+    type Data =
+        {
+            Calorie: double option
+            Distance: double option
+            Segment: double option
+            Speed: double option
+            Start_time: double option
+        }
+
+    [<EntryPoint>]
+    let main _ =
+        let dataOwnerId = 1
+
+        let raifExcels = getLocalExcels @""
+        let raitransactions = RaiffeisenExcelAccountStatement.readExcels dataOwnerId raifExcels
+        
+        let raifExcels = getLocalExcels @""
+        let raitransactions = RaiffeisenExcelAccountStatement.readExcels dataOwnerId raifExcels
+
+        let revExcels = getLocalExcels @""
+        let revtransactions = RevolutExcelAccountStatement.readExcels dataOwnerId revExcels
+
+        let omPdfs = getLocalPdfs @""
+        let omtransactions = OrangeMoneyPdfAccountStatement.readPdfs dataOwnerId omPdfs
+
+        let carrPdfs = getLocalPdfs @"r"
+        let carrReceipts = CarrefourPdfReceipt.readPdfs dataOwnerId carrPdfs
+        
+        let heartRatecsv = getLocalCsvs @""
+        let rates = ZeppLifeHeartRate.readCsvs dataOwnerId heartRatecsv
+
+        let results = BCRMortgageMapper.getBcrMorgages()
+
+        printfn "Run succesfully"
+        0
