@@ -38,9 +38,7 @@ export class ReceiptsProductsComponent {
   minDate = new Date('2021-01-01');
   now = new Date();
 
-  constructor(private readonly store: Store<fromReceipts.State>) {
-    this.store.dispatch(ReceiptsActions.loadReceipts());
-  }
+  constructor(private readonly store: Store<fromReceipts.State>) {}
 
   onSelectionChange(module: string) {
     this.store.dispatch(

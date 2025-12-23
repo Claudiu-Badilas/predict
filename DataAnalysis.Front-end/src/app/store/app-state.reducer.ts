@@ -6,14 +6,17 @@ import {
   createFeatureSelector,
   createSelector,
 } from '@ngrx/store';
+import * as fromLayout from 'src/app/platform/reducers/layout.reducer';
 import { RouterState } from './navigation-state/router-serializer';
 
 export interface AppState {
   router: fromRouter.RouterReducerState<RouterState>;
+  layout: fromLayout.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
   router: fromRouter.routerReducer,
+  layout: fromLayout.reducer,
 };
 
 const getRouterState =

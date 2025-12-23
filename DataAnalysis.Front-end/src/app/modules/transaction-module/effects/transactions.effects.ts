@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
-import * as TransactionsActions from 'src/app/modules/transaction-module/actions/transactions.actions';
-import { TransactionService } from '../services/transaction.service';
-import * as fromTransactions from 'src/app/modules/transaction-module/reducers/transactions.reducer';
 import { Store } from '@ngrx/store';
+import * as TransactionsActions from 'src/app/modules/transaction-module/actions/transactions.actions';
+import * as fromTransactions from 'src/app/modules/transaction-module/reducers/transactions.reducer';
+import * as LayoutActions from 'src/app/platform/actions/layout.actions';
+import { TransactionService } from '../services/transaction.service';
 
 @Injectable()
 export class TransactionsEffects {
@@ -18,6 +19,7 @@ export class TransactionsEffects {
   loadTransactions$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TransactionsActions.loadTransactions),
+      tap(() => LayoutActions.spinnerOn()),
       withLatestFrom(
         this.store.select(fromTransactions.getStartDate),
         this.store.select(fromTransactions.getEndDate)
@@ -25,9 +27,10 @@ export class TransactionsEffects {
       switchMap(([, startDate, endDate]) =>
         this._transactionService.getTransactions(startDate, endDate)
       ),
-      map((transactions) =>
-        TransactionsActions.setTransactionsSuccess({ transactions })
-      )
+      switchMap((transactions) => [
+        TransactionsActions.setTransactionsSuccess({ transactions }),
+        LayoutActions.spinnerOff(),
+      ])
     )
   );
 }

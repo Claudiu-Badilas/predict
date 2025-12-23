@@ -28,9 +28,7 @@ export class ReceiptsSummaryComponent {
   endDate$ = this.store.select(fromReceipts.getEndDate);
   receipts$ = this.store.select(fromReceipts.getReceipts);
 
-  constructor(private readonly store: Store<fromReceipts.State>) {
-    this.store.dispatch(ReceiptsActions.loadReceipts());
-  }
+  constructor(private readonly store: Store<fromReceipts.State>) {}
 
   minDate = new Date('2021-01-01');
   now = new Date();

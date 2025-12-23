@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import * as fromLayout from 'src/app/platform/reducers/layout.reducer';
 
 @Component({
   selector: 'app-spinner',
@@ -7,4 +10,8 @@ import { Component } from '@angular/core';
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.scss'],
 })
-export class SpinnerComponent {}
+export class SpinnerComponent {
+  isLoading$ = this.store.select(fromLayout.getIsLoading);
+
+  constructor(private readonly store: Store<fromLayout.State>) {}
+}
