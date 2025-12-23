@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "DataAnalysis": {
+    "Predict": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/data-analysis.front-end"
+              "base": "dist/predict.front-end"
             },
             "index": "src/index.html",
             "polyfills": ["zone.js"],
@@ -64,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "DataAnalysis:build:production"
+              "buildTarget": "Predict:build:production"
             },
             "development": {
-              "buildTarget": "DataAnalysis:build:development"
+              "buildTarget": "Predict:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
           "options": {
-            "buildTarget": "DataAnalysis:build"
+            "buildTarget": "Predict:build"
           }
         },
         "test": {
