@@ -6,6 +6,8 @@ import {
   on,
 } from '@ngrx/store';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-module/state-management/mortgage-loan.actions';
+import { DateUtils } from 'src/app/shared/utils/date.utils';
+import { MortgageLoanProgressChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-progress.chart.util';
 import {
   mapBaseRepaymentScheduleToOverview,
   OverviewRepaymentSchedule,
@@ -98,6 +100,27 @@ export const getRepaymentSchedules = createSelector(
   (state) => state.repaymentSchedules
 );
 
+export const getBaseRepaymentSchedule = createSelector(
+  getRepaymentSchedules,
+  (repaymentSchedules) =>
+    repaymentSchedules.find((r) => r.isBasePayment) ?? null
+);
+
+export const getLatestRepaymentSchedule = createSelector(
+  getRepaymentSchedules,
+  (repaymentSchedules) =>
+    repaymentSchedules.length > 0
+      ? repaymentSchedules
+          .slice()
+          .sort(
+            (a, b) =>
+              DateUtils.fromStringToJsDate(b.date.split('T')[0]).valueOf() -
+              DateUtils.fromStringToJsDate(a.date.split('T')[0]).valueOf()
+          )
+          .at(0)
+      : null
+);
+
 export const getSelectedRepaymentScheduleName = createSelector(
   getMortgageLoanState,
   (state) =>
@@ -155,4 +178,14 @@ export const getSelectedRepaymentScheduleOverview = createSelector(
   getOverviewStartDate,
   getSelectedLoanRates,
   mapBaseRepaymentScheduleToOverview
+);
+
+//################
+// DETAILED
+//################
+
+export const getMortgageLoanProgressChart = createSelector(
+  getBaseRepaymentSchedule,
+  getLatestRepaymentSchedule,
+  MortgageLoanProgressChartUtils.getChart
 );

@@ -11,5 +11,16 @@
 
   <ng-container filters-partial-size></ng-container>
 
-  <ng-container main-content> </ng-container>
+  <ng-container main-content>
+    <div class="d-flex gap">
+      <app-highcharts-wrapper
+        class="w-50"
+        [chartOptions]="mortgageLoanProgressChart$ | async"
+      />
+      <app-highcharts-wrapper
+        class="w-50"
+        [chartOptions]="mortgageLoanProgressChart$ | async"
+      />
+    </div>
+  </ng-container>
 </app-side-bar>
