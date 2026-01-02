@@ -22,6 +22,9 @@ export class MortgageLoanDetailedComponent {
   mortgageLoanProgressChart$ = this.store.select(
     fromMortgageLoan.getMortgageLoanProgressChart
   );
+  mortgageLoanAmountChartUtils$ = this.store.select(
+    fromMortgageLoan.getMortgageLoanAmountChartUtils
+  );
 
   constructor(private store: Store<fromMortgageLoan.MortgageLoanState>) {}
 

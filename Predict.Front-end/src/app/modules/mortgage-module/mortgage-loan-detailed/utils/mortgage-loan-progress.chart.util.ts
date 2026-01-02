@@ -36,7 +36,7 @@ export namespace MortgageLoanProgressChartUtils {
         panning: { enabled: true, type: 'xy' },
         panKey: 'shift',
       },
-      title: { text: 'Progress', align: 'left' },
+      title: { text: 'Loan Progress', align: 'left' },
       tooltip: {
         headerFormat: '',
         pointFormat:

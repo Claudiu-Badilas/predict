@@ -13,6 +13,7 @@ import {
   OverviewRepaymentSchedule,
 } from '../mortgage-loan-overview/models/overview-mortgage-loan.model';
 import { RepaymentSchedule } from './../models/mortgage.model';
+import { MortgageLoanAmountChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-amount.chart.util';
 
 interface OverviewMortgageLoanState {
   repaymentSchedules: OverviewRepaymentSchedule[];
@@ -188,4 +189,10 @@ export const getMortgageLoanProgressChart = createSelector(
   getBaseRepaymentSchedule,
   getLatestRepaymentSchedule,
   MortgageLoanProgressChartUtils.getChart
+);
+
+export const getMortgageLoanAmountChartUtils = createSelector(
+  getBaseRepaymentSchedule,
+  getLatestRepaymentSchedule,
+  MortgageLoanAmountChartUtils.getChart
 );
