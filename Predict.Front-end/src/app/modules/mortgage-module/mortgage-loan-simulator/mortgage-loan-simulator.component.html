@@ -11,5 +11,7 @@
 
   <ng-container filters-partial-size></ng-container>
 
-  <ng-container main-content> </ng-container>
+  <ng-container main-content>
+    <app-highcharts-wrapper [chartOptions]="mortgageLoanAmountChart$ | async"
+  /></ng-container>
 </app-side-bar>
