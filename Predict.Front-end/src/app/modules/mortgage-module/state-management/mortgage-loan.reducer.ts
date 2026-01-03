@@ -19,6 +19,7 @@ import { RatesTrendChartUtils } from '../mortgage-loan-simulator/utils/loan-rate
 
 interface OverviewMortgageLoanState {
   repaymentSchedules: OverviewRepaymentSchedule[];
+  selectedRepaymentScheduleName: string;
   selectedLoanRates: number[];
   startDate: Date;
   selectAll: boolean;
@@ -26,17 +27,16 @@ interface OverviewMortgageLoanState {
 
 export interface MortgageLoanState {
   repaymentSchedules: RepaymentSchedule[];
-  selectedRepaymentScheduleName: string;
 
   overview: OverviewMortgageLoanState;
 }
 
 const initialState: MortgageLoanState = {
   repaymentSchedules: [],
-  selectedRepaymentScheduleName: null,
 
   overview: {
     repaymentSchedules: [],
+    selectedRepaymentScheduleName: null,
     selectedLoanRates: [],
     startDate: new Date(),
     selectAll: undefined,
@@ -56,7 +56,7 @@ const mortgageReducer = createReducer(
     MortgageLoanActions.selectedMortgageLoanChanged,
     (state, { selected }) => ({
       ...state,
-      selectedRepaymentScheduleName: selected,
+      overview: { ...state.overview, selectedRepaymentScheduleName: selected },
     })
   ),
 
@@ -120,10 +120,19 @@ export const getLatestRepaymentSchedule = createSelector(
       : null
 );
 
+//################
+// OVERVIEW
+//################
+export const getOverviewMortgageLoanState = createSelector(
+  getMortgageLoanState,
+  (state) => state.overview
+);
+
 export const getSelectedRepaymentScheduleName = createSelector(
   getMortgageLoanState,
-  (state) =>
-    state.selectedRepaymentScheduleName ??
+  getOverviewMortgageLoanState,
+  (state, overview) =>
+    overview.selectedRepaymentScheduleName ??
     state.repaymentSchedules[0]?.name ??
     null
 );
@@ -135,14 +144,6 @@ export const getSelectedRepaymentSchedule = createSelector(
     repaymentSchedules?.find(
       (rs) => rs.name === selectedRepaymentScheduleName
     ) ?? null
-);
-
-//################
-// OVERVIEW
-//################
-export const getOverviewMortgageLoanState = createSelector(
-  getMortgageLoanState,
-  (state) => state.overview
 );
 
 export const getOverviewStartDate = createSelector(
