@@ -1,0 +1,33 @@
+<div class="scrollable-container mt-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Data Plății</th>
+        <th scope="col">Rată Credit</th>
+        <th scope="col">Rată Dobândă</th>
+        <th scope="col">Sold Rest Plată</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (rata of (updatedBaseRepaymentScheduleBasedOnLatestStates$ | async )
+      ?? []; track rata.index) {
+      <tr
+        [ngStyle]="{
+          'background-color': rata.isNormalPayment
+            ? colors.TEAL_300
+            : rata.isExtraPayment
+            ? colors.GREEN_300
+            : colors.BS_WHITE
+        }"
+      >
+        <td>{{ rata.index }}</td>
+        <td>{{ rata.dataPlatii | date : "yyyy-MM-dd" }}</td>
+        <td>{{ rata.rataCredit }}</td>
+        <td>{{ rata.rataDobanda }}</td>
+        <td>{{ rata.soldRestPlata }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

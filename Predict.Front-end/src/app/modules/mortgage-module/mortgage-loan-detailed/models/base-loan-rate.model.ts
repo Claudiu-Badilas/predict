@@ -1,4 +1,5 @@
 export type BaseLoanRate = {
+  index: number;
   dataPlatii: Date;
   rataCredit: number;
   rataDobanda: number;

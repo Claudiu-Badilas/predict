@@ -5,6 +5,7 @@ import * as fromMortgageLoan from 'src/app/modules/mortgage-module/state-managem
 import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
+import { MortgageLoanDetailedBodyComponent } from './components/mortgage-loan-detailed-body/mortgage-loan-detailed-body.component';
 import { MortgageLoanDetailedHeaderComponent } from './components/mortgage-loan-detailed-header/mortgage-loan-detailed-header.component';
 
 @Component({
@@ -14,6 +15,7 @@ import { MortgageLoanDetailedHeaderComponent } from './components/mortgage-loan-
     SideBarModule,
     ToggleButtonComponent,
     MortgageLoanDetailedHeaderComponent,
+    MortgageLoanDetailedBodyComponent,
   ],
   templateUrl: './mortgage-loan-detailed.component.html',
   styleUrl: './mortgage-loan-detailed.component.scss',

@@ -32,6 +32,7 @@ export namespace BaseMortgageLoan {
         if (!rate) return;
 
         calculatedRates.push({
+          index: rate.nrCtr,
           dataPlatii: toDate(rate.dataPlatii),
           rataCredit: rate.rataCredit,
           rataDobanda: rate.rataDobanda,
@@ -53,16 +54,19 @@ export namespace BaseMortgageLoan {
         const sliceEnd =
           previousSchedule.rate.length - schedule.rate.length + 1;
 
-        base.rate.slice(sliceStart, sliceEnd).forEach((rate) =>
-          calculatedRates.push({
-            dataPlatii: toDate(rate.dataPlatii),
-            rataCredit: rate.rataCredit,
-            rataDobanda: rate.rataDobanda,
-            soldRestPlata: rate.soldRestPlata,
-            isNormalPayment: false,
-            isExtraPayment: true,
-          })
-        );
+        base.rate
+          .slice(sliceStart, sliceEnd)
+          .forEach((rate) =>
+            calculatedRates.push({
+              index: rate.nrCtr,
+              dataPlatii: toDate(rate.dataPlatii),
+              rataCredit: rate.rataCredit,
+              rataDobanda: rate.rataDobanda,
+              soldRestPlata: rate.soldRestPlata,
+              isNormalPayment: false,
+              isExtraPayment: true,
+            })
+          );
       }
     });
 
@@ -80,6 +84,7 @@ export namespace BaseMortgageLoan {
     const unpaidRates: BaseLoanRate[] = base.rate
       .slice(lastPaidRate.nrCtr)
       .map((rate) => ({
+        index: rate.nrCtr,
         dataPlatii: toDate(rate.dataPlatii),
         rataCredit: rate.rataCredit,
         rataDobanda: rate.rataDobanda,
