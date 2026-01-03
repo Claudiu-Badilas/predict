@@ -186,19 +186,17 @@ export const getSelectedRepaymentScheduleOverview = createSelector(
 //################
 // DETAILED
 //################
-
-export const getMortgageLoanProgressChart = createSelector(
-  getBaseRepaymentSchedule,
-  getLatestRepaymentSchedule,
-  MortgageLoanProgressChartUtils.getChart
-);
-
 export const getUpdatedBaseRepaymentScheduleBasedOnLatestStates =
   createSelector(
     getBaseRepaymentSchedule,
     getRepaymentSchedules,
     BaseMortgageLoan.getUpdatedBaseRepaymentScheduleBasedOnLatestStates
   );
+
+export const getMortgageLoanProgressChart = createSelector(
+  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
+  MortgageLoanProgressChartUtils.getChart
+);
 
 export const getMortgageInterestProgressChart = createSelector(
   getUpdatedBaseRepaymentScheduleBasedOnLatestStates,

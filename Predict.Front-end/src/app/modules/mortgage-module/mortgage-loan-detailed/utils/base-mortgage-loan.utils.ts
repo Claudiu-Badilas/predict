@@ -25,6 +25,7 @@ export namespace BaseMortgageLoan {
               rataDobanda: rate.rataDobanda,
               isNormalPayment: true,
               isExtraPayment: false,
+              soldRestPlata: rate.soldRestPlata,
             },
           ];
         }
@@ -47,6 +48,7 @@ export namespace BaseMortgageLoan {
               rataDobanda: rate.rataDobanda,
               isNormalPayment: false,
               isExtraPayment: true,
+              soldRestPlata: rate.soldRestPlata,
             }));
         }
 
@@ -67,6 +69,7 @@ export namespace BaseMortgageLoan {
         rataDobanda: rate.rataDobanda,
         isNormalPayment: false,
         isExtraPayment: false,
+        soldRestPlata: rate.soldRestPlata,
       }));
 
     return [...rates, ...unpaidRates];

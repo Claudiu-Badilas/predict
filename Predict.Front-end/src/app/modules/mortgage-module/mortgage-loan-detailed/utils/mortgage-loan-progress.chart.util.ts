@@ -1,33 +1,33 @@
 import { CalculatorUtil } from 'src/app/shared/utils/calculator.utils';
 import { MathUtil } from 'src/app/shared/utils/math.utils';
-import { RepaymentSchedule } from '../../models/mortgage.model';
 
 export namespace MortgageLoanProgressChartUtils {
-  export function getChart(
-    base: RepaymentSchedule,
-    latest: RepaymentSchedule
-  ): Highcharts.Options {
-    if (!base || !latest) return null;
-
-    const firstBaseRate = base.rate.at(0);
+  export function getChart(rates: any[]): Highcharts.Options {
+    if (!rates.length) return null;
     const baseRemainingUnpaidAmount = CalculatorUtil.sum([
-      firstBaseRate.soldRestPlata,
-      firstBaseRate.rataCredit,
+      rates.at(0).rataCredit,
+      rates.at(0).soldRestPlata,
     ]);
+    const paidRates = rates.filter(
+      (r) => r.isNormalPayment || r.isExtraPayment
+    );
+    const paidLoan = CalculatorUtil.sum(paidRates.map((r) => r.rataCredit));
 
-    const firstLatestRate = latest.rate.at(0);
-    const latestRemainingUnpaidAmount = CalculatorUtil.sum([
-      firstLatestRate.soldRestPlata,
-      firstLatestRate.rataCredit,
-    ]);
+    const unpaidRates = rates.filter(
+      (r) => !r.isNormalPayment && !r.isExtraPayment
+    );
 
-    const unpaidPercent = MathUtil.percent(
-      latestRemainingUnpaidAmount,
+    const unpaidLoan = CalculatorUtil.sum(unpaidRates.map((r) => r.rataCredit));
+
+    const unpaidLoanPercent = MathUtil.percent(
+      unpaidLoan,
       baseRemainingUnpaidAmount
     );
 
-    const paidAmount = baseRemainingUnpaidAmount - latestRemainingUnpaidAmount;
-    const paidPercent = MathUtil.percent(paidAmount, baseRemainingUnpaidAmount);
+    const paidLoanPercent = MathUtil.percent(
+      paidLoan,
+      baseRemainingUnpaidAmount
+    );
 
     return {
       chart: {
@@ -55,14 +55,14 @@ export namespace MortgageLoanProgressChartUtils {
           data: [
             {
               name: 'Paid Loan',
-              y: MathUtil.round(paidPercent),
-              amount: MathUtil.round(paidAmount),
+              y: MathUtil.round(paidLoanPercent),
+              amount: MathUtil.round(paidLoan),
               color: 'green',
             },
             {
               name: 'Unpaid Loan',
-              y: MathUtil.round(unpaidPercent),
-              amount: MathUtil.round(latestRemainingUnpaidAmount),
+              y: MathUtil.round(unpaidLoanPercent),
+              amount: MathUtil.round(unpaidLoan),
               color: 'red',
             },
           ],
