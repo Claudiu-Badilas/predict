@@ -31,6 +31,7 @@ export class MortgageLoanSimulatorComponent {
   );
 
   selectedValue$ = new BehaviorSubject<string>(null);
+
   mortgageLoanAmountChart$ = combineLatest([
     this.repaymentSchedules$,
     this.selectedValue$,

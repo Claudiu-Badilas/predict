@@ -1,0 +1,12 @@
+<div class="field">
+  @if(label){
+  <label class="m-0">{{ label }}</label>
+  }
+
+  <input
+    type="number"
+    [value]="value ?? ''"
+    [disabled]="disabled"
+    (input)="onInput($event)"
+  />
+</div>

@@ -29,4 +29,15 @@ export namespace JsDateUtils {
   export function isBetween(from: Date, target: Date, to: Date): boolean {
     return isSameOrAfter(from, target) && isSameOrBefore(target, to);
   }
+
+  export function addMonths(date: Date, months: number): Date {
+    const result = new Date(date);
+
+    const day = result.getDate();
+    result.setMonth(result.getMonth() + months);
+
+    if (result.getDate() < day) result.setDate(0);
+
+    return result;
+  }
 }

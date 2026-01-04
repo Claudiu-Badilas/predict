@@ -1,0 +1,22 @@
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+label {
+  font-size: 17px;
+}
+
+input {
+  height: 40px;
+  max-width: 150px;
+  padding: 6px 10px;
+  font-size: 17px;
+  border-radius: 6px;
+}
+
+input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
