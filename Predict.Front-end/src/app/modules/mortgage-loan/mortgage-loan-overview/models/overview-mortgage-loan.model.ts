@@ -68,7 +68,7 @@ function getColor(
   selected: boolean
 ): string {
   if (disabled) return Colors.GRAY_200;
-  if (nextRate) return Colors.BLUE_100;
-  if (selected) return Colors.GREEN_100;
+  if (nextRate) return Colors.BLUE_200;
+  if (selected) return Colors.GREEN_200;
   return 'white';
 }
