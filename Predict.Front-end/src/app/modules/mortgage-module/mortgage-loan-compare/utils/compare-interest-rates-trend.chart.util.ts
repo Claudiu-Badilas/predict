@@ -5,28 +5,32 @@ import { Colors } from 'src/app/shared/styles/colors';
 
 export namespace CompareInterestTrendChartUtils {
   export function getChart(
+    base: RepaymentSchedule,
     left: RepaymentSchedule,
     right: RepaymentSchedule
   ): Highcharts.Options {
-    if (!left || !right) return null;
+    if (!base || !left || !right) return null;
 
-    const sources: Array<[RepaymentSchedule, string]> = [
-      [left, Colors.TEAL_400],
-      [right, Colors.BS_DANGER],
+    const sources: Array<[RepaymentSchedule, string, string]> = [
+      [base, 'Base', Colors.BS_SECONDARY],
+      [left, left.name, Colors.TEAL_400],
+      [right, right.name, Colors.BS_DANGER],
     ];
 
-    const series: any[] = sources.flatMap(([repaymentSchedule, color]) => [
-      {
-        type: 'line',
-        name: `Interests ${repaymentSchedule.name}`,
-        color,
-        data: repaymentSchedule.rate.map((r) => ({
-          x: r.dataPlatii.getTime(),
-          y: Number(r.rataDobanda.toFixed(2)),
-          date: DateUtils.fromJsDateToString(r.dataPlatii),
-        })),
-      },
-    ]);
+    const series: any[] = sources.flatMap(
+      ([repaymentSchedule, name, color]) => [
+        {
+          type: 'line',
+          name,
+          color,
+          data: repaymentSchedule.rate.map((r) => ({
+            x: r.dataPlatii.getTime(),
+            y: Number(r.rataDobanda.toFixed(2)),
+            date: DateUtils.fromJsDateToString(r.dataPlatii),
+          })),
+        },
+      ]
+    );
 
     return {
       title: { text: 'Loan Rates Trend', align: 'left' },

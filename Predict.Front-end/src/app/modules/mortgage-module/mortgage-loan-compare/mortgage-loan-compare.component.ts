@@ -31,6 +31,9 @@ export class MortgageLoanCompareComponent {
   repaymentSchedules$ = this.store.select(
     fromMortgageLoan.getRepaymentSchedules
   );
+  baseRepaymentSchedule$ = this.store.select(
+    fromMortgageLoan.getBaseRepaymentSchedule
+  );
 
   repaymentSchedulesOptions$ = this.repaymentSchedules$.pipe(
     map((rs) => rs.map((r) => r.name))
@@ -50,17 +53,23 @@ export class MortgageLoanCompareComponent {
   ]).pipe(map(([rs, selected]) => rs.find((r) => r.name === selected)));
 
   compareRatesTrendChart$ = combineLatest([
+    this.baseRepaymentSchedule$,
     this.leftRepaymentSchedules$,
     this.rightRepaymentSchedules$,
   ]).pipe(
-    map(([left, right]) => CompareRatesTrendChartUtils.getChart(left, right))
+    map(([base, left, right]) =>
+      CompareRatesTrendChartUtils.getChart(base, left, right)
+    )
   );
 
   compareInterestTrendChart$ = combineLatest([
+    this.baseRepaymentSchedule$,
     this.leftRepaymentSchedules$,
     this.rightRepaymentSchedules$,
   ]).pipe(
-    map(([left, right]) => CompareInterestTrendChartUtils.getChart(left, right))
+    map(([base, left, right]) =>
+      CompareInterestTrendChartUtils.getChart(base, left, right)
+    )
   );
 
   constructor(private store: Store<fromAppStore.AppState>) {
