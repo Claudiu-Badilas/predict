@@ -11,13 +11,13 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
 export class ReceiptListComponent {
   @Input() receipts: ReceiptDomain[] = [];
 
-  expanded = new Set<number>();
+  expandedId: number | null = null;
 
   toggle(id: number) {
-    if (this.expanded.has(id)) {
-      this.expanded.delete(id);
+    if (this.expandedId === id) {
+      this.expandedId = null;
     } else {
-      this.expanded.add(id);
+      this.expandedId = id;
     }
   }
 }
