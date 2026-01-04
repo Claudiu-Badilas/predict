@@ -23,9 +23,9 @@ export class HighchartWrapperComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    Highcharts.chart(
-      this.el.nativeElement.querySelector('.chart-container'),
-      this.chartOptions
-    );
+    Highcharts.chart(this.el.nativeElement.querySelector('.chart-container'), {
+      ...this.chartOptions,
+      credits: { enabled: false },
+    });
   }
 }
