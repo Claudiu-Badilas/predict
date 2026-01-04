@@ -1,41 +1,27 @@
 .sidebar {
-  background-color: #801136;
-  height: 100%;
-  position: fixed;
-  left: 0;
-  top: 0;
-
-  width: 300px;
-  color: white;
-  margin-top: 50px;
-
-  img {
-    transform: rotate(-180deg);
-    left: 255px;
-  }
-
-  &-partial-size {
+  &-visible {
     background-color: #801136;
     height: 100%;
     position: fixed;
     left: 0;
     top: 0;
 
-    width: 50px;
+    width: 300px;
     color: white;
     margin-top: 50px;
-
-    img {
-      transform: rotate(0deg);
-      left: 5px;
-    }
   }
-}
 
-.sidebar .sidebar-partial-size ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  &-hidden {
+    background-color: #801136;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 25px;
+    color: white;
+    margin-top: 50px;
+  }
 }
 
 /* ----- CONTENT POSITIONING ----- */
@@ -45,29 +31,6 @@
 }
 
 .content-full {
-  margin-left: 50px;
+  margin-left: 25px;
   padding: 20px;
-}
-
-/* ----- ARROW STYLES ----- */
-.arrows {
-  width: 100%;
-  height: 40px;
-  position: absolute;
-  bottom: 50px;
-  left: 0px;
-  padding: 5px 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #a31545;
-  }
-
-  img {
-    width: 30px;
-    height: 30px;
-    position: relative;
-    bottom: 0px;
-    filter: invert(100%);
-  }
 }

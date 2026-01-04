@@ -1,21 +1,9 @@
 @if (isFullSize) {
-<div class="sidebar">
-  <div>
-    <ng-content select="[filters-full-size]"></ng-content>
-  </div>
-  <div class="arrows" (click)="toggleSidebar()">
-    <img src="assets/icons/side-bar/arrows.png" alt="" />
-  </div>
+<div class="sidebar-visible" (dblclick)="toggleSidebar()">
+  <ng-content select="[filters-full-size]"></ng-content>
 </div>
 } @else {
-<div class="sidebar-partial-size">
-  <div>
-    <ng-content select="[filters-partial-size]"></ng-content>
-  </div>
-  <div class="arrows" (click)="toggleSidebar()">
-    <img src="assets/icons/side-bar/arrows.png" alt="" />
-  </div>
-</div>
+<div class="sidebar-hidden" (dblclick)="toggleSidebar()"></div>
 }
 
 <div [ngClass]="{ content: isFullSize, 'content-full': !isFullSize }">
