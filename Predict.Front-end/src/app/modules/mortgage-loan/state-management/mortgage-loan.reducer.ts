@@ -5,7 +5,7 @@ import {
   createSelector,
   on,
 } from '@ngrx/store';
-import * as MortgageLoanActions from 'src/app/modules/mortgage-module/state-management/mortgage-loan.actions';
+import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.actions';
 import { BaseMortgageLoan } from '../mortgage-loan-detailed/utils/base-mortgage-loan.utils';
 import { MortgageInterestProgressChartUtils } from '../mortgage-loan-detailed/utils/mortgage-interest-progress.chart.util';
 import { MortgageLoanAmountChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-amount.chart.util';

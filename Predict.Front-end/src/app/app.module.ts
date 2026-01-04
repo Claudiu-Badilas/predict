@@ -21,8 +21,8 @@ import { NavigationEffects } from 'src/app/store/effects/navigation.effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastNotificationEffects } from 'src/app/platform/toast-notifications/effects/toast-notification.effects';
 import { ToastNotificationModule } from 'src/app/platform/toast-notifications/toast-notification.module';
-import { MortgageLoanModule } from './modules/mortgage-module/mortgage-loan.module';
-import { MortgageLoanService } from './modules/mortgage-module/services/overview-mortgage.service';
+import { MortgageLoanModule } from './modules/mortgage-loan/mortgage-loan.module';
+import { MortgageLoanService } from './modules/mortgage-loan/services/overview-mortgage.service';
 import { ReceiptsModule } from './modules/receipts/receipts.module';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 
