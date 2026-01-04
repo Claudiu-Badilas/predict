@@ -3,7 +3,7 @@ import { Colors } from 'src/app/shared/styles/colors';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { Rata } from '../../models/mortgage.model';
 
-export namespace RatesTrendChartUtils {
+export namespace LoanRatesSimulationTrendChartUtils {
   export function getChart(rates: Rata[]): Highcharts.Options {
     const series: any[] = [
       {

@@ -15,7 +15,7 @@ import {
   OverviewRepaymentSchedule,
 } from '../mortgage-loan-overview/models/overview-mortgage-loan.model';
 import { RepaymentSchedule } from './../models/mortgage.model';
-import { RatesTrendChartUtils } from '../mortgage-loan-simulator/utils/loan-rates-trend.chart.util';
+import { LoanRatesSimulationTrendChartUtils } from '../mortgage-loan-simulator/utils/loan-rates-simulation-trend.chart.util';
 
 interface OverviewMortgageLoanState {
   repaymentSchedules: OverviewRepaymentSchedule[];
@@ -203,17 +203,4 @@ export const getMortgageInterestProgressChart = createSelector(
 export const getMortgageLoanAmountChartUtils = createSelector(
   getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
   MortgageLoanAmountChartUtils.getChart
-);
-
-//################
-// SIMULATOR
-//################
-export const getBaseRepaymentScheduleRates = createSelector(
-  getBaseRepaymentSchedule,
-  (repaymentSchedules) => repaymentSchedules?.rate ?? []
-);
-
-export const getMortgageLoanAmountChart = createSelector(
-  getBaseRepaymentScheduleRates,
-  RatesTrendChartUtils.getChart
 );

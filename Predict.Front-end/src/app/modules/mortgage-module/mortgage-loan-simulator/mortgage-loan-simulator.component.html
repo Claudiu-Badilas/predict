@@ -7,6 +7,14 @@
         (selectionChange)="onSelectionChange($event)"
       />
     </div>
+    <div class="space">
+      <app-dropdown-select
+        [items]="repaymentSchedulesOptions$ | async"
+        [selectedItem]="selectedValue$ | async"
+        placeholder="No Selection"
+        (selectionChange)="onDropdownSelected($event)"
+      />
+    </div>
   </ng-container>
 
   <ng-container filters-partial-size></ng-container>
