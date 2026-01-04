@@ -12,6 +12,7 @@ import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/t
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { Rata } from '../models/mortgage.model';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
+import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 
 @Component({
   selector: 'app-mortgage-loan-overview',
@@ -23,6 +24,7 @@ import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-
     DropdownSelectComponent,
     MortgageLoanOverviewHeaderComponent,
     CheckboxComponent,
+    HighchartWrapperComponent,
   ],
   templateUrl: './mortgage-loan-overview.component.html',
   styleUrls: ['./mortgage-loan-overview.component.scss'],
@@ -40,6 +42,9 @@ export class MortgageLoanOverviewComponent {
   overviewStartDate$ = this.store.select(fromMortgageLoan.getOverviewStartDate);
   overviewLoanRates$ = this.selectedRepaymentSchedule$.pipe(
     map((srs) => srs?.overviewLoanRates?.filter((r) => r.selected) ?? [])
+  );
+  loanRatesSimulationTrendChart$ = this.store.select(
+    fromMortgageLoan.getLoanRatesSimulationTrendChart
   );
 
   constructor(
