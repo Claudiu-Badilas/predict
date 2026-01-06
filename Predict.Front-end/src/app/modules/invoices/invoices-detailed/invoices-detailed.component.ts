@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromInvoices from 'src/app/modules/invoices/reducers/invoices.reducer';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 
 @Component({
   selector: 'app-invoices-detailed',
-  imports: [SideBarModule, ToggleButtonComponent],
+  imports: [SideBarComponent, ToggleButtonComponent],
   templateUrl: './invoices-detailed.component.html',
   styleUrl: './invoices-detailed.component.scss',
 })

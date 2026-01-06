@@ -7,7 +7,7 @@ import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/state-managemen
 import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
 import { DatePickerComponent } from 'src/app/shared/components/date-picker/date-picker.component';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { Rata } from '../models/mortgage.model';
@@ -18,7 +18,7 @@ import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-
   selector: 'app-mortgage-loan-overview',
   imports: [
     CommonModule,
-    SideBarModule,
+    SideBarComponent,
     DatePickerComponent,
     ToggleButtonComponent,
     DropdownSelectComponent,

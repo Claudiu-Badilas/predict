@@ -1,10 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { TripleClickDirective } from '../../directives/triple-click.directive';
 
 @Component({
     selector: 'app-side-bar',
     templateUrl: './side-bar.component.html',
     styleUrls: ['./side-bar.component.scss'],
-    standalone: false
+  imports: [CommonModule, TripleClickDirective],
 })
 export class SideBarComponent {
   isFullSize = true;

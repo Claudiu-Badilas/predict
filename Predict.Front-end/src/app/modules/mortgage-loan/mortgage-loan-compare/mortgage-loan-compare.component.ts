@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, filter, map, take } from 'rxjs';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.reducer';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
@@ -18,7 +18,7 @@ import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.ch
   selector: 'app-mortgage-loan-compare',
   imports: [
     CommonModule,
-    SideBarModule,
+    SideBarComponent,
     ToggleButtonComponent,
     MortgageLoanCompareBodyComponent,
     DropdownSelectComponent,
