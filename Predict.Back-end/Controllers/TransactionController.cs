@@ -40,7 +40,7 @@ namespace Predict.Controllers {
             [FromQuery, Required] string endDate
         ) {
 
-            return Ok(await _transactionRepo.GetTransactionByUserIdAndOwnerId(2, dataOwnerId, DateTime.Parse(startDate), DateTime.Parse(endDate)));
+            return Ok(await _transactionRepo.GetTransactionByUserIdAndOwnerId(1, dataOwnerId, DateTime.Parse(startDate), DateTime.Parse(endDate)));
         }
     }
 }

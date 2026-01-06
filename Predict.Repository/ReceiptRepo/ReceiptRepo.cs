@@ -14,6 +14,10 @@ public class ReceiptRepo : IReceiptRepo {
         _npsqlConnectionString = envConfig.GetNpsqlConnectionString();
     }
 
+    public ReceiptRepo(string npsqlConnectionString) {
+        _npsqlConnectionString = npsqlConnectionString;
+    }
+
     public async Task<IEnumerable<Receipt>> GetReceiptByUserId(int dataOwnerId) {
         using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
             connection.Open();
@@ -76,7 +80,7 @@ public class ReceiptRepo : IReceiptRepo {
         await using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
             var sql = @"
                     INSERT INTO public.receipt
-                        (identifier, ""date"", total_price, total_discount, provider_id, currency_id, data_owner_id)
+                        (identifier, ""receipt_date"", total_price, total_discount, provider_id, currency_id, data_owner_id)
                     VALUES (
                         unnest(@identifiers),
                         unnest(@dates),

@@ -12,6 +12,10 @@ public class TransactionRepo : ITransactionRepo {
     public TransactionRepo(IEnvironmentConfiguration envConfig) {
         _npsqlConnectionString = envConfig.GetNpsqlConnectionString();
     }
+    
+    public TransactionRepo(string npsqlConnectionString) {
+        _npsqlConnectionString = npsqlConnectionString;
+    }
 
     public async Task<IEnumerable<TransactionResponse>> GetTransactionByUserIdAndOwnerId(int userId, int ownerId, DateTime startDate, DateTime endDate) {
         using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
