@@ -16,6 +16,7 @@ import { AuthenticationEffects } from 'src/app/platform/authentication/effects/a
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { NavigationEffects } from 'src/app/store/effects/navigation.effects';
 
+import { HttpClientModule } from '@angular/common/http';
 import { ToastNotificationEffects } from 'src/app/platform/toast-notifications/effects/toast-notification.effects';
 import { ToastNotificationModule } from 'src/app/platform/toast-notifications/toast-notification.module';
 import { MortgageLoanModule } from './modules/mortgage-loan/mortgage-loan.module';
@@ -31,6 +32,7 @@ import { TopBarComponent } from './shared/components/top-bar/top-bar.component';
     AppRouting,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
     TransactionModule,
     AuthenticationModule,
     StoreModule.forRoot(fromAppStore.appReducer),
