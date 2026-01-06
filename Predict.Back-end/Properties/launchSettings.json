@@ -15,7 +15,9 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:8080",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TOKEN_KEY": "adskd]ad)-{admkwamd2312dsa",
+        "DB_CONN_STRING": "host=localhost;username=postgres;password=admin;database=predict"
       }
     },
     "IIS Express": {
@@ -23,7 +25,10 @@
       "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TOKEN_KEY": "adskd]ad)-{admkwamd2312dsa",
+        "DB_CONN_STRING": "host=localhost;username=postgres;password=admin;database=predict"
+      }
       }
     }
   }
