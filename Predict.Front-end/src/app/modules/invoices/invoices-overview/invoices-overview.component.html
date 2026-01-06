@@ -9,5 +9,32 @@
     </div>
   </ng-container>
 
-  <ng-container main-content> <h1>Overview</h1></ng-container>
+  <ng-container main-content>
+    @for( invoice of invoices$ | async; track invoice.address) {
+    <h1>{{ invoice.address }}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Provider</th>
+          <th>Date</th>
+          <th>Index</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for( inv of invoice.invoices; track inv.date) {
+        <tr>
+          <td>{{ inv.type }}</td>
+          <td>{{ inv.provider }}</td>
+          <td>{{ inv.date }}</td>
+          <td>{{ inv.index }}</td>
+          <td>{{ inv.amount }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    }
+  </ng-container>
 </app-side-bar>

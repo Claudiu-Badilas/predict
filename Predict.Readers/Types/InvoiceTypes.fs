@@ -16,5 +16,5 @@ module InvoiceTypes =
     type LocationInvoice = 
         {
             Address: string option
-            Invoice: Invoice list
+            Invoices: Invoice list
         }

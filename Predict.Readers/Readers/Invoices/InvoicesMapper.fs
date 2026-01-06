@@ -59,7 +59,7 @@ module InvoicesMapper =
                 }
             )
         )
-        |> fun invoices -> { Address = Some fileName; Invoice = invoices |> Array.toList }
+        |> fun invoices -> { Address = Some fileName; Invoices = invoices |> Array.toList }
 
 
     let getInvoices () =

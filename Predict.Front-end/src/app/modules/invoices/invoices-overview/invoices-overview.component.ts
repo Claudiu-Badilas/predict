@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromInvoices from 'src/app/modules/invoices/reducers/invoices.reducer';
@@ -7,11 +8,15 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 
 @Component({
   selector: 'app-invoices-overview',
-  imports: [SideBarComponent, ToggleButtonComponent],
+  imports: [CommonModule, SideBarComponent, ToggleButtonComponent],
   templateUrl: './invoices-overview.component.html',
   styleUrl: './invoices-overview.component.scss',
 })
 export class InvoicesOverviewComponent {
+  invoices$ = this.store.select(
+    fromInvoices.getInvoices
+  );
+
   constructor(private store: Store<fromInvoices.State>) {}
 
   onSelectionChange(module: string) {
