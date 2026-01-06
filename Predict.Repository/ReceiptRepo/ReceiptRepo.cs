@@ -34,19 +34,19 @@ public class ReceiptRepo : IReceiptRepo {
             var sql = @"
                     SELECT
 	                    r.id as Id,
-	                    r.""date"" as Date,
+	                    r.receipt_date as Date,
 	                    r.total_price as TotalPrice,
 	                    r.total_discount as TotalDiscout,
 	                    r.description as Description,
 	                    p.""name"" as Provider,
-	                    c.""type"" as currency
+	                    c.""code"" as currency
                     FROM public.receipt r
                     JOIN public.currency c ON c.id = r.currency_id 
                     JOIN public.provider p ON p.id = r.provider_id
                     WHERE 
-                        r.""date"" >= @startDate
-                        AND r.""date"" <= @endDate
-                    ORDER BY r.""date"" desc;";
+                        r.receipt_date>= @startDate
+                        AND r.receipt_date <= @endDate
+                    ORDER BY r.receipt_date desc;";
 
             return (await connection.QueryAsync<ReceiptResponse>(sql, new { startDate, endDate })).ToList();
         };

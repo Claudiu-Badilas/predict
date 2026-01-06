@@ -25,7 +25,7 @@ public class HealthRepo : IHealthRepo {
                         do2.id as DataOwnerId
                     FROM public.hearth_rate hr 
                     JOIN public.data_owner do2 ON do2.id = hr.data_owner_id 
-                    JOIN public.""user"" u ON u.id = do2.user_id 
+                    JOIN public.""users"" u ON u.id = do2.user_id 
                     JOIN public.provider p ON p.id = hr.provider_id 
                     WHERE u.id = @userId
                         AND do2.id = @dataOwnerId

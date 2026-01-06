@@ -19,7 +19,7 @@ public class UserRepository : IUserRepository {
             var sql = @"
                     SELECT EXISTS(
                         SELECT 1 
-                        FROM public.""user""    
+                        FROM public.""users""    
                         WHERE email = @email
                     )";
             return (await connection.QueryAsync<bool>(sql, new { email })).FirstOrDefault();
@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository {
                         u.last_login as LastLogin,
                         u.is_active as IsActive,
                         u.is_admin as IsAdmin
-                    FROM public.""user"" u 
+                    FROM public.""users"" u 
                     WHERE u.email = @email;";
             return (await connection.QueryAsync<AppUser>(sql, new { email })).FirstOrDefault();
         };
@@ -49,7 +49,7 @@ public class UserRepository : IUserRepository {
         using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
             connection.Open();
             var sql = @"
-                    INSERT INTO public.""user"" 
+                    INSERT INTO public.""users"" 
                         (email, password_hash, password_salt, join_date, last_login, is_active, is_admin) 
                     VALUES
                         (@Email, @PasswordHash, @PasswordSalt, @JoinDate, @LastLogin, @IsActive, @IsAdmin)
@@ -70,7 +70,7 @@ public class UserRepository : IUserRepository {
                         u.last_login as LastLogin,
                         u.is_active as IsActive,
                         u.is_admin as IsAdmin
-                    FROM public.""user"" u 
+                    FROM public.""users"" u 
                     WHERE u.email = @email;";
             return (await connection.QueryAsync<User>(sql, new { email })).FirstOrDefault();
         };
@@ -86,7 +86,7 @@ public class UserRepository : IUserRepository {
 	                    do2.creation_date as CreationDate,
 	                    do2.user_id as UserId
                     FROM public.data_owner do2 
-                    JOIN public.""user"" u ON u.id = do2.user_id
+                    JOIN public.""users"" u ON u.id = do2.user_id
                     WHERE u.id = @userId;";
             return await connection.QueryAsync<DataOwner>(sql, new { userId });
         };

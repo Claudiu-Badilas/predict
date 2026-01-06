@@ -20,18 +20,18 @@ public class TransactionRepo : ITransactionRepo {
                     SELECT 
                         t.id as Id, 
                         t.registration_date as RegistrationDate, 
-                        t.completition_date as CompletionDate, 
+                        t.completion_date as CompletionDate, 
                         t.amount as Amount, 
                         t.fee as Fee, 
                         t.description as Description, 
                         t.reference_id as ReferenceId, 
                         p.""name""  as Provider, 
-                        c.""type""  as Currency, 
+                        c.""code""  as Currency, 
                         tt.""type""  as TransactionType, 
                         do2.id as DataOwnerId
-                    FROM public.""transaction"" t
+                    FROM public.""transactions"" t
                     JOIN public.data_owner do2 on do2.id = t.data_owner_id
-                    JOIN public.""user"" u on u.id = do2.user_id
+                    JOIN public.""users"" u on u.id = do2.user_id
                     JOIN public.currency c ON c.id = t.currency_id
                     JOIN public.provider p ON p.id = t.provider_id 
                     JOIN public.transaction_type tt ON tt.id = t.transaction_type_id  
@@ -55,7 +55,7 @@ public class TransactionRepo : ITransactionRepo {
             connection.Open();
             var sql = @"
                     SELECT identifier 
-                    FROM public.""transaction"" t
+                    FROM public.""transactions"" t
                     WHERE t.data_owner_id = @dataOwnerId
                         AND t.provider_id = @providerId;";
 
@@ -67,8 +67,8 @@ public class TransactionRepo : ITransactionRepo {
         using (var connection = new NpgsqlConnection(_npsqlConnectionString)) {
             connection.Open();
             var sql = @"
-                    INSERT INTO public.""transaction"" (
-                        identifier, registration_date, completition_date, amount, fee, description, 
+                    INSERT INTO public.""transactions"" (
+                        identifier, registration_date, completion_date, amount, fee, description, 
                         reference_id, provider_id, currency_id, transaction_type_id, data_owner_id )
                     VALUES (
                         unnest(@identifiers),
