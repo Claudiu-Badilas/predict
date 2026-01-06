@@ -8,7 +8,7 @@ import { RangeSelectorComponent } from 'src/app/shared/components/date-range-pic
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { SearchInputComponent } from 'src/app/shared/components/search-input/search-input.component';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { TransactionHeaderComponent } from './components/transaction-header/transaction-header.component';
 import { TransactionTableComponent } from './components/transaction-table/transaction-table.component';
 import { TransactionsEffects } from './effects/transactions.effects';
@@ -20,7 +20,7 @@ import { TransactionRoutingModule } from './transaction.routing';
     CommonModule,
     TransactionRoutingModule,
     NgbModule,
-    SideBarModule,
+    SideBarComponent,
     RangeSelectorComponent,
     StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
     EffectsModule.forFeature([TransactionsEffects]),

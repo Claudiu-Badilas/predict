@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.reducer';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MortgageLoanDetailedBodyComponent } from './components/mortgage-loan-detailed-body/mortgage-loan-detailed-body.component';
@@ -12,7 +12,7 @@ import { MortgageLoanDetailedHeaderComponent } from './components/mortgage-loan-
   selector: 'app-mortgage-loan-detailed',
   imports: [
     CommonModule,
-    SideBarModule,
+    SideBarComponent,
     ToggleButtonComponent,
     MortgageLoanDetailedHeaderComponent,
     MortgageLoanDetailedBodyComponent,

@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import * as ReceiptsActions from 'src/app/modules/receipts/actions/receipts.actions';
 import * as fromReceipts from 'src/app/modules/receipts/reducers/receipts.reducer';
 import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
@@ -15,7 +15,7 @@ import { DateRangePicker } from 'src/app/shared/components/date-range-picker/mod
   selector: 'app-receipts-summary',
   imports: [
     CommonModule,
-    SideBarModule,
+    SideBarComponent,
     ReceiptListComponent,
     RangeSelectorComponent,
     ToggleButtonComponent,

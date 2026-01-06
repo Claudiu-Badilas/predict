@@ -7,7 +7,7 @@ import * as fromReceipts from 'src/app/modules/receipts/reducers/receipts.reduce
 import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { SearchInputComponent } from 'src/app/shared/components/search-input/search-input.component';
-import { SideBarModule } from 'src/app/shared/components/side-bar/side-bar.module';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
@@ -16,7 +16,7 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
   selector: 'app-receipts-products',
   imports: [
     CommonModule,
-    SideBarModule,
+    SideBarComponent,
     RangeSelectorComponent,
     ToggleButtonComponent,
     SearchInputComponent,
