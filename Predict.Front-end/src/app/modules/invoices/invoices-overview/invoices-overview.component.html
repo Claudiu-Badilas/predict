@@ -7,10 +7,19 @@
         (selectionChange)="onSelectionChange($event)"
       />
     </div>
+    <div class="space">
+      <app-dropdown-select
+        [items]="invoiceLocations$ | async"
+        [selectedItem]="selectedInvoiceLocation$ | async"
+        placeholder="No Selection"
+        (selectionChange)="onDropdownSelected($event)"
+      />
+    </div>
   </ng-container>
 
   <ng-container main-content>
-    @for( invoice of invoices$ | async; track invoice.address) {
+    @let invoice = selectedInvoice$ | async ; @if(!!invoice){
+
     <h1>{{ invoice.address }}</h1>
     <table>
       <thead>
@@ -34,7 +43,8 @@
         }
       </tbody>
     </table>
-
+    } @else {
+    <p>Please select a location to view invoices.</p>
     }
   </ng-container>
 </app-side-bar>

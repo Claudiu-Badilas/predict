@@ -7,9 +7,10 @@ import {
 } from '@ngrx/store';
 import * as InvoicesActions from 'src/app/modules/invoices/actions/invoices.actions';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
+import { LocationInvoice } from '../models/invoice.model';
 
 export interface State {
-  invoices: any[];
+  invoices: LocationInvoice[];
   startDate: Date;
   endDate: Date;
 }
