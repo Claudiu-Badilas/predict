@@ -1,9 +1,11 @@
 export interface InvoiceDto {
-  type: string;
+  invoiceType: string;
   provider: string;
   date: string;
   index: number;
   amount: number;
+  type: string;
+  action: string;
 }
 
 export interface LocationInvoiceDto {
@@ -12,18 +14,18 @@ export interface LocationInvoiceDto {
 }
 
 export class Invoice {
-  type: string;
+  invoiceType: string;
   provider: string;
   date: Date;
   index: number;
   amount: number;
+  type: string;
+  action: string;
 
   constructor(data: InvoiceDto) {
-    this.type = data.type;
-    this.provider = data.provider;
+    Object.assign(this, data);
+
     this.date = new Date(data.date);
-    this.index = data.index;
-    this.amount = data.amount;
   }
 }
 

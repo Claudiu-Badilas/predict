@@ -33,15 +33,25 @@ module InvoicesMapper =
         )
 
 
-    let tryGetDate (value: string option) =
+    let tryGetDate (value: string option) (format: string) =
         value
         |> Option.bind (fun v ->
-            let format = "M/d/yyyy h:mm:ss tt"
             let culture = CultureInfo.InvariantCulture
             match DateTime.TryParseExact(v, format, culture, DateTimeStyles.None) with
             | true, dt -> Some dt
             | _ -> None
         )
+
+
+    let tryGetDateFallback (value: string option) =
+        let date1 = tryGetDate value  "dd/MM/yyyy"
+        let date2 = tryGetDate value  "d/M/yyyy"
+        match date1, date2 with
+        | Some dt1, Some dt2 -> Some dt1
+        | Some dt1, None -> Some dt1
+        | None, Some dt2 -> Some dt2
+        | _ -> None
+        
 
 
     let getInvoiceDetails (fileName, workbook: WorkBook) : LocationInvoice =
@@ -51,11 +61,13 @@ module InvoicesMapper =
             |> Array.skip 1
             |> Array.map (fun row ->
                 {
-                    Type = Some sheetName
+                    InvoiceType = Some sheetName
                     Provider = Some row.[0]
-                    Date = tryGetDate (Some row.[1])
+                    Date = tryGetDateFallback (Some row.[1])
                     Index = tryGetDouble (Some row.[2])
                     Amount = tryGetDouble (Some row.[3])
+                    Type = Some row.[4]
+                    Action = Some row.[5]
                 }
             )
         )

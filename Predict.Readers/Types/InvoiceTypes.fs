@@ -6,11 +6,13 @@ module InvoiceTypes =
 
     type Invoice = 
         {
-            Type: string option
+            InvoiceType: string option
             Provider: string option
             Date: DateTime option
             Index: double option
             Amount: double option
+            Type: string option
+            Action: string option
         }
 
     type LocationInvoice = 
