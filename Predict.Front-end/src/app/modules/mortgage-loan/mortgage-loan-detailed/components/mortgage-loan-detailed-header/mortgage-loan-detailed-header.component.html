@@ -1,14 +1,15 @@
 <div class="d-flex gap mb-3">
   <app-highcharts-wrapper
-    class="w-25"
+    class="w-50"
     [chartOptions]="mortgageLoanProgressChart$ | async"
   />
   <app-highcharts-wrapper
-    class="w-25"
+    class="w-50"
     [chartOptions]="mortgageInterestProgressChart$ | async"
   />
+</div>
+<div class="mb-3">
   <app-highcharts-wrapper
-    class="w-50"
     [chartOptions]="mortgageLoanAmountChartUtils$ | async"
   />
 </div>

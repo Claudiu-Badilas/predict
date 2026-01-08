@@ -30,14 +30,13 @@
   </ng-container>
 
   <ng-container main-content>
-    <div class="d-flex mb-3">
-      <div class="w-50 mr-3">
-        <app-highcharts-wrapper
-          [chartOptions]="compareRatesTrendChart$ | async"
-        />
-      </div>
+    <div class="mb-3">
       <app-highcharts-wrapper
-        class="w-50"
+        [chartOptions]="compareRatesTrendChart$ | async"
+      />
+    </div>
+    <div class="mb-3">
+      <app-highcharts-wrapper
         [chartOptions]="compareInterestTrendChart$ | async"
       />
     </div>
