@@ -25,7 +25,16 @@
     </div>
   </ng-container>
 
-  <ng-container main-content>
+  <ng-container main-content
+    ><div class="d-flex flex-column">
+      @let charts = invoiceIndexTrentCharts$ | async ; @for(chart of charts;
+      track chart ) {
+
+      <div class="mb-3">
+        <app-highcharts-wrapper [chartOptions]="chart" />
+      </div>
+      }
+    </div>
     @let invoices = selectedInvoices$ | async ; @for( invoice of invoices; track
     invoice.address) {@if(!!invoice ) {
     <h1>{{ invoice.address }}</h1>

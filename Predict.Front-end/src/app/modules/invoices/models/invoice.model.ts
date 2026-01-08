@@ -1,3 +1,5 @@
+import { DateUtils } from 'src/app/shared/utils/date.utils';
+
 export interface InvoiceDto {
   invoiceType: string;
   provider: string;
@@ -19,13 +21,13 @@ export class Invoice {
   date: Date;
   index: number;
   amount: number;
-  type: string;
-  action: string;
+  type: 'Payment' | 'Index Update';
+  action: 'MANUIAL' | 'SCHEDULED';
 
   constructor(data: InvoiceDto) {
     Object.assign(this, data);
 
-    this.date = new Date(data.date);
+    this.date = DateUtils.fromSplittedStringToJsDate(data.date);
   }
 }
 

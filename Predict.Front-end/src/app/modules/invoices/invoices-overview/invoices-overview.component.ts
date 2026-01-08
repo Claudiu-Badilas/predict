@@ -4,9 +4,11 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import * as fromInvoices from 'src/app/modules/invoices/reducers/invoices.reducer';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
+import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
+import { InvoiceIndexTrentChartUtils } from './utils/invoice-index-trent.chart.utils';
 
 @Component({
   selector: 'app-invoices-overview',
@@ -15,6 +17,7 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
     SideBarComponent,
     ToggleButtonComponent,
     DropdownSelectComponent,
+    HighchartWrapperComponent,
   ],
   templateUrl: './invoices-overview.component.html',
   styleUrl: './invoices-overview.component.scss',
@@ -56,6 +59,9 @@ export class InvoicesOverviewComponent {
         ),
       }));
     })
+  );
+  invoiceIndexTrentCharts$ = this.selectedInvoices$.pipe(
+    map((inv) => inv.map((i) => InvoiceIndexTrentChartUtils.getChart(i)))
   );
 
   constructor(private store: Store<fromInvoices.State>) {}
