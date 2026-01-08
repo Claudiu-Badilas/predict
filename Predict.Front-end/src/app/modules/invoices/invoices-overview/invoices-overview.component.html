@@ -24,21 +24,25 @@
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+          <th>Invoice Type</th>
           <th>Provider</th>
           <th>Date</th>
           <th>Index</th>
           <th>Amount</th>
+          <th>Type</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
         @for( inv of invoice.invoices; track inv.date) {
         <tr>
-          <td>{{ inv.type }}</td>
+          <td>{{ inv.invoiceType }}</td>
           <td>{{ inv.provider }}</td>
-          <td>{{ inv.date }}</td>
+          <td>{{ inv.date | date : "yyyy-MM-dd" }}</td>
           <td>{{ inv.index }}</td>
           <td>{{ inv.amount }}</td>
+          <td>{{ inv.type }}</td>
+          <td>{{ inv.action }}</td>
         </tr>
         }
       </tbody>
