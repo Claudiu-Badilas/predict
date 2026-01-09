@@ -8,19 +8,23 @@ export namespace MortgageLoanProgressChartUtils {
     if (!rates.length) return null;
 
     const baseRemainingUnpaidAmount = CalculatorUtil.sum([
-      rates.at(0).rataCredit,
-      rates.at(0).soldRestPlata,
+      rates.at(0).principalAmount,
+      rates.at(0).remainingBalance,
     ]);
     const paidRates = rates.filter(
       (r) => r.isNormalPayment || r.isExtraPayment
     );
-    const paidLoan = CalculatorUtil.sum(paidRates.map((r) => r.rataCredit));
+    const paidLoan = CalculatorUtil.sum(
+      paidRates.map((r) => r.principalAmount)
+    );
 
     const unpaidRates = rates.filter(
       (r) => !r.isNormalPayment && !r.isExtraPayment
     );
 
-    const unpaidLoan = CalculatorUtil.sum(unpaidRates.map((r) => r.rataCredit));
+    const unpaidLoan = CalculatorUtil.sum(
+      unpaidRates.map((r) => r.principalAmount)
+    );
 
     const unpaidLoanPercent = MathUtil.percent(
       unpaidLoan,

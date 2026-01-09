@@ -9,22 +9,22 @@ export namespace MortgageInterestProgressChartUtils {
 
     const paidInterestRates = rates.filter((r) => r.isNormalPayment);
     const paidInterest = CalculatorUtil.sum(
-      paidInterestRates.map((r) => r.rataDobanda)
+      paidInterestRates.map((r) => r.interestAmount)
     );
 
     const savedInterestRates = rates.filter((r) => r.isExtraPayment);
     const savedInterest = CalculatorUtil.sum(
-      savedInterestRates.map((r) => r.rataDobanda)
+      savedInterestRates.map((r) => r.interestAmount)
     );
 
     const unpaidRates = rates.filter(
       (r) => !r.isNormalPayment && !r.isExtraPayment
     );
     const unpaidInterest = CalculatorUtil.sum(
-      unpaidRates.map((r) => r.rataDobanda)
+      unpaidRates.map((r) => r.interestAmount)
     );
     const totalUnpaidInterest = CalculatorUtil.sum(
-      rates.map((r) => r.rataDobanda)
+      rates.map((r) => r.interestAmount)
     );
 
     const paidInterestPercent = MathUtil.percent(

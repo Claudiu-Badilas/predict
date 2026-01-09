@@ -10,25 +10,29 @@ export namespace MortgageLoanAmountChartUtils {
     const paidRates = rates.filter(
       (r) => r.isNormalPayment || r.isExtraPayment
     );
-    const paidLoan = CalculatorUtil.sum(paidRates.map((r) => r.rataCredit));
+    const paidLoan = CalculatorUtil.sum(
+      paidRates.map((r) => r.principalAmount)
+    );
 
     const paidInterestRates = rates.filter((r) => r.isNormalPayment);
     const paidInterest = CalculatorUtil.sum(
-      paidInterestRates.map((r) => r.rataDobanda)
+      paidInterestRates.map((r) => r.interestAmount)
     );
 
     const savedInterestRates = rates.filter((r) => r.isExtraPayment);
     const savedInterest = CalculatorUtil.sum(
-      savedInterestRates.map((r) => r.rataDobanda)
+      savedInterestRates.map((r) => r.interestAmount)
     );
 
     const unpaidRates = rates.filter(
       (r) => !r.isNormalPayment && !r.isExtraPayment
     );
     const unpaidInterest = CalculatorUtil.sum(
-      unpaidRates.map((r) => r.rataDobanda)
+      unpaidRates.map((r) => r.interestAmount)
     );
-    const unpaidLoan = CalculatorUtil.sum(unpaidRates.map((r) => r.rataCredit));
+    const unpaidLoan = CalculatorUtil.sum(
+      unpaidRates.map((r) => r.principalAmount)
+    );
 
     return {
       chart: { type: 'bar' },

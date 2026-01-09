@@ -1,9 +1,9 @@
 export type BaseLoanRate = {
   index: number;
-  dataPlatii: Date;
-  rataCredit: number;
-  rataDobanda: number;
-  soldRestPlata: number;
+  paymentDate: Date;
+  principalAmount: number;
+  interestAmount: number;
+  remainingBalance: number;
   isNormalPayment: boolean;
   isExtraPayment: boolean;
 };
