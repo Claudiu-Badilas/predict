@@ -36,14 +36,14 @@ export namespace MortgageLoanAmountChartUtils {
 
     return {
       chart: { type: 'bar' },
-      title: { text: 'Amounts', align: 'left' },
+      title: { text: 'Total Plata', align: 'left' },
       xAxis: {
         categories: [
-          'Paid Loan',
-          'Paid Interest',
-          'Saved Interest',
-          'Unpaid Interest',
-          'Unpaid Loan',
+          'Principal Platiti',
+          'Dobanda Platita',
+          'Dobanda Salvata',
+          'Dobanda Neplatita',
+          'Principal Neplatit',
         ],
         gridLineWidth: 1,
         lineWidth: 0,
@@ -60,7 +60,6 @@ export namespace MortgageLoanAmountChartUtils {
       series: [
         {
           colorByPoint: true,
-          name: 'Loan Status',
           showInLegend: false,
           data: [
             { y: MathUtil.round(paidLoan), color: Colors.TEAL_400 },

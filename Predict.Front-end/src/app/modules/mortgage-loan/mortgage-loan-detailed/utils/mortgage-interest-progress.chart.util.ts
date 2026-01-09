@@ -47,7 +47,7 @@ export namespace MortgageInterestProgressChartUtils {
         panning: { enabled: true, type: 'xy' },
         panKey: 'shift',
       },
-      title: { text: 'Interest Progress', align: 'left' },
+      title: { text: 'Progres Plata Dobanda', align: 'left' },
       tooltip: {
         headerFormat: '',
         pointFormat:
@@ -65,19 +65,19 @@ export namespace MortgageInterestProgressChartUtils {
           borderRadius: 5,
           data: [
             {
-              name: 'Paid Interest',
+              name: 'Dobanda Platita',
               y: MathUtil.round(paidInterestPercent),
               amount: MathUtil.round(paidInterest),
               color: Colors.BLUE_400,
             },
             {
-              name: 'Saved Interest',
+              name: 'Dobanda Salvata',
               y: MathUtil.round(savedInterestPercent),
               amount: MathUtil.round(savedInterest),
               color: Colors.GREEN_400,
             },
             {
-              name: 'Unpaid Interest',
+              name: 'Dobanda Neplatita',
               y: MathUtil.round(unpaidInterestPercent),
               amount: MathUtil.round(unpaidInterest),
               color: Colors.BS_ORANGE,

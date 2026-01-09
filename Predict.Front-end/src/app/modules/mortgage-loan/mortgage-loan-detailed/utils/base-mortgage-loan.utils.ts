@@ -10,7 +10,7 @@ export namespace BaseMortgageLoan {
     if (!base?.monthlyInstalments?.length || !repaymentSchedules?.length)
       return [];
 
-    const findRateByDate = (date: Date) =>
+    const findInstalmentByDate = (date: Date) =>
       base.monthlyInstalments.find((r) =>
         JsDateUtils.isSame(r.paymentDate, date)
       );
@@ -24,7 +24,7 @@ export namespace BaseMortgageLoan {
 
     sortedSchedules.forEach((schedule, index, array) => {
       if (schedule.isNormalPayment) {
-        const rate = findRateByDate(schedule.date);
+        const rate = findInstalmentByDate(schedule.date);
         if (!rate) return;
 
         calculatedBaseLoanInstalments.push({
@@ -44,7 +44,7 @@ export namespace BaseMortgageLoan {
 
         const firstPrevInstalmentDate =
           previousSchedule.monthlyInstalments[0].paymentDate;
-        const startRate = findRateByDate(firstPrevInstalmentDate);
+        const startRate = findInstalmentByDate(firstPrevInstalmentDate);
         if (!startRate) return;
 
         const sliceStart = startRate.instalmentId - 1;

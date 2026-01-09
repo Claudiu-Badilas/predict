@@ -11,28 +11,28 @@ export namespace MortgageLoanProgressChartUtils {
       rates.at(0).principalAmount,
       rates.at(0).remainingBalance,
     ]);
-    const paidRates = rates.filter(
+    const paidInstalments = rates.filter(
       (r) => r.isNormalPayment || r.isExtraPayment
     );
-    const paidLoan = CalculatorUtil.sum(
-      paidRates.map((r) => r.principalAmount)
+    const paidPrincipalAmount = CalculatorUtil.sum(
+      paidInstalments.map((r) => r.principalAmount)
     );
 
-    const unpaidRates = rates.filter(
+    const unpaidInstalments = rates.filter(
       (r) => !r.isNormalPayment && !r.isExtraPayment
     );
 
-    const unpaidLoan = CalculatorUtil.sum(
-      unpaidRates.map((r) => r.principalAmount)
+    const unpaidPrincipalAmountAmount = CalculatorUtil.sum(
+      unpaidInstalments.map((r) => r.principalAmount)
     );
 
-    const unpaidLoanPercent = MathUtil.percent(
-      unpaidLoan,
+    const paidPrincipalAmountPercent = MathUtil.percent(
+      paidPrincipalAmount,
       baseRemainingUnpaidAmount
     );
 
-    const paidLoanPercent = MathUtil.percent(
-      paidLoan,
+    const unpaidPrincipalAmountPercent = MathUtil.percent(
+      unpaidPrincipalAmountAmount,
       baseRemainingUnpaidAmount
     );
 
@@ -43,7 +43,7 @@ export namespace MortgageLoanProgressChartUtils {
         panning: { enabled: true, type: 'xy' },
         panKey: 'shift',
       },
-      title: { text: 'Loan Progress', align: 'left' },
+      title: { text: 'Progres Plata Principal', align: 'left' },
       tooltip: {
         headerFormat: '',
         pointFormat: `
@@ -62,15 +62,15 @@ export namespace MortgageLoanProgressChartUtils {
           borderRadius: 5,
           data: [
             {
-              name: 'Paid Loan',
-              y: MathUtil.round(paidLoanPercent),
-              amount: MathUtil.round(paidLoan),
+              name: 'Principal Platiti',
+              y: MathUtil.round(paidPrincipalAmountPercent),
+              amount: MathUtil.round(paidPrincipalAmount),
               color: Colors.TEAL_400,
             },
             {
-              name: 'Unpaid Loan',
-              y: MathUtil.round(unpaidLoanPercent),
-              amount: MathUtil.round(unpaidLoan),
+              name: 'Principal Neplatit',
+              y: MathUtil.round(unpaidPrincipalAmountPercent),
+              amount: MathUtil.round(unpaidPrincipalAmountAmount),
               color: Colors.BS_DANGER,
             },
           ],
