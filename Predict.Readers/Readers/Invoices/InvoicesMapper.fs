@@ -26,7 +26,7 @@ module InvoicesMapper =
     let tryGetDouble (value: string option) =
         value
         |> Option.bind (fun v ->
-            let culture = CultureInfo("de-DE")
+            let culture = CultureInfo.InvariantCulture
             match Double.TryParse(v, NumberStyles.Number, culture) with
             | true, dv -> Some dv
             | _ -> None
