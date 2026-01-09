@@ -1,10 +1,10 @@
 import { Colors } from 'src/app/shared/styles/colors';
 import { CalculatorUtil } from 'src/app/shared/utils/calculator.utils';
 import { MathUtil } from 'src/app/shared/utils/math.utils';
-import { BaseLoanRate } from '../models/base-loan-rate.model';
+import { BaseLoanInstalment } from '../models/base-loan-rate.model';
 
 export namespace MortgageLoanProgressChartUtils {
-  export function getChart(rates: BaseLoanRate[]): Highcharts.Options {
+  export function getChart(rates: BaseLoanInstalment[]): Highcharts.Options {
     if (!rates.length) return null;
 
     const baseRemainingUnpaidAmount = CalculatorUtil.sum([

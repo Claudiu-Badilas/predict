@@ -1,4 +1,4 @@
-export type BaseLoanRate = {
+export type BaseLoanInstalment = {
   index: number;
   paymentDate: Date;
   principalAmount: number;

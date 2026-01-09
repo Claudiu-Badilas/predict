@@ -1,10 +1,10 @@
 import { CalculatorUtil } from 'src/app/shared/utils/calculator.utils';
 import { MathUtil } from 'src/app/shared/utils/math.utils';
-import { BaseLoanRate } from '../models/base-loan-rate.model';
+import { BaseLoanInstalment } from '../models/base-loan-rate.model';
 import { Colors } from 'src/app/shared/styles/colors';
 
 export namespace MortgageLoanAmountChartUtils {
-  export function getChart(rates: BaseLoanRate[]): Highcharts.Options {
+  export function getChart(rates: BaseLoanInstalment[]): Highcharts.Options {
     if (!rates.length) return null;
 
     const paidRates = rates.filter(

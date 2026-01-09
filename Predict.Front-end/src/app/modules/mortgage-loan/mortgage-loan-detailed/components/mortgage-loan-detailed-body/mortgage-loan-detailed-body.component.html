@@ -22,10 +22,10 @@
         }"
       >
         <td>{{ rata.index }}</td>
-        <td>{{ rata.dataPlatii | date : "yyyy-MM-dd" }}</td>
-        <td>{{ rata.rataCredit }}</td>
-        <td>{{ rata.rataDobanda }}</td>
-        <td>{{ rata.soldRestPlata }}</td>
+        <td>{{ rata.paymentDate | date : "yyyy-MM-dd" }}</td>
+        <td>{{ rata.principalAmount }}</td>
+        <td>{{ rata.interestAmount }}</td>
+        <td>{{ rata.remainingBalance }}</td>
       </tr>
       }
     </tbody>

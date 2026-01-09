@@ -1,13 +1,12 @@
-import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import { RepaymentSchedule } from '../../models/mortgage.model';
-import { BaseLoanRate } from '../models/base-loan-rate.model';
+import { BaseLoanInstalment } from '../models/base-loan-rate.model';
 
 export namespace BaseMortgageLoan {
   export function getUpdatedBaseRepaymentScheduleBasedOnLatestStates(
     base: RepaymentSchedule,
     repaymentSchedules: RepaymentSchedule[]
-  ): BaseLoanRate[] {
+  ): BaseLoanInstalment[] {
     if (!base?.monthlyInstalments?.length || !repaymentSchedules?.length)
       return [];
 
@@ -21,14 +20,14 @@ export namespace BaseMortgageLoan {
       .slice()
       .sort((a, b) => a.date.valueOf() - b.date.valueOf());
 
-    const calculatedRates: BaseLoanRate[] = [];
+    const calculatedBaseLoanInstalments: BaseLoanInstalment[] = [];
 
     sortedSchedules.forEach((schedule, index, array) => {
       if (schedule.isNormalPayment) {
         const rate = findRateByDate(schedule.date);
         if (!rate) return;
 
-        calculatedRates.push({
+        calculatedBaseLoanInstalments.push({
           index: rate.instalmentId,
           paymentDate: rate.paymentDate,
           principalAmount: rate.principalAmount,
@@ -36,7 +35,7 @@ export namespace BaseMortgageLoan {
           remainingBalance: rate.remainingBalance,
           isNormalPayment: true,
           isExtraPayment: false,
-        } satisfies BaseLoanRate);
+        } satisfies BaseLoanInstalment);
       }
 
       if (schedule.isExtraPayment) {
@@ -55,7 +54,7 @@ export namespace BaseMortgageLoan {
           1;
 
         base.monthlyInstalments.slice(sliceStart, sliceEnd).forEach((rate) =>
-          calculatedRates.push({
+          calculatedBaseLoanInstalments.push({
             index: rate.instalmentId,
             paymentDate: rate.paymentDate,
             principalAmount: rate.principalAmount,
@@ -63,25 +62,25 @@ export namespace BaseMortgageLoan {
             remainingBalance: rate.remainingBalance,
             isNormalPayment: false,
             isExtraPayment: true,
-          } satisfies BaseLoanRate)
+          } satisfies BaseLoanInstalment)
         );
       }
     });
 
-    if (!calculatedRates.length) return [];
+    if (!calculatedBaseLoanInstalments.length) return [];
 
     const lastCalculatedDate =
-      calculatedRates[calculatedRates.length - 1].paymentDate;
+      calculatedBaseLoanInstalments[calculatedBaseLoanInstalments.length - 1]
+        .paymentDate;
 
     const lastPaidRate = base.monthlyInstalments.find((r) =>
       JsDateUtils.isSame(r.paymentDate, lastCalculatedDate)
     );
 
-    if (!lastPaidRate) return calculatedRates;
+    if (!lastPaidRate) return calculatedBaseLoanInstalments;
 
-    const unpaidRates: BaseLoanRate[] = base.monthlyInstalments
-      .slice(lastPaidRate.instalmentId)
-      .map(
+    const unpaidBaseLoanInstalments: BaseLoanInstalment[] =
+      base.monthlyInstalments.slice(lastPaidRate.instalmentId).map(
         (rate) =>
           ({
             index: rate.instalmentId,
@@ -91,9 +90,9 @@ export namespace BaseMortgageLoan {
             remainingBalance: rate.remainingBalance,
             isNormalPayment: false,
             isExtraPayment: false,
-          } satisfies BaseLoanRate)
+          } satisfies BaseLoanInstalment)
       );
 
-    return [...calculatedRates, ...unpaidRates];
+    return [...calculatedBaseLoanInstalments, ...unpaidBaseLoanInstalments];
   }
 }
