@@ -35,7 +35,11 @@
     <div class="section">
       <p class="label">Sold Inainte Plata</p>
       <p class="value decrease">
-        {{ instalment?.remainingBalance?.toFixed(2) || "0.00" }}
+        {{
+          (instalment?.remainingBalance + instalment?.principalAmount)?.toFixed(
+            2
+          ) || "0.00"
+        }}
       </p>
     </div>
     <div class="divider"></div>
