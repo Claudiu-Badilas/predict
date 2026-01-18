@@ -11,7 +11,6 @@ import * as fromAppStore from 'src/app/store/app-state.reducer';
 
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { MortgageLoanCompareBodyComponent } from './components/mortgage-loan-compare-body/mortgage-loan-compare-body.component';
-import { CompareInterestTrendChartUtils } from './utils/compare-interest-rates-trend.chart.util';
 import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.chart.util';
 
 @Component({
@@ -29,14 +28,14 @@ import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.ch
 })
 export class MortgageLoanCompareComponent {
   repaymentSchedules$ = this.store.select(
-    fromMortgageLoan.getRepaymentSchedules
+    fromMortgageLoan.getRepaymentSchedules,
   );
   baseRepaymentSchedule$ = this.store.select(
-    fromMortgageLoan.getBaseRepaymentSchedule
+    fromMortgageLoan.getBaseRepaymentSchedule,
   );
 
   repaymentSchedulesOptions$ = this.repaymentSchedules$.pipe(
-    map((rs) => rs.map((r) => r.name))
+    map((rs) => rs.map((r) => r.name)),
   );
 
   selectedLeftValue$ = new BehaviorSubject<string>(null);
@@ -58,30 +57,20 @@ export class MortgageLoanCompareComponent {
     this.rightRepaymentSchedules$,
   ]).pipe(
     map(([base, left, right]) =>
-      CompareRatesTrendChartUtils.getChart(base, left, right)
-    )
-  );
-
-  compareInterestTrendChart$ = combineLatest([
-    this.baseRepaymentSchedule$,
-    this.leftRepaymentSchedules$,
-    this.rightRepaymentSchedules$,
-  ]).pipe(
-    map(([base, left, right]) =>
-      CompareInterestTrendChartUtils.getChart(base, left, right)
-    )
+      CompareRatesTrendChartUtils.getChart(base, left, right),
+    ),
   );
 
   constructor(private store: Store<fromAppStore.AppState>) {
     this.repaymentSchedules$
       .pipe(
         filter((rs) => rs?.length > 0),
-        take(1)
+        take(1),
       )
       .subscribe((rs) => {
         this.selectedLeftValue$.next(rs.find((r) => r.isBasePayment).name);
         this.selectedRightValue$.next(
-          rs.filter((r) => !r.isBasePayment).at(0).name
+          rs.filter((r) => !r.isBasePayment).at(0).name,
         );
       });
   }
@@ -90,7 +79,7 @@ export class MortgageLoanCompareComponent {
     this.store.dispatch(
       NavigationAction.navigateTo({
         route: `/mortgage-loan/${module.toLowerCase()}`,
-      })
+      }),
     );
   }
 

@@ -35,11 +35,6 @@
         [chartOptions]="compareRatesTrendChart$ | async"
       />
     </div>
-    <div class="mb-3">
-      <app-highcharts-wrapper
-        [chartOptions]="compareInterestTrendChart$ | async"
-      />
-    </div>
     <mortgage-loan-compare-body
       [left]="leftRepaymentSchedules$ | async"
       [right]="rightRepaymentSchedules$ | async"
