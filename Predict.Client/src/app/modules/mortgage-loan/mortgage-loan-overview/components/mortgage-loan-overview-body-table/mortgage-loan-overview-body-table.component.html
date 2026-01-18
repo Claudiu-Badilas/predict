@@ -1,0 +1,50 @@
+<div class="scrollable-container mt-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Nr.</th>
+        <th scope="col">Data Plății</th>
+        <th scope="col">Rată Credit</th>
+        <th scope="col">Rată Dobândă</th>
+        <th scope="col">Comision Administrare</th>
+        <th scope="col">Costuri Asigurare</th>
+        <th scope="col">Comision Gestiune</th>
+        <th scope="col">Dobândă Recalculată</th>
+        <th scope="col">Total Rată</th>
+        <th scope="col">Sold Rest Plată</th>
+      </tr>
+    </thead>
+    <tbody>
+      @let selectedRepaymentSchedule = selectedRepaymentSchedule$ | async;
+      @for (
+        rata of selectedRepaymentSchedule?.overviewLoanRates ?? [];
+        track rata.instalmentId
+      ) {
+        <tr
+          [ngStyle]="{ 'background-color': rata.color }"
+          [ngClass]="{ faded: rata.disabled && !rata.nextInterest }"
+        >
+          <td>
+            <app-checkbox
+              [id]="rata.instalmentId"
+              [checked]="rata.selected"
+              [disabled]="rata.disabled"
+              (valueChange)="onSelect(rata)"
+            />
+          </td>
+          <td>{{ rata.instalmentId }}</td>
+          <td>{{ rata.paymentDate | date: "yyyy-MM-dd" }}</td>
+          <td>{{ rata.principalAmount }}</td>
+          <td>{{ rata.interestAmount }}</td>
+          <td>{{ rata.administrationFee }}</td>
+          <td>{{ rata.insuranceCost }}</td>
+          <td>{{ rata.managementFee }}</td>
+          <td>{{ rata.recalculatedInterest }}</td>
+          <td>{{ rata.totalInstalment }}</td>
+          <td>{{ rata.remainingBalance }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
