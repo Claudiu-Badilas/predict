@@ -11,8 +11,12 @@ import { OverviewLoanInstalment } from '../../models/overview-mortgage-loan.mode
 export class MortgageLoanOverviewHeaderComponent {
   overviewLoanInstalments = input.required<OverviewLoanInstalment[]>();
 
-  instalment = computed(() =>
-    this.overviewLoanInstalments().find((r) => r.instalmentPayment),
+  instalmentPayments = computed(() =>
+    this.overviewLoanInstalments().filter((r) => r.instalmentPayment),
+  );
+
+  totalInstalmentPayments = computed(() =>
+    CalculatorUtil.sum(this.instalmentPayments().map((a) => a.totalInstalment)),
   );
 
   earlyPayments = computed(() =>
@@ -31,10 +35,18 @@ export class MortgageLoanOverviewHeaderComponent {
     ),
   );
 
-  total = computed(() =>
+  totalPayment = computed(() =>
     CalculatorUtil.sum([
-      this.instalment()?.totalInstalment,
+      this.totalInstalmentPayments(),
       this.totalEarlyPayment(),
     ]),
   );
+
+  initialRemainingBalance = computed(() => {
+    const firstInstalment = this.overviewLoanInstalments()[0];
+    return CalculatorUtil.sum([
+      firstInstalment?.remainingBalance,
+      firstInstalment?.principalAmount,
+    ]);
+  });
 }

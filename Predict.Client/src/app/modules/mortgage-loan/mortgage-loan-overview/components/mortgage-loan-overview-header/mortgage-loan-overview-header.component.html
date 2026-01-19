@@ -3,7 +3,7 @@
     <div class="section">
       <p class="label">Total Rata</p>
       <p class="value">
-        {{ instalment()?.totalInstalment?.toFixed(2) || "0.00" }}
+        {{ totalInstalmentPayments()?.toFixed(2) || "0.00" }}
       </p>
     </div>
     <div class="divider"></div>
@@ -26,8 +26,8 @@
     <div class="section right">
       <p class="label">Total de Plata</p>
       <p class="value decrease">
-        {{ total()?.toFixed(2) || "0.00" }}
-        ({{ (total() / 2)?.toFixed(2) || "0.00" }})
+        {{ totalPayment()?.toFixed(2) || "0.00" }}
+        ({{ (totalPayment() / 2)?.toFixed(2) || "0.00" }})
       </p>
     </div>
   </div>
@@ -35,11 +35,7 @@
     <div class="section">
       <p class="label">Sold Inainte Plata</p>
       <p class="value decrease">
-        {{
-          (
-            instalment()?.remainingBalance + instalment()?.principalAmount
-          )?.toFixed(2) || "0.00"
-        }}
+        {{ initialRemainingBalance()?.toFixed(2) || "0.00" }}
       </p>
     </div>
     <div class="divider"></div>
