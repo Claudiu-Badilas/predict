@@ -13,6 +13,7 @@ export type OverviewLoanInstalment = {
   earlyPayment: boolean;
   disabled: boolean;
   color: string;
+  totalRow: boolean;
 };
 
 export type OverviewRepaymentSchedule = {

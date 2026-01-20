@@ -33,7 +33,7 @@
       @let selectedRepaymentSchedule = selectedRepaymentSchedule$ | async;
       <app-mortgage-loan-overview-header
         [overviewLoanInstalments]="
-          selectedRepaymentSchedule.overviewLoanInstalments
+          selectedRepaymentSchedule?.overviewLoanInstalments ?? []
         "
       />
       <app-mortgage-loan-overview-body-table />

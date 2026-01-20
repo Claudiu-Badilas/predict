@@ -51,7 +51,8 @@
     <tbody>
       @if (selectedRepaymentSchedule$ | async; as selectedRepaymentSchedule) {
         @for (
-          instalment of selectedRepaymentSchedule.overviewLoanInstalments;
+          instalment of selectedRepaymentSchedule?.overviewLoanInstalments ??
+            [];
           track instalment.instalmentId
         ) {
           <tr
@@ -59,21 +60,27 @@
             [class.faded]="instalment.disabled"
           >
             <td>
-              <app-checkbox
-                [id]="instalment.instalmentId"
-                [checked]="instalment.instalmentPayment"
-                [disabled]="instalment.disabled || instalment.earlyPayment"
-                (valueChange)="onSelectInstalmentPayment(instalment)"
-              />
+              @if (!instalment.totalRow) {
+                <app-checkbox
+                  [id]="instalment.instalmentId"
+                  [checked]="instalment.instalmentPayment"
+                  [disabled]="instalment.disabled || instalment.earlyPayment"
+                  (valueChange)="onSelectInstalmentPayment(instalment)"
+                />
+              }
             </td>
 
             <td>
-              <app-checkbox
-                [id]="instalment.instalmentId"
-                [checked]="instalment.earlyPayment"
-                [disabled]="instalment.disabled || instalment.instalmentPayment"
-                (valueChange)="onSelectEarlyPayment(instalment)"
-              />
+              @if (!instalment.totalRow) {
+                <app-checkbox
+                  [id]="instalment.instalmentId"
+                  [checked]="instalment.earlyPayment"
+                  [disabled]="
+                    instalment.disabled || instalment.instalmentPayment
+                  "
+                  (valueChange)="onSelectEarlyPayment(instalment)"
+                />
+              }
             </td>
 
             <td>

@@ -5,6 +5,7 @@ import {
   OverviewLoanInstalment,
   OverviewRepaymentSchedule,
 } from '../models/overview-mortgage-loan.model';
+import { CalculatorUtil } from 'src/app/shared/utils/calculator.utils';
 
 export function mapBaseRepaymentScheduleToOverview(
   base: RepaymentSchedule,
@@ -14,7 +15,86 @@ export function mapBaseRepaymentScheduleToOverview(
 ): OverviewRepaymentSchedule | null {
   if (!base) return null;
 
-  const overviewLoanRates = base.monthlyInstalments.map((r) => {
+  const overviewBaseLoanInstalments = mapOverviewBaseLoanInstalments(
+    base,
+    startDate,
+    selectedInstalmentPayments,
+    selectedEarlyPayments,
+  );
+
+  const overviewLoanInstalments = mapOverviewLoanInstalments(
+    overviewBaseLoanInstalments,
+  );
+
+  return {
+    name: base.name,
+    overviewLoanInstalments: overviewLoanInstalments,
+  } as OverviewRepaymentSchedule;
+}
+
+function mapOverviewLoanInstalments(
+  overviewBaseLoanInstalments: OverviewLoanInstalment[],
+) {
+  const arr: OverviewLoanInstalment[] = [];
+  let temp: OverviewLoanInstalment[] = [];
+
+  overviewBaseLoanInstalments.forEach((r, i) => {
+    const next = overviewBaseLoanInstalments[i + 1];
+    arr.push(r);
+    if (r.instalmentPayment) {
+      temp = [];
+      temp.push(r);
+    } else if (r.earlyPayment) {
+      temp.push(r);
+
+      if (next && !next.earlyPayment) {
+        arr.push({
+          instalmentId: null,
+          paymentDate: null,
+          interestAmount: temp[0].instalmentPayment
+            ? temp[0].interestAmount
+            : 0,
+          principalAmount: CalculatorUtil.sum(
+            temp.map((m) => m.principalAmount),
+          ),
+          administrationFee: CalculatorUtil.sum(
+            temp.map((m) => m.administrationFee),
+          ),
+          insuranceCost: CalculatorUtil.sum(temp.map((m) => m.insuranceCost)),
+          managementFee: CalculatorUtil.sum(temp.map((m) => m.managementFee)),
+          recalculatedInterest: CalculatorUtil.sum(
+            temp.map((m) => m.recalculatedInterest),
+          ),
+          totalInstalment: CalculatorUtil.sum(
+            temp.map((m) =>
+              m.instalmentPayment
+                ? m.totalInstalment
+                : m.earlyPayment
+                  ? m.principalAmount
+                  : 0,
+            ),
+          ),
+          remainingBalance: temp.at(-1).remainingBalance,
+          instalmentPayment: false,
+          earlyPayment: false,
+          disabled: true,
+          totalRow: true,
+          color: Colors.PINK_400,
+        } as OverviewLoanInstalment);
+      }
+    }
+  });
+
+  return arr;
+}
+
+function mapOverviewBaseLoanInstalments(
+  base: RepaymentSchedule,
+  startDate: Date,
+  selectedInstalmentPayments: number[],
+  selectedEarlyPayments: number[],
+) {
+  return base.monthlyInstalments.map((r) => {
     const disabled = JsDateUtils.isBefore(r.paymentDate, startDate);
 
     const instalmentPayment = selectedInstalmentPayments.some(
@@ -37,25 +117,20 @@ export function mapBaseRepaymentScheduleToOverview(
       instalmentPayment: !disabled && instalmentPayment,
       earlyPayment: !disabled && earlyPayment,
       disabled: disabled,
-      color: getColor(disabled, instalmentPayment, earlyPayment, false),
+      color: getColor(disabled, instalmentPayment, earlyPayment),
+      totalRow: false,
     } as OverviewLoanInstalment;
   });
-
-  return {
-    name: base.name,
-    overviewLoanInstalments: overviewLoanRates,
-  } as OverviewRepaymentSchedule;
 }
 
 function getColor(
   disabled: boolean,
   instalmentPayment: boolean,
   earlyPayment: boolean,
-  totalRow: boolean,
 ): string {
   if (disabled) return Colors.GRAY_200;
   if (instalmentPayment) return Colors.BLUE_200;
   if (earlyPayment) return Colors.GREEN_200;
-  if (totalRow) return Colors.PINK_400;
+
   return 'white';
 }
