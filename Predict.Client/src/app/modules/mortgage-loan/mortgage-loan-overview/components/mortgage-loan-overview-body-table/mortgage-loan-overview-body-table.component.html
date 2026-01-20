@@ -62,7 +62,7 @@
               <app-checkbox
                 [id]="instalment.instalmentId"
                 [checked]="instalment.instalmentPayment"
-                [disabled]="instalment.disabled"
+                [disabled]="instalment.disabled || instalment.earlyPayment"
                 (valueChange)="onSelectInstalmentPayment(instalment)"
               />
             </td>
@@ -71,7 +71,7 @@
               <app-checkbox
                 [id]="instalment.instalmentId"
                 [checked]="instalment.earlyPayment"
-                [disabled]="instalment.disabled"
+                [disabled]="instalment.disabled || instalment.instalmentPayment"
                 (valueChange)="onSelectEarlyPayment(instalment)"
               />
             </td>
