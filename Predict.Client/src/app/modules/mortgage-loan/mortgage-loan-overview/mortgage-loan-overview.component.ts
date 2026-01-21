@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.actions';
@@ -12,6 +12,7 @@ import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/t
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
+import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
 
 @Component({
   selector: 'app-mortgage-loan-overview',
@@ -24,6 +25,7 @@ import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-
     MortgageLoanOverviewHeaderComponent,
     HighchartWrapperComponent,
     MortgageLoanOverviewBodyTableComponent,
+    CheckboxComponent,
   ],
   templateUrl: './mortgage-loan-overview.component.html',
   styleUrls: ['./mortgage-loan-overview.component.scss'],
@@ -42,6 +44,8 @@ export class MortgageLoanOverviewComponent {
   loanRatesSimulationTrendChart$ = this.store.select(
     fromMortgageLoan.getLoanRatesSimulationTrendChart,
   );
+
+  showTotalRow = signal(false);
 
   constructor(
     private readonly store: Store<fromMortgageLoan.MortgageLoanState>,
@@ -66,5 +70,9 @@ export class MortgageLoanOverviewComponent {
 
   onSelectedDateChange(date: Date) {
     this.store.dispatch(MortgageLoanActions.startDateChanged({ date }));
+  }
+
+  onShowTotalRow(checked: boolean) {
+    this.showTotalRow.set(checked);
   }
 }

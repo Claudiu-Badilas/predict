@@ -91,7 +91,7 @@ function createSummaryRow(
     earlyPayment: false,
     disabled: true,
     totalRow: true,
-    color: Colors.PINK_400,
+    color: Colors.PINK_200,
   };
 }
 

@@ -26,6 +26,14 @@
         />
       </div>
     </div>
+    <div class="space">
+      <app-checkbox
+        [label]="'Display total row'"
+        [id]="'total row'"
+        [checked]="showTotalRow()"
+        (valueChange)="onShowTotalRow($event)"
+      />
+    </div>
   </ng-container>
 
   <ng-container main-content
@@ -36,7 +44,7 @@
           selectedRepaymentSchedule?.overviewLoanInstalments ?? []
         "
       />
-      <app-mortgage-loan-overview-body-table />
+      <app-mortgage-loan-overview-body-table [showTotalRow]="showTotalRow()" />
       <div class="mt-3">
         <app-highcharts-wrapper
           [chartOptions]="loanRatesSimulationTrendChart$ | async"

@@ -55,66 +55,70 @@
             [];
           track instalment.instalmentId
         ) {
-          <tr
-            [style.background-color]="instalment.color"
-            [class.faded]="instalment.disabled"
-          >
-            <td>
-              @if (!instalment.totalRow) {
-                <app-checkbox
-                  [id]="instalment.instalmentId"
-                  [checked]="instalment.instalmentPayment"
-                  [disabled]="instalment.disabled || instalment.earlyPayment"
-                  (valueChange)="onSelectInstalmentPayment(instalment)"
-                />
-              }
-            </td>
+          @if (
+            !instalment.totalRow || (instalment.totalRow && showTotalRow())
+          ) {
+            <tr
+              [style.background-color]="instalment.color"
+              [class.faded]="instalment.disabled"
+            >
+              <td>
+                @if (!instalment.totalRow) {
+                  <app-checkbox
+                    [id]="instalment.instalmentId"
+                    [checked]="instalment.instalmentPayment"
+                    [disabled]="instalment.disabled || instalment.earlyPayment"
+                    (valueChange)="onSelectInstalmentPayment(instalment)"
+                  />
+                }
+              </td>
 
-            <td>
-              @if (!instalment.totalRow) {
-                <app-checkbox
-                  [id]="instalment.instalmentId"
-                  [checked]="instalment.earlyPayment"
-                  [disabled]="
-                    instalment.disabled || instalment.instalmentPayment
-                  "
-                  (valueChange)="onSelectEarlyPayment(instalment)"
-                />
-              }
-            </td>
+              <td>
+                @if (!instalment.totalRow) {
+                  <app-checkbox
+                    [id]="instalment.instalmentId"
+                    [checked]="instalment.earlyPayment"
+                    [disabled]="
+                      instalment.disabled || instalment.instalmentPayment
+                    "
+                    (valueChange)="onSelectEarlyPayment(instalment)"
+                  />
+                }
+              </td>
 
-            <td>
-              {{ instalment.instalmentId }}
-            </td>
-            <td>
-              {{ instalment.paymentDate | date: "yyyy-MM-dd" }}
-            </td>
-            <td>
-              {{ instalment.principalAmount }}
-            </td>
-            <td>
-              {{ instalment.interestAmount }}
-            </td>
-            @if (isVisible("administrationFee")) {
-              <td>{{ instalment.administrationFee }}</td>
-            }
-            @if (isVisible("insuranceCost")) {
-              <td>{{ instalment.insuranceCost }}</td>
-            }
-            @if (isVisible("managementFee")) {
-              <td>{{ instalment.managementFee }}</td>
-            }
-            @if (isVisible("recalculatedInterest")) {
-              <td>{{ instalment.recalculatedInterest }}</td>
-            }
-            <td>
-              {{ instalment.totalInstalment }}
-            </td>
-            @if (isVisible("remainingBalance")) {
-              <td>{{ instalment.remainingBalance }}</td>
-            }
-            <td></td>
-          </tr>
+              <td>
+                {{ instalment.instalmentId }}
+              </td>
+              <td>
+                {{ instalment.paymentDate | date: "yyyy-MM-dd" }}
+              </td>
+              <td>
+                {{ instalment.principalAmount }}
+              </td>
+              <td>
+                {{ instalment.interestAmount }}
+              </td>
+              @if (isVisible("administrationFee")) {
+                <td>{{ instalment.administrationFee }}</td>
+              }
+              @if (isVisible("insuranceCost")) {
+                <td>{{ instalment.insuranceCost }}</td>
+              }
+              @if (isVisible("managementFee")) {
+                <td>{{ instalment.managementFee }}</td>
+              }
+              @if (isVisible("recalculatedInterest")) {
+                <td>{{ instalment.recalculatedInterest }}</td>
+              }
+              <td>
+                {{ instalment.totalInstalment }}
+              </td>
+              @if (isVisible("remainingBalance")) {
+                <td>{{ instalment.remainingBalance }}</td>
+              }
+              <td></td>
+            </tr>
+          }
         }
       }
     </tbody>

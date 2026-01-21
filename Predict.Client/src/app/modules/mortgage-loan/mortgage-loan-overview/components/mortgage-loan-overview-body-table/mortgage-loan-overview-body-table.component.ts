@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
+  input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -24,6 +25,8 @@ import { TableColumn } from './model/table-body.model';
 export class MortgageLoanOverviewBodyTableComponent
   implements OnInit, OnDestroy
 {
+  showTotalRow = input.required<boolean>();
+
   selectedRepaymentSchedule$ = this.store.select(
     fromMortgageLoan.getSelectedRepaymentScheduleOverview,
   );
