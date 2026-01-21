@@ -16,13 +16,15 @@ export namespace BaseMortgageLoan {
       .sort((a, b) => a.date.valueOf() - b.date.valueOf());
 
     const toBaseLoanInstalment = (
+      additionalId: number,
+      paymentDate: Date,
       instalment: Instalment,
       isNormalPayment: boolean,
       isExtraPayment: boolean,
     ): BaseLoanInstalment =>
       ({
-        index: instalment.instalmentId,
-        paymentDate: instalment.paymentDate,
+        index: instalment.instalmentId + additionalId,
+        paymentDate: paymentDate || instalment.paymentDate,
         principalAmount: instalment.principalAmount,
         interestAmount: instalment.interestAmount,
         remainingBalance: instalment.remainingBalance,
@@ -36,6 +38,8 @@ export namespace BaseMortgageLoan {
 
       return instalments.map((instalment) =>
         toBaseLoanInstalment(
+          0,
+          schedule.date,
           instalment,
           schedule.isNormalPayment,
           schedule.isExtraPayment,
@@ -43,9 +47,17 @@ export namespace BaseMortgageLoan {
       );
     });
 
-    const unpaidInstalments = baseInstalments.map((instalment) =>
-      toBaseLoanInstalment(instalment, false, false),
-    );
+    const unpaidInstalments = schedules
+      .at(-1)
+      .monthlyInstalments.map((instalment) =>
+        toBaseLoanInstalment(
+          calculatedBaseLoanInstalments.length,
+          null,
+          instalment,
+          false,
+          false,
+        ),
+      );
 
     return calculatedBaseLoanInstalments.concat(unpaidInstalments);
   }
