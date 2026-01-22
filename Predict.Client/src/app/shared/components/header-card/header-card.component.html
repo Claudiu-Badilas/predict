@@ -1,0 +1,40 @@
+<div class="header-cards mb-3">
+  @for (
+    headerCardInput of headerCardInputs();
+    let index = $index;
+    track index
+  ) {
+    <div class="divided-card">
+      @for (
+        section of headerCardInput.sections;
+        track section.label;
+        let first = $first;
+        let last = $last
+      ) {
+        <div
+          class="section"
+          [ngClass]="{
+            left: first,
+            center: !first && !last,
+            right: last,
+          }"
+        >
+          <p class="label">{{ section.label }}</p>
+          @if (isNumber(section.value)) {
+            <p class="value" [ngClass]="section.color">
+              {{ section.value ?? section.default ?? "-" | numberFormat }}
+            </p>
+          } @else {
+            <p class="value" [ngClass]="section.color">
+              {{ section.value ?? section.default ?? "-" }}
+            </p>
+          }
+        </div>
+
+        @if (!last) {
+          <div class="divider"></div>
+        }
+      }
+    </div>
+  }
+</div>
