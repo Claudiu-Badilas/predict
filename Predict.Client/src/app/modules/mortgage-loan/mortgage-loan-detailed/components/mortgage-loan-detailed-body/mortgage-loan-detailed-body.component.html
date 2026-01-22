@@ -42,9 +42,9 @@
         >
           <td>{{ rata.index }}</td>
           <td>{{ rata.paymentDate | date: "yyyy-MM-dd" }}</td>
-          <td>{{ rata.principalAmount }}</td>
-          <td>{{ rata.interestAmount }}</td>
-          <td>{{ rata.remainingBalance }}</td>
+          <td>{{ rata.principalAmount | numberFormat }}</td>
+          <td>{{ rata.interestAmount | numberFormat }}</td>
+          <td>{{ rata.remainingBalance | numberFormat }}</td>
         </tr>
       }
     </tbody>

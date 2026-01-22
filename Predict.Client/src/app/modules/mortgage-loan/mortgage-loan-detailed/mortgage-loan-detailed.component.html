@@ -7,6 +7,14 @@
         (selectionChange)="onSelectionChange($event)"
       />
     </div>
+
+    <app-dropdown-select
+      class="space"
+      [items]="dropDownSelectOptions$ | async"
+      [selectedItem]="selectedRepaymentScheduleName$ | async"
+      placeholder="No Selection"
+      (selectionChange)="onDropdownSelected($event)"
+    />
   </ng-container>
 
   <ng-container main-content>

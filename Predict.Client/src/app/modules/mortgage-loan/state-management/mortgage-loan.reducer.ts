@@ -5,16 +5,18 @@ import {
   createSelector,
   on,
 } from '@ngrx/store';
+import * as MortgageLoanDetailedActions from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/actions/mortgage-loan-detailed.actions';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.actions';
+import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import { BaseMortgageLoan } from '../mortgage-loan-detailed/utils/base-mortgage-loan.utils';
 import { MortgageInterestProgressChartUtils } from '../mortgage-loan-detailed/utils/mortgage-interest-progress.chart.util';
 import { MortgageLoanAmountChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-amount.chart.util';
+import { MortgageLoanPaymentsChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-payments.chart.util';
 import { MortgageLoanProgressChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-progress.chart.util';
 import { OverviewRepaymentSchedule } from '../mortgage-loan-overview/models/overview-mortgage-loan.model';
 import { LoanRatesSimulationTrendChartUtils } from '../mortgage-loan-overview/utils/loan-rates-simulation-trend.chart.util';
 import { mapBaseRepaymentScheduleToOverview } from '../mortgage-loan-overview/utils/overview-mortgage-loan.utils';
 import { RepaymentSchedule } from './../models/mortgage.model';
-import { MortgageLoanPaymentsChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-payments.chart.util';
 
 interface OverviewMortgageLoanState {
   repaymentSchedules: OverviewRepaymentSchedule[];
@@ -24,10 +26,16 @@ interface OverviewMortgageLoanState {
   startDate: Date;
 }
 
+interface DetailedMortgageLoanState {
+  selectedRepaymentScheduleName: string;
+}
+
 export interface MortgageLoanState {
   repaymentSchedules: RepaymentSchedule[];
 
   overview: OverviewMortgageLoanState;
+
+  detiled: DetailedMortgageLoanState;
 }
 
 const initialState: MortgageLoanState = {
@@ -39,6 +47,10 @@ const initialState: MortgageLoanState = {
     selectedInstalmentPayments: [1],
     selectedEarlyPayments: [2, 3, 4, 5, 6, 7],
     startDate: new Date('2025-12-16'),
+  },
+
+  detiled: {
+    selectedRepaymentScheduleName: null,
   },
 };
 
@@ -95,6 +107,15 @@ const mortgageReducer = createReducer(
     ...state,
     overview: { ...state.overview, startDate: date },
   })),
+
+  //DETAILED
+  on(
+    MortgageLoanDetailedActions.selectedMortgageLoanChanged,
+    (state, { selected }) => ({
+      ...state,
+      detiled: { ...state.detiled, selectedRepaymentScheduleName: selected },
+    }),
+  ),
 );
 
 export function reducer(state: MortgageLoanState, action: Action) {
@@ -183,10 +204,39 @@ export const getLoanRatesSimulationTrendChart = createSelector(
 //################
 // DETAILED
 //################
+
+export const getDetailedMortgageLoanState = createSelector(
+  getMortgageLoanState,
+  (state) => state.detiled,
+);
+
+export const getDetailedSelectedRepaymentScheduleName = createSelector(
+  getDetailedMortgageLoanState,
+  (detailed) => detailed.selectedRepaymentScheduleName,
+);
+
+export const getDetailedSelectedRepaymentSchedule = createSelector(
+  getRepaymentSchedules,
+  getDetailedSelectedRepaymentScheduleName,
+  (repaymentSchedules, selectedRepaymentScheduleName) =>
+    repaymentSchedules.find((r) => r.name === selectedRepaymentScheduleName),
+);
+
+export const getDetailedRepaymentSchedules = createSelector(
+  getRepaymentSchedules,
+  getDetailedSelectedRepaymentSchedule,
+  (repaymentSchedules, selectedRepaymentSchedule) =>
+    repaymentSchedules.filter(
+      (r) =>
+        !selectedRepaymentSchedule ||
+        JsDateUtils.isSameOrBefore(r.date, selectedRepaymentSchedule.date),
+    ),
+);
+
 export const getUpdatedBaseRepaymentScheduleBasedOnLatestStates =
   createSelector(
     getBaseRepaymentSchedule,
-    getRepaymentSchedules,
+    getDetailedRepaymentSchedules,
     BaseMortgageLoan.getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
   );
 

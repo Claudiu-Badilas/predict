@@ -11,7 +11,6 @@ export namespace BaseMortgageLoan {
     const baseInstalments = [...base.monthlyInstalments];
 
     const schedules = repaymentSchedules
-      .filter((rs) => !rs.isBasePayment)
       .slice()
       .sort((a, b) => a.date.valueOf() - b.date.valueOf());
 

@@ -52,9 +52,11 @@ export class RepaymentSchedule {
   constructor(res: RepaymentScheduleDto) {
     Object.assign(this, res);
 
+    this.name = `${res.name} - ${res.isBasePayment ? 'Initial' : res.isNormalPayment ? 'Rata' : 'Anticipat'}`;
+
     this.date = DateUtils.fromSplittedStringToJsDate(res.date);
     this.monthlyInstalments = res.monthlyInstalments.map(
-      (r) => new Instalment(r)
+      (r) => new Instalment(r),
     );
   }
 }
