@@ -102,7 +102,7 @@ function mapOverviewBaseLoanInstalments(
   selectedEarlyPayments: number[],
 ) {
   return base.monthlyInstalments.map((r) => {
-    const disabled = JsDateUtils.isBefore(r.paymentDate, startDate);
+    const disabled = JsDateUtils.isSameOrBefore(r.paymentDate, startDate);
 
     const instalmentPayment = selectedInstalmentPayments.some(
       (s) => s === r.instalmentId,

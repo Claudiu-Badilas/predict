@@ -1,10 +1,11 @@
 import { Component, computed, input } from '@angular/core';
+import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { OverviewLoanInstalment } from '../../models/overview-mortgage-loan.model';
 
 @Component({
   selector: 'app-mortgage-loan-overview-header',
-  imports: [],
+  imports: [NumberFormatPipe],
   templateUrl: './mortgage-loan-overview-header.component.html',
   styleUrl: './mortgage-loan-overview-header.component.scss',
 })

@@ -93,28 +93,51 @@
                 {{ instalment.paymentDate | date: "yyyy-MM-dd" }}
               </td>
               <td>
-                {{ instalment.principalAmount }}
+                {{ instalment.principalAmount | numberFormat }}
               </td>
-              <td>
-                {{ instalment.interestAmount }}
+              <td [ngClass]="{ strike: instalment.earlyPayment }">
+                {{ instalment.interestAmount | numberFormat }}
               </td>
               @if (isVisible("administrationFee")) {
-                <td>{{ instalment.administrationFee }}</td>
+                <td [ngClass]="{ strike: instalment.earlyPayment }">
+                  {{ instalment.administrationFee | numberFormat }}
+                </td>
               }
               @if (isVisible("insuranceCost")) {
-                <td>{{ instalment.insuranceCost }}</td>
+                <td
+                  [ngClass]="{
+                    strike: instalment.earlyPayment || instalment.totalRow,
+                  }"
+                >
+                  {{ instalment.insuranceCost | numberFormat }}
+                </td>
               }
               @if (isVisible("managementFee")) {
-                <td>{{ instalment.managementFee }}</td>
+                <td [ngClass]="{ strike: instalment.earlyPayment }">
+                  {{ instalment.managementFee | numberFormat }}
+                </td>
               }
               @if (isVisible("recalculatedInterest")) {
-                <td>{{ instalment.recalculatedInterest }}</td>
+                <td [ngClass]="{ strike: instalment.earlyPayment }">
+                  {{ instalment.recalculatedInterest | numberFormat }}
+                </td>
               }
-              <td>
-                {{ instalment.totalInstalment }}
-              </td>
+              @if (instalment.earlyPayment) {
+                <td>
+                  <span class="strike">{{
+                    instalment.totalInstalment | numberFormat
+                  }}</span>
+                  <span class="ml-2">
+                    <b>{{ instalment.principalAmount | numberFormat }}</b></span
+                  >
+                </td>
+              } @else {
+                <td>
+                  {{ instalment.totalInstalment | numberFormat }}
+                </td>
+              }
               @if (isVisible("remainingBalance")) {
-                <td>{{ instalment.remainingBalance }}</td>
+                <td>{{ instalment.remainingBalance | numberFormat }}</td>
               }
               <td></td>
             </tr>

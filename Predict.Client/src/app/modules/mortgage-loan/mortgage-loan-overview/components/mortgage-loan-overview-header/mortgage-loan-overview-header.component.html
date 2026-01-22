@@ -3,14 +3,14 @@
     <div class="section">
       <p class="label">Total Rata</p>
       <p class="value">
-        {{ totalInstalmentPayments()?.toFixed(2) || "0.00" }}
+        {{ totalInstalmentPayments()?.toFixed(2) || "0.00" | numberFormat }}
       </p>
     </div>
     <div class="divider"></div>
     <div class="section right">
       <p class="label">Total Plata Anticipata</p>
       <p class="value">
-        {{ totalEarlyPayment()?.toFixed(2) || "0.00" }}
+        {{ totalEarlyPayment()?.toFixed(2) || "0.00" | numberFormat }}
       </p>
     </div>
   </div>
@@ -19,15 +19,15 @@
     <div class="section">
       <p class="label">Dobândă Salvată</p>
       <p class="value increase">
-        {{ totalSavedInterest()?.toFixed(2) || "0.00" }}
+        {{ totalSavedInterest()?.toFixed(2) || "0.00" | numberFormat }}
       </p>
     </div>
     <div class="divider"></div>
     <div class="section right">
       <p class="label">Total de Plata</p>
       <p class="value decrease">
-        {{ totalPayment()?.toFixed(2) || "0.00" }}
-        ({{ (totalPayment() / 2)?.toFixed(2) || "0.00" }})
+        {{ totalPayment()?.toFixed(2) || "0.00" | numberFormat }} ➤
+        {{ (totalPayment() / 2)?.toFixed(2) || "0.00" | numberFormat }}
       </p>
     </div>
   </div>
@@ -35,14 +35,17 @@
     <div class="section">
       <p class="label">Sold Inainte Plata</p>
       <p class="value decrease">
-        {{ initialRemainingBalance()?.toFixed(2) || "0.00" }}
+        {{ initialRemainingBalance()?.toFixed(2) || "0.00" | numberFormat }}
       </p>
     </div>
     <div class="divider"></div>
     <div class="section right">
       <p class="label">Sold dupa Plata</p>
       <p class="value increase">
-        {{ lastEarlyPayment()?.remainingBalance?.toFixed(2) || "0.00" }}
+        {{
+          lastEarlyPayment()?.remainingBalance?.toFixed(2) || "0.00"
+            | numberFormat
+        }}
       </p>
     </div>
   </div>

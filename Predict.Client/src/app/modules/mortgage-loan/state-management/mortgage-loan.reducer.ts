@@ -36,9 +36,9 @@ const initialState: MortgageLoanState = {
   overview: {
     repaymentSchedules: [],
     selectedRepaymentScheduleName: null,
-    selectedInstalmentPayments: [],
-    selectedEarlyPayments: [],
-    startDate: new Date(),
+    selectedInstalmentPayments: [1],
+    selectedEarlyPayments: [2, 3, 4, 5, 6, 7],
+    startDate: new Date('2025-12-16'),
   },
 };
 

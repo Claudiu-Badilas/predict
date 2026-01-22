@@ -13,12 +13,13 @@ import { fromEvent, Subscription } from 'rxjs';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.actions';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.reducer';
 import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
+import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { OverviewLoanInstalment } from '../../models/overview-mortgage-loan.model';
 import { TableColumn } from './model/table-body.model';
 
 @Component({
   selector: 'app-mortgage-loan-overview-body-table',
-  imports: [CommonModule, FormsModule, CheckboxComponent],
+  imports: [CommonModule, FormsModule, CheckboxComponent, NumberFormatPipe],
   templateUrl: './mortgage-loan-overview-body-table.component.html',
   styleUrl: './mortgage-loan-overview-body-table.component.scss',
 })

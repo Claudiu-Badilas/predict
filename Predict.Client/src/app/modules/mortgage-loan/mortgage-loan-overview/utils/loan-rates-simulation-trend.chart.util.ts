@@ -2,10 +2,14 @@ import Highcharts from 'highcharts';
 import { Colors } from 'src/app/shared/styles/colors';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { RepaymentSchedule } from '../../models/mortgage.model';
+import {
+  numberFormat,
+  NumberFormatPipe,
+} from 'src/app/shared/pipes/number-format.pipe';
 
 export namespace LoanRatesSimulationTrendChartUtils {
   export function getChart(
-    repaymentSchedule: RepaymentSchedule
+    repaymentSchedule: RepaymentSchedule,
   ): Highcharts.Options {
     if (!repaymentSchedule) return null;
 
@@ -51,7 +55,7 @@ export namespace LoanRatesSimulationTrendChartUtils {
               .map(
                 (p: any) =>
                   `<span style="color:${p.series.color}">●</span>
-                  ${p.series.name}: <b>${p.y}</b><br/>`
+                  ${p.series.name}: <b>${numberFormat(p.y)}</b><br/>`,
               )
               .join('')}
           `;
