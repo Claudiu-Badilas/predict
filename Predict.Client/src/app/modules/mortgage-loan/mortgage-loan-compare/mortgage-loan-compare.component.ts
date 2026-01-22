@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, filter, map, take } from 'rxjs';
+
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/state-management/mortgage-loan.reducer';
-import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
-import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
-import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 
+import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
+import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
-import { MortgageLoanCompareBodyComponent } from './components/mortgage-loan-compare-body/mortgage-loan-compare-body.component';
+import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
+import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
+
 import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.chart.util';
 
 @Component({
@@ -19,60 +21,62 @@ import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.ch
     CommonModule,
     SideBarComponent,
     ToggleButtonComponent,
-    MortgageLoanCompareBodyComponent,
     DropdownSelectComponent,
     HighchartWrapperComponent,
+    CheckboxComponent,
   ],
   templateUrl: './mortgage-loan-compare.component.html',
   styleUrls: ['./mortgage-loan-compare.component.scss'],
 })
 export class MortgageLoanCompareComponent {
-  repaymentSchedules$ = this.store.select(
-    fromMortgageLoan.getRepaymentSchedules,
-  );
-  baseRepaymentSchedule$ = this.store.select(
-    fromMortgageLoan.getBaseRepaymentSchedule,
+  repaymentSchedules = toSignal(
+    this.store.select(fromMortgageLoan.getRepaymentSchedules),
+    { initialValue: [] },
   );
 
-  repaymentSchedulesOptions$ = this.repaymentSchedules$.pipe(
-    map((rs) => rs.map((r) => r.name)),
+  baseRepaymentSchedule = toSignal(
+    this.store.select(fromMortgageLoan.getBaseRepaymentSchedule),
   );
 
-  selectedLeftValue$ = new BehaviorSubject<string>(null);
-  selectedRightValue$ = new BehaviorSubject<string>(null);
+  includeBase = signal<boolean>(true);
+  selectedLeftValue = signal<string | null>(null);
+  selectedRightValue = signal<string>('No Selection');
 
-  leftRepaymentSchedules$ = combineLatest([
-    this.repaymentSchedules$,
-    this.selectedLeftValue$,
-  ]).pipe(map(([rs, selected]) => rs.find((r) => r.name === selected)));
+  repaymentSchedulesOptions = computed(() => [
+    'No Selection',
+    ...this.repaymentSchedules().map((r) => r.name),
+  ]);
 
-  rightRepaymentSchedules$ = combineLatest([
-    this.repaymentSchedules$,
-    this.selectedRightValue$,
-  ]).pipe(map(([rs, selected]) => rs.find((r) => r.name === selected)));
+  leftRepaymentSchedule = computed(() =>
+    this.repaymentSchedules().find((r) => r.name === this.selectedLeftValue()),
+  );
 
-  compareRatesTrendChart$ = combineLatest([
-    this.baseRepaymentSchedule$,
-    this.leftRepaymentSchedules$,
-    this.rightRepaymentSchedules$,
-  ]).pipe(
-    map(([base, left, right]) =>
-      CompareRatesTrendChartUtils.getChart(base, left, right),
+  rightRepaymentSchedule = computed(() =>
+    this.repaymentSchedules().find((r) => r.name === this.selectedRightValue()),
+  );
+
+  includeBaseRepaymentSchedule = computed(() =>
+    this.includeBase() ? this.baseRepaymentSchedule() : null,
+  );
+
+  compareRatesTrendChart = computed(() =>
+    CompareRatesTrendChartUtils.getChart(
+      this.includeBaseRepaymentSchedule(),
+      this.leftRepaymentSchedule(),
+      this.rightRepaymentSchedule(),
     ),
   );
 
   constructor(private store: Store<fromAppStore.AppState>) {
-    this.repaymentSchedules$
-      .pipe(
-        filter((rs) => rs?.length > 0),
-        take(1),
-      )
-      .subscribe((rs) => {
-        this.selectedLeftValue$.next(rs.find((r) => r.isBasePayment).name);
-        this.selectedRightValue$.next(
-          rs.filter((r) => !r.isBasePayment).at(0).name,
-        );
-      });
+    effect(() => {
+      const rs = this.repaymentSchedules();
+      if (rs.length > 0 && !this.selectedLeftValue()) {
+        const firstNonBase = rs.find((r) => !r.isBasePayment);
+        if (firstNonBase) {
+          this.selectedLeftValue.set(firstNonBase.name);
+        }
+      }
+    });
   }
 
   onSelectionChange(module: string) {
@@ -83,11 +87,15 @@ export class MortgageLoanCompareComponent {
     );
   }
 
-  onLeftDropdownSelected(event: string) {
-    this.selectedLeftValue$.next(event);
+  onIncludeBase(checked: boolean) {
+    this.includeBase.set(checked);
   }
 
-  onRightDropdownSelected(event: string) {
-    this.selectedRightValue$.next(event);
+  onLeftDropdownSelected(value: string) {
+    this.selectedLeftValue.set(value);
+  }
+
+  onRightDropdownSelected(value: string) {
+    this.selectedRightValue.set(value);
   }
 }

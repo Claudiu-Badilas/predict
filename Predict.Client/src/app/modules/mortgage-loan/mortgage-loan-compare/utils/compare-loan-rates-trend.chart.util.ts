@@ -1,7 +1,7 @@
 import Highcharts from 'highcharts';
+import { Colors } from 'src/app/shared/styles/colors';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { RepaymentSchedule } from '../../models/mortgage.model';
-import { Colors } from 'src/app/shared/styles/colors';
 
 export namespace CompareRatesTrendChartUtils {
   export function getChart(
@@ -9,17 +9,15 @@ export namespace CompareRatesTrendChartUtils {
     left: RepaymentSchedule,
     right: RepaymentSchedule,
   ): Highcharts.Options {
-    if (!base || !left || !right) return null;
-
     const sources: Array<[RepaymentSchedule, string, string]> = [
-      [base, 'Base', Colors.BS_SECONDARY],
-      [left, left.name, Colors.TEAL_400],
-      [right, right.name, Colors.BS_DANGER],
+      base ? [base, 'Base', Colors.BS_SECONDARY] : null,
+      left ? [left, left.name, Colors.BS_TEAL] : null,
+      right ? [right, right.name, Colors.BS_DANGER] : null,
     ];
 
-    const series: Highcharts.SeriesOptionsType[] = sources.flatMap(
-      ([repaymentSchedule, name, color]) => [
-        // Principal
+    const series: Highcharts.SeriesOptionsType[] = sources
+      .filter(Boolean)
+      .flatMap(([repaymentSchedule, name, color]) => [
         {
           type: 'spline',
           name: `${name} – Principal`,
@@ -30,11 +28,9 @@ export namespace CompareRatesTrendChartUtils {
             date: DateUtils.fromJsDateToString(r.paymentDate),
           })),
         },
-
-        // Interest
         {
           type: 'line',
-          name: `${name} – Interest`,
+          name: `${name} – Dobanda`,
           color,
           dashStyle: 'ShortDash',
           data: repaymentSchedule.monthlyInstalments.map((r) => ({
@@ -43,29 +39,17 @@ export namespace CompareRatesTrendChartUtils {
             date: DateUtils.fromJsDateToString(r.paymentDate),
           })),
         },
-      ],
-    );
+      ]);
 
     return {
       title: {
-        text: 'Trendul de rambursare – Principal vs Dobandă',
+        text: 'Trendul de rambursare - Principal vs Dobandă',
         align: 'left',
       },
-      chart: {
-        zooming: { type: 'x' },
-      },
-      xAxis: {
-        type: 'datetime',
-        title: { text: 'Date' },
-      },
-      yAxis: {
-        title: { text: 'Amount' },
-      },
-      plotOptions: {
-        series: {
-          marker: { enabled: false },
-        },
-      },
+      chart: { zooming: { type: 'x' } },
+      xAxis: { type: 'datetime', title: { text: 'Date' } },
+      yAxis: { title: { text: 'Amount' } },
+      plotOptions: { series: { marker: { enabled: false } } },
       tooltip: {
         shared: true,
         useHTML: true,

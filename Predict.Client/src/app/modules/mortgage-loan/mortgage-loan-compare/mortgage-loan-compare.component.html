@@ -11,8 +11,8 @@
     <div class="space d-flex flex-column">
       <div>Left</div>
       <app-dropdown-select
-        [items]="repaymentSchedulesOptions$ | async"
-        [selectedItem]="selectedLeftValue$ | async"
+        [items]="repaymentSchedulesOptions()"
+        [selectedItem]="selectedLeftValue()"
         placeholder="No Selection"
         (selectionChange)="onLeftDropdownSelected($event)"
       />
@@ -21,24 +21,25 @@
     <div class="space d-flex flex-column">
       <div>Right</div>
       <app-dropdown-select
-        [items]="repaymentSchedulesOptions$ | async"
-        [selectedItem]="selectedRightValue$ | async"
+        [items]="repaymentSchedulesOptions()"
+        [selectedItem]="selectedRightValue()"
         placeholder="No Selection"
         (selectionChange)="onRightDropdownSelected($event)"
+      />
+    </div>
+
+    <div class="space">
+      <app-checkbox
+        [label]="'Include Graficul Initial'"
+        [checked]="includeBase()"
+        (valueChange)="onIncludeBase($event)"
       />
     </div>
   </ng-container>
 
   <ng-container main-content>
     <div class="mb-3">
-      <app-highcharts-wrapper
-        [chartOptions]="compareRatesTrendChart$ | async"
-      />
+      <app-highcharts-wrapper [chartOptions]="compareRatesTrendChart()" />
     </div>
-    <mortgage-loan-compare-body
-      [left]="leftRepaymentSchedules$ | async"
-      [right]="rightRepaymentSchedules$ | async"
-    >
-    </mortgage-loan-compare-body>
   </ng-container>
 </app-side-bar>
