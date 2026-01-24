@@ -37,14 +37,23 @@ export interface MortgageLoanState {
   detiled: DetailedMortgageLoanState;
 }
 
+const payments1 = generatePayments(1, 35, 7);
+const payments2 = generatePayments(36, 72, 6);
+
 const initialState: MortgageLoanState = {
   repaymentSchedules: [],
 
   overview: {
     repaymentSchedules: [],
     selectedRepaymentScheduleName: null,
-    selectedInstalmentPayments: [1],
-    selectedEarlyPayments: [2, 3, 4, 5, 6, 7],
+    selectedInstalmentPayments: [
+      ...payments1.selectedInstalmentPayments,
+      ...payments2.selectedInstalmentPayments,
+    ],
+    selectedEarlyPayments: [
+      ...payments1.selectedEarlyPayments,
+      ...payments2.selectedEarlyPayments,
+    ],
     startDate: new Date('2025-12-16'),
   },
 
@@ -253,3 +262,21 @@ export const getMortgageLoanPaymentsChart = createSelector(
   getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
   MortgageLoanPaymentsChartUtils.getChart,
 );
+
+function generatePayments(minValue: number, maxValue: number, step: number) {
+  const selectedInstalmentPayments = [];
+  const selectedEarlyPayments = [];
+
+  for (let i = minValue; i <= maxValue; i++) {
+    if ((i - 1) % step === 0) {
+      selectedInstalmentPayments.push(i);
+    } else {
+      selectedEarlyPayments.push(i);
+    }
+  }
+
+  return {
+    selectedInstalmentPayments,
+    selectedEarlyPayments,
+  };
+}

@@ -1,6 +1,7 @@
 export type OverviewLoanInstalment = {
   instalmentId: number | null;
   paymentDate: Date | null;
+  newPaymentDate: Date | null;
   interestAmount: number | null;
   principalAmount: number | null;
   administrationFee: number | null;

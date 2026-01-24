@@ -65,8 +65,9 @@ function createSummaryRow(
   const lastInBatch = batch.at(-1)!;
 
   return {
-    instalmentId: null,
-    paymentDate: null,
+    instalmentId: batch.filter((x) => x.earlyPayment).length,
+    paymentDate: firstInBatch.newPaymentDate,
+    newPaymentDate: lastInBatch.newPaymentDate,
     interestAmount: firstInBatch.instalmentPayment
       ? firstInBatch.interestAmount
       : 0,
@@ -91,7 +92,7 @@ function createSummaryRow(
     earlyPayment: false,
     disabled: true,
     totalRow: true,
-    color: Colors.PINK_200,
+    color: Colors.PINK_100,
   };
 }
 
@@ -101,7 +102,11 @@ function mapOverviewBaseLoanInstalments(
   selectedInstalmentPayments: number[],
   selectedEarlyPayments: number[],
 ) {
-  return base.monthlyInstalments.map((r) => {
+  let newPaymentDate: Date = null;
+  let updateInstalmentDate = false;
+  let updateEarlyPayDate = false;
+
+  return base.monthlyInstalments.map((r, i, arr) => {
     const disabled = JsDateUtils.isSameOrBefore(r.paymentDate, startDate);
 
     const instalmentPayment = selectedInstalmentPayments.some(
@@ -110,9 +115,38 @@ function mapOverviewBaseLoanInstalments(
     const earlyPayment = selectedEarlyPayments.some(
       (s) => s === r.instalmentId,
     );
+
+    if (instalmentPayment) {
+      updateInstalmentDate = true;
+    }
+
+    const prevInstalmentPayment = selectedInstalmentPayments.some(
+      (s) => s === arr[i - 1]?.instalmentId,
+    );
+    if (prevInstalmentPayment && earlyPayment) {
+      updateEarlyPayDate = true;
+    }
+
+    if (!JsDateUtils.isValidDate(newPaymentDate) && updateInstalmentDate) {
+      newPaymentDate = r.paymentDate;
+      updateInstalmentDate = false;
+    } else if (updateEarlyPayDate && newPaymentDate && earlyPayment) {
+      newPaymentDate = JsDateUtils.addDays(newPaymentDate, 1);
+      updateEarlyPayDate = false;
+    } else if (
+      JsDateUtils.isValidDate(newPaymentDate) &&
+      updateInstalmentDate
+    ) {
+      newPaymentDate = JsDateUtils.addMonths(
+        JsDateUtils.addDays(newPaymentDate, -1),
+        1,
+      );
+      updateInstalmentDate = false;
+    }
     return {
       instalmentId: r.instalmentId,
       paymentDate: r.paymentDate,
+      newPaymentDate,
       interestAmount: r.interestAmount,
       principalAmount: r.principalAmount,
       administrationFee: r.administrationFee,

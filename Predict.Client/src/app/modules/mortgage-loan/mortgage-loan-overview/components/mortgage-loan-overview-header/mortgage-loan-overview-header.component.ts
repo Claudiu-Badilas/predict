@@ -83,7 +83,7 @@ export class MortgageLoanOverviewHeaderComponent {
       {
         sections: [
           {
-            label: 'Sold Inainte',
+            label: 'Sold Initial',
             value: this.initialRemainingBalance(),
             default: '0.00',
             color: 'red',
@@ -95,7 +95,7 @@ export class MortgageLoanOverviewHeaderComponent {
             color: 'green',
           } as CardSection,
           {
-            label: 'Costuri Salvate',
+            label: 'Costuri Economisite',
             value: this.totalSavedInterest(),
             default: '0.00',
             color: 'green',

@@ -53,10 +53,13 @@
         @for (
           instalment of selectedRepaymentSchedule?.overviewLoanInstalments ??
             [];
-          track instalment.instalmentId
+          let index = $index;
+          track index
         ) {
           @if (
-            !instalment.totalRow || (instalment.totalRow && showTotalRow())
+            (showOnlyTotalRow() && instalment.totalRow) ||
+            (!showOnlyTotalRow() && showTotalRow()) ||
+            (!showOnlyTotalRow() && !showTotalRow() && !instalment.totalRow)
           ) {
             <tr
               [style.background-color]="instalment.color"
@@ -89,9 +92,31 @@
               <td>
                 {{ instalment.instalmentId }}
               </td>
-              <td>
-                {{ instalment.paymentDate | date: "yyyy-MM-dd" }}
-              </td>
+              @if (
+                !instalment.totalRow &&
+                (instalment.instalmentPayment || instalment.earlyPayment)
+              ) {
+                <td>
+                  <span
+                    [ngClass]="{
+                      strike:
+                        instalment.instalmentPayment || instalment.earlyPayment,
+                    }"
+                  >
+                    {{ instalment.paymentDate | date: "yyyy-MM-dd" }}
+                  </span>
+                  <span
+                    ><b>
+                      {{ instalment.newPaymentDate | date: "yyyy-MM-dd" }}
+                    </b>
+                  </span>
+                </td>
+              } @else {
+                <td>
+                  {{ instalment.paymentDate | date: "yyyy-MM-dd" }} -
+                  {{ instalment.newPaymentDate | date: "yyyy-MM-dd" }}
+                </td>
+              }
               <td>
                 {{ instalment.principalAmount | numberFormat }}
               </td>

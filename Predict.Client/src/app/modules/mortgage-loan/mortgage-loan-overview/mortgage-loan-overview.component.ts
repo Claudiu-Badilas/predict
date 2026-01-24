@@ -40,7 +40,8 @@ export class MortgageLoanOverviewComponent {
     .pipe(map((rs) => rs.map((r) => r.name)));
   overviewStartDate$ = this.store.select(fromMortgageLoan.getOverviewStartDate);
 
-  showTotalRow = signal(false);
+  showTotalRow = signal(true);
+  showOnlyTotalRow = signal(false);
 
   constructor(
     private readonly store: Store<fromMortgageLoan.MortgageLoanState>,
@@ -69,5 +70,9 @@ export class MortgageLoanOverviewComponent {
 
   onShowTotalRow(checked: boolean) {
     this.showTotalRow.set(checked);
+  }
+
+  onOnlyShowTotalRow(checked: boolean) {
+    this.showOnlyTotalRow.set(checked);
   }
 }

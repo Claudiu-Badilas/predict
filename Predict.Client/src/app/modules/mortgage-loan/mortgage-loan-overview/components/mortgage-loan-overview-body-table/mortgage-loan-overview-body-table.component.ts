@@ -27,6 +27,7 @@ export class MortgageLoanOverviewBodyTableComponent
   implements OnInit, OnDestroy
 {
   showTotalRow = input.required<boolean>();
+  showOnlyTotalRow = input.required<boolean>();
 
   selectedRepaymentSchedule$ = this.store.select(
     fromMortgageLoan.getSelectedRepaymentScheduleOverview,

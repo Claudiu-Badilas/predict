@@ -34,6 +34,14 @@
         (valueChange)="onShowTotalRow($event)"
       />
     </div>
+    <div class="space">
+      <app-checkbox
+        [label]="'Display ONLY total row'"
+        [id]="'total row'"
+        [checked]="showOnlyTotalRow()"
+        (valueChange)="onOnlyShowTotalRow($event)"
+      />
+    </div>
   </ng-container>
 
   <ng-container main-content
@@ -44,7 +52,10 @@
           selectedRepaymentSchedule?.overviewLoanInstalments ?? []
         "
       />
-      <app-mortgage-loan-overview-body-table [showTotalRow]="showTotalRow()" />
+      <app-mortgage-loan-overview-body-table
+        [showTotalRow]="showTotalRow()"
+        [showOnlyTotalRow]="showOnlyTotalRow()"
+      />
     </div>
   </ng-container>
 </app-side-bar>
