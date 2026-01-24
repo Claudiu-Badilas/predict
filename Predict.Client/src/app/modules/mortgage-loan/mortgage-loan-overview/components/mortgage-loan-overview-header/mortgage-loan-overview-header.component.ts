@@ -58,33 +58,23 @@ export class MortgageLoanOverviewHeaderComponent {
       {
         sections: [
           {
-            label: 'Total Rata',
+            label: 'Rata',
             value: this.totalInstalmentPayments(),
             default: '0.00',
             color: null,
           } as CardSection,
           {
-            label: 'Total Plata Anticipata',
+            label: 'Plata Anticipata',
             value: this.totalEarlyPayment(),
             default: '0.00',
             color: null,
           } as CardSection,
-        ],
-      } as HeaderCardInput,
-      {
-        sections: [
           {
-            label: 'Dobândă Salvată',
-            value: this.totalSavedInterest(),
-            default: '0.00',
-            color: 'green',
-          } as CardSection,
-          {
-            label: 'Total de Plata',
+            label: 'Total Plata',
             value: [
               NumberFormatPipe.numberFormat(this.totalPayment()) || '0.00',
               NumberFormatPipe.numberFormat(this.totalPayment() / 2) || '0.00',
-            ].join(' ➤ '),
+            ].join(' - '),
             default: '0.00',
             color: 'red',
           } as CardSection,
@@ -93,14 +83,20 @@ export class MortgageLoanOverviewHeaderComponent {
       {
         sections: [
           {
-            label: 'Sold Inainte Plata',
+            label: 'Sold Inainte',
             value: this.initialRemainingBalance(),
             default: '0.00',
             color: 'red',
           } as CardSection,
           {
-            label: 'Sold dupa Plata',
+            label: 'Sold Restant',
             value: this.lastEarlyPayment()?.remainingBalance,
+            default: '0.00',
+            color: 'green',
+          } as CardSection,
+          {
+            label: 'Costuri Salvate',
+            value: this.totalSavedInterest(),
             default: '0.00',
             color: 'green',
           } as CardSection,
