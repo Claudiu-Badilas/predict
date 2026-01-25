@@ -42,6 +42,14 @@
         (valueChange)="onOnlyShowTotalRow($event)"
       />
     </div>
+    <div class="space">
+      <app-numeric-input
+        id="targetAmount"
+        [label]="'Target Amount'"
+        [value]="0"
+        (valueChange)="onTargetAmountChange($event)"
+      />
+    </div>
   </ng-container>
 
   <ng-container main-content

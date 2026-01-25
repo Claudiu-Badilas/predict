@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs';
+import { first, map } from 'rxjs';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/actions/mortgage-loan.actions';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
@@ -12,6 +12,8 @@ import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/t
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
+import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
+import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
 
 @Component({
   selector: 'app-mortgage-loan-overview',
@@ -24,6 +26,7 @@ import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-
     MortgageLoanOverviewHeaderComponent,
     MortgageLoanOverviewBodyTableComponent,
     CheckboxComponent,
+    NumericInputComponent,
   ],
   templateUrl: './mortgage-loan-overview.component.html',
   styleUrls: ['./mortgage-loan-overview.component.scss'],
@@ -74,5 +77,23 @@ export class MortgageLoanOverviewComponent {
 
   onOnlyShowTotalRow(checked: boolean) {
     this.showOnlyTotalRow.set(checked);
+  }
+
+  onTargetAmountChange(value: number) {
+    this.store
+      .select(fromMortgageLoan.getSelectedRepaymentSchedule)
+      .pipe(first())
+      .subscribe((schedule) => {
+        const [instalmentPayments, earlyPayments] = mapInstalementSimulation(
+          schedule,
+          value,
+        );
+        this.store.dispatch(
+          MortgageLoanActions.simulateInstalmentPaymentsChanged({
+            selectedInstalmentPayments: instalmentPayments,
+            selectedEarlyPayments: earlyPayments,
+          }),
+        );
+      });
   }
 }

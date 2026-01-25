@@ -5,15 +5,16 @@
 }
 
 label {
-  font-size: 17px;
+  font-size: 15px;
 }
 
 input {
   height: 40px;
   max-width: 150px;
   padding: 6px 10px;
-  font-size: 17px;
+  font-size: 15px;
   border-radius: 6px;
+  text-align: center;
 }
 
 input:disabled {

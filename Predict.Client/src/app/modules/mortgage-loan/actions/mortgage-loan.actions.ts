@@ -29,3 +29,11 @@ export const selectedEarlyPaymentChanged = createAction(
   '[Overview Mortgage Loan] Selected Early Payment Changed',
   props<{ values: number[] }>(),
 );
+
+export const simulateInstalmentPaymentsChanged = createAction(
+  '[Overview Mortgage Loan] Simulate Instalment Payments Changed',
+  props<{
+    selectedInstalmentPayments: number[];
+    selectedEarlyPayments: number[];
+  }>(),
+);

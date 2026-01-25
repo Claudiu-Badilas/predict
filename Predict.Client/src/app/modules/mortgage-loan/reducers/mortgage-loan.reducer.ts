@@ -5,8 +5,8 @@ import {
   createSelector,
   on,
 } from '@ngrx/store';
-import * as MortgageLoanDetailedActions from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/actions/mortgage-loan-detailed.actions';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/actions/mortgage-loan.actions';
+import * as MortgageLoanDetailedActions from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/actions/mortgage-loan-detailed.actions';
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import { BaseMortgageLoan } from '../mortgage-loan-detailed/utils/base-mortgage-loan.utils';
 import { MortgageInterestProgressChartUtils } from '../mortgage-loan-detailed/utils/mortgage-interest-progress.chart.util';
@@ -37,23 +37,14 @@ export interface MortgageLoanState {
   detiled: DetailedMortgageLoanState;
 }
 
-const payments1 = generatePayments(1, 35, 7);
-const payments2 = generatePayments(36, 72, 6);
-
 const initialState: MortgageLoanState = {
   repaymentSchedules: [],
 
   overview: {
     repaymentSchedules: [],
     selectedRepaymentScheduleName: null,
-    selectedInstalmentPayments: [
-      ...payments1.selectedInstalmentPayments,
-      ...payments2.selectedInstalmentPayments,
-    ],
-    selectedEarlyPayments: [
-      ...payments1.selectedEarlyPayments,
-      ...payments2.selectedEarlyPayments,
-    ],
+    selectedInstalmentPayments: [],
+    selectedEarlyPayments: [],
     startDate: new Date('2025-12-16'),
   },
 
@@ -115,6 +106,17 @@ const mortgageReducer = createReducer(
     ...state,
     overview: { ...state.overview, startDate: date },
   })),
+  on(
+    MortgageLoanActions.simulateInstalmentPaymentsChanged,
+    (state, { selectedInstalmentPayments, selectedEarlyPayments }) => ({
+      ...state,
+      overview: {
+        ...state.overview,
+        selectedInstalmentPayments: [...selectedInstalmentPayments],
+        selectedEarlyPayments: [...selectedEarlyPayments],
+      },
+    }),
+  ),
 
   //DETAILED
   on(
@@ -262,21 +264,3 @@ export const getMortgageLoanPaymentsChart = createSelector(
   getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
   MortgageLoanPaymentsChartUtils.getChart,
 );
-
-function generatePayments(minValue: number, maxValue: number, step: number) {
-  const selectedInstalmentPayments = [];
-  const selectedEarlyPayments = [];
-
-  for (let i = minValue; i <= maxValue; i++) {
-    if ((i - 1) % step === 0) {
-      selectedInstalmentPayments.push(i);
-    } else {
-      selectedEarlyPayments.push(i);
-    }
-  }
-
-  return {
-    selectedInstalmentPayments,
-    selectedEarlyPayments,
-  };
-}
