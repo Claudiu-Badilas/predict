@@ -152,6 +152,13 @@
                     <b>{{ instalment.principalAmount | numberFormat }}</b></span
                   >
                 </td>
+              } @else if (instalment.totalRow) {
+                <td>
+                  {{
+                    instalment.interestAmount + instalment.principalAmount
+                      | numberFormat
+                  }}
+                </td>
               } @else {
                 <td>
                   {{ instalment.totalInstalment | numberFormat }}
