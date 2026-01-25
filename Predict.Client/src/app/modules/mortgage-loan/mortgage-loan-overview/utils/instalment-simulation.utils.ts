@@ -15,9 +15,9 @@ export function mapInstalementSimulation(
   let accAmount = 0;
   let accPayments = 1;
 
-  base.monthlyInstalments.forEach((instalment, i) => {
+  for (let i = 0; i < base.monthlyInstalments.length; i++) {
+    const instalment = base.monthlyInstalments[i];
     const tempAccAmount = accAmount + instalment.principalAmount;
-
     const maxAmountTrashhold = monthlyAmount + monthlyAmount * 0.05;
 
     if (i === 0) {
@@ -27,7 +27,7 @@ export function mapInstalementSimulation(
       tempAccAmount > maxAmountTrashhold ||
       accAmount > monthlyAmount
     ) {
-      if (accPayments === payments) return;
+      if (payments !== null && accPayments === payments) break;
 
       selectedInstalmentPayments.push(instalment.instalmentId);
       accAmount = instalment.totalInstalment;
@@ -36,7 +36,7 @@ export function mapInstalementSimulation(
       selectedEarlyPayments.push(instalment.instalmentId);
       accAmount += instalment.principalAmount;
     }
-  });
+  }
 
   return [selectedInstalmentPayments, selectedEarlyPayments];
 }
