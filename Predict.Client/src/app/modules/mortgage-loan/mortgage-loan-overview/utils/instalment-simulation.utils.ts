@@ -2,9 +2,9 @@ import { RepaymentSchedule } from '../../models/mortgage.model';
 
 export function mapInstalementSimulation(
   base: RepaymentSchedule | null,
-  maxAmount: number = 4_000,
+  monthlyAmount: number = 4_000,
 ): [number[], number[]] | null {
-  if (!base || maxAmount === null || maxAmount <= 0) return [[], []];
+  if (!base || monthlyAmount === null || monthlyAmount <= 0) return [[], []];
 
   const selectedInstalmentPayments: number[] = [];
   const selectedEarlyPayments: number[] = [];
@@ -14,16 +14,16 @@ export function mapInstalementSimulation(
   base.monthlyInstalments.forEach((instalment, i) => {
     const tempAccAmount = accAmount + instalment.principalAmount;
 
-    const maxAmountTrashhold = maxAmount + maxAmount * 0.05;
+    const maxAmountTrashhold = monthlyAmount + monthlyAmount * 0.05;
 
     if (
       i === 0 ||
       tempAccAmount > maxAmountTrashhold ||
-      accAmount > maxAmount
+      accAmount > monthlyAmount
     ) {
       selectedInstalmentPayments.push(instalment.instalmentId);
       accAmount = instalment.totalInstalment;
-    } else if (accAmount <= maxAmount) {
+    } else if (accAmount <= monthlyAmount) {
       selectedEarlyPayments.push(instalment.instalmentId);
       accAmount += instalment.principalAmount;
     }

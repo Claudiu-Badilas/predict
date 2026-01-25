@@ -84,14 +84,14 @@ export class MortgageLoanOverviewComponent {
     this.showOnlyTotalRow.set(checked);
   }
 
-  onTargetAmountChange(value: number) {
+  onMonthlyAmountChange(monthlyAmount: number) {
     this.store
       .select(fromMortgageLoan.getSelectedRepaymentSchedule)
       .pipe(first())
       .subscribe((schedule) => {
         const [instalmentPayments, earlyPayments] = mapInstalementSimulation(
           schedule,
-          value,
+          monthlyAmount,
         );
         this.store.dispatch(
           MortgageLoanActions.simulateInstalmentPaymentsChanged({
