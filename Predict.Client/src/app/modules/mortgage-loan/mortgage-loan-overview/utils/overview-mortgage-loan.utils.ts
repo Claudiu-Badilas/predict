@@ -124,7 +124,7 @@ class DateStateManager {
   private isEarlyPayDateUpdate = false;
   private isFirstBaseIdentical = true;
 
-  updateForInstalment(paymentDate: Date, hasInstalmentPayment: boolean): void {
+  updateForInstalment(hasInstalmentPayment: boolean): void {
     if (hasInstalmentPayment) {
       this.isInstalmentDateUpdate = true;
     }
@@ -221,11 +221,7 @@ function createOverviewBaseLoanInstalments(
       ? selectedInstalmentSet.has(previousInstalment?.instalmentId)
       : false;
 
-    // Update date state
-    dateManager.updateForInstalment(
-      instalment.paymentDate,
-      hasInstalmentPayment,
-    );
+    dateManager.updateForInstalment(hasInstalmentPayment);
     dateManager.updateForEarlyPayment(previousHadInstalment, hasEarlyPayment);
 
     const newPaymentDate = dateManager.calculateNewPaymentDate(
