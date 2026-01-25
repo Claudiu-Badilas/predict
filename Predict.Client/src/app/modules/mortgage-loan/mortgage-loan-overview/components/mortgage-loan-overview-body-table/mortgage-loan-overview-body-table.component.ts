@@ -16,6 +16,7 @@ import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.c
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { OverviewLoanInstalment } from '../../models/overview-mortgage-loan.model';
 import { TableColumn } from './model/table-body.model';
+import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 
 @Component({
   selector: 'app-mortgage-loan-overview-body-table',
@@ -32,6 +33,8 @@ export class MortgageLoanOverviewBodyTableComponent
   selectedRepaymentSchedule$ = this.store.select(
     fromMortgageLoan.getSelectedRepaymentScheduleOverview,
   );
+
+  jsDateUtils = JsDateUtils;
 
   @ViewChild('menuContainer', { static: false }) menuContainer!: ElementRef;
   @ViewChild('menuDropdown', { static: false }) menuDropdown!: ElementRef;

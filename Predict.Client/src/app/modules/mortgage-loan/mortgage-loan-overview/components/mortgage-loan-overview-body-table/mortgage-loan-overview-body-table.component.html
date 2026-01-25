@@ -49,15 +49,14 @@
     </thead>
 
     <tbody>
-      @if (selectedRepaymentSchedule$ | async; as selectedRepaymentSchedule) {
-        @for (
-          instalment of selectedRepaymentSchedule?.overviewLoanInstalments ??
-            [];
-          let index = $index;
-          track index
-        ) {
+      @if (selectedRepaymentSchedule$ | async; as repaymentSchedule) {
+        @let instalments = repaymentSchedule?.overviewLoanInstalments ?? [];
+        @for (instalment of instalments; let index = $index; track index) {
           @if (
             (showOnlyTotalRow() && instalment.totalRow) ||
+            (showOnlyTotalRow() &&
+              !instalment.instalmentPayment &&
+              !instalment.earlyPayment) ||
             (!showOnlyTotalRow() && showTotalRow()) ||
             (!showOnlyTotalRow() && !showTotalRow() && !instalment.totalRow)
           ) {
@@ -93,28 +92,25 @@
                 {{ instalment.instalmentId }}
               </td>
               @if (
-                !instalment.totalRow &&
-                (instalment.instalmentPayment || instalment.earlyPayment)
+                jsDateUtils.isValidDate(instalment.newPaymentDate) &&
+                !jsDateUtils.isSame(
+                  instalment.paymentDate,
+                  instalment.newPaymentDate
+                )
               ) {
                 <td>
-                  <span
-                    [ngClass]="{
-                      strike:
-                        instalment.instalmentPayment || instalment.earlyPayment,
-                    }"
-                  >
+                  <span class="strike">
                     {{ instalment.paymentDate | date: "yyyy-MM-dd" }}
                   </span>
-                  <span
-                    ><b>
+                  <span>
+                    <b>
                       {{ instalment.newPaymentDate | date: "yyyy-MM-dd" }}
                     </b>
                   </span>
                 </td>
               } @else {
                 <td>
-                  {{ instalment.paymentDate | date: "yyyy-MM-dd" }} -
-                  {{ instalment.newPaymentDate | date: "yyyy-MM-dd" }}
+                  {{ instalment.paymentDate | date: "yyyy-MM-dd" }}
                 </td>
               }
               <td>

@@ -7,49 +7,61 @@ import {
   OverviewRepaymentSchedule,
 } from '../models/overview-mortgage-loan.model';
 
+// Constants for better maintainability
+const PAYMENT_TYPES = {
+  DISABLED: 'disabled',
+  INSTALMENT: 'instalment',
+  EARLY: 'early',
+  NONE: 'none',
+} as const;
+
 export function mapBaseRepaymentScheduleToOverview(
-  base: RepaymentSchedule,
+  base: RepaymentSchedule | null,
   startDate: Date,
   selectedInstalmentPayments: number[],
   selectedEarlyPayments: number[],
 ): OverviewRepaymentSchedule | null {
   if (!base) return null;
 
-  const overviewBaseLoanInstalments = mapOverviewBaseLoanInstalments(
+  const overviewBaseLoanInstalments = createOverviewBaseLoanInstalments(
     base,
     startDate,
     selectedInstalmentPayments,
     selectedEarlyPayments,
   );
 
-  const overviewLoanInstalments = mapOverviewLoanInstalments(
+  const overviewLoanInstalments = createOverviewLoanInstalments(
     overviewBaseLoanInstalments,
   );
 
   return {
     name: base.name,
-    overviewLoanInstalments: overviewLoanInstalments,
-  } as OverviewRepaymentSchedule;
+    overviewLoanInstalments,
+  };
 }
 
-function mapOverviewLoanInstalments(
+// Main transformation pipeline
+function createOverviewLoanInstalments(
   overviewBaseLoanInstalments: OverviewLoanInstalment[],
 ): OverviewLoanInstalment[] {
   const result: OverviewLoanInstalment[] = [];
   let earlyPaymentBatch: OverviewLoanInstalment[] = [];
 
-  overviewBaseLoanInstalments.forEach((current, index) => {
-    const next = overviewBaseLoanInstalments[index + 1];
+  overviewBaseLoanInstalments.forEach((current, index, array) => {
+    const next = array[index + 1];
+
     result.push(current);
 
     if (current.instalmentPayment) {
+      // Start new batch
       earlyPaymentBatch = [current];
     } else if (current.earlyPayment) {
+      // Add to current batch
       earlyPaymentBatch.push(current);
 
-      const shouldCreateSummary = next && !next.earlyPayment;
-      if (shouldCreateSummary) {
-        const summaryInstalment = createSummaryRow(earlyPaymentBatch);
+      const isBatchComplete = next && !next.earlyPayment;
+      if (isBatchComplete) {
+        const summaryInstalment = createBatchSummary(earlyPaymentBatch);
         result.push(summaryInstalment);
       }
     }
@@ -58,35 +70,29 @@ function mapOverviewLoanInstalments(
   return result;
 }
 
-function createSummaryRow(
+// Create summary for a batch of early payments
+function createBatchSummary(
   batch: OverviewLoanInstalment[],
 ): OverviewLoanInstalment {
   const firstInBatch = batch[0];
-  const lastInBatch = batch.at(-1)!;
+  const lastInBatch = batch[batch.length - 1];
+  const hasInstalmentPayment = firstInBatch.instalmentPayment;
+
+  const summaryData = {
+    interestAmount: hasInstalmentPayment ? firstInBatch.interestAmount : 0,
+    principalAmount: calculateBatchTotal(batch, 'principalAmount'),
+    administrationFee: calculateBatchTotal(batch, 'administrationFee'),
+    insuranceCost: calculateBatchTotal(batch, 'insuranceCost'),
+    managementFee: calculateBatchTotal(batch, 'managementFee'),
+    recalculatedInterest: calculateBatchTotal(batch, 'recalculatedInterest'),
+    totalInstalment: calculateTotalInstalment(batch),
+  };
 
   return {
-    instalmentId: batch.filter((x) => x.earlyPayment).length,
+    instalmentId: countEarlyPayments(batch),
     paymentDate: firstInBatch.newPaymentDate,
     newPaymentDate: lastInBatch.newPaymentDate,
-    interestAmount: firstInBatch.instalmentPayment
-      ? firstInBatch.interestAmount
-      : 0,
-    principalAmount: Calculator.sum(batch.map((m) => m.principalAmount)),
-    administrationFee: Calculator.sum(batch.map((m) => m.administrationFee)),
-    insuranceCost: Calculator.sum(batch.map((m) => m.insuranceCost)),
-    managementFee: Calculator.sum(batch.map((m) => m.managementFee)),
-    recalculatedInterest: Calculator.sum(
-      batch.map((m) => m.recalculatedInterest),
-    ),
-    totalInstalment: Calculator.sum(
-      batch.map((m) =>
-        m.instalmentPayment
-          ? m.totalInstalment
-          : m.earlyPayment
-            ? m.principalAmount
-            : 0,
-      ),
-    ),
+    ...summaryData,
     remainingBalance: lastInBatch.remainingBalance,
     instalmentPayment: false,
     earlyPayment: false,
@@ -96,82 +102,202 @@ function createSummaryRow(
   };
 }
 
-function mapOverviewBaseLoanInstalments(
+// Helper functions for batch calculations
+function calculateBatchTotal<T extends keyof OverviewLoanInstalment>(
+  batch: OverviewLoanInstalment[],
+  property: T,
+): number {
+  return Calculator.sum(batch.map((item) => item[property] as number));
+}
+
+function calculateTotalInstalment(batch: OverviewLoanInstalment[]): number {
+  return Calculator.sum(
+    batch.map((item) => {
+      if (item.instalmentPayment) return item.totalInstalment;
+      if (item.earlyPayment) item.principalAmount;
+      return 0;
+    }),
+  );
+}
+
+function countEarlyPayments(batch: OverviewLoanInstalment[]): number {
+  return batch.filter((item) => item.earlyPayment).length;
+}
+
+// Date state management using a class for better encapsulation
+class DateStateManager {
+  private newPaymentDate: Date | null = null;
+  private isInstalmentDateUpdate = false;
+  private isEarlyPayDateUpdate = false;
+  private isFirstBaseIdentical = true;
+
+  updateForInstalment(paymentDate: Date, hasInstalmentPayment: boolean): void {
+    if (hasInstalmentPayment) {
+      this.isInstalmentDateUpdate = true;
+    }
+  }
+
+  updateForEarlyPayment(
+    previousHadInstalment: boolean,
+    hasEarlyPayment: boolean,
+  ): void {
+    if (previousHadInstalment && hasEarlyPayment) {
+      this.isEarlyPayDateUpdate = true;
+    }
+  }
+
+  calculateNewPaymentDate(
+    paymentDate: Date,
+    instalmentPayment: boolean,
+    earlyPayment: boolean,
+  ): Date | null {
+    if (!this.newPaymentDate && this.isInstalmentDateUpdate) {
+      this.newPaymentDate = paymentDate;
+      this.isInstalmentDateUpdate = false;
+      return this.newPaymentDate;
+    }
+
+    if (this.isEarlyPayDateUpdate && this.newPaymentDate && earlyPayment) {
+      this.newPaymentDate = JsDateUtils.addDays(this.newPaymentDate, 1);
+      this.isEarlyPayDateUpdate = false;
+      return this.newPaymentDate;
+    }
+
+    if (this.newPaymentDate && this.isInstalmentDateUpdate) {
+      this.newPaymentDate = this.adjustDateForInstalment();
+      this.isInstalmentDateUpdate = false;
+      return this.newPaymentDate;
+    }
+
+    if (this.newPaymentDate && !instalmentPayment && !earlyPayment) {
+      return this.handleRegularPayment();
+    }
+
+    return this.newPaymentDate;
+  }
+
+  private adjustDateForInstalment(): Date {
+    return JsDateUtils.addMonths(
+      JsDateUtils.addDays(this.newPaymentDate!, -1),
+      1,
+    );
+  }
+
+  private handleRegularPayment(): Date {
+    if (this.isFirstBaseIdentical) {
+      this.newPaymentDate = JsDateUtils.addDays(this.newPaymentDate!, -1);
+      this.isFirstBaseIdentical = false;
+    }
+
+    this.newPaymentDate = JsDateUtils.addMonths(this.newPaymentDate!, 1);
+    return this.newPaymentDate;
+  }
+
+  reset(): void {
+    this.newPaymentDate = null;
+    this.isInstalmentDateUpdate = false;
+    this.isEarlyPayDateUpdate = false;
+    this.isFirstBaseIdentical = true;
+  }
+}
+
+// Main mapping function
+function createOverviewBaseLoanInstalments(
   base: RepaymentSchedule,
   startDate: Date,
   selectedInstalmentPayments: number[],
   selectedEarlyPayments: number[],
-) {
-  let newPaymentDate: Date = null;
-  let updateInstalmentDate = false;
-  let updateEarlyPayDate = false;
+): OverviewLoanInstalment[] {
+  const dateManager = new DateStateManager();
+  const selectedInstalmentSet = new Set(selectedInstalmentPayments);
+  const selectedEarlyPaymentSet = new Set(selectedEarlyPayments);
 
-  return base.monthlyInstalments.map((r, i, arr) => {
-    const disabled = JsDateUtils.isSameOrBefore(r.paymentDate, startDate);
+  return base.monthlyInstalments.map((instalment, index, arr) => {
+    const previousInstalment = arr[index - 1];
 
-    const instalmentPayment = selectedInstalmentPayments.some(
-      (s) => s === r.instalmentId,
+    const isDisabled = JsDateUtils.isSameOrBefore(
+      instalment.paymentDate,
+      startDate,
     );
-    const earlyPayment = selectedEarlyPayments.some(
-      (s) => s === r.instalmentId,
+    const hasInstalmentPayment = selectedInstalmentSet.has(
+      instalment.instalmentId,
+    );
+    const hasEarlyPayment = selectedEarlyPaymentSet.has(
+      instalment.instalmentId,
+    );
+    const previousHadInstalment = previousInstalment
+      ? selectedInstalmentSet.has(previousInstalment?.instalmentId)
+      : false;
+
+    // Update date state
+    dateManager.updateForInstalment(
+      instalment.paymentDate,
+      hasInstalmentPayment,
+    );
+    dateManager.updateForEarlyPayment(previousHadInstalment, hasEarlyPayment);
+
+    const newPaymentDate = dateManager.calculateNewPaymentDate(
+      instalment.paymentDate,
+      hasInstalmentPayment,
+      hasEarlyPayment,
     );
 
-    if (instalmentPayment) {
-      updateInstalmentDate = true;
-    }
-
-    const prevInstalmentPayment = selectedInstalmentPayments.some(
-      (s) => s === arr[i - 1]?.instalmentId,
+    const paymentType = determinePaymentType(
+      isDisabled,
+      hasInstalmentPayment,
+      hasEarlyPayment,
     );
-    if (prevInstalmentPayment && earlyPayment) {
-      updateEarlyPayDate = true;
-    }
 
-    if (!JsDateUtils.isValidDate(newPaymentDate) && updateInstalmentDate) {
-      newPaymentDate = r.paymentDate;
-      updateInstalmentDate = false;
-    } else if (updateEarlyPayDate && newPaymentDate && earlyPayment) {
-      newPaymentDate = JsDateUtils.addDays(newPaymentDate, 1);
-      updateEarlyPayDate = false;
-    } else if (
-      JsDateUtils.isValidDate(newPaymentDate) &&
-      updateInstalmentDate
-    ) {
-      newPaymentDate = JsDateUtils.addMonths(
-        JsDateUtils.addDays(newPaymentDate, -1),
-        1,
-      );
-      updateInstalmentDate = false;
-    }
     return {
-      instalmentId: r.instalmentId,
-      paymentDate: r.paymentDate,
+      instalmentId: instalment.instalmentId,
+      paymentDate: instalment.paymentDate,
       newPaymentDate,
-      interestAmount: r.interestAmount,
-      principalAmount: r.principalAmount,
-      administrationFee: r.administrationFee,
-      insuranceCost: r.insuranceCost,
-      managementFee: r.managementFee,
-      recalculatedInterest: r.recalculatedInterest,
-      totalInstalment: r.totalInstalment,
-      remainingBalance: r.remainingBalance,
-      instalmentPayment: !disabled && instalmentPayment,
-      earlyPayment: !disabled && earlyPayment,
-      disabled: disabled,
-      color: getColor(disabled, instalmentPayment, earlyPayment),
+      interestAmount: instalment.interestAmount,
+      principalAmount: instalment.principalAmount,
+      administrationFee: instalment.administrationFee,
+      insuranceCost: instalment.insuranceCost,
+      managementFee: instalment.managementFee,
+      recalculatedInterest: instalment.recalculatedInterest,
+      totalInstalment: instalment.totalInstalment,
+      remainingBalance: instalment.remainingBalance,
+      instalmentPayment: !isDisabled && hasInstalmentPayment,
+      earlyPayment: !isDisabled && hasEarlyPayment,
+      disabled: isDisabled,
+      color: getRowColor(paymentType),
       totalRow: false,
-    } as OverviewLoanInstalment;
+    };
   });
 }
 
-function getColor(
-  disabled: boolean,
-  instalmentPayment: boolean,
-  earlyPayment: boolean,
-): string {
-  if (disabled) return Colors.GRAY_200;
-  if (instalmentPayment) return Colors.BLUE_200;
-  if (earlyPayment) return Colors.GREEN_200;
-
-  return 'white';
+// Payment type determination
+function determinePaymentType(
+  isDisabled: boolean,
+  hasInstalmentPayment: boolean,
+  hasEarlyPayment: boolean,
+): keyof typeof PAYMENT_TYPES {
+  if (isDisabled) return 'DISABLED';
+  if (hasInstalmentPayment) return 'INSTALMENT';
+  if (hasEarlyPayment) return 'EARLY';
+  return 'NONE';
 }
+
+// Color mapping with pattern
+function getRowColor(paymentType: keyof typeof PAYMENT_TYPES): string {
+  const colorMap: Record<keyof typeof PAYMENT_TYPES, string> = {
+    DISABLED: Colors.GRAY_200,
+    INSTALMENT: Colors.BLUE_200,
+    EARLY: Colors.GREEN_200,
+    NONE: 'white',
+  };
+
+  return colorMap[paymentType] || 'white';
+}
+
+// // Export for testing if needed
+// export const internalFunctions = {
+//   calculateBatchTotal,
+//   calculateTotalInstalment,
+//   countEarlyPayments,
+//   determinePaymentType,
+//   getRowColor,
+// };
