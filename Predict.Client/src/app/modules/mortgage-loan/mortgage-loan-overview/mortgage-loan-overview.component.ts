@@ -84,14 +84,39 @@ export class MortgageLoanOverviewComponent {
     this.showOnlyTotalRow.set(checked);
   }
 
+  monthlyAmount = signal<number>(null);
+  payments = signal<number>(null);
+
   onMonthlyAmountChange(monthlyAmount: number) {
+    this.monthlyAmount.set(monthlyAmount);
+
     this.store
       .select(fromMortgageLoan.getSelectedRepaymentSchedule)
       .pipe(first())
       .subscribe((schedule) => {
         const [instalmentPayments, earlyPayments] = mapInstalementSimulation(
           schedule,
-          monthlyAmount,
+          { monthlyAmount: this.monthlyAmount(), payments: this.payments() },
+        );
+        this.store.dispatch(
+          MortgageLoanActions.simulateInstalmentPaymentsChanged({
+            selectedInstalmentPayments: instalmentPayments,
+            selectedEarlyPayments: earlyPayments,
+          }),
+        );
+      });
+  }
+
+  onPaymentsChange(payments: number) {
+    this.payments.set(payments);
+
+    this.store
+      .select(fromMortgageLoan.getSelectedRepaymentSchedule)
+      .pipe(first())
+      .subscribe((schedule) => {
+        const [instalmentPayments, earlyPayments] = mapInstalementSimulation(
+          schedule,
+          { monthlyAmount: this.monthlyAmount(), payments: this.payments() },
         );
         this.store.dispatch(
           MortgageLoanActions.simulateInstalmentPaymentsChanged({

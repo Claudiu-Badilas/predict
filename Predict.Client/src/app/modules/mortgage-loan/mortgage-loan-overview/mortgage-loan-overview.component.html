@@ -46,8 +46,16 @@
       <app-numeric-input
         id="targetAmount"
         [label]="'Monthly Amount'"
-        [value]="0"
+        [value]="null"
         (valueChange)="onMonthlyAmountChange($event)"
+      />
+    </div>
+    <div class="space">
+      <app-numeric-input
+        id="targetAmount"
+        [label]="'Months'"
+        [value]="null"
+        (valueChange)="onPaymentsChange($event)"
       />
     </div>
   </ng-container>

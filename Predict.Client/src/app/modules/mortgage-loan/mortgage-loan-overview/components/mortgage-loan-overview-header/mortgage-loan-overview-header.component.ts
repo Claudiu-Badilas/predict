@@ -17,6 +17,12 @@ import { OverviewLoanInstalment } from '../../models/overview-mortgage-loan.mode
 export class MortgageLoanOverviewHeaderComponent {
   overviewLoanInstalments = input.required<OverviewLoanInstalment[]>();
 
+  payments = computed(() =>
+    this.overviewLoanInstalments().filter(
+      (r) => r.instalmentPayment || r.earlyPayment,
+    ),
+  );
+
   instalmentPayments = computed(() =>
     this.overviewLoanInstalments().filter((r) => r.instalmentPayment),
   );
@@ -90,7 +96,7 @@ export class MortgageLoanOverviewHeaderComponent {
           } as CardSection,
           {
             label: 'Sold Restant',
-            value: this.overviewLoanInstalments()?.at(-1)?.remainingBalance,
+            value: this.payments()?.at(-1)?.remainingBalance,
             default: '0.00',
             color: 'green',
           } as CardSection,
