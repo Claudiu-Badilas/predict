@@ -1,0 +1,344 @@
+:host {
+  display: block;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  align-items: center;
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.4rem;
+  }
+
+  .blue {
+    background: #538bfc;
+  }
+  .green {
+    background: #7fcf9a;
+  }
+  .pink {
+    background: #f2a0b6;
+  }
+}
+
+.table-wrapper {
+  border: 1px solid #e2e6ee;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 1400px; /* Increased minimum width to accommodate new columns */
+
+  th,
+  td {
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid #eeeeee;
+    vertical-align: middle;
+  }
+
+  th {
+    background: #fafbff;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e6ee;
+    padding: 0.9rem 0.5rem;
+  }
+}
+
+/* Column widths for consistent alignment */
+.col-rata {
+  width: 70px;
+}
+.col-anticipat {
+  width: 70px;
+}
+.col-number {
+  width: 50px;
+}
+.col-date {
+  width: 110px;
+}
+.col-credit {
+  width: 100px;
+}
+.col-interest {
+  width: 100px;
+}
+.col-admin-fee {
+  width: 120px;
+}
+.col-insurance {
+  width: 120px;
+}
+.col-management-fee {
+  width: 120px;
+}
+.col-recalculated {
+  width: 120px;
+}
+.col-total {
+  width: 100px;
+}
+.col-restant {
+  width: 100px;
+}
+.col-actions {
+  width: 60px;
+}
+
+/* Hide columns when toggled off */
+.hidden {
+  display: none;
+}
+
+/* Menu cell styling */
+.menu-cell {
+  position: relative;
+}
+.burger-btn {
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-right: 4px;
+  color: #666;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+.burger-btn:hover {
+  background-color: #f0f0f0;
+}
+.column-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 180px;
+  border-radius: 4px;
+}
+.column-menu label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 5px 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  user-select: none;
+}
+.column-menu input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Merged Group Header + Subtotal Row */
+.group-header-subtotal-row {
+  background: linear-gradient(to right, #f8fafc, #f1f5f9);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: none;
+
+  &:hover {
+    background: linear-gradient(to right, #f1f5f9, #e2e8f0);
+  }
+
+  .group-title-cell {
+    padding: 1rem 0.75rem;
+    text-align: left;
+
+    .chevron {
+      margin-right: 8px;
+      font-size: 12px;
+      display: inline-block;
+      width: 20px;
+      text-align: center;
+      color: #666666;
+    }
+
+    strong {
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .count {
+      color: #666666;
+      font-weight: normal;
+      font-size: 0.85rem;
+      background: #e8ecf5;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+  }
+
+  /* Subtotal number cells styling */
+  .subtotal-credit,
+  .subtotal-interest,
+  .subtotal-admin-fee,
+  .subtotal-insurance,
+  .subtotal-management-fee,
+  .subtotal-recalculated,
+  .subtotal-total,
+  .subtotal-restant {
+    background: transparent;
+    border: none;
+    padding: 1rem 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .subtotal-total {
+    color: #0f766e;
+    font-weight: 700;
+  }
+}
+
+/* Data row styling - keep borders only for data rows */
+tbody tr:not(.group-header-subtotal-row) {
+  border-bottom: 1px solid #f1f5f9;
+
+  &:hover {
+    background-color: #f8fafc;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Blue row styling with hex colors */
+.blue {
+  background-color: #f0f7ff;
+  border-left: 3px solid #538bfc;
+
+  &:hover {
+    background-color: #e8f0ff;
+  }
+
+  .col-total {
+    color: #1e40af;
+    font-weight: 600;
+  }
+}
+
+/* Green row styling with hex colors */
+.green {
+  background-color: #f0fdf4;
+  border-left: 3px solid #7fcf9a;
+
+  &:hover {
+    background-color: #e9f8ef;
+  }
+
+  .col-total {
+    color: #166534;
+    font-weight: 600;
+  }
+}
+
+/* Pink row styling with hex colors */
+.pink {
+  background-color: #fef2f6;
+  border-left: 3px solid #f2a0b6;
+
+  &:hover {
+    background-color: #fde3ea;
+  }
+
+  .col-total {
+    color: #9d174d;
+    font-weight: 600;
+  }
+}
+
+/* Input styling */
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  margin: 0;
+  vertical-align: middle;
+  accent-color: #0d9488;
+}
+
+/* Text alignment helpers */
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.muted {
+  color: #777777;
+  font-size: 0.8rem;
+}
+
+.help {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f4f6fb;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #444444;
+}
+
+/* Remove borders for cleaner look */
+table tbody {
+  border: none;
+}
+
+/* Add subtle separator between groups */
+.group-header-subtotal-row:not(:first-child) {
+  border-top: 1px solid #f1f5f9;
+}
+
+/* When group is expanded, add subtle bottom border */
+.group-header-subtotal-row.expanded-group {
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 2px;
+}
+
+/* Ensure all number cells are right-aligned */
+.col-credit,
+.col-interest,
+.col-admin-fee,
+.col-insurance,
+.col-management-fee,
+.col-recalculated,
+.col-total,
+.col-restant,
+.subtotal-credit,
+.subtotal-interest,
+.subtotal-admin-fee,
+.subtotal-insurance,
+.subtotal-management-fee,
+.subtotal-recalculated,
+.subtotal-total,
+.subtotal-restant {
+  text-align: right;
+}
