@@ -56,7 +56,7 @@ export class InstallmentTableComponent {
       label: 'Rată Dobândă Recalculată',
       visible: false,
     },
-    { key: 'restantAmount', label: 'Solt restant', visible: false },
+    { key: 'restantAmount', label: 'Solt restant', visible: true },
   ];
 
   groups: Group[] = [

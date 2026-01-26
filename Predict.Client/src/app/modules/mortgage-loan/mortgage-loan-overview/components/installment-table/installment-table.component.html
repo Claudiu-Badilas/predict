@@ -1,5 +1,4 @@
 <div class="table-wrapper">
-  <!-- Main Table -->
   <table>
     <thead>
       <tr>
@@ -35,11 +34,12 @@
           class="col-restant"
           [class.hidden]="!isColumnVisible('restantAmount')"
         >
-          Solt restant
+          Sold restant
         </th>
         <th class="col-actions text-right">
           <div class="menu-cell" #menuContainer>
             <button class="burger-btn" (click)="toggleMenu($event)">⋮</button>
+
             @if (isMenuOpen) {
               <div class="column-menu" #menuDropdown>
                 @for (col of columns; track col.key) {
@@ -62,10 +62,13 @@
     </thead>
 
     <tbody>
-      <!-- Group Rows -->
       <ng-container *ngFor="let group of groups; trackBy: trackById">
-        <!-- Merged Group Header + Subtotal Row -->
-        <tr class="group-header-subtotal-row" (click)="toggleGroup(group)">
+        <!-- Group Header + Subtotal -->
+        <tr
+          class="group-header-subtotal-row"
+          [class.expanded-group]="group.expanded"
+          (click)="toggleGroup(group)"
+        >
           <td colspan="3" class="group-title-cell">
             <div class="d-flex align-items-center justify-content-between">
               <div class="d-flex align-items-center">
@@ -75,50 +78,60 @@
               <span class="count">{{ group.rows.length }} rate</span>
             </div>
           </td>
+
           <td>2026-02-17</td>
+
           <td class="bold subtotal-credit">
             {{ getSubtotal(group).credit | numberFormat }}
           </td>
+
           <td class="bold subtotal-interest">
             {{ getSubtotal(group).interest | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-admin-fee"
             [class.hidden]="!isColumnVisible('adminFee')"
           >
             {{ getSubtotal(group).adminFee | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-insurance"
             [class.hidden]="!isColumnVisible('insuranceCost')"
           >
             {{ getSubtotal(group).insurance | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-management-fee"
             [class.hidden]="!isColumnVisible('managementFee')"
           >
             {{ getSubtotal(group).managementFee | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-recalculated"
             [class.hidden]="!isColumnVisible('recalculatedInterest')"
           >
             {{ getSubtotal(group).recalculatedInterest | numberFormat }}
           </td>
+
           <td class="bold subtotal-total">
             {{ getSubtotal(group).total | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-restant"
             [class.hidden]="!isColumnVisible('restantAmount')"
           >
             {{ getSubtotal(group).restant | numberFormat }}
           </td>
+
           <td class="col-actions"></td>
         </tr>
 
-        <!-- Group Data Rows -->
+        <!-- Group Rows -->
         <ng-container *ngIf="group.expanded">
           <tr
             *ngFor="let row of group.rows; trackBy: trackById"
@@ -133,50 +146,61 @@
                 (change)="toggleRow(row)"
               />
             </td>
+
             <td class="col-anticipat">
               <input type="checkbox" [checked]="row.rataAnticipat" />
             </td>
+
             <td class="col-number">{{ row.number }}</td>
             <td class="col-date">{{ row.paymentDate }}</td>
+
             <td class="col-credit">
               {{ row.creditRate | numberFormat }}
             </td>
+
             <td class="col-interest">
               {{ row.interestRate | numberFormat }}
             </td>
+
             <td
               class="col-admin-fee"
               [class.hidden]="!isColumnVisible('adminFee')"
             >
               {{ row.adminFee | numberFormat }}
             </td>
+
             <td
               class="col-insurance"
               [class.hidden]="!isColumnVisible('insuranceCost')"
             >
               {{ row.insuranceCost | numberFormat }}
             </td>
+
             <td
               class="col-management-fee"
               [class.hidden]="!isColumnVisible('managementFee')"
             >
               {{ row.managementFee | numberFormat }}
             </td>
+
             <td
               class="col-recalculated"
               [class.hidden]="!isColumnVisible('recalculatedInterest')"
             >
               {{ row.recalculatedInterest | numberFormat }}
             </td>
+
             <td class="col-total bold">
               {{ row.totalRate | numberFormat }}
             </td>
+
             <td
               class="col-restant"
               [class.hidden]="!isColumnVisible('restantAmount')"
             >
               {{ row.restantAmount | numberFormat }}
             </td>
+
             <td class="col-actions"></td>
           </tr>
         </ng-container>
