@@ -7,16 +7,10 @@ import {
 } from '@ngrx/store';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/actions/mortgage-loan.actions';
 import * as MortgageLoanDetailedActions from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/actions/mortgage-loan-detailed.actions';
-import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
-import { BaseMortgageLoan } from '../mortgage-loan-detailed/utils/base-mortgage-loan.utils';
-import { MortgageInterestProgressChartUtils } from '../mortgage-loan-detailed/utils/mortgage-interest-progress.chart.util';
-import { MortgageLoanAmountChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-amount.chart.util';
-import { MortgageLoanPaymentsChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-payments.chart.util';
-import { MortgageLoanProgressChartUtils } from '../mortgage-loan-detailed/utils/mortgage-loan-progress.chart.util';
 import { OverviewRepaymentSchedule } from '../mortgage-loan-overview/models/overview-mortgage-loan.model';
+import { InstalmentSimulationTrendChartUtils } from '../mortgage-loan-overview/utils/instalment-simulation.chart.utils';
 import { mapBaseRepaymentScheduleToOverview } from '../mortgage-loan-overview/utils/overview-mortgage-loan.utils';
 import { RepaymentSchedule } from './../models/mortgage.model';
-import { InstalmentSimulationTrendChartUtils } from '../mortgage-loan-overview/utils/instalment-simulation.chart.utils';
 
 interface OverviewMortgageLoanState {
   repaymentSchedules: OverviewRepaymentSchedule[];
@@ -133,7 +127,7 @@ export function reducer(state: MortgageLoanState, action: Action) {
   return mortgageReducer(state, action);
 }
 
-const getMortgageLoanState =
+export const getMortgageLoanState =
   createFeatureSelector<MortgageLoanState>('MortgageLoanState');
 
 export const getRepaymentSchedules = createSelector(
@@ -210,63 +204,4 @@ export const getSelectedRepaymentScheduleOverview = createSelector(
 export const getInstalmentSimulationTrendChart = createSelector(
   getSelectedRepaymentScheduleOverview,
   InstalmentSimulationTrendChartUtils.getChart,
-);
-
-//################
-// DETAILED
-//################
-
-export const getDetailedMortgageLoanState = createSelector(
-  getMortgageLoanState,
-  (state) => state.detiled,
-);
-
-export const getDetailedSelectedRepaymentScheduleName = createSelector(
-  getDetailedMortgageLoanState,
-  (detailed) => detailed.selectedRepaymentScheduleName,
-);
-
-export const getDetailedSelectedRepaymentSchedule = createSelector(
-  getRepaymentSchedules,
-  getDetailedSelectedRepaymentScheduleName,
-  (repaymentSchedules, selectedRepaymentScheduleName) =>
-    repaymentSchedules.find((r) => r.name === selectedRepaymentScheduleName),
-);
-
-export const getDetailedRepaymentSchedules = createSelector(
-  getRepaymentSchedules,
-  getDetailedSelectedRepaymentSchedule,
-  (repaymentSchedules, selectedRepaymentSchedule) =>
-    repaymentSchedules.filter(
-      (r) =>
-        !selectedRepaymentSchedule ||
-        JsDateUtils.isSameOrBefore(r.date, selectedRepaymentSchedule.date),
-    ),
-);
-
-export const getUpdatedBaseRepaymentScheduleBasedOnLatestStates =
-  createSelector(
-    getBaseRepaymentSchedule,
-    getDetailedRepaymentSchedules,
-    BaseMortgageLoan.getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
-  );
-
-export const getMortgageLoanProgressChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
-  MortgageLoanProgressChartUtils.getChart,
-);
-
-export const getMortgageInterestProgressChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
-  MortgageInterestProgressChartUtils.getChart,
-);
-
-export const getMortgageLoanAmountChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
-  MortgageLoanAmountChartUtils.getChart,
-);
-
-export const getMortgageLoanPaymentsChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
-  MortgageLoanPaymentsChartUtils.getChart,
 );
