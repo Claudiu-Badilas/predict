@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import * as fromMortgageLoanDetailed from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/selectors/mortgage-loan-detailed.selectors';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
@@ -14,19 +15,19 @@ import { Colors } from 'src/app/shared/styles/colors';
 })
 export class MortgageLoanDetailedBodyComponent {
   mortgageLoanProgressChart$ = this.store.select(
-    fromMortgageLoan.getMortgageLoanProgressChart,
+    fromMortgageLoanDetailed.getMortgageLoanProgressChart,
   );
   mortgageInterestProgressChart$ = this.store.select(
-    fromMortgageLoan.getMortgageInterestProgressChart,
+    fromMortgageLoanDetailed.getMortgageInterestProgressChart,
   );
   mortgageLoanAmountChart$ = this.store.select(
-    fromMortgageLoan.getMortgageLoanAmountChart,
+    fromMortgageLoanDetailed.getMortgageLoanAmountChart,
   );
   mortgageLoanPaymentsChart$ = this.store.select(
-    fromMortgageLoan.getMortgageLoanPaymentsChart,
+    fromMortgageLoanDetailed.getMortgageLoanPaymentsChart,
   );
   updatedBaseRepaymentScheduleBasedOnLatestStates$ = this.store.select(
-    fromMortgageLoan.getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
+    fromMortgageLoanDetailed.getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
   );
 
   constructor(private store: Store<fromMortgageLoan.MortgageLoanState>) {}

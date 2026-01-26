@@ -1,7 +1,7 @@
 import { Instalment, RepaymentSchedule } from '../../models/mortgage.model';
 import { BaseLoanInstalment } from '../models/base-loan-rate.model';
 
-export namespace BaseMortgageLoan {
+export namespace BaseMortgageLoanUtils {
   export function getUpdatedBaseRepaymentScheduleBasedOnLatestStates(
     base: RepaymentSchedule,
     repaymentSchedules: RepaymentSchedule[],
