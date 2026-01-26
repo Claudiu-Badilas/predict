@@ -2,10 +2,10 @@
   <table>
     <thead>
       <tr>
-        <th class="col-rata">Rata</th>
-        <th class="col-anticipat">Anticipat</th>
-        <th class="col-number">#</th>
-        <th class="col-date">Data Plății</th>
+        <th class="text-center col-rata">Rata</th>
+        <th class="text-center col-anticipat">Anticipat</th>
+        <th class="text-center col-number">#</th>
+        <th class="text-center col-date">Data Plății</th>
         <th class="col-credit">Rată Credit</th>
         <th class="col-interest">Rată Dobândă</th>
         <th class="col-admin-fee" [class.hidden]="!isColumnVisible('adminFee')">
@@ -27,7 +27,7 @@
           class="col-recalculated"
           [class.hidden]="!isColumnVisible('recalculatedInterest')"
         >
-          Rată Dobândă Recalculată
+          Dobândă Recalculată
         </th>
         <th class="col-total">Total Rată</th>
         <th
@@ -79,7 +79,7 @@
             </div>
           </td>
 
-          <td>2026-02-17</td>
+          <td class="text-center">2026-02-17</td>
 
           <td class="bold subtotal-credit">
             {{ getSubtotal(group).credit | numberFormat }}
@@ -139,7 +139,7 @@
             [class.green]="row.type === 'additional'"
             [class.pink]="row.type === 'subtotal'"
           >
-            <td class="col-rata">
+            <td class="text-center col-rata">
               <input
                 type="checkbox"
                 [checked]="row.selected"
@@ -147,12 +147,12 @@
               />
             </td>
 
-            <td class="col-anticipat">
+            <td class="text-center col-anticipat">
               <input type="checkbox" [checked]="row.rataAnticipat" />
             </td>
 
-            <td class="col-number">{{ row.number }}</td>
-            <td class="col-date">{{ row.paymentDate }}</td>
+            <td class="text-center col-number">{{ row.number }}</td>
+            <td class="text-center col-date">{{ row.paymentDate }}</td>
 
             <td class="col-credit">
               {{ row.creditRate | numberFormat }}
