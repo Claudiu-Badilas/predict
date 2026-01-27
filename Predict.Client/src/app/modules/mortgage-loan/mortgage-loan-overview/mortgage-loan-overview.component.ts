@@ -39,6 +39,9 @@ export class MortgageLoanOverviewComponent {
   selectedRepaymentSchedule$ = this.store.select(
     fromMortgageLoanOverview.getSelectedRepaymentScheduleOverview,
   );
+  monthlyInstalmentBatches = toSignal(
+    this.store.select(fromMortgageLoanOverview.getMonthlyInstalmentBatches),
+  );
   selectedRepaymentScheduleName$ = this.store.select(
     fromMortgageLoanOverview.getSelectedRepaymentScheduleName,
   );

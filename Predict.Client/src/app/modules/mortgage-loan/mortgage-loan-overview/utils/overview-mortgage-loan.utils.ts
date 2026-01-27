@@ -194,7 +194,7 @@ class DateStateManager {
   }
 }
 
-function createOverviewBaseLoanInstalments(
+export function createOverviewBaseLoanInstalments(
   base: RepaymentSchedule,
   startDate: Date,
   selectedInstalmentPayments: number[],
