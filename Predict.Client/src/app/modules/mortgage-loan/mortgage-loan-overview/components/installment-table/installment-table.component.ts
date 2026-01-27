@@ -309,8 +309,4 @@ export class InstallmentTableComponent {
       count: selected.length,
     };
   }
-
-  trackById(_: number, item: any) {
-    return item.id;
-  }
 }

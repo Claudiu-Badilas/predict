@@ -8,6 +8,7 @@
         <th class="text-center col-date">Data Plății</th>
         <th class="col-credit">Rată Credit</th>
         <th class="col-interest">Rată Dobândă</th>
+
         <th class="col-admin-fee" [class.hidden]="!isColumnVisible('adminFee')">
           Comision Administrare
         </th>
@@ -29,16 +30,20 @@
         >
           Dobândă Recalculată
         </th>
+
         <th class="col-total">Total Rată</th>
+
         <th
           class="col-restant"
           [class.hidden]="!isColumnVisible('restantAmount')"
         >
           Sold restant
         </th>
+
         <th class="col-actions text-right">
           <div class="menu-cell" #menuContainer>
             <button class="burger-btn" (click)="toggleMenu($event)">⋮</button>
+
             @if (isMenuOpen) {
               <div class="column-menu" #menuDropdown>
                 @for (col of columns; track col.key) {
@@ -61,7 +66,7 @@
     </thead>
 
     <tbody>
-      <ng-container *ngFor="let group of groups; trackBy: trackById">
+      @for (group of groups; track group.id) {
         <!-- Group Header + Subtotal -->
         <tr
           class="group-header-subtotal-row"
@@ -71,112 +76,146 @@
           <td colspan="3" class="group-title-cell bold">
             <div class="d-flex align-items-center justify-content-between">
               <div class="d-flex align-items-center">
-                <span class="chevron">{{ group.expanded ? "▼" : "▶" }}</span>
+                <span class="chevron">
+                  {{ group.expanded ? "▼" : "▶" }}
+                </span>
                 17 {{ group.title }}
               </div>
               <span class="count">{{ group.rows.length }} rate</span>
             </div>
           </td>
+
           <td></td>
+
           <td class="bold subtotal-credit">
             {{ getSubtotal(group).credit | numberFormat }}
           </td>
           <td class="bold subtotal-interest">
             {{ getSubtotal(group).interest | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-admin-fee"
             [class.hidden]="!isColumnVisible('adminFee')"
           >
             {{ getSubtotal(group).adminFee | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-insurance"
             [class.hidden]="!isColumnVisible('insuranceCost')"
           >
             {{ getSubtotal(group).insurance | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-management-fee"
             [class.hidden]="!isColumnVisible('managementFee')"
           >
             {{ getSubtotal(group).managementFee | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-recalculated"
             [class.hidden]="!isColumnVisible('recalculatedInterest')"
           >
             {{ getSubtotal(group).recalculatedInterest | numberFormat }}
           </td>
+
           <td class="bold subtotal-total">
             {{ getSubtotal(group).total | numberFormat }}
           </td>
+
           <td
             class="bold subtotal-restant"
             [class.hidden]="!isColumnVisible('restantAmount')"
           >
             {{ getSubtotal(group).restant | numberFormat }}
           </td>
+
           <td class="col-actions"></td>
         </tr>
 
         <!-- Group Rows -->
-        <ng-container *ngIf="group.expanded">
-          <tr
-            *ngFor="let row of group.rows; trackBy: trackById"
-            [class.blue]="row.type === 'primary'"
-            [class.green]="row.type === 'additional'"
-            [class.pink]="row.type === 'subtotal'"
-          >
-            <td class="text-center col-rata">
-              <input
-                type="checkbox"
-                [checked]="row.selected"
-                (change)="toggleRow(row)"
-              />
-            </td>
-            <td class="text-center col-anticipat">
-              <input type="checkbox" [checked]="row.rataAnticipat" />
-            </td>
-            <td class="text-center col-number">{{ row.number }}</td>
-            <td class="text-center col-date">{{ row.paymentDate }}</td>
-            <td class="col-credit">{{ row.creditRate | numberFormat }}</td>
-            <td class="col-interest">{{ row.interestRate | numberFormat }}</td>
-            <td
-              class="col-admin-fee"
-              [class.hidden]="!isColumnVisible('adminFee')"
+        @if (group.expanded) {
+          @for (row of group.rows; track row.id) {
+            <tr
+              [class.blue]="row.type === 'primary'"
+              [class.green]="row.type === 'additional'"
+              [class.pink]="row.type === 'subtotal'"
             >
-              {{ row.adminFee | numberFormat }}
-            </td>
-            <td
-              class="col-insurance"
-              [class.hidden]="!isColumnVisible('insuranceCost')"
-            >
-              {{ row.insuranceCost | numberFormat }}
-            </td>
-            <td
-              class="col-management-fee"
-              [class.hidden]="!isColumnVisible('managementFee')"
-            >
-              {{ row.managementFee | numberFormat }}
-            </td>
-            <td
-              class="col-recalculated"
-              [class.hidden]="!isColumnVisible('recalculatedInterest')"
-            >
-              {{ row.recalculatedInterest | numberFormat }}
-            </td>
-            <td class="col-total bold">{{ row.totalRate | numberFormat }}</td>
-            <td
-              class="col-restant"
-              [class.hidden]="!isColumnVisible('restantAmount')"
-            >
-              {{ row.restantAmount | numberFormat }}
-            </td>
-            <td class="col-actions"></td>
-          </tr>
-        </ng-container>
-      </ng-container>
+              <td class="text-center col-rata">
+                <input
+                  type="checkbox"
+                  [checked]="row.selected"
+                  (change)="toggleRow(row)"
+                />
+              </td>
+
+              <td class="text-center col-anticipat">
+                <input type="checkbox" [checked]="row.rataAnticipat" />
+              </td>
+
+              <td class="text-center col-number">
+                {{ row.number }}
+              </td>
+
+              <td class="text-center col-date">
+                {{ row.paymentDate }}
+              </td>
+
+              <td class="col-credit">
+                {{ row.creditRate | numberFormat }}
+              </td>
+
+              <td class="col-interest">
+                {{ row.interestRate | numberFormat }}
+              </td>
+
+              <td
+                class="col-admin-fee"
+                [class.hidden]="!isColumnVisible('adminFee')"
+              >
+                {{ row.adminFee | numberFormat }}
+              </td>
+
+              <td
+                class="col-insurance"
+                [class.hidden]="!isColumnVisible('insuranceCost')"
+              >
+                {{ row.insuranceCost | numberFormat }}
+              </td>
+
+              <td
+                class="col-management-fee"
+                [class.hidden]="!isColumnVisible('managementFee')"
+              >
+                {{ row.managementFee | numberFormat }}
+              </td>
+
+              <td
+                class="col-recalculated"
+                [class.hidden]="!isColumnVisible('recalculatedInterest')"
+              >
+                {{ row.recalculatedInterest | numberFormat }}
+              </td>
+
+              <td class="col-total bold">
+                {{ row.totalRate | numberFormat }}
+              </td>
+
+              <td
+                class="col-restant"
+                [class.hidden]="!isColumnVisible('restantAmount')"
+              >
+                {{ row.restantAmount | numberFormat }}
+              </td>
+
+              <td class="col-actions"></td>
+            </tr>
+          }
+        }
+      }
     </tbody>
   </table>
 </div>
