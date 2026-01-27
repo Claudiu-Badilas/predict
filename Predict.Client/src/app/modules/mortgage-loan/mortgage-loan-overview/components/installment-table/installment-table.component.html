@@ -9,7 +9,10 @@
         <th class="col-credit">Rată Credit</th>
         <th class="col-interest">Rată Dobândă</th>
 
-        <th class="col-admin-fee" [class.hidden]="!isColumnVisible('adminFee')">
+        <th
+          class="col-admin-fee"
+          [class.hidden]="!isColumnVisible('administrationFee')"
+        >
           Comision Administrare
         </th>
         <th
@@ -35,7 +38,7 @@
 
         <th
           class="col-restant"
-          [class.hidden]="!isColumnVisible('restantAmount')"
+          [class.hidden]="!isColumnVisible('remainingBalance')"
         >
           Sold restant
         </th>
@@ -45,7 +48,7 @@
             <button class="burger-btn" (click)="toggleMenu($event)">⋮</button>
 
             @if (isMenuOpen) {
-              <div class="column-menu" #menuDropdown>
+              <div class="column-menu">
                 @for (col of columns; track col.key) {
                   <div>
                     <label (click)="$event.stopPropagation()">
@@ -66,117 +69,119 @@
     </thead>
 
     <tbody>
-      @for (group of groups; track group.id) {
+      @for (group of groups(); track group.id) {
         <!-- Group Header + Subtotal -->
-        <tr
-          class="group-header-subtotal-row"
-          [class.expanded-group]="group.expanded"
-          (click)="toggleGroup(group)"
-        >
-          <td colspan="3" class="group-title-cell bold">
-            <div class="d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center">
-                <span class="chevron">
-                  {{ group.expanded ? "▼" : "▶" }}
-                </span>
-                17 {{ group.title }}
+        @if (group.instalments.length > 1) {
+          <tr
+            class="group-header-subtotal-row blue"
+            [class.expanded-group]="group.expanded"
+            (click)="toggleGroup(group)"
+          >
+            <td colspan="3" class="group-title-cell bold">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <span class="chevron">
+                    {{ group.expanded ? "▼" : "▶" }}
+                  </span>
+                  {{ group.title }}
+                </div>
+                <span class="count"> {{ group.instalments.length }} rate </span>
               </div>
-              <span class="count">{{ group.rows.length }} rate</span>
-            </div>
-          </td>
+            </td>
 
-          <td></td>
+            <td></td>
 
-          <td class="bold subtotal-credit">
-            {{ getSubtotal(group).credit | numberFormat }}
-          </td>
-          <td class="bold subtotal-interest">
-            {{ getSubtotal(group).interest | numberFormat }}
-          </td>
+            <td class="bold subtotal-credit">
+              {{ getSubtotal(group).principal | numberFormat }}
+            </td>
+            <td class="bold subtotal-interest">
+              {{ getSubtotal(group).interest | numberFormat }}
+            </td>
 
-          <td
-            class="bold subtotal-admin-fee"
-            [class.hidden]="!isColumnVisible('adminFee')"
-          >
-            {{ getSubtotal(group).adminFee | numberFormat }}
-          </td>
+            <td
+              class="bold subtotal-admin-fee"
+              [class.hidden]="!isColumnVisible('administrationFee')"
+            >
+              {{ getSubtotal(group).administrationFee | numberFormat }}
+            </td>
 
-          <td
-            class="bold subtotal-insurance"
-            [class.hidden]="!isColumnVisible('insuranceCost')"
-          >
-            {{ getSubtotal(group).insurance | numberFormat }}
-          </td>
+            <td
+              class="bold subtotal-insurance"
+              [class.hidden]="!isColumnVisible('insuranceCost')"
+            >
+              {{ getSubtotal(group).insurance | numberFormat }}
+            </td>
 
-          <td
-            class="bold subtotal-management-fee"
-            [class.hidden]="!isColumnVisible('managementFee')"
-          >
-            {{ getSubtotal(group).managementFee | numberFormat }}
-          </td>
+            <td
+              class="bold subtotal-management-fee"
+              [class.hidden]="!isColumnVisible('managementFee')"
+            >
+              {{ getSubtotal(group).managementFee | numberFormat }}
+            </td>
 
-          <td
-            class="bold subtotal-recalculated"
-            [class.hidden]="!isColumnVisible('recalculatedInterest')"
-          >
-            {{ getSubtotal(group).recalculatedInterest | numberFormat }}
-          </td>
+            <td
+              class="bold subtotal-recalculated"
+              [class.hidden]="!isColumnVisible('recalculatedInterest')"
+            >
+              {{ getSubtotal(group).recalculatedInterest | numberFormat }}
+            </td>
 
-          <td class="bold subtotal-total">
-            {{ getSubtotal(group).total | numberFormat }}
-          </td>
+            <td class="bold subtotal-total">
+              {{ getSubtotal(group).total | numberFormat }}
+            </td>
 
-          <td
-            class="bold subtotal-restant"
-            [class.hidden]="!isColumnVisible('restantAmount')"
-          >
-            {{ getSubtotal(group).restant | numberFormat }}
-          </td>
+            <td
+              class="bold subtotal-restant"
+              [class.hidden]="!isColumnVisible('remainingBalance')"
+            >
+              {{ getSubtotal(group).restant | numberFormat }}
+            </td>
 
-          <td class="col-actions"></td>
-        </tr>
+            <td class="col-actions"></td>
+          </tr>
+        }
 
         <!-- Group Rows -->
         @if (group.expanded) {
-          @for (row of group.rows; track row.id) {
+          @for (row of group.instalments; track row.instalmentId) {
             <tr
-              [class.blue]="row.type === 'primary'"
-              [class.green]="row.type === 'additional'"
-              [class.pink]="row.type === 'subtotal'"
+              [class.pink]="row.instalmentPayment"
+              [class.green]="row.earlyPayment"
             >
               <td class="text-center col-rata">
                 <input
                   type="checkbox"
-                  [checked]="row.selected"
+                  [checked]="row.instalmentPayment"
                   (change)="toggleRow(row)"
+                  [disabled]="row.disabled"
                 />
               </td>
 
               <td class="text-center col-anticipat">
-                <input type="checkbox" [checked]="row.rataAnticipat" />
+                <input type="checkbox" [checked]="row.earlyPayment" disabled />
               </td>
 
               <td class="text-center col-number">
-                {{ row.number }}
+                {{ row.instalmentId }}
               </td>
 
               <td class="text-center col-date">
-                {{ row.paymentDate }}
+                {{ row.paymentDate | date: "dd.MM.yyyy" }}
               </td>
 
               <td class="col-credit">
-                {{ row.creditRate | numberFormat }}
+                {{ row.principalAmount | numberFormat }}
               </td>
 
               <td class="col-interest">
-                {{ row.interestRate | numberFormat }}
+                {{ row.interestAmount | numberFormat }}
               </td>
 
               <td
                 class="col-admin-fee"
-                [class.hidden]="!isColumnVisible('adminFee')"
+                [class.hidden]="!isColumnVisible('administrationFee')"
               >
-                {{ row.adminFee | numberFormat }}
+                {{ row.administrationFee | numberFormat }}
               </td>
 
               <td
@@ -201,14 +206,14 @@
               </td>
 
               <td class="col-total bold">
-                {{ row.totalRate | numberFormat }}
+                {{ row.totalInstalment | numberFormat }}
               </td>
 
               <td
                 class="col-restant"
-                [class.hidden]="!isColumnVisible('restantAmount')"
+                [class.hidden]="!isColumnVisible('remainingBalance')"
               >
-                {{ row.restantAmount | numberFormat }}
+                {{ row.remainingBalance | numberFormat }}
               </td>
 
               <td class="col-actions"></td>
