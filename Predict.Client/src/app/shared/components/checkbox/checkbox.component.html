@@ -1,11 +1,18 @@
-<label class="checkbox-container">
-  @if (label) {
+@if (label) {
+  <label class="checkbox-container">
     <span>{{ label }}</span>
-  }
+    <input
+      type="checkbox"
+      [(ngModel)]="checked"
+      [disabled]="disabled"
+      (change)="onCheckboxChange()"
+    />
+  </label>
+} @else {
   <input
     type="checkbox"
     [(ngModel)]="checked"
     [disabled]="disabled"
     (change)="onCheckboxChange()"
   />
-</label>
+}

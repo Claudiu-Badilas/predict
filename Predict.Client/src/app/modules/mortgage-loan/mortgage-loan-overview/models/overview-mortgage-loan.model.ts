@@ -23,23 +23,16 @@ export type OverviewRepaymentSchedule = {
 };
 
 export class MonthlyInstalmentManager {
-  public compleated: boolean = false;
+  public completed: boolean = false;
   public expanded: boolean = true;
   public id: number;
-  public title: string;
+  public title: Date;
 
-  constructor(
-    public instalments: OverviewLoanInstalment[],
-    { compleated = false, expanded = true } = {},
-  ) {
-    this.compleated = compleated;
-    this.expanded = expanded;
+  constructor(public instalments: OverviewLoanInstalment[]) {
+    if (!instalments.length) return;
+
+    this.completed = instalments.some((i) => i.instalmentPayment);
     this.id = instalments[0]?.instalmentId ?? 0;
-    this.title = instalments[0]?.newPaymentDate
-      ? instalments[0].newPaymentDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-        })
-      : 'Unknown Date';
+    this.title = instalments[0].newPaymentDate ?? null;
   }
 }

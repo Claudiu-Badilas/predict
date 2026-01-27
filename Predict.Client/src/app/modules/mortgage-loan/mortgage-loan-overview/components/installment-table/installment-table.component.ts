@@ -7,50 +7,37 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/actions/mortgage-loan.actions';
+import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
+import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import {
   MonthlyInstalmentManager,
   OverviewLoanInstalment,
 } from '../../models/overview-mortgage-loan.model';
-
-interface ColumnConfig {
-  key:
-    | 'administrationFee'
-    | 'insuranceCost'
-    | 'managementFee'
-    | 'recalculatedInterest'
-    | 'remainingBalance';
-  label: string;
-  visible: boolean;
-}
+import {
+  ColumnConfig,
+  DEFAULT_COLUMN_CONFIGS,
+} from './models/column-config.model';
 
 @Component({
   selector: 'app-installment-table',
-  imports: [CommonModule, FormsModule, NumberFormatPipe],
+  imports: [CommonModule, FormsModule, NumberFormatPipe, CheckboxComponent],
   templateUrl: './installment-table.component.html',
   styleUrls: ['./installment-table.component.scss'],
 })
 export class InstallmentTableComponent {
+  showOnlyTotalRow = input.required<boolean>();
   groups = input<MonthlyInstalmentManager[]>([]);
   @ViewChild('menuContainer') menuContainer!: ElementRef;
 
-  isMenuOpen = false;
+  constructor(
+    private readonly store: Store<fromMortgageLoan.MortgageLoanState>,
+  ) {}
 
-  columns: ColumnConfig[] = [
-    {
-      key: 'administrationFee',
-      label: 'Comision Administrare',
-      visible: false,
-    },
-    { key: 'insuranceCost', label: 'Costuri Asigurare', visible: false },
-    { key: 'managementFee', label: 'Comision Management', visible: false },
-    {
-      key: 'recalculatedInterest',
-      label: 'Rată Dobândă Recalculată',
-      visible: false,
-    },
-    { key: 'remainingBalance', label: 'Sold restant', visible: true },
-  ];
+  isMenuOpen = false;
+  columns: ColumnConfig[] = DEFAULT_COLUMN_CONFIGS;
 
   toggleGroup(group: MonthlyInstalmentManager) {
     group.expanded = !group.expanded;
@@ -107,5 +94,21 @@ export class InstallmentTableComponent {
       restant: selected.reduce((s, r) => s + sum(r.remainingBalance), 0),
       count: selected.length,
     };
+  }
+
+  onSelectInstalmentPayment(rata: OverviewLoanInstalment) {
+    this.store.dispatch(
+      MortgageLoanActions.selectedInstalmentPaymentChanged({
+        values: [rata.instalmentId],
+      }),
+    );
+  }
+
+  onSelectEarlyPayment(rata: OverviewLoanInstalment) {
+    this.store.dispatch(
+      MortgageLoanActions.selectedEarlyPaymentChanged({
+        values: [rata.instalmentId],
+      }),
+    );
   }
 }

@@ -6,46 +6,46 @@
         <th class="text-center col-anticipat">Anticipat</th>
         <th class="text-center col-number">#</th>
         <th class="text-center col-date">Data Plății</th>
-        <th class="col-credit">Rată Credit</th>
-        <th class="col-interest">Rată Dobândă</th>
+        <th class="text-center col-credit">Rată Credit</th>
+        <th class="text-center col-interest">Rată Dobândă</th>
 
         <th
-          class="col-admin-fee"
+          class="text-center col-admin-fee"
           [class.hidden]="!isColumnVisible('administrationFee')"
         >
           Comision Administrare
         </th>
         <th
-          class="col-insurance"
+          class="text-center col-insurance"
           [class.hidden]="!isColumnVisible('insuranceCost')"
         >
           Costuri Asigurare
         </th>
         <th
-          class="col-management-fee"
+          class="text-center col-management-fee"
           [class.hidden]="!isColumnVisible('managementFee')"
         >
           Comision Management
         </th>
         <th
-          class="col-recalculated"
+          class="text-center col-recalculated"
           [class.hidden]="!isColumnVisible('recalculatedInterest')"
         >
           Dobândă Recalculată
         </th>
 
-        <th class="col-total">Total Rată</th>
+        <th class="text-center col-total">Total Rată</th>
 
         <th
-          class="col-restant"
+          class="text-center col-restant"
           [class.hidden]="!isColumnVisible('remainingBalance')"
         >
           Sold restant
         </th>
 
-        <th class="col-actions text-right">
+        <th class="text-right col-actions">
           <div class="menu-cell" #menuContainer>
-            <button class="burger-btn" (click)="toggleMenu($event)">⋮</button>
+            <button class="burger-btn" (click)="toggleMenu($event)">☰</button>
 
             @if (isMenuOpen) {
               <div class="column-menu">
@@ -71,7 +71,7 @@
     <tbody>
       @for (group of groups(); track group.id) {
         <!-- Group Header + Subtotal -->
-        @if (group.instalments.length > 1) {
+        @if (group.completed) {
           <tr
             class="group-header-subtotal-row blue"
             [class.expanded-group]="group.expanded"
@@ -83,7 +83,7 @@
                   <span class="chevron">
                     {{ group.expanded ? "▼" : "▶" }}
                   </span>
-                  {{ group.title }}
+                  {{ group.title | date: "dd MMM yyyy" }}
                 </div>
                 <span class="count"> {{ group.instalments.length }} rate </span>
               </div>
@@ -91,74 +91,79 @@
 
             <td></td>
 
-            <td class="bold subtotal-credit">
+            <td class="bold text-center subtotal-credit">
               {{ getSubtotal(group).principal | numberFormat }}
             </td>
-            <td class="bold subtotal-interest">
+            <td class="bold text-center subtotal-interest">
               {{ getSubtotal(group).interest | numberFormat }}
             </td>
 
             <td
-              class="bold subtotal-admin-fee"
+              class="bold text-center subtotal-admin-fee"
               [class.hidden]="!isColumnVisible('administrationFee')"
             >
               {{ getSubtotal(group).administrationFee | numberFormat }}
             </td>
 
             <td
-              class="bold subtotal-insurance"
+              class="bold text-center subtotal-insurance"
               [class.hidden]="!isColumnVisible('insuranceCost')"
             >
               {{ getSubtotal(group).insurance | numberFormat }}
             </td>
 
             <td
-              class="bold subtotal-management-fee"
+              class="bold text-center subtotal-management-fee"
               [class.hidden]="!isColumnVisible('managementFee')"
             >
               {{ getSubtotal(group).managementFee | numberFormat }}
             </td>
 
             <td
-              class="bold subtotal-recalculated"
+              class="bold text-center subtotal-recalculated"
               [class.hidden]="!isColumnVisible('recalculatedInterest')"
             >
               {{ getSubtotal(group).recalculatedInterest | numberFormat }}
             </td>
 
-            <td class="bold subtotal-total">
+            <td class="bold text-center subtotal-total">
               {{ getSubtotal(group).total | numberFormat }}
             </td>
 
             <td
-              class="bold subtotal-restant"
+              class="bold text-center subtotal-restant"
               [class.hidden]="!isColumnVisible('remainingBalance')"
             >
               {{ getSubtotal(group).restant | numberFormat }}
             </td>
 
-            <td class="col-actions"></td>
+            <td class="text-right col-actions"></td>
           </tr>
         }
 
         <!-- Group Rows -->
-        @if (group.expanded) {
+        @if (showOnlyTotalRow() ? false : group.expanded) {
           @for (row of group.instalments; track row.instalmentId) {
             <tr
               [class.pink]="row.instalmentPayment"
               [class.green]="row.earlyPayment"
             >
               <td class="text-center col-rata">
-                <input
-                  type="checkbox"
+                <app-checkbox
+                  [id]="row.instalmentId"
                   [checked]="row.instalmentPayment"
-                  (change)="toggleRow(row)"
-                  [disabled]="row.disabled"
+                  [disabled]="row.disabled || row.earlyPayment"
+                  (valueChange)="onSelectInstalmentPayment(row)"
                 />
               </td>
 
               <td class="text-center col-anticipat">
-                <input type="checkbox" [checked]="row.earlyPayment" disabled />
+                <app-checkbox
+                  [id]="row.instalmentId"
+                  [checked]="row.earlyPayment"
+                  [disabled]="row.disabled || row.instalmentPayment"
+                  (valueChange)="onSelectEarlyPayment(row)"
+                />
               </td>
 
               <td class="text-center col-number">
@@ -169,54 +174,54 @@
                 {{ row.paymentDate | date: "dd.MM.yyyy" }}
               </td>
 
-              <td class="col-credit">
+              <td class="text-center col-credit">
                 {{ row.principalAmount | numberFormat }}
               </td>
 
-              <td class="col-interest">
+              <td class="text-center col-interest">
                 {{ row.interestAmount | numberFormat }}
               </td>
 
               <td
-                class="col-admin-fee"
+                class="text-center col-admin-fee"
                 [class.hidden]="!isColumnVisible('administrationFee')"
               >
                 {{ row.administrationFee | numberFormat }}
               </td>
 
               <td
-                class="col-insurance"
+                class="text-center col-insurance"
                 [class.hidden]="!isColumnVisible('insuranceCost')"
               >
                 {{ row.insuranceCost | numberFormat }}
               </td>
 
               <td
-                class="col-management-fee"
+                class="text-center col-management-fee"
                 [class.hidden]="!isColumnVisible('managementFee')"
               >
                 {{ row.managementFee | numberFormat }}
               </td>
 
               <td
-                class="col-recalculated"
+                class="text-center col-recalculated"
                 [class.hidden]="!isColumnVisible('recalculatedInterest')"
               >
                 {{ row.recalculatedInterest | numberFormat }}
               </td>
 
-              <td class="col-total bold">
+              <td class="text-center col-total bold">
                 {{ row.totalInstalment | numberFormat }}
               </td>
 
               <td
-                class="col-restant"
+                class="text-center col-restant"
                 [class.hidden]="!isColumnVisible('remainingBalance')"
               >
                 {{ row.remainingBalance | numberFormat }}
               </td>
 
-              <td class="col-actions"></td>
+              <td class="text-right col-actions"></td>
             </tr>
           }
         }
