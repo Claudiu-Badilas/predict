@@ -39,6 +39,7 @@ table {
     font-weight: 600;
     border-bottom: 2px solid #e2e6ee;
     padding: 0.9rem 0.25rem;
+    font-size: 17px;
   }
 }
 
@@ -62,7 +63,6 @@ thead {
 /* ============================= */
 .col-rata {
   width: 70px;
-  text-align: center;
 }
 .col-anticipat {
   width: 70px;
@@ -150,11 +150,6 @@ thead {
       padding: 5px 0;
       white-space: nowrap;
       font-size: 0.85rem;
-    }
-
-    input[type="checkbox"] {
-      margin: 0;
-      cursor: pointer;
     }
   }
 }
@@ -258,48 +253,8 @@ tbody {
 }
 
 /* ============================= */
-/* Inputs */
-/* ============================= */
-input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  margin: 0;
-  vertical-align: middle;
-  accent-color: #0d9488;
-}
-
-/* ============================= */
 /* Helpers */
 /* ============================= */
-.text-right {
-  text-align: right;
-}
-.text-left {
-  text-align: left;
-}
-.text-center {
-  text-align: center;
-}
 .bold {
   font-weight: 700;
-}
-
-.col-credit,
-.col-interest,
-.col-admin-fee,
-.col-insurance,
-.col-management-fee,
-.col-recalculated,
-.col-total,
-.col-restant,
-.subtotal-credit,
-.subtotal-interest,
-.subtotal-admin-fee,
-.subtotal-insurance,
-.subtotal-management-fee,
-.subtotal-recalculated,
-.subtotal-total,
-.subtotal-restant {
-  text-align: center;
 }

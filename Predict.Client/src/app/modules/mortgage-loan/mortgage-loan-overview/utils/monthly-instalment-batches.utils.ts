@@ -40,18 +40,12 @@ function createMonthlyInstalmentBatches(
 
     if (current.instalmentPayment || current.earlyPayment) {
       if (next && !next.earlyPayment) {
-        const batch = new MonthlyInstalmentBatch(tempBatch, {
-          compleated: true,
-        });
-        batches.push(batch);
+        batches.push(new MonthlyInstalmentBatch(tempBatch));
         tempBatch = [];
       }
     }
     if ((!current.instalmentPayment && !current.earlyPayment) || !next) {
-      const batch = new MonthlyInstalmentBatch(tempBatch, {
-        compleated: false,
-      });
-      batches.push(batch);
+      batches.push(new MonthlyInstalmentBatch(tempBatch));
       tempBatch = [];
     }
   });
