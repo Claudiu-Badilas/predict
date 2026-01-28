@@ -15,18 +15,21 @@
         >
           Comision Administrare
         </th>
+
         <th
           class="text-center col-insurance"
           [class.hidden]="!isColumnVisible('insuranceCost')"
         >
           Costuri Asigurare
         </th>
+
         <th
           class="text-center col-management-fee"
           [class.hidden]="!isColumnVisible('managementFee')"
         >
           Comision Management
         </th>
+
         <th
           class="text-center col-recalculated"
           [class.hidden]="!isColumnVisible('recalculatedInterest')"
@@ -70,7 +73,7 @@
 
     <tbody>
       @for (group of groups(); track group.id) {
-        <!-- Group Header + Subtotal -->
+        <!-- Group Header -->
         @if (group.completed) {
           <tr
             class="group-header-subtotal-row blue"
@@ -91,36 +94,37 @@
 
             <td></td>
 
-            <td class="bold text-center subtotal-credit">
+            <td class="bold text-center">
               {{ getSubtotal(group).principal | numberFormat }}
             </td>
-            <td class="bold text-center subtotal-interest">
+
+            <td class="bold text-center">
               {{ getSubtotal(group).interest | numberFormat }}
             </td>
 
             <td
-              class="bold text-center subtotal-admin-fee"
+              class="bold text-center"
               [class.hidden]="!isColumnVisible('administrationFee')"
             >
               {{ getSubtotal(group).administrationFee | numberFormat }}
             </td>
 
             <td
-              class="bold text-center subtotal-insurance"
+              class="bold text-center"
               [class.hidden]="!isColumnVisible('insuranceCost')"
             >
               {{ getSubtotal(group).insurance | numberFormat }}
             </td>
 
             <td
-              class="bold text-center subtotal-management-fee"
+              class="bold text-center"
               [class.hidden]="!isColumnVisible('managementFee')"
             >
               {{ getSubtotal(group).managementFee | numberFormat }}
             </td>
 
             <td
-              class="bold text-center subtotal-recalculated"
+              class="bold text-center"
               [class.hidden]="!isColumnVisible('recalculatedInterest')"
             >
               {{ getSubtotal(group).recalculatedInterest | numberFormat }}
@@ -131,24 +135,24 @@
             </td>
 
             <td
-              class="bold text-center subtotal-restant"
+              class="bold text-center"
               [class.hidden]="!isColumnVisible('remainingBalance')"
             >
               {{ getSubtotal(group).restant | numberFormat }}
             </td>
 
-            <td class="text-right col-actions"></td>
+            <td></td>
           </tr>
         }
 
-        <!-- Group Rows -->
+        <!-- Rows -->
         @if (showOnlyTotalRow() ? false : group.expanded) {
           @for (row of group.instalments; track row.instalmentId) {
             <tr
               [class.pink]="row.instalmentPayment"
               [class.green]="row.earlyPayment"
             >
-              <td class="text-center col-rata">
+              <td class="text-center">
                 <app-checkbox
                   [id]="row.instalmentId"
                   [checked]="row.instalmentPayment"
@@ -157,7 +161,7 @@
                 />
               </td>
 
-              <td class="text-center col-anticipat">
+              <td class="text-center">
                 <app-checkbox
                   [id]="row.instalmentId"
                   [checked]="row.earlyPayment"
@@ -166,62 +170,57 @@
                 />
               </td>
 
-              <td class="text-center col-number">
-                {{ row.instalmentId }}
-              </td>
-
-              <td class="text-center col-date">
+              <td class="text-center">{{ row.instalmentId }}</td>
+              <td class="text-center">
                 {{ row.paymentDate | date: "dd.MM.yyyy" }}
               </td>
-
-              <td class="text-center col-credit">
+              <td class="text-center">
                 {{ row.principalAmount | numberFormat }}
               </td>
-
-              <td class="text-center col-interest">
+              <td class="text-center">
                 {{ row.interestAmount | numberFormat }}
               </td>
 
               <td
-                class="text-center col-admin-fee"
+                class="text-center"
                 [class.hidden]="!isColumnVisible('administrationFee')"
               >
                 {{ row.administrationFee | numberFormat }}
               </td>
 
               <td
-                class="text-center col-insurance"
+                class="text-center"
                 [class.hidden]="!isColumnVisible('insuranceCost')"
               >
                 {{ row.insuranceCost | numberFormat }}
               </td>
 
               <td
-                class="text-center col-management-fee"
+                class="text-center"
                 [class.hidden]="!isColumnVisible('managementFee')"
               >
                 {{ row.managementFee | numberFormat }}
               </td>
 
               <td
-                class="text-center col-recalculated"
+                class="text-center"
                 [class.hidden]="!isColumnVisible('recalculatedInterest')"
               >
                 {{ row.recalculatedInterest | numberFormat }}
               </td>
 
-              <td class="text-center col-total bold">
+              <td class="text-center bold">
                 {{ row.totalInstalment | numberFormat }}
               </td>
 
               <td
-                class="text-center col-restant"
+                class="text-center"
                 [class.hidden]="!isColumnVisible('remainingBalance')"
               >
                 {{ row.remainingBalance | numberFormat }}
               </td>
 
-              <td class="text-right col-actions"></td>
+              <td></td>
             </tr>
           }
         }

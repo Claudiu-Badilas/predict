@@ -4,16 +4,14 @@
 }
 
 /* ============================= */
-/* Wrapper + Scroll Behavior */
+/* Wrapper */
 /* ============================= */
 .table-wrapper {
   border: 1px solid #e2e6ee;
   border-radius: 7.5px;
   background: white;
   height: calc(100vh - 225px);
-  overflow-y: auto;
-  overflow-x: auto;
-  position: relative;
+  overflow: auto;
 }
 
 /* ============================= */
@@ -21,89 +19,53 @@
 /* ============================= */
 table {
   width: 100%;
-  min-width: 1400px;
+  table-layout: auto;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.9rem;
+}
 
-  th,
-  td {
-    padding: 0.75rem 0.25rem;
-    text-align: left;
-    border-bottom: 1px solid #eeeeee;
-    vertical-align: middle;
-  }
+th,
+td {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid #eeeeee;
+  vertical-align: middle;
+  white-space: nowrap;
+  min-width: 80px;
+}
 
-  th {
-    background: white;
-    font-weight: 600;
-    border-bottom: 2px solid #e2e6ee;
-    padding: 0.9rem 0.25rem;
-    font-size: 17px;
-  }
+th {
+  background: white;
+  font-weight: 600;
+  border-bottom: 2px solid #e2e6ee;
+  font-size: 17px;
 }
 
 /* ============================= */
 /* Sticky Header */
 /* ============================= */
-thead {
-  position: relative;
+thead th {
+  position: sticky;
+  top: 0;
   z-index: 25;
-
-  th {
-    position: sticky;
-    top: 0;
-    z-index: 25;
-    background: white;
-  }
+  background: white;
 }
 
 /* ============================= */
-/* Column Widths */
+/* Helpers */
 /* ============================= */
-.col-rata {
-  width: 70px;
-}
-.col-anticipat {
-  width: 70px;
-}
-.col-number {
-  width: 50px;
-}
-.col-date {
-  width: 110px;
-}
-.col-credit {
-  width: 100px;
-}
-.col-interest {
-  width: 100px;
-}
-.col-admin-fee {
-  width: 120px;
-}
-.col-insurance {
-  width: 120px;
-}
-.col-management-fee {
-  width: 120px;
-}
-.col-recalculated {
-  width: 120px;
-}
-.col-total {
-  width: 100px;
-}
-.col-restant {
-  width: 100px;
-}
-.col-actions {
-  width: 0px;
+.text-center {
+  text-align: center;
 }
 
-/* ============================= */
-/* Visibility */
-/* ============================= */
+.text-right {
+  text-align: right;
+}
+
+.bold {
+  font-weight: 700;
+}
+
 .hidden {
   display: none;
 }
@@ -116,17 +78,14 @@ thead {
   z-index: 50;
 
   .burger-btn {
-    font-size: 1rem;
     background: transparent;
     border: none;
     cursor: pointer;
-    margin-right: 4px;
-    color: #666;
     padding: 4px 8px;
     border-radius: 4px;
 
     &:hover {
-      background-color: #f0f0f0;
+      background: #f0f0f0;
     }
   }
 
@@ -134,7 +93,7 @@ thead {
     position: absolute;
     top: 100%;
     right: 0;
-    background: #ffffff;
+    background: #fff;
     border: 1px solid #dee2e6;
     padding: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -147,23 +106,17 @@ thead {
       align-items: center;
       gap: 8px;
       cursor: pointer;
-      padding: 5px 0;
-      white-space: nowrap;
       font-size: 0.85rem;
+      padding: 4px 0;
     }
   }
 }
 
 /* ============================= */
-/* Group Header Row */
+/* Group Header */
 /* ============================= */
 .group-header-subtotal-row {
   cursor: pointer;
-  border: none;
-
-  &.expanded-group {
-    border-bottom: 1px solid #e2e8f0;
-  }
 
   .group-title-cell {
     font-size: 22px;
@@ -171,7 +124,6 @@ thead {
 
     .chevron {
       margin-right: 8px;
-      font-size: 15px;
       width: 20px;
       text-align: center;
       color: #666;
@@ -179,7 +131,7 @@ thead {
 
     .count {
       color: #357b38;
-      font-size: 0.85rem;
+      font-size: 13px;
       background: #d4ecd5;
       padding: 2px 10px;
       border-radius: 30px;
@@ -189,72 +141,36 @@ thead {
 }
 
 /* ============================= */
-/* Subtotals */
-/* ============================= */
-.subtotal-credit,
-.subtotal-interest,
-.subtotal-admin-fee,
-.subtotal-insurance,
-.subtotal-management-fee,
-.subtotal-recalculated,
-.subtotal-total,
-.subtotal-restant {
-  background: transparent;
-  border: none;
-  padding: 1rem 0.5rem;
-  font-size: 1rem;
-}
-
-.subtotal-total {
-  color: #0f766e;
-  font-weight: 700;
-}
-
-/* ============================= */
-/* Data Rows */
-/* ============================= */
-tbody {
-  tr:not(.group-header-subtotal-row) {
-    border-bottom: 1px solid #f1f5f9;
-  }
-}
-
-/* ============================= */
-/* Row Colors Using `color` and `totalRow` */
+/* Row Colors */
 /* ============================= */
 .blue {
-  background-color: #f0f7ff;
+  background: #e6f1ff;
+
   td:first-child {
-    border-left: 7px solid #538bfc;
-  }
-  &:hover {
-    background-color: #e8f0ff;
+    border-left: 7px solid #4a7df0;
   }
 }
 
 .green {
-  background-color: #f0fdf4;
+  background: #f0fdf4;
+
   td:first-child {
     border-left: 7px solid #7fcf9a;
-  }
-  &:hover {
-    background-color: #e9f8ef;
   }
 }
 
 .pink {
-  background-color: #fef2f6;
+  background: #fef2f6;
+
   td:first-child {
     border-left: 7px solid #f2a0b6;
-  }
-  &:hover {
-    background-color: #fde3ea;
   }
 }
 
 /* ============================= */
-/* Helpers */
+/* Totals */
 /* ============================= */
-.bold {
+.subtotal-total {
+  color: #0f766e;
   font-weight: 700;
 }
