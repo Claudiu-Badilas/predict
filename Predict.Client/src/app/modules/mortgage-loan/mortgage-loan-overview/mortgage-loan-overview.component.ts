@@ -17,6 +17,7 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
 import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
+import { InstallmentTableComponent } from './components/installment-table/installment-table.component';
 
 @Component({
   selector: 'app-mortgage-loan-overview',
@@ -31,6 +32,7 @@ import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
     CheckboxComponent,
     NumericInputComponent,
     HighchartWrapperComponent,
+    InstallmentTableComponent,
   ],
   templateUrl: './mortgage-loan-overview.component.html',
   styleUrls: ['./mortgage-loan-overview.component.scss'],
