@@ -2,17 +2,25 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'numberFormat' })
 export class NumberFormatPipe implements PipeTransform {
-  transform(value: number | string, digits: number = 2): string {
-    return NumberFormatPipe.numberFormat(value, digits);
+  transform(
+    value: number | string,
+    defaultValue: string = null,
+    digits: number = 2,
+  ): string {
+    return NumberFormatPipe.numberFormat(value, defaultValue, digits);
   }
 
-  static numberFormat(value: number | string, digits: number = 2) {
+  static numberFormat(
+    value: number | string,
+    defaultValue: string = null,
+    digits: number = 2,
+  ) {
     if (value === null || value === undefined || value === '') {
-      return '';
+      return defaultValue ?? null;
     }
 
     const num = Number(value);
-    if (isNaN(num)) return '-';
+    if (isNaN(num)) return defaultValue ?? null;
 
     const fixed = num.toFixed(digits);
 
