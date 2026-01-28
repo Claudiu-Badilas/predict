@@ -18,6 +18,7 @@ import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-lo
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
 import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
 import { InstallmentTableComponent } from './components/installment-table/installment-table.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-mortgage-loan-overview',
@@ -33,6 +34,7 @@ import { InstallmentTableComponent } from './components/installment-table/instal
     NumericInputComponent,
     HighchartWrapperComponent,
     InstallmentTableComponent,
+    HeaderComponent,
   ],
   templateUrl: './mortgage-loan-overview.component.html',
   styleUrls: ['./mortgage-loan-overview.component.scss'],
@@ -63,6 +65,7 @@ export class MortgageLoanOverviewComponent {
 
   showTotalRow = signal(true);
   showOnlyTotalRow = signal(false);
+  oldVersion = signal(true);
   monthlyAmount = signal<number>(3750);
   payments = signal<number>(1);
 
@@ -118,5 +121,9 @@ export class MortgageLoanOverviewComponent {
 
   onPaymentsChange(payments: number) {
     this.payments.set(payments);
+  }
+
+  onOldVersion(checked: boolean) {
+    this.oldVersion.set(checked);
   }
 }

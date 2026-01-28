@@ -7,10 +7,11 @@ import {
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { OverviewLoanInstalment } from '../../models/overview-mortgage-loan.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-mortgage-loan-overview-header',
-  imports: [HeaderCardComponent],
+  imports: [HeaderCardComponent, CommonModule, NumberFormatPipe],
   templateUrl: './mortgage-loan-overview-header.component.html',
   styleUrl: './mortgage-loan-overview-header.component.scss',
 })
