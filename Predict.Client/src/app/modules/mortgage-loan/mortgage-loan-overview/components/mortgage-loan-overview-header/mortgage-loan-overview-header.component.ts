@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, input, Signal } from '@angular/core';
 import { HeaderCardComponent } from 'src/app/shared/components/header-card/header-card.component';
 import {
@@ -7,11 +8,10 @@ import {
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { OverviewLoanInstalment } from '../../models/overview-mortgage-loan.model';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-mortgage-loan-overview-header',
-  imports: [HeaderCardComponent, CommonModule, NumberFormatPipe],
+  imports: [HeaderCardComponent, CommonModule],
   templateUrl: './mortgage-loan-overview-header.component.html',
   styleUrl: './mortgage-loan-overview-header.component.scss',
 })

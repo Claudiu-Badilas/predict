@@ -42,10 +42,19 @@
     <div class="card-body">
       <div class="summary-row">
         <div class="summary-section stat-item stat-item--teal">
-          <span class="stat-item__label">Costuri Economisite</span>
-          <span class="stat-item__value"
-            >{{ totalSavedInterest() | numberFormat: "0.00" }}
-          </span>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="stat-item__label">Costuri Economisite </span>
+            <span class="stat-item__label">Raport Rate </span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="stat-item__value"
+              >{{ totalSavedInterest() | numberFormat: "0.00" }}
+            </span>
+            <span class="stat-item__value">
+              {{ completedMontlyInstalments() | numberFormat: "0" : 0 }} /
+              {{ incompletedMontlyInstalments() | numberFormat: "0" : 0 }}
+            </span>
+          </div>
         </div>
 
         <div class="vertical-divider"></div>

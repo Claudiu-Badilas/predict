@@ -31,7 +31,7 @@ import { Calculator } from 'src/app/shared/utils/calculator.utils';
 })
 export class InstallmentTableComponent {
   showOnlyTotalRow = input.required<boolean>();
-  groups = input<MonthlyInstalmentManager[]>([]);
+  monthlyInstalmentGroups = input<MonthlyInstalmentManager[]>([]);
 
   @ViewChild('menuContainer') menuContainer!: ElementRef;
 

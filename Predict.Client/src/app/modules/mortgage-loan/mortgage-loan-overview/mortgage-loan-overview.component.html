@@ -64,14 +64,12 @@
         />
       } @else {
         <app-header
-          [overviewLoanInstalments]="
-            selectedRepaymentSchedule?.overviewLoanInstalments ?? []
-          "
+          [monthlyInstalmentGroups]="monthlyInstalmentBatches()"
         ></app-header>
         <app-installment-table
           class="mt-3"
           [showOnlyTotalRow]="showOnlyTotalRow()"
-          [groups]="monthlyInstalmentBatches()"
+          [monthlyInstalmentGroups]="monthlyInstalmentBatches()"
         />
       }
     </div>
