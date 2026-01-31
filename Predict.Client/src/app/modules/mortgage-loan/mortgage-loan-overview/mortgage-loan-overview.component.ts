@@ -4,28 +4,25 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import * as MortgageLoanActions from 'src/app/modules/mortgage-loan/actions/mortgage-loan.actions';
-import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import * as fromMortgageLoanOverview from 'src/app/modules/mortgage-loan/mortgage-loan-overview/selectors/mortgage-loan-overview.selectors';
+import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { CheckboxComponent } from 'src/app/shared/components/checkbox/checkbox.component';
-import { DatePickerComponent } from 'src/app/shared/components/date-picker/date-picker.component';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
-import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
 import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
+import { HeaderComponent } from './components/header/header.component';
+import { InstallmentTableComponent } from './components/installment-table/installment-table.component';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
 import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
-import { InstallmentTableComponent } from './components/installment-table/installment-table.component';
-import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-mortgage-loan-overview',
   imports: [
     CommonModule,
     SideBarComponent,
-    DatePickerComponent,
     ToggleButtonComponent,
     DropdownSelectComponent,
     MortgageLoanOverviewHeaderComponent,
@@ -51,9 +48,6 @@ export class MortgageLoanOverviewComponent {
   dropDownSelectOptions$ = this.store
     .select(fromMortgageLoan.getRepaymentSchedules)
     .pipe(map((rs) => rs.map((r) => r.name)));
-  overviewStartDate$ = this.store.select(
-    fromMortgageLoanOverview.getOverviewStartDate,
-  );
 
   selectedRepaymentScheduleBase = toSignal(
     this.store.select(fromMortgageLoanOverview.getSelectedRepaymentSchedule),
@@ -82,9 +76,6 @@ export class MortgageLoanOverviewComponent {
     });
   }
 
-  minDate = new Date('2025-01-01');
-  maxDate = new Date('2055-12-01');
-
   onSelectionChange(module: string) {
     this.store.dispatch(
       NavigationAction.navigateTo({
@@ -97,10 +88,6 @@ export class MortgageLoanOverviewComponent {
     this.store.dispatch(
       MortgageLoanActions.selectedMortgageLoanChanged({ selected: value }),
     );
-  }
-
-  onSelectedDateChange(date: Date) {
-    this.store.dispatch(MortgageLoanActions.startDateChanged({ date }));
   }
 
   onShowTotalRow(checked: boolean) {
