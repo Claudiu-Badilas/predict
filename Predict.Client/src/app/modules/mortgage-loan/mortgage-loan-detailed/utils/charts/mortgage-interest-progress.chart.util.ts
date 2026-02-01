@@ -1,10 +1,12 @@
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { MathUtil } from 'src/app/shared/utils/math.utils';
-import { BaseLoanInstalment } from '../../models/base-loan-rate.model';
+import { HistocialInstalmentPayment } from '../../models/base-loan-rate.model';
 import { Colors } from 'src/app/shared/styles/colors';
 
 export namespace MortgageInterestProgressChartUtils {
-  export function getChart(rates: BaseLoanInstalment[]): Highcharts.Options {
+  export function getChart(
+    rates: HistocialInstalmentPayment[],
+  ): Highcharts.Options {
     if (!rates.length) return null;
 
     const paidInterestRates = rates.filter((r) => r.isNormalPayment);

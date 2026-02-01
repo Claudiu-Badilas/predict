@@ -1,4 +1,4 @@
-export type BaseLoanInstalment = {
+export type HistocialInstalmentPayment = {
   index: number;
   paymentDate: Date;
   principalAmount: number;
