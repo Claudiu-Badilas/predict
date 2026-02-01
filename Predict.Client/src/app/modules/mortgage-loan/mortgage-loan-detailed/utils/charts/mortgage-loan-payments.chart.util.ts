@@ -2,7 +2,7 @@ import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { Colors } from 'src/app/shared/styles/colors';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { ObjectUtil } from 'src/app/shared/utils/object.utils';
-import { BaseLoanInstalment } from '../models/base-loan-rate.model';
+import { BaseLoanInstalment } from '../../models/base-loan-rate.model';
 
 export namespace MortgageLoanPaymentsChartUtils {
   export function getChart(

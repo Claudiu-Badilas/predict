@@ -1,6 +1,6 @@
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { MathUtil } from 'src/app/shared/utils/math.utils';
-import { BaseLoanInstalment } from '../models/base-loan-rate.model';
+import { BaseLoanInstalment } from '../../models/base-loan-rate.model';
 import { Colors } from 'src/app/shared/styles/colors';
 
 export namespace MortgageInterestProgressChartUtils {

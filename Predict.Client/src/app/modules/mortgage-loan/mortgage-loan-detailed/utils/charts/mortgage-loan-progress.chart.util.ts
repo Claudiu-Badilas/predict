@@ -1,7 +1,7 @@
 import { Colors } from 'src/app/shared/styles/colors';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { MathUtil } from 'src/app/shared/utils/math.utils';
-import { BaseLoanInstalment } from '../models/base-loan-rate.model';
+import { BaseLoanInstalment } from '../../models/base-loan-rate.model';
 
 export namespace MortgageLoanProgressChartUtils {
   export function getChart(rates: BaseLoanInstalment[]): Highcharts.Options {

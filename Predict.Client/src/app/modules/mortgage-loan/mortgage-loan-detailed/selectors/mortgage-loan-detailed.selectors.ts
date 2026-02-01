@@ -2,10 +2,10 @@ import { createSelector } from '@ngrx/store';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import { BaseMortgageLoanUtils } from '../utils/base-mortgage-loan.utils';
-import { MortgageInterestProgressChartUtils } from '../utils/mortgage-interest-progress.chart.util';
-import { MortgageLoanAmountChartUtils } from '../utils/mortgage-loan-amount.chart.util';
-import { MortgageLoanPaymentsChartUtils } from '../utils/mortgage-loan-payments.chart.util';
-import { MortgageLoanProgressChartUtils } from '../utils/mortgage-loan-progress.chart.util';
+import { MortgageInterestProgressChartUtils } from '../utils/charts/mortgage-interest-progress.chart.util';
+import { MortgageLoanAmountChartUtils } from '../utils/charts/mortgage-loan-amount.chart.util';
+import { MortgageLoanPaymentsChartUtils } from '../utils/charts/mortgage-loan-payments.chart.util';
+import { MortgageLoanProgressChartUtils } from '../utils/charts/mortgage-loan-progress.chart.util';
 
 export const getDetailedMortgageLoanState = createSelector(
   fromMortgageLoan.getMortgageLoanState,
