@@ -51,7 +51,6 @@ export class MortgageLoanOverviewComponent {
 
   showTotalRow = signal(true);
   showOnlyTotalRow = signal(false);
-  oldVersion = signal(false);
   monthlyAmount = signal<number>(3750);
   payments = signal<number>(1);
 
@@ -100,9 +99,5 @@ export class MortgageLoanOverviewComponent {
 
   onPaymentsChange(payments: number) {
     this.payments.set(payments);
-  }
-
-  onOldVersion(checked: boolean) {
-    this.oldVersion.set(checked);
   }
 }
