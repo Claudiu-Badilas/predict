@@ -18,7 +18,7 @@
     <div class="space">
       <app-numeric-input
         id="targetAmount"
-        [label]="'Monthly Amount'"
+        [label]="'Monthly amount'"
         [value]="monthlyAmount()"
         (valueChange)="onMonthlyAmountChange($event)"
       />
@@ -33,7 +33,7 @@
     </div>
     <div class="space">
       <app-checkbox
-        [label]="'Toggle ONLY summary rows'"
+        [label]="'Select summary rows'"
         [id]="'total row'"
         [checked]="showOnlyTotalRow()"
         (valueChange)="onOnlyShowTotalRow($event)"
