@@ -6,6 +6,7 @@ import { MortgageLoanAmountChartUtils } from '../utils/charts/mortgage-loan-amou
 import { MortgageLoanPaymentsChartUtils } from '../utils/charts/mortgage-loan-payments.chart.util';
 import { MortgageLoanProgressChartUtils } from '../utils/charts/mortgage-loan-progress.chart.util';
 import { HistocialInstalmentPaymentsUtils } from '../utils/historial-instalment-payments.utils';
+import { HistocialInstalmentPaymentBatchesUtils } from '../utils/historial-instalment-payment-batches.utils';
 
 export const getDetailedMortgageLoanState = createSelector(
   fromMortgageLoan.getMortgageLoanState,
@@ -35,29 +36,33 @@ export const getDetailedRepaymentSchedules = createSelector(
     ),
 );
 
-export const getUpdatedBaseRepaymentScheduleBasedOnLatestStates =
-  createSelector(
-    fromMortgageLoan.getBaseRepaymentSchedule,
-    getDetailedRepaymentSchedules,
-    HistocialInstalmentPaymentsUtils.getHistocialInstalmentPayments,
-  );
+export const getHistocialInstalmentPayments = createSelector(
+  fromMortgageLoan.getBaseRepaymentSchedule,
+  getDetailedRepaymentSchedules,
+  HistocialInstalmentPaymentsUtils.getHistocialInstalmentPayments,
+);
+
+export const getHistocialInstalmentPaymentBatches = createSelector(
+  getHistocialInstalmentPayments,
+  HistocialInstalmentPaymentBatchesUtils.getHistocialInstalmentPaymentBatches,
+);
 
 export const getMortgageLoanProgressChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
+  getHistocialInstalmentPayments,
   MortgageLoanProgressChartUtils.getChart,
 );
 
 export const getMortgageInterestProgressChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
+  getHistocialInstalmentPayments,
   MortgageInterestProgressChartUtils.getChart,
 );
 
 export const getMortgageLoanAmountChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
+  getHistocialInstalmentPayments,
   MortgageLoanAmountChartUtils.getChart,
 );
 
 export const getMortgageLoanPaymentsChart = createSelector(
-  getUpdatedBaseRepaymentScheduleBasedOnLatestStates,
+  getHistocialInstalmentPayments,
   MortgageLoanPaymentsChartUtils.getChart,
 );
