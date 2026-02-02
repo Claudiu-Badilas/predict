@@ -45,7 +45,7 @@ export namespace MortgageLoanProgressChartUtils {
         panning: { enabled: true, type: 'xy' },
         panKey: 'shift',
       },
-      title: { text: 'Progres Plata Principal', align: 'left' },
+      title: { text: 'Progres Principal', align: 'left' },
       tooltip: {
         headerFormat: '',
         pointFormat: `
@@ -64,13 +64,13 @@ export namespace MortgageLoanProgressChartUtils {
           borderRadius: 5,
           data: [
             {
-              name: 'Principal Platiti',
+              name: 'Platit',
               y: MathUtil.round(paidPrincipalAmountPercent),
               amount: MathUtil.round(paidPrincipalAmount),
               color: Colors.TEAL_400,
             },
             {
-              name: 'Principal Neplatit',
+              name: 'Neplatit',
               y: MathUtil.round(unpaidPrincipalAmountPercent),
               amount: MathUtil.round(unpaidPrincipalAmountAmount),
               color: Colors.BS_DANGER,

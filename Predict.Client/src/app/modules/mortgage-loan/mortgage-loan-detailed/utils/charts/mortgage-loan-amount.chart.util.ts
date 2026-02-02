@@ -18,6 +18,9 @@ export namespace MortgageLoanAmountChartUtils {
     const paidInterest = Calculator.sum(
       paidInterestRates.map((r) => r.interestAmount),
     );
+    const paidInsurance = Calculator.sum(
+      paidInterestRates.map((r) => r.insuranceCost),
+    );
 
     const savedInterestRates = rates.filter((r) => r.earlyPayment);
     const savedInterest = Calculator.sum(
@@ -42,6 +45,7 @@ export namespace MortgageLoanAmountChartUtils {
           'Principal Platiti',
           'Principal Neplatit',
           'Dobanda Platita',
+          'Asigurare Platita',
           'Dobanda Salvata',
           'Dobanda Neplatita',
         ],
@@ -65,6 +69,7 @@ export namespace MortgageLoanAmountChartUtils {
             { y: MathUtil.round(paidLoan), color: Colors.TEAL_400 },
             { y: MathUtil.round(unpaidLoan), color: Colors.BS_DANGER },
             { y: MathUtil.round(paidInterest), color: Colors.BLUE_400 },
+            { y: MathUtil.round(paidInsurance), color: Colors.YELLOW_400 },
             { y: MathUtil.round(savedInterest), color: Colors.GREEN_400 },
             { y: MathUtil.round(unpaidInterest), color: Colors.BS_ORANGE },
           ],

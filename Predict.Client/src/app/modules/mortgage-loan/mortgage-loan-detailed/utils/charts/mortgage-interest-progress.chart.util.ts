@@ -13,6 +13,9 @@ export namespace MortgageInterestProgressChartUtils {
     const paidInterest = Calculator.sum(
       paidInterestRates.map((r) => r.interestAmount),
     );
+    const paidInsurance = Calculator.sum(
+      paidInterestRates.map((r) => r.insuranceCost),
+    );
 
     const savedInterestRates = rates.filter((r) => r.earlyPayment);
     const savedInterest = Calculator.sum(
@@ -33,6 +36,11 @@ export namespace MortgageInterestProgressChartUtils {
       paidInterest,
       totalUnpaidInterest,
     );
+    const paidInsurancePercent = MathUtil.percent(
+      paidInsurance,
+      totalUnpaidInterest,
+    );
+
     const savedInterestPercent = MathUtil.percent(
       savedInterest,
       totalUnpaidInterest,
@@ -49,7 +57,7 @@ export namespace MortgageInterestProgressChartUtils {
         panning: { enabled: true, type: 'xy' },
         panKey: 'shift',
       },
-      title: { text: 'Progres Plata Dobanda', align: 'left' },
+      title: { text: 'Progres Dobanda', align: 'left' },
       tooltip: {
         headerFormat: '',
         pointFormat:
@@ -67,19 +75,25 @@ export namespace MortgageInterestProgressChartUtils {
           borderRadius: 5,
           data: [
             {
-              name: 'Dobanda Platita',
+              name: 'Platita',
               y: MathUtil.round(paidInterestPercent),
               amount: MathUtil.round(paidInterest),
               color: Colors.BLUE_400,
             },
             {
-              name: 'Dobanda Salvata',
+              name: 'Asigurare',
+              y: MathUtil.round(paidInsurancePercent),
+              amount: MathUtil.round(paidInsurance),
+              color: Colors.YELLOW_400,
+            },
+            {
+              name: 'Salvata',
               y: MathUtil.round(savedInterestPercent),
               amount: MathUtil.round(savedInterest),
               color: Colors.GREEN_400,
             },
             {
-              name: 'Dobanda Neplatita',
+              name: 'Neplatita',
               y: MathUtil.round(unpaidInterestPercent),
               amount: MathUtil.round(unpaidInterest),
               color: Colors.BS_ORANGE,

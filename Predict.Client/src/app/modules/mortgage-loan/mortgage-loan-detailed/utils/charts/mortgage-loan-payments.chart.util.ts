@@ -39,6 +39,11 @@ export namespace MortgageLoanPaymentsChartUtils {
         groupedscheduledPaymentsByMonth[cat]?.map((i) => i.interestAmount),
       ),
     );
+    const scheduledPaymentsinsuranceCostData = categories.map((cat) =>
+      Calculator.sum(
+        groupedscheduledPaymentsByMonth[cat]?.map((i) => i.insuranceCost),
+      ),
+    );
     const scheduledPaymentsPrincipalData = categories.map((cat) =>
       Calculator.sum(
         groupedscheduledPaymentsByMonth[cat]?.map((i) => i.principalAmount),
@@ -55,10 +60,13 @@ export namespace MortgageLoanPaymentsChartUtils {
     const unpaidInterestData = categories.map((cat) =>
       Calculator.sum(groupedUnpaidByMonth[cat]?.map((i) => i.interestAmount)),
     );
+    const unpaidInsurenceData = categories.map((cat) =>
+      Calculator.sum(groupedUnpaidByMonth[cat]?.map((i) => i.insuranceCost)),
+    );
 
     return {
-      chart: { zooming: { type: 'xy' } },
-      title: { text: 'Monthly Payments', align: 'left' },
+      chart: { zooming: { type: 'x' } },
+      title: { text: 'Plati Lunare', align: 'left' },
       xAxis: { categories },
       yAxis: { title: { text: 'Amount (RON)' } },
       plotOptions: {
@@ -105,15 +113,28 @@ export namespace MortgageLoanPaymentsChartUtils {
         },
         {
           type: 'column',
+          name: 'Asigurare',
+          color: Colors.YELLOW_400,
+          data: scheduledPaymentsinsuranceCostData,
+        },
+        {
+          type: 'column',
           name: 'Dobanda rata',
           color: Colors.BLUE_300,
           data: scheduledPaymentsIntrestsData,
         },
+
         {
           type: 'column',
           name: 'Principal Neplatit',
           color: Colors.BS_TEAL,
           data: unpaidPrincipalData,
+        },
+        {
+          type: 'column',
+          name: 'Asigurare Neplatita',
+          color: Colors.YELLOW_400,
+          data: unpaidInsurenceData,
         },
         {
           type: 'column',
