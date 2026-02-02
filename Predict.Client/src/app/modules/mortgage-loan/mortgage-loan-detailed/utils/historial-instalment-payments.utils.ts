@@ -26,10 +26,11 @@ export namespace HistocialInstalmentPaymentsUtils {
         paymentDate: paymentDate || instalment.paymentDate,
         principalAmount: instalment.principalAmount,
         interestAmount: instalment.interestAmount,
+        insuranceCost: instalment.insuranceCost,
         remainingBalance: instalment.remainingBalance,
         instalmentPayment: isNormalPayment,
         earlyPayment: isExtraPayment,
-      }) satisfies HistocialInstalmentPayment;
+      }) as HistocialInstalmentPayment;
 
     const calculatedBaseLoanInstalments = schedules.flatMap((schedule) => {
       const index = baseInstalments.length - schedule.monthlyInstalments.length;
