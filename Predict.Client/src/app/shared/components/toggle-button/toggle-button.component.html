@@ -1,14 +1,14 @@
-<div class="toggle-wrapper d-flex">
+<div class="toggle-wrapper d-flex align-items-center justify-content-center">
   <div class="toggle-background"></div>
 
   @for (option of options; track option) {
-  <div
-    class="toggle-option"
-    [ngClass]="{ active: option === _selected() }"
-    (click)="select(option)"
-  >
-    {{ option }}
-  </div>
+    <div
+      class="toggle-option"
+      [ngClass]="{ active: option === _selected() }"
+      (click)="select(option)"
+    >
+      {{ option }}
+    </div>
   }
 
   <div
