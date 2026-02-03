@@ -5,8 +5,8 @@ import { MortgageInterestProgressChartUtils } from '../utils/charts/mortgage-int
 import { MortgageLoanAmountChartUtils } from '../utils/charts/mortgage-loan-amount.chart.util';
 import { MortgageLoanPaymentsChartUtils } from '../utils/charts/mortgage-loan-payments.chart.util';
 import { MortgageLoanProgressChartUtils } from '../utils/charts/mortgage-loan-progress.chart.util';
-import { HistocialInstalmentPaymentsUtils } from '../utils/historial-instalment-payments.utils';
-import { HistocialInstalmentPaymentBatchesUtils } from '../utils/historial-instalment-payment-batches.utils';
+import { HistoricalInstalmentPaymentsUtils } from '../utils/historical-instalment-payments.utils';
+import { HistoricalInstalmentPaymentBatchesUtils } from '../utils/historical-instalment-payment-batches.utils';
 
 export const getDetailedMortgageLoanState = createSelector(
   fromMortgageLoan.getMortgageLoanState,
@@ -39,12 +39,12 @@ export const getDetailedRepaymentSchedules = createSelector(
 export const getHistocialInstalmentPayments = createSelector(
   fromMortgageLoan.getBaseRepaymentSchedule,
   getDetailedRepaymentSchedules,
-  HistocialInstalmentPaymentsUtils.getHistocialInstalmentPayments,
+  HistoricalInstalmentPaymentsUtils.getHistocialInstalmentPayments,
 );
 
 export const getHistocialInstalmentPaymentBatches = createSelector(
   getHistocialInstalmentPayments,
-  HistocialInstalmentPaymentBatchesUtils.getHistocialInstalmentPaymentBatches,
+  HistoricalInstalmentPaymentBatchesUtils.getHistocialInstalmentPaymentBatches,
 );
 
 export const getMortgageLoanProgressChart = createSelector(

@@ -1,7 +1,7 @@
 import { Instalment, RepaymentSchedule } from '../../models/mortgage.model';
 import { HistocialInstalmentPayment } from '../models/base-loan-rate.model';
 
-export namespace HistocialInstalmentPaymentsUtils {
+export namespace HistoricalInstalmentPaymentsUtils {
   export function getHistocialInstalmentPayments(
     base: RepaymentSchedule,
     repaymentSchedules: RepaymentSchedule[],

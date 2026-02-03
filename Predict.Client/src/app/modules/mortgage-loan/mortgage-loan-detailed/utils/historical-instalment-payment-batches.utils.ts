@@ -3,7 +3,7 @@ import {
   HistocialInstalmentPaymentBatch,
 } from '../models/base-loan-rate.model';
 
-export namespace HistocialInstalmentPaymentBatchesUtils {
+export namespace HistoricalInstalmentPaymentBatchesUtils {
   export function getHistocialInstalmentPaymentBatches(
     overviewBaseLoanInstalments: HistocialInstalmentPayment[],
   ): HistocialInstalmentPaymentBatch[] {
