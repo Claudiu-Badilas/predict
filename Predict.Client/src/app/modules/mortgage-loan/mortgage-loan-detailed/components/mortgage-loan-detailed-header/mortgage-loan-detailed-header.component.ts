@@ -1,18 +1,17 @@
-import { Component, computed, inject, Signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import * as fromMortgageLoanDetailed from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/selectors/mortgage-loan-detailed.selectors';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
-import { HeaderCardComponent } from 'src/app/shared/components/header-card/header-card.component';
-import {
-  CardSection,
-  HeaderCardInput,
-} from 'src/app/shared/components/header-card/models/header-card-input.model';
+import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
+import { MathUtil } from 'src/app/shared/utils/math.utils';
 
 @Component({
   selector: 'app-mortgage-loan-detailed-header',
-  imports: [HeaderCardComponent],
+  imports: [CommonModule, NumberFormatPipe],
   templateUrl: './mortgage-loan-detailed-header.component.html',
   styleUrl: './mortgage-loan-detailed-header.component.scss',
 })
@@ -23,10 +22,79 @@ export class MortgageLoanDetailedHeaderComponent {
     this.store.select(fromMortgageLoanDetailed.getHistocialInstalmentPayments),
     { initialValue: null },
   );
-
   readonly baseRepaymentSchedule = toSignal(
     this.store.select(fromMortgageLoan.getBaseRepaymentSchedule),
     { initialValue: null },
+  );
+  readonly histocialInstalmentPaymentBatches = toSignal(
+    this.store.select(
+      fromMortgageLoanDetailed.getHistocialInstalmentPaymentBatches,
+    ),
+    { initialValue: [] },
+  );
+
+  readonly paidPrincipal = computed(() =>
+    Calculator.sum(
+      this.updatedBaseRepaymentScheduleBasedOnLatestStates()
+        .filter((s) => s.earlyPayment || s.instalmentPayment)
+        .map((s) => s.principalAmount),
+    ),
+  );
+  readonly paidPrincipalPercent = computed(() => {
+    const total = Calculator.sum(
+      this.updatedBaseRepaymentScheduleBasedOnLatestStates().map(
+        (s) => s.principalAmount,
+      ),
+    );
+
+    return MathUtil.percent(this.paidPrincipal(), total);
+  });
+
+  readonly paidIntrest = computed(() =>
+    Calculator.sum(
+      this.updatedBaseRepaymentScheduleBasedOnLatestStates()
+        .filter((s) => s.instalmentPayment)
+        .map((s) => s.interestAmount),
+    ),
+  );
+  readonly paidIntrestPercent = computed(() => {
+    const total = Calculator.sum(
+      this.updatedBaseRepaymentScheduleBasedOnLatestStates().map(
+        (s) => s.interestAmount,
+      ),
+    );
+
+    return MathUtil.percent(this.paidIntrest(), total);
+  });
+
+  readonly paidInsurance = computed(() =>
+    Calculator.sum(
+      this.updatedBaseRepaymentScheduleBasedOnLatestStates()
+        .filter((s) => s.instalmentPayment)
+        .map((s) => s.insuranceCost),
+    ),
+  );
+
+  readonly totalPaid = computed(() =>
+    Calculator.sum([
+      this.paidPrincipal(),
+      this.paidIntrest(),
+      this.paidInsurance(),
+    ]),
+  );
+
+  readonly paidInstalments = computed(() =>
+    Calculator.sum(
+      this.histocialInstalmentPaymentBatches()
+        .filter((s) => s.completed)
+        .map((s) => s.instalments.length),
+    ),
+  );
+
+  readonly unpaidInstalments = computed(() =>
+    Calculator.sum(
+      this.histocialInstalmentPaymentBatches().map((s) => s.instalments.length),
+    ),
   );
 
   readonly firstInstalmentPaymentDate = computed(() => {
@@ -54,40 +122,5 @@ export class MortgageLoanDetailedHeaderComponent {
     const d1 = this.lastInstalmentPaymentDate();
     const d2 = this.lastBaseInstalmentPaymentDate();
     return JsDateUtils.dateDiffYMD(d1, d2);
-  });
-
-  headerCardInputs: Signal<HeaderCardInput[]> = computed(() => {
-    return [
-      {
-        sections: [
-          {
-            label: 'Prima plata',
-            value: this.firstInstalmentPaymentDate(),
-            pattern: 'MMM-yyyy',
-            default: '-',
-            color: 'green',
-          } as CardSection,
-          {
-            label: 'Ultima plata',
-            value: this.lastInstalmentPaymentDate(),
-            pattern: 'MMM-yyyy',
-            default: '-',
-            color: 'red',
-          } as CardSection,
-          {
-            label: 'Perioad Ramasa',
-            value: this.dateDiffYMD(),
-            default: '-',
-            color: 'red',
-          } as CardSection,
-          {
-            label: 'Perioad Ramasa',
-            value: this.savedDateDiffYMD(),
-            default: '-',
-            color: 'green',
-          } as CardSection,
-        ],
-      } as HeaderCardInput,
-    ];
   });
 }

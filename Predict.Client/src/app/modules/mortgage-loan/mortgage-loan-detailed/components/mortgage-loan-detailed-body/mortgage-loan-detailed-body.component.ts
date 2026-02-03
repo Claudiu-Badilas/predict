@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import * as fromMortgageLoanDetailed from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/selectors/mortgage-loan-detailed.selectors';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
@@ -7,8 +8,6 @@ import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { Colors } from 'src/app/shared/styles/colors';
 import { TableComponent } from '../table/table.component';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-mortgage-loan-detailed-body',
@@ -17,7 +16,6 @@ import { HeaderComponent } from '../header/header.component';
     HighchartWrapperComponent,
     NumberFormatPipe,
     TableComponent,
-    HeaderComponent,
   ],
   templateUrl: './mortgage-loan-detailed-body.component.html',
   styleUrl: './mortgage-loan-detailed-body.component.scss',
