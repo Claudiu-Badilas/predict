@@ -1,0 +1,171 @@
+.comparison-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.comparison-panel {
+  flex: 1 1 100%;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  @media (min-width: 900px) {
+    flex: 1 1 calc(50% - 0.5rem);
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fafafa;
+
+  h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.header-tabs {
+  display: flex;
+  gap: 0.5rem;
+
+  .tab {
+    font-size: 0.75rem;
+    color: #666;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+
+    &.active {
+      background: #4a5568;
+      color: #fff;
+    }
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.25rem;
+
+  .icon-btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: #e0e0e0;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: #666;
+
+    &:hover {
+      background: #d0d0d0;
+    }
+  }
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+
+  th,
+  td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  th {
+    font-weight: 500;
+    color: #666;
+    font-size: 0.75rem;
+    background: #fafafa;
+  }
+
+  td:first-child {
+    color: #555;
+    font-weight: 500;
+  }
+
+  .highlight {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .savings {
+    color: #2e7d32;
+    font-weight: 500;
+  }
+
+  .danger {
+    color: #c62828;
+    font-weight: 500;
+  }
+
+  .neutral {
+    color: #666;
+  }
+
+  .duration {
+    color: #2e7d32;
+  }
+
+  .vs {
+    font-size: 0.7rem;
+    color: #888;
+    margin-left: 0.25rem;
+  }
+
+  .total-row {
+    td {
+      font-weight: 600;
+      background: #f9f9f9;
+    }
+  }
+}
+
+.best-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f0f7f0;
+  border-top: 1px solid #c8e6c9;
+
+  .check-icon {
+    width: 24px;
+    height: 24px;
+    background: #2e7d32;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .best-text {
+    strong {
+      display: block;
+      color: #1b5e20;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #4a7c4f;
+    }
+  }
+}
