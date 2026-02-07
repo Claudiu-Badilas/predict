@@ -3,6 +3,8 @@ import { Component, computed, effect, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 
+import * as MortgageLoanCompareActions from 'src/app/modules/mortgage-loan/mortgage-loan-compare/actions/mortgage-loan-compare.actions';
+import * as fromMortgageLoanCompare from 'src/app/modules/mortgage-loan/mortgage-loan-compare/selectors/mortgage-loan-compare.selectors';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
@@ -43,8 +45,17 @@ export class MortgageLoanCompareComponent {
   );
 
   includeBase = signal<boolean>(true);
-  selectedLeftValue = signal<string | null>(null);
-  selectedRightValue = signal<string>('No Selection');
+  selectedLeftValue = toSignal(
+    this.store.select(
+      fromMortgageLoanCompare.getLeftSelectedRepaymentScheduleName,
+    ),
+  );
+
+  selectedRightValue = toSignal(
+    this.store.select(
+      fromMortgageLoanCompare.getRightSelectedRepaymentScheduleName,
+    ),
+  );
 
   repaymentSchedulesOptions = computed(() => [
     'No Selection',
@@ -77,7 +88,11 @@ export class MortgageLoanCompareComponent {
       if (rs.length > 0 && !this.selectedLeftValue()) {
         const firstNonBase = rs.find((r) => !r.isBasePayment);
         if (firstNonBase) {
-          this.selectedLeftValue.set(firstNonBase.name);
+          this.store.dispatch(
+            MortgageLoanCompareActions.selectedLeftMortgageLoanChanged({
+              selected: firstNonBase.name,
+            }),
+          );
         }
       }
     });
@@ -96,10 +111,18 @@ export class MortgageLoanCompareComponent {
   }
 
   onLeftDropdownSelected(value: string) {
-    this.selectedLeftValue.set(value);
+    this.store.dispatch(
+      MortgageLoanCompareActions.selectedLeftMortgageLoanChanged({
+        selected: value,
+      }),
+    );
   }
 
   onRightDropdownSelected(value: string) {
-    this.selectedRightValue.set(value);
+    this.store.dispatch(
+      MortgageLoanCompareActions.selectedRightMortgageLoanChanged({
+        selected: value,
+      }),
+    );
   }
 }
