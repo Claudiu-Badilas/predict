@@ -1,170 +1,144 @@
-.comparison-wrapper {
-  display: flex;
-  flex-wrap: wrap;
+$bg: #f5f7fa;
+$card-bg: #ffffff;
+$text: #2d3748;
+$text-muted: #718096;
+$border: #e2e8f0;
+$primary: #3182ce;
+$success: #38a169;
+$success-light: #f0fff4;
+$danger: #e53e3e;
+
+.tables-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  box-sizing: border-box;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.comparison-panel {
-  flex: 1 1 100%;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.comparison-card {
+  background: $card-bg;
+  border: 1px solid $border;
+  border-radius: 10px;
   overflow: hidden;
-
-  @media (min-width: 900px) {
-    flex: 1 1 calc(50% - 0.5rem);
-  }
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-.panel-header {
+.card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
-  background: #fafafa;
+  justify-content: space-between;
+  border-bottom: 1px solid $border;
 
-  h3 {
-    margin: 0;
-    font-size: 0.95rem;
+  h2 {
+    font-size: 16px;
     font-weight: 600;
-    color: #333;
+  }
+
+  .header-label {
+    font-size: 13px;
+    color: $text-muted;
+  }
+
+  .header-badge {
+    font-size: 12px;
+    padding: 4px 12px;
+    border: 1px solid $border;
+    border-radius: 20px;
+    font-weight: 500;
   }
 }
 
-.header-tabs {
-  display: flex;
-  gap: 0.5rem;
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: $text-muted;
+  font-size: 16px;
+  line-height: 1;
 
-  .tab {
-    font-size: 0.75rem;
-    color: #666;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-
-    &.active {
-      background: #4a5568;
-      color: #fff;
-    }
+  &:hover {
+    background: $bg;
   }
 }
 
-.header-actions {
-  display: flex;
-  gap: 0.25rem;
-
-  .icon-btn {
-    width: 24px;
-    height: 24px;
-    border: none;
-    background: #e0e0e0;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 0.7rem;
-    color: #666;
-
-    &:hover {
-      background: #d0d0d0;
-    }
-  }
-}
-
-.comparison-table {
+.data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
-
-  th,
-  td {
-    padding: 0.6rem 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid #f0f0f0;
-  }
+  font-size: 14px;
 
   th {
-    font-weight: 500;
-    color: #666;
-    font-size: 0.75rem;
-    background: #fafafa;
-  }
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 400;
+    color: $text-muted;
+    border-bottom: 1px solid $border;
+    font-size: 13px;
 
-  td:first-child {
-    color: #555;
-    font-weight: 500;
-  }
-
-  .highlight {
-    font-weight: 600;
-    color: #333;
-  }
-
-  .savings {
-    color: #2e7d32;
-    font-weight: 500;
-  }
-
-  .danger {
-    color: #c62828;
-    font-weight: 500;
-  }
-
-  .neutral {
-    color: #666;
-  }
-
-  .duration {
-    color: #2e7d32;
-  }
-
-  .vs {
-    font-size: 0.7rem;
-    color: #888;
-    margin-left: 0.25rem;
-  }
-
-  .total-row {
-    td {
-      font-weight: 600;
-      background: #f9f9f9;
+    &:first-child {
+      padding-left: 24px;
     }
+  }
+
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid $border;
+
+    &:first-child {
+      padding-left: 24px;
+    }
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background: rgba($bg, 0.5);
   }
 }
 
-.best-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: #f0f7f0;
-  border-top: 1px solid #c8e6c9;
+.row-label {
+  color: $text-muted;
+}
 
-  .check-icon {
-    width: 24px;
-    height: 24px;
-    background: #2e7d32;
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
+.row-year {
+  font-weight: 600;
+}
+
+.row--bold td {
+  font-weight: 600;
+}
+
+.text-primary {
+  color: $primary;
+}
+
+.diff {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  .triangle {
     flex-shrink: 0;
   }
 
-  .best-text {
-    strong {
-      display: block;
-      color: #1b5e20;
-      font-size: 0.9rem;
-      margin-bottom: 0.25rem;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.8rem;
-      color: #4a7c4f;
-    }
+  &--down {
+    color: $success;
   }
+
+  &--up {
+    color: $danger;
+  }
+}
+
+.vs-label {
+  font-size: 12px;
+  color: $text-muted;
+  margin-left: 4px;
 }
