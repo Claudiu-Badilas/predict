@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import * as fromMortgageLoanCompare from 'src/app/modules/mortgage-loan/mortgage-loan-compare/selectors/mortgage-loan-compare.selectors';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { MathUtil } from 'src/app/shared/utils/math.utils';
 
 @Component({
   selector: 'app-mortgage-loan-compare-header',
@@ -30,4 +31,8 @@ export class MortgageLoanCompareHeaderComponent {
       fromMortgageLoanCompare.getRightHistoricalInstalmentPaymentBatchesManager,
     ),
   );
+
+  getPercent(target: number, total: number) {
+    return MathUtil.percent(target, total);
+  }
 }

@@ -1,80 +1,111 @@
-<div class="comparison-container">
-  <div class="comparison-card base">
-    @let baseManager = baseHistoricalInstalmentPaymentBatchesManager();
-    <div class="card-header">
-      <h3>{{ baseManager.getBaseName() }}</h3>
+@let baseManager = baseHistoricalInstalmentPaymentBatchesManager();
+@let leftManager = leftHistoricalInstalmentPaymentBatchesManager();
+@let rightManager = rightHistoricalInstalmentPaymentBatchesManager();
+<div class="payment-grid">
+  <div class="payment-card payment-card--initial">
+    <div class="payment-card__header">
+      <h3 class="payment-card__title"></h3>
+      <span class="payment-card__badge">{{ baseManager.getBaseName() }}</span>
     </div>
-    <div class="card-content">
-      <div class="stat">
-        <span class="value primary">{{
-          baseManager.getPaidAmmount() | numberFormat: "0.00"
-        }}</span>
-        <span class="label">Total Paid</span>
-        <span class="date">{{
-          baseManager.getLastPaidMonth() | date: "dd MMM yyy"
-        }}</span>
-      </div>
-      <div class="stat">
-        <span class="value">{{
-          baseManager.getUnpaidAmmount() | numberFormat: "-"
-        }}</span>
-        <span class="label">End Date</span>
-        <span class="date">{{
-          baseManager.getLastUnaidMonth() | date: "dd MMM yyy"
-        }}</span>
-      </div>
+    <div class="payment-card__body">
+      <p class="payment-card__value">
+        {{ baseManager.getPaidAmmount() | numberFormat: "0.00" }}
+      </p>
+      <p class="payment-card__label">Total Paid</p>
     </div>
-  </div>
-  <div class="comparison-card left">
-    @let leftManager = leftHistoricalInstalmentPaymentBatchesManager();
-    <div class="card-header">
-      <h3>{{ leftManager.getBaseName() }}</h3>
-    </div>
-    <div class="card-content">
-      <div class="stat">
-        <span class="value primary">{{
-          leftManager.getPaidAmmount() | numberFormat: "-"
-        }}</span>
-        <span class="label">Total Paid</span>
-        <span class="date">{{
-          leftManager.getLastPaidMonth() | date: "dd MMM yyy"
-        }}</span>
+    <div class="payment-card__divider"></div>
+    <div class="payment-card__footer">
+      <div class="payment-card__remaining">
+        <span class="payment-card__meta-label">Remaining</span>
+        <p class="payment-card__meta-value">
+          {{ baseManager.getUnpaidPrincipalAmmount() | numberFormat: "-" }}
+        </p>
       </div>
-      <div class="stat">
-        <span class="value">{{
-          leftManager.getUnpaidAmmount() | numberFormat: "-"
-        }}</span>
-        <span class="label">End Date</span>
-        <span class="date">{{
-          leftManager.getLastUnaidMonth() | date: "dd MMM yyy"
-        }}</span>
+      <div class="payment-card__dates">
+        <div class="payment-card__date-row">
+          <span class="payment-card__meta-label">Paid:</span>
+          <span class="payment-card__meta-text">{{
+            (baseManager.getLastPaidMonth() | date: "dd MMM yyy") || "-"
+          }}</span>
+        </div>
+        <div class="payment-card__date-row">
+          <span class="payment-card__meta-label">End:</span>
+          <span class="payment-card__meta-text">{{
+            baseManager.getLastUnaidMonth() | date: "dd MMM yyy"
+          }}</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="comparison-card right">
-    @let rightManager = rightHistoricalInstalmentPaymentBatchesManager();
-    <div class="card-header">
-      <h3>{{ rightManager.getBaseName() }}</h3>
+  <div class="payment-card payment-card--rata">
+    <div class="payment-card__header">
+      <h3 class="payment-card__title"></h3>
+      <span class="payment-card__badge">{{ leftManager.getBaseName() }}</span>
     </div>
-    <div class="card-content">
-      <div class="stat">
-        <span class="value primary">{{
-          rightManager.getPaidAmmount() | numberFormat: "-"
-        }}</span>
-        <span class="label">Total Paid</span>
-        <span class="date">{{
-          rightManager.getLastPaidMonth() | date: "dd MMM yyy"
-        }}</span>
+    <div class="payment-card__body">
+      <p class="payment-card__value">
+        {{ leftManager.getPaidAmmount() | numberFormat: "0.00" }}
+      </p>
+      <p class="payment-card__label">Total Paid</p>
+    </div>
+    <div class="payment-card__divider"></div>
+    <div class="payment-card__footer">
+      <div class="payment-card__remaining">
+        <span class="payment-card__meta-label">Remaining</span>
+        <p class="payment-card__meta-value">
+          {{ leftManager.getUnpaidPrincipalAmmount() | numberFormat: "-" }}
+        </p>
       </div>
-      <div class="stat">
-        <span class="value">{{
-          rightManager.getUnpaidAmmount() | numberFormat: "-"
-        }}</span>
-        <span class="label">End Date</span>
-        <span class="date">{{
-          rightManager.getLastUnaidMonth() | date: "dd MMM yyy"
-        }}</span>
+      <div class="payment-card__dates">
+        <div class="payment-card__date-row">
+          <span class="payment-card__meta-label">Paid:</span>
+          <span class="payment-card__meta-text">{{
+            (leftManager.getLastPaidMonth() | date: "dd MMM yyy") || "-"
+          }}</span>
+        </div>
+        <div class="payment-card__date-row">
+          <span class="payment-card__meta-label">End:</span>
+          <span class="payment-card__meta-text">{{
+            leftManager.getLastUnaidMonth() | date: "dd MMM yyy"
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="payment-card payment-card--anticipat">
+    <div class="payment-card__header">
+      <h3 class="payment-card__title"></h3>
+      <span class="payment-card__badge">{{ rightManager.getBaseName() }}</span>
+    </div>
+    <div class="payment-card__body">
+      <p class="payment-card__value">
+        {{ rightManager.getPaidAmmount() | numberFormat: "0.00" }}
+      </p>
+      <p class="payment-card__label">Total Paid</p>
+    </div>
+    <div class="payment-card__divider"></div>
+    <div class="payment-card__footer">
+      <div class="payment-card__remaining">
+        <span class="payment-card__meta-label">Remaining</span>
+        <p class="payment-card__meta-value">
+          {{ rightManager.getUnpaidPrincipalAmmount() | numberFormat: "-" }}
+        </p>
+      </div>
+      <div class="payment-card__dates">
+        <div class="payment-card__date-row">
+          <span class="payment-card__meta-label">Paid:</span>
+          <span class="payment-card__meta-text">{{
+            (rightManager.getLastPaidMonth() | date: "dd MMM yyy") || "-"
+          }}</span>
+        </div>
+        <div class="payment-card__date-row">
+          <span class="payment-card__meta-label">End:</span>
+          <span class="payment-card__meta-text">{{
+            rightManager.getLastUnaidMonth() | date: "dd MMM yyy"
+          }}</span>
+        </div>
       </div>
     </div>
   </div>
