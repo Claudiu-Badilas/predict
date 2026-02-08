@@ -85,6 +85,26 @@ export class HistoricalInstalmentPaymentBatchesManager {
     );
   }
 
+  getUnpaidPrincipalAmmount() {
+    return Calculator.sum(
+      this.historicalInstalmentPaymentBatch
+        .flatMap((b) =>
+          b.instalments.filter((i) => !i.instalmentPayment && !i.earlyPayment),
+        )
+        .map((i) => i.principalAmount),
+    );
+  }
+
+  getUnpaidAmmountInterest() {
+    return Calculator.sum(
+      this.historicalInstalmentPaymentBatch
+        .flatMap((b) =>
+          b.instalments.filter((i) => !i.instalmentPayment && !i.earlyPayment),
+        )
+        .map((i) => Calculator.sum([i.interestAmount, i.insuranceCost])),
+    );
+  }
+
   getLastPaidMonth() {
     return (
       this.historicalInstalmentPaymentBatch.filter((b) => b.completed)?.at(-1)
