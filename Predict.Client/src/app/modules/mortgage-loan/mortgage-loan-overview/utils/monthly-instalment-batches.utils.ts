@@ -1,3 +1,4 @@
+import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { RepaymentSchedule } from '../../models/mortgage.model';
 import {
   MonthlyInstalmentManager as MonthlyInstalmentBatch,
@@ -102,7 +103,16 @@ function createMonthlyInstalmentBatches(
   overviewBaseLoanInstalments.forEach((current, index, array) => {
     const next = array[index + 1];
 
-    tempBatch.push(current);
+    const total = (val: OverviewLoanInstalment) =>
+      val.earlyPayment ? val.principalAmount : val.totalInstalment;
+    const batchTotalInstalment = Calculator.sum([
+      ...tempBatch.map((v) => total(v)),
+      total(current),
+    ]);
+    tempBatch.push({
+      ...current,
+      batchTotalInstalment,
+    } as OverviewLoanInstalment);
 
     if (current.instalmentPayment || current.earlyPayment) {
       if (next && !next.earlyPayment) {

@@ -278,12 +278,25 @@
               <td
                 class="text-center"
                 [ngClass]="{
-                  strike: row.earlyPayment,
                   'last-bottom-border': last && row.earlyPayment,
                   disabled: !group.completed && row.disabled,
                 }"
               >
-                {{ row.totalInstalment | numberFormat: "0.00" }}
+                @if (!row.earlyPayment) {
+                  <span
+                    [ngClass]="{
+                      strike: row.earlyPayment,
+                    }"
+                  >
+                    {{ row.totalInstalment | numberFormat: "0.00" }}
+                  </span>
+                } @else {
+                  <span
+                    >{{ row.batchTotalInstalment | numberFormat: "-" }} ({{
+                      row.batchTotalInstalment / 2 | numberFormat: "-"
+                    }})
+                  </span>
+                }
               </td>
 
               <td
