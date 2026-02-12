@@ -7,37 +7,51 @@ export namespace CompareRatesTrendChartUtils {
   export function getChart(
     left: RepaymentSchedule,
     right: RepaymentSchedule,
+    chartView: 'rata' | 'dobanda' | 'principal',
   ): Highcharts.Options {
     const sources: Array<[RepaymentSchedule, string, string]> = [
       left ? [left, left.name, Colors.BS_TEAL] : null,
       right ? [right, right.name, Colors.PINK_500] : null,
-    ];
+    ].filter(Boolean) as Array<[RepaymentSchedule, string, string]>;
 
-    const series: Highcharts.SeriesOptionsType[] = sources
-      .filter(Boolean)
-      .flatMap(([repaymentSchedule, name, color]) => [
-        {
-          type: 'spline',
-          name: `${name} – Principal`,
-          color,
-          data: repaymentSchedule.monthlyInstalments.map((r) => ({
-            x: r.paymentDate.getTime(),
-            y: Number(r.principalAmount.toFixed(2)),
-            date: DateUtils.fromJsDateToString(r.paymentDate),
-          })),
-        },
-        {
-          type: 'line',
-          name: `${name} – Dobanda`,
-          color,
-          dashStyle: 'ShortDash',
-          data: repaymentSchedule.monthlyInstalments.map((r) => ({
-            x: r.paymentDate.getTime(),
-            y: Number(r.interestAmount.toFixed(2)),
-            date: DateUtils.fromJsDateToString(r.paymentDate),
-          })),
-        },
-      ]);
+    const series: Highcharts.SeriesOptionsType[] = [];
+
+    sources.forEach(([repaymentSchedule, name, color]) => {
+      const principalSeries: Highcharts.SeriesSplineOptions = {
+        type: 'spline',
+        name: `${name} – Principal`,
+        color,
+        data: repaymentSchedule.monthlyInstalments.map((r) => ({
+          x: r.paymentDate.getTime(),
+          y: Number(r.principalAmount.toFixed(2)),
+          date: DateUtils.fromJsDateToString(r.paymentDate),
+        })),
+      };
+
+      const interestSeries: Highcharts.SeriesLineOptions = {
+        type: 'line',
+        name: `${name} – Dobanda`,
+        color,
+        dashStyle: 'ShortDash',
+        data: repaymentSchedule.monthlyInstalments.map((r) => ({
+          x: r.paymentDate.getTime(),
+          y: Number(r.interestAmount.toFixed(2)),
+          date: DateUtils.fromJsDateToString(r.paymentDate),
+        })),
+      };
+
+      if (chartView === 'rata') {
+        series.push(principalSeries, interestSeries);
+      }
+
+      if (chartView === 'principal') {
+        series.push(principalSeries);
+      }
+
+      if (chartView === 'dobanda') {
+        series.push(interestSeries);
+      }
+    });
 
     return {
       title: {
@@ -57,13 +71,15 @@ export namespace CompareRatesTrendChartUtils {
 
           return `
             <b>Date: ${date}</b><br/>
-            ${points
-              .map(
-                (p: any) =>
-                  `<span style="color:${p.series.color}">●</span>
+            ${
+              points
+                ?.map(
+                  (p: any) =>
+                    `<span style="color:${p.series.color}">●</span>
                    ${p.series.name}: <b>${p.y}</b><br/>`,
-              )
-              .join('')}
+                )
+                .join('') || ''
+            }
           `;
         },
       },
