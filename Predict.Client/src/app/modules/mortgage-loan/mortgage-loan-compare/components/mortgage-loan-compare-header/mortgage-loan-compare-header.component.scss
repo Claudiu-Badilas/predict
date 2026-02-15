@@ -30,7 +30,6 @@ $color-card-bg: hsl(0, 0%, 100%);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
-  // Variants
   &--initial {
     border-left-color: $color-initial;
     .payment-card__badge {
@@ -61,12 +60,16 @@ $color-card-bg: hsl(0, 0%, 100%);
     }
   }
 
-  // Header
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem;
+    padding: 0.75rem 1.25rem 0.25rem;
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: center;
   }
 
   &__title {
@@ -85,7 +88,15 @@ $color-card-bg: hsl(0, 0%, 100%);
     border-radius: 9999px;
   }
 
-  // Body
+  &__label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: $color-muted;
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+
   &__body {
     padding: 0 1.25rem 0.75rem;
   }
@@ -97,21 +108,11 @@ $color-card-bg: hsl(0, 0%, 100%);
     margin: 0;
   }
 
-  &__label {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    color: $color-muted;
-    margin: 0.125rem 0 0;
-  }
-
-  // Divider
   &__divider {
     margin: 0 1.25rem;
     border-top: 1px solid rgba($color-border, 0.5);
   }
 
-  // Footer
   &__footer {
     display: flex;
     align-items: center;
