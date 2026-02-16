@@ -105,54 +105,22 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="row-year">2026</td>
-          <td>9,820</td>
-          <td>7,450</td>
-          <td>8,120</td>
-        </tr>
-        <tr>
-          <td class="row-year">2030</td>
-          <td>8,100</td>
-          <td>
-            <span class="diff diff--down"> 7,930 </span>
-            <span class="vs-label">vs Base</span>
-          </td>
-          <td>
-            <span class="diff diff--up"> 8,120 </span>
-            <span class="vs-label">vs Base</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="row-year">2040</td>
-          <td>4,950</td>
-          <td>
-            <span class="diff diff--down"> 3,200 </span>
-            <span class="vs-label">vs Base</span>
-          </td>
-          <td>
-            <span class="diff diff--up"> 3,780 </span>
-            <span class="vs-label">vs Base</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="row-year">2050</td>
-          <td>1,100</td>
-          <td>0 <span class="vs-label">−1,10 Obas</span></td>
-          <td>
-            <span class="diff diff--down"> 420 </span>
-            <span class="vs-label">vs Base</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="row-year">2060</td>
-          <td>1,100</td>
-          <td>0 <span class="vs-label">−1,10 Obas</span></td>
-          <td>
-            <span class="diff diff--down"> 420 </span>
-            <span class="vs-label">vs Base</span>
-          </td>
-        </tr>
+        @for (year of years(); track $index) {
+          <tr>
+            <td class="row-year">{{ year }}</td>
+            <td>
+              {{ getPrincipalAmount(year, baseManager) | numberFormat: "0.00" }}
+            </td>
+            <td>
+              {{ getPrincipalAmount(year, leftManager) | numberFormat: "0.00" }}
+            </td>
+            <td>
+              {{
+                getPrincipalAmount(year, rightManager) | numberFormat: "0.00"
+              }}
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
