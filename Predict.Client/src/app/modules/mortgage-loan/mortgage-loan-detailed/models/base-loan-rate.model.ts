@@ -2,6 +2,7 @@ import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { RepaymentSchedule } from '../../models/mortgage.model';
 import { HistoricalInstalmentPaymentBatchesUtils } from '../utils/historical-instalment-payment-batches.utils';
 import { HistoricalInstalmentPaymentsUtils } from '../utils/historical-instalment-payments.utils';
+import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 
 export type HistoricalInstalmentPayment = {
   index: number;
@@ -101,7 +102,17 @@ export class HistoricalInstalmentPaymentBatchesManager {
         .flatMap((b) =>
           b.instalments.filter((i) => !i.instalmentPayment && !i.earlyPayment),
         )
-        .map((i) => Calculator.sum([i.interestAmount, i.insuranceCost])),
+        .map((i) => i.interestAmount),
+    );
+  }
+
+  getUnpaidInsuranceAmmount() {
+    return Calculator.sum(
+      this.historicalInstalmentPaymentBatch
+        .flatMap((b) =>
+          b.instalments.filter((i) => !i.instalmentPayment && !i.earlyPayment),
+        )
+        .map((i) => i.insuranceCost),
     );
   }
 
@@ -114,5 +125,11 @@ export class HistoricalInstalmentPaymentBatchesManager {
 
   getLastUnaidMonth() {
     return this.historicalInstalmentPaymentBatch?.at(-1)?.title ?? null;
+  }
+
+  getDuration() {
+    const d1 = this.selected.monthlyInstalments[0]?.paymentDate;
+    const d2 = this.selected.monthlyInstalments?.at(-1)?.paymentDate;
+    return JsDateUtils.dateDiffYMD(d1, d2);
   }
 }

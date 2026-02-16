@@ -1,3 +1,7 @@
+@let baseManager = baseHistoricalInstalmentPaymentBatchesManager();
+@let leftManager = leftHistoricalInstalmentPaymentBatchesManager();
+@let rightManager = rightHistoricalInstalmentPaymentBatchesManager();
+
 <div class="tables-container">
   <div class="comparison-card">
     <div class="card-header">
@@ -7,55 +11,63 @@
       <thead>
         <tr>
           <th></th>
-          <th>Base (Initial)</th>
-          <th>Anticipat Jan 2026</th>
-          <th>Anticipat</th>
+          <th>{{ baseManager.getBaseName() }}</th>
+          <th>{{ leftManager.getBaseName() }}</th>
+          <th>{{ rightManager.getBaseName() }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="row-label">Total Principal</td>
-          <td>300,000 €</td>
-          <td>300,000 €</td>
-          <td><strong>300,000 €</strong></td>
-        </tr>
-        <tr>
-          <td class="row-label">Total Interest</td>
-          <td>112,430 €</td>
-          <td>112,430 €</td>
+          <td class="row-label">Principal</td>
           <td>
-            <span class="diff diff--down">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 8L0 0H10L5 8Z" fill="currentColor" />
-              </svg>
-              98,200 €
-            </span>
+            {{ baseManager.getUnpaidPrincipalAmmount() | numberFormat: "0.00" }}
+          </td>
+          <td>
+            {{ leftManager.getUnpaidPrincipalAmmount() | numberFormat: "0.00" }}
+          </td>
+          <td>
+            {{
+              rightManager.getUnpaidPrincipalAmmount() | numberFormat: "0.00"
+            }}
           </td>
         </tr>
         <tr>
-          <td class="row-label">Fees + Insurance</td>
-          <td>12,500 €</td>
-          <td>12,100 €</td>
+          <td class="row-label">Dobanda</td>
           <td>
-            <span class="diff diff--down">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 8L0 0H10L5 8Z" fill="currentColor" />
-              </svg>
-              12,300 €
-            </span>
+            {{ baseManager.getUnpaidAmmountInterest() | numberFormat: "0.00" }}
+          </td>
+          <td>
+            {{ leftManager.getUnpaidAmmountInterest() | numberFormat: "0.00" }}
+          </td>
+          <td>
+            {{ rightManager.getUnpaidAmmountInterest() | numberFormat: "0.00" }}
+          </td>
+        </tr>
+        <tr>
+          <td class="row-label">PAD</td>
+          <td>
+            {{ baseManager.getUnpaidInsuranceAmmount() | numberFormat: "0.00" }}
+          </td>
+          <td>
+            {{ leftManager.getUnpaidInsuranceAmmount() | numberFormat: "0.00" }}
+          </td>
+          <td>
+            {{
+              rightManager.getUnpaidInsuranceAmmount() | numberFormat: "0.00"
+            }}
           </td>
         </tr>
         <tr class="row--bold">
-          <td class="row-label">Total Paid</td>
-          <td>424,930 €</td>
-          <td>410,300 €</td>
-          <td>415,260 €</td>
+          <td class="row-label">Paid</td>
+          <td>{{ baseManager.getPaidAmmount() | numberFormat: "0.00" }}</td>
+          <td>{{ leftManager.getPaidAmmount() | numberFormat: "0.00" }}</td>
+          <td>{{ rightManager.getPaidAmmount() | numberFormat: "0.00" }}</td>
         </tr>
         <tr>
-          <td class="row-label">Total Duration</td>
-          <td class="text-primary">30 y 2 months</td>
-          <td class="text-primary">28 y 8 months</td>
-          <td class="text-primary">29 y 1 month</td>
+          <td class="row-label">Duration</td>
+          <td class="text-primary">{{ baseManager.getDuration() ?? "-" }}</td>
+          <td class="text-primary">{{ leftManager.getDuration() ?? "-" }}</td>
+          <td class="text-primary">{{ rightManager.getDuration() ?? "-" }}</td>
         </tr>
       </tbody>
     </table>
@@ -69,87 +81,57 @@
       <thead>
         <tr>
           <th></th>
-          <th>Base (Initial)</th>
-          <th>Anticipat Jan 2026</th>
-          <th>Anticipat Dec 2025</th>
+          <th>{{ baseManager.getBaseName() }}</th>
+          <th>{{ leftManager.getBaseName() }}</th>
+          <th>{{ rightManager.getBaseName() }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="row-year">2026</td>
-          <td>9,820 €</td>
-          <td>7,450 €</td>
-          <td>8,120 €</td>
+          <td>9,820</td>
+          <td>7,450</td>
+          <td>8,120</td>
         </tr>
         <tr>
           <td class="row-year">2030</td>
-          <td>8,100 €</td>
+          <td>8,100</td>
           <td>
-            <span class="diff diff--down">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 8L0 0H10L5 8Z" fill="currentColor" />
-              </svg>
-              7,930 €
-            </span>
+            <span class="diff diff--down"> 7,930 </span>
             <span class="vs-label">vs Base</span>
           </td>
           <td>
-            <span class="diff diff--up">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 0L10 8H0L5 0Z" fill="currentColor" />
-              </svg>
-              8,120 €
-            </span>
+            <span class="diff diff--up"> 8,120 </span>
             <span class="vs-label">vs Base</span>
           </td>
         </tr>
         <tr>
           <td class="row-year">2040</td>
-          <td>4,950 €</td>
+          <td>4,950</td>
           <td>
-            <span class="diff diff--down">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 8L0 0H10L5 8Z" fill="currentColor" />
-              </svg>
-              3,200 €
-            </span>
+            <span class="diff diff--down"> 3,200 </span>
             <span class="vs-label">vs Base</span>
           </td>
           <td>
-            <span class="diff diff--up">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 0L10 8H0L5 0Z" fill="currentColor" />
-              </svg>
-              3,780 €
-            </span>
+            <span class="diff diff--up"> 3,780 </span>
             <span class="vs-label">vs Base</span>
           </td>
         </tr>
         <tr>
           <td class="row-year">2050</td>
-          <td>1,100 €</td>
-          <td>0 € <span class="vs-label">−1,10 Obas</span></td>
+          <td>1,100</td>
+          <td>0 <span class="vs-label">−1,10 Obas</span></td>
           <td>
-            <span class="diff diff--down">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 8L0 0H10L5 8Z" fill="currentColor" />
-              </svg>
-              420 €
-            </span>
+            <span class="diff diff--down"> 420 </span>
             <span class="vs-label">vs Base</span>
           </td>
         </tr>
         <tr>
           <td class="row-year">2060</td>
-          <td>1,100 €</td>
-          <td>0 € <span class="vs-label">−1,10 Obas</span></td>
+          <td>1,100</td>
+          <td>0 <span class="vs-label">−1,10 Obas</span></td>
           <td>
-            <span class="diff diff--down">
-              <svg class="triangle" width="10" height="8" viewBox="0 0 10 8">
-                <path d="M5 8L0 0H10L5 8Z" fill="currentColor" />
-              </svg>
-              420 €
-            </span>
+            <span class="diff diff--down"> 420 </span>
             <span class="vs-label">vs Base</span>
           </td>
         </tr>
