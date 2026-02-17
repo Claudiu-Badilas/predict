@@ -5,6 +5,7 @@ export interface ColumnConfig {
     | 'managementFee'
     | 'recalculatedInterest'
     | 'halfTotal'
+    | 'earlyPayment'
     | 'remainingBalance';
   label: string;
   visible: boolean;
@@ -24,5 +25,6 @@ export const DEFAULT_COLUMN_CONFIGS: ColumnConfig[] = [
     visible: false,
   },
   { key: 'halfTotal', label: '1/2', visible: false },
+  { key: 'earlyPayment', label: 'Anticipat', visible: false },
   { key: 'remainingBalance', label: 'Sold Ramas', visible: true },
 ];

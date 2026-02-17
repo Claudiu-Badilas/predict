@@ -38,15 +38,18 @@
         </th>
 
         <th class="text-center col-total">Total Rată</th>
-        <th
-          class="text-center col-restant"
-          [class.hidden]="!isColumnVisible('halfTotal')"
-        >
+        <th class="text-center" [class.hidden]="!isColumnVisible('halfTotal')">
           1/2
+        </th>
+        <th
+          class="text-center"
+          [class.hidden]="!isColumnVisible('earlyPayment')"
+        >
+          Anticipat
         </th>
 
         <th
-          class="text-center col-restant"
+          class="text-center"
           [class.hidden]="!isColumnVisible('remainingBalance')"
         >
           Sold Ramas
@@ -99,60 +102,64 @@
             </td>
 
             <td></td>
-
+            @let subtotal = getSubtotal(group);
             <td class="bold text-center">
-              {{ getSubtotal(group).principal | numberFormat: "0.00" }}
+              {{ subtotal.principal | numberFormat: "0.00" }}
             </td>
 
             <td class="bold text-center">
-              {{ getSubtotal(group).interest | numberFormat: "0.00" }}
+              {{ subtotal.interest | numberFormat: "0.00" }}
             </td>
 
             <td
               class="bold text-center"
               [class.hidden]="!isColumnVisible('administrationFee')"
             >
-              {{ getSubtotal(group).administrationFee | numberFormat: "0.00" }}
+              {{ subtotal.administrationFee | numberFormat: "0.00" }}
             </td>
 
             <td
               class="bold text-center"
               [class.hidden]="!isColumnVisible('insuranceCost')"
             >
-              {{ getSubtotal(group).insurance | numberFormat: "0.00" }}
+              {{ subtotal.insurance | numberFormat: "0.00" }}
             </td>
 
             <td
               class="bold text-center"
               [class.hidden]="!isColumnVisible('managementFee')"
             >
-              {{ getSubtotal(group).managementFee | numberFormat: "0.00" }}
+              {{ subtotal.managementFee | numberFormat: "0.00" }}
             </td>
 
             <td
               class="bold text-center"
               [class.hidden]="!isColumnVisible('recalculatedInterest')"
             >
-              {{
-                getSubtotal(group).recalculatedInterest | numberFormat: "0.00"
-              }}
+              {{ subtotal.recalculatedInterest | numberFormat: "0.00" }}
             </td>
 
             <td class="bold text-center subtotal-total">
-              {{ getSubtotal(group).total | numberFormat: "0.00" }}
+              {{ subtotal.total | numberFormat: "0.00" }}
             </td>
 
             <td
               class="bold text-center"
               [class.hidden]="!isColumnVisible('halfTotal')"
             >
-              {{ getSubtotal(group).total / 2 | numberFormat: "0.00" }}
+              {{ subtotal.total / 2 | numberFormat: "0.00" }}
+            </td>
+            <td
+              class="bold text-center"
+              [class.hidden]="!isColumnVisible('earlyPayment')"
+            >
+              {{ subtotal.earlyPaymenrt | numberFormat: "0.00" }}
             </td>
             <td
               class="bold text-center"
               [class.hidden]="!isColumnVisible('remainingBalance')"
             >
-              {{ getSubtotal(group).restant | numberFormat: "0.00" }}
+              {{ subtotal.restant | numberFormat: "0.00" }}
             </td>
 
             <td></td>
@@ -317,6 +324,16 @@
                 }"
               >
                 {{ row.batchTotalInstalment / 2 | numberFormat: "-" }}
+              </td>
+              <td
+                [class.hidden]="!isColumnVisible('earlyPayment')"
+                class="text-center"
+                [ngClass]="{
+                  'last-bottom-border': last && row.earlyPayment,
+                  disabled: !group.completed && row.disabled,
+                }"
+              >
+                {{ row.batchTotalEarlyPayment | numberFormat: "-" }}
               </td>
 
               <td

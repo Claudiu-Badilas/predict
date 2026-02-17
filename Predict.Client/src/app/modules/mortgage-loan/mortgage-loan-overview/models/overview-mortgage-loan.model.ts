@@ -10,6 +10,7 @@ export type OverviewLoanInstalment = {
   recalculatedInterest: number | null;
   totalInstalment: number | null;
   batchTotalInstalment?: number | null;
+  batchTotalEarlyPayment?: number | null;
   remainingBalance: number | null;
   instalmentPayment: boolean;
   earlyPayment: boolean;

@@ -109,9 +109,18 @@ function createMonthlyInstalmentBatches(
       ...tempBatch.map((v) => total(v)),
       total(current),
     ]);
+
+    const early = (val: OverviewLoanInstalment) =>
+      val.earlyPayment ? val.principalAmount : 0;
+    const batchTotalEarlyPayment = Calculator.sum([
+      ...tempBatch.map((v) => early(v)),
+      early(current),
+    ]);
+
     tempBatch.push({
       ...current,
       batchTotalInstalment,
+      batchTotalEarlyPayment,
     } as OverviewLoanInstalment);
 
     if (current.instalmentPayment || current.earlyPayment) {
