@@ -15,7 +15,9 @@ export const getDetailedMortgageLoanState = createSelector(
 
 export const getDetailedSelectedRepaymentScheduleName = createSelector(
   getDetailedMortgageLoanState,
-  (detailed) => detailed.selectedRepaymentScheduleName,
+  fromMortgageLoan.getRepaymentSchedules,
+  (detailed, repaymentSchedules) =>
+    detailed.selectedRepaymentScheduleName || repaymentSchedules[0]?.name,
 );
 
 export const getDetailedSelectedRepaymentSchedule = createSelector(
