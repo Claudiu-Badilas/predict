@@ -87,7 +87,7 @@ export class MortgageLoanOverviewBodyTableComponent {
         early.map((e) => e.principalAmount).concat(installment.totalInstalment),
       ),
       earlyPaymenrt: Calculator.sum(early.map((e) => e.principalAmount)),
-      restant: early?.at(-1)?.remainingBalance,
+      restant: instalments?.at(-1)?.remainingBalance,
       count: instalments.length,
     };
   }

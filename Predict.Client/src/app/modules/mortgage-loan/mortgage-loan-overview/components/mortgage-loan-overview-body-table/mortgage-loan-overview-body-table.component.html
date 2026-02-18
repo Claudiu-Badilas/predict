@@ -2,42 +2,42 @@
   <table>
     <thead>
       <tr>
-        <th class="text-center col-rata">Rata</th>
-        <th class="text-center col-anticipat">Anticipat</th>
-        <th class="text-center col-number">#</th>
-        <th class="text-center col-date">Data Plății</th>
-        <th class="text-center col-credit">Rată Credit</th>
-        <th class="text-center col-interest">Rată Dobândă</th>
+        <th class="text-center">Rata</th>
+        <th class="text-center">Anticipat</th>
+        <th class="text-center">#</th>
+        <th class="text-center">Data Plății</th>
+        <th class="text-center">Rată Credit</th>
+        <th class="text-center">Rată Dobândă</th>
 
         <th
-          class="text-center col-admin-fee"
+          class="text-center"
           [class.hidden]="!isColumnVisible('administrationFee')"
         >
           Administrare
         </th>
 
         <th
-          class="text-center col-insurance"
+          class="text-center"
           [class.hidden]="!isColumnVisible('insuranceCost')"
         >
           PAD
         </th>
 
         <th
-          class="text-center col-management-fee"
+          class="text-center"
           [class.hidden]="!isColumnVisible('managementFee')"
         >
           Management
         </th>
 
         <th
-          class="text-center col-recalculated"
+          class="text-center"
           [class.hidden]="!isColumnVisible('recalculatedInterest')"
         >
           Dobândă Recalculată
         </th>
 
-        <th class="text-center col-total">Total Rată</th>
+        <th class="text-center">Total Rată</th>
         <th class="text-center" [class.hidden]="!isColumnVisible('halfTotal')">
           1/2
         </th>
@@ -55,7 +55,7 @@
           Sold Ramas
         </th>
 
-        <th class="text-right col-actions">
+        <th class="text-right">
           <div class="menu-cell" #menuContainer>
             <button class="burger-btn" (click)="toggleMenu($event)">☰</button>
 
