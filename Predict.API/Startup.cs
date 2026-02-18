@@ -1,7 +1,5 @@
-using FluentMigrator.Runner;
 using Predict.Common.Configuration;
 using Predict.Configuration.Context;
-using Predict.Configuration.Migrations;
 using Predict.Extensions;
 using Predict.Middleware;
 using Predict.Repository.ReceiptRepo;
@@ -13,72 +11,64 @@ using Predict.Service.AuthorizationService;
 using Predict.Service.CacheService;
 using Predict.Service.CacheServicel;
 using Predict.Service.TokenService;
-using System.Reflection;
 
-namespace Predict {
-    public class Startup {
-        private readonly IConfiguration _config;
+namespace Predict;
 
-        public Startup(IConfiguration config) {
-            _config = config;
+public class Startup(IConfiguration config)
+{
+
+    public IConfiguration Configuration { get; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton<IDapperContext, DapperContext>();
+
+        services.AddControllers();
+        services.AddCors();
+
+        services.AddMemoryCache();
+        services.AddSingleton<ICacheService, MemoryCacheService>();
+
+        services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddSingleton<ITransactionRepo, TransactionRepo>();
+        services.AddSingleton<IReceiptRepo, ReceiptRepo>();
+
+        services.AddSingleton<ITokenService, TokenService>();
+        services.AddSingleton<IAccountService, AccountService>();
+        services.AddSingleton<IAuthService, AuthService>();
+        services.AddSingleton<IReceiptsService, ReceiptsService>();
+        services.AddSingleton<IMortgageLoanService, MortgageLoanService>();
+        services.AddSingleton<IInvoiceService, InvoiceService>();
+
+        services.AddSingleton<IEnvironmentConfiguration, EnvironmentConfiguration>();
+
+        services.AddIdentityServices(config, new EnvironmentConfiguration());
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
         }
+        app.UseMiddleware<ExceptionMiddleware>();
 
-        public IConfiguration Configuration { get; }
+        app.UseRouting();
 
-        public void ConfigureServices(IServiceCollection services) {
-            services.AddSingleton<IDapperContext, DapperContext>();
-            services.AddSingleton<Database>();
+        app.UseCors(builder =>
+           builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               //.WithOrigins("http://localhost:4200/")
+               );
 
-            services.AddLogging(c => c.AddFluentMigratorConsole())
-                .AddFluentMigratorCore()
-                .ConfigureRunner(c => c.AddPostgres()
-                    .WithGlobalConnectionString(new EnvironmentConfiguration().GetNpsqlConnectionString())
-                    .ScanIn(Assembly.GetExecutingAssembly()).For.Migrations());
+        app.UseAuthentication();
 
-            services.AddControllers();
-            services.AddCors();
+        app.UseAuthorization();
 
-            services.AddMemoryCache();
-            services.AddSingleton<ICacheService, MemoryCacheService>();
-
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<ITransactionRepo, TransactionRepo>();
-            services.AddSingleton<IReceiptRepo, ReceiptRepo>();
-
-            services.AddSingleton<ITokenService, TokenService>();
-            services.AddSingleton<IAccountService, AccountService>();
-            services.AddSingleton<IAuthService, AuthService>();
-            services.AddSingleton<IReceiptsService, ReceiptsService>();
-            services.AddSingleton<IMortgageLoanService, MortgageLoanService>();
-            services.AddSingleton<IInvoiceService, InvoiceService>();
-
-            services.AddSingleton<IEnvironmentConfiguration, EnvironmentConfiguration>();
-
-            services.AddIdentityServices(_config, new EnvironmentConfiguration());
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
-            if (env.IsDevelopment()) {
-                app.UseDeveloperExceptionPage();
-            }
-            app.UseMiddleware<ExceptionMiddleware>();
-
-            app.UseRouting();
-
-            app.UseCors(builder =>
-               builder.AllowAnyOrigin()
-                   .AllowAnyHeader()
-                   .AllowAnyMethod()
-                   //.WithOrigins("http://localhost:4200/")
-                   );
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => {
-                endpoints.MapControllers();
-            });
-        }
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
     }
 }
