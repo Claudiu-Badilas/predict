@@ -81,7 +81,7 @@ export namespace MortgageInterestProgressChartUtils {
               color: Colors.BLUE_400,
             },
             {
-              name: 'Asigurare',
+              name: 'PAD',
               y: MathUtil.round(paidInsurancePercent),
               amount: MathUtil.round(paidInsurance),
               color: Colors.YELLOW_400,

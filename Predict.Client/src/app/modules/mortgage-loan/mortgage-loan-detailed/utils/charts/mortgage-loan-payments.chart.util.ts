@@ -101,7 +101,7 @@ export namespace MortgageLoanPaymentsChartUtils {
       series: [
         {
           type: 'column',
-          name: 'Dobanda principal',
+          name: 'Principal Rata',
           color: Colors.GREEN_300,
           data: scheduledPaymentsPrincipalData,
         },
@@ -113,17 +113,16 @@ export namespace MortgageLoanPaymentsChartUtils {
         },
         {
           type: 'column',
-          name: 'Asigurare',
+          name: 'PAD',
           color: Colors.YELLOW_400,
           data: scheduledPaymentsinsuranceCostData,
         },
         {
           type: 'column',
-          name: 'Dobanda rata',
+          name: 'Dobanda Rata',
           color: Colors.BLUE_300,
           data: scheduledPaymentsIntrestsData,
         },
-
         {
           type: 'column',
           name: 'Principal Neplatit',
@@ -132,7 +131,7 @@ export namespace MortgageLoanPaymentsChartUtils {
         },
         {
           type: 'column',
-          name: 'Asigurare Neplatita',
+          name: 'PAD Neplatita',
           color: Colors.YELLOW_400,
           data: unpaidInsurenceData,
         },

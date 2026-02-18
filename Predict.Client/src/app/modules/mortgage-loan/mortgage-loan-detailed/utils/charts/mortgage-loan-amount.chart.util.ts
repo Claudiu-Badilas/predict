@@ -42,10 +42,10 @@ export namespace MortgageLoanAmountChartUtils {
       title: { text: 'Total Plata', align: 'left' },
       xAxis: {
         categories: [
-          'Principal Platiti',
+          'Principal Platit',
           'Principal Neplatit',
           'Dobanda Platita',
-          'Asigurare Platita',
+          'PAD Platita',
           'Dobanda Salvata',
           'Dobanda Neplatita',
         ],
