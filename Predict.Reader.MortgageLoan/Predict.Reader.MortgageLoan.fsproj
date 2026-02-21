@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="BCR\" />
+    <Compile Include="BCR\Types\MortgageTypes.fs" />
+    <Compile Include="BCR\BCRMortgageLoadnReader.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Predict.Reader.Common\Predict.Reader.Common.fsproj" />
   </ItemGroup>
 </Project>
