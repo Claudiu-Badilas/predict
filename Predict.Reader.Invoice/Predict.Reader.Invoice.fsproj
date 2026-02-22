@@ -6,6 +6,10 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Include="Types\InvoiceTypes.fs" />
+	  <Compile Include="InvoicesReader.fs" />
+	</ItemGroup>
+	<ItemGroup>
 		<ProjectReference Include="..\Predict.Reader.Common\Predict.Reader.Common.fsproj" />
 	</ItemGroup>
 </Project>
