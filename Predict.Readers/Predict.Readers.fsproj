@@ -12,7 +12,6 @@
 
 	<ItemGroup>
 		<Compile Include="Types\CommonTypes.fs" />
-		<Compile Include="Types\InvoiceTypes.fs" />
 		<Compile Include="Types\ReceiptTypes.fs" />
 		<Compile Include="Types\HealthTypes.fs" />
 		<Compile Include="Types\TransactionTypes.fs" />
@@ -23,7 +22,6 @@
 		<Compile Include="DatabaseAccess\Utils\StorerUtils.fs" />
 		<Compile Include="DatabaseAccess\StoreTransactions.fs" />
 		<Compile Include="DatabaseAccess\StoreReceipts.fs" />
-		<Compile Include="Readers\Invoices\InvoicesMapper.fs" />
 		<Compile Include="Readers\AccountStatement\OM\OrangeMoneyPdfAccountStatement.fs" />
 		<Compile Include="Readers\AccountStatement\OM\OrangeMoneyExcelAccountStatement.fs" />
 		<Compile Include="Readers\AccountStatement\RevolutExcelAccountStatement.fs" />

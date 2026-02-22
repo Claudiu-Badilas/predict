@@ -3,7 +3,6 @@ open IronXL
 open iTextSharp.text.pdf
 open Predict.Readers.AccountStatement
 open Predict.Reader.ReceiptParser
-open Predict.Reader.Mortgage
 
 module ParserConsole =
 
@@ -57,10 +56,6 @@ module ParserConsole =
 
         //let carrPdfs = getLocalPdfs @$"{path}\"
         //let carrReceipts = CarrefourPdfReceipt.readPdfs dataOwnerId carrPdfs
-
-        //let results = BCRMortgageMapper.getBcrMorgages()
-
-        let invoices = InvoicesMapper.getInvoices ()
 
         printfn "Run succesfully"
         0
