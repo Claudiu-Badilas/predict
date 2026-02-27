@@ -17,7 +17,7 @@ export const DEFAULT_COLUMN_CONFIGS: ColumnConfig[] = [
     label: 'Administrare',
     visible: false,
   },
-  { key: 'insuranceCost', label: 'PAD', visible: false },
+  { key: 'insuranceCost', label: 'PAD', visible: true },
   { key: 'managementFee', label: 'Management', visible: false },
   {
     key: 'recalculatedInterest',
