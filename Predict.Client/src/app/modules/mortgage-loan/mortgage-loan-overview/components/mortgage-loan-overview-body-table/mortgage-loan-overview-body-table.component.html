@@ -2,8 +2,7 @@
   <table>
     <thead>
       <tr>
-        <th class="text-center">Rata</th>
-        <th class="text-center">Anticipat</th>
+        <th class="text-center">Rata/Anticipat</th>
         <th class="text-center">#</th>
         <th class="text-center">Data Plății</th>
         <th class="text-center">Rată Credit</th>
@@ -90,7 +89,7 @@
             (click)="toggleGroup(group)"
           >
             @let subtotal = getSubtotal(group);
-            <td colspan="3" class="group-title-cell bold">
+            <td colspan="2" class="group-title-cell bold">
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                   <span class="chevron">
@@ -98,17 +97,18 @@
                   </span>
                   {{ group.title | date: "dd MMM yyyy" }}
                 </div>
-                <span class="count"
-                  >{{ subtotal.instalmentsCount }}
-                  @if (subtotal.earlyCount > 0) {
-                    + {{ subtotal.earlyCount }}
-                  }
-                  RATE
-                </span>
               </div>
             </td>
 
-            <td></td>
+            <td class="text-center">
+              <span class="count bold"
+                >{{ subtotal.instalmentsCount }}
+                @if (subtotal.earlyCount > 0) {
+                  + {{ subtotal.earlyCount }}
+                }
+                RATE
+              </span>
+            </td>
             <td class="bold text-center">
               {{ subtotal.principal | numberFormat: "0.00" }}
             </td>
@@ -191,20 +191,13 @@
                 }"
               >
                 <p-checkbox
+                  class="mr-3"
                   [id]="row.instalmentId"
                   [checked]="row.instalmentPayment"
                   [disabled]="row.disabled || row.earlyPayment"
                   (valueChange)="onSelectInstalmentPayment(row)"
-                />
-              </td>
-
-              <td
-                class="text-center"
-                [ngClass]="{
-                  'last-bottom-border': last && row.earlyPayment,
-                }"
-              >
-                <p-checkbox
+                /><p-checkbox
+                  class="ml-1"
                   [id]="row.instalmentId"
                   [checked]="row.earlyPayment"
                   [disabled]="row.disabled || row.instalmentPayment"

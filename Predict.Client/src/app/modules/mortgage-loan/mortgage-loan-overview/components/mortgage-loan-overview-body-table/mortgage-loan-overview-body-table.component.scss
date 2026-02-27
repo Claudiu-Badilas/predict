@@ -128,18 +128,16 @@ thead th {
       text-align: center;
       color: #666;
     }
-
-    .count {
-      color: #f43f5e;
-      font-size: 15px;
-      background: transparent;
-      padding: 0 10px;
-      border-radius: 30px;
-      border: 1px solid #f43f5e;
-    }
   }
 }
-
+.count {
+  color: #f43f5e;
+  font-size: 14px;
+  background: transparent;
+  padding: 0 10px;
+  border-radius: 30px;
+  border: 1px solid #f43f5e;
+}
 /* ============================= */
 /* Row Colors */
 /* ============================= */
