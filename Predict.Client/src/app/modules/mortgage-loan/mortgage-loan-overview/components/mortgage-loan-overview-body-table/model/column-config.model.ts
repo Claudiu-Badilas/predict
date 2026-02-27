@@ -24,7 +24,7 @@ export const DEFAULT_COLUMN_CONFIGS: ColumnConfig[] = [
     label: 'Dobândă Recalculată',
     visible: false,
   },
-  { key: 'halfTotal', label: '1/2', visible: false },
-  { key: 'earlyPayment', label: 'Anticipat', visible: false },
+  { key: 'halfTotal', label: '1/2', visible: true },
+  { key: 'earlyPayment', label: 'Anticipat', visible: true },
   { key: 'remainingBalance', label: 'Sold Ramas', visible: true },
 ];
