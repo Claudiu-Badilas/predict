@@ -62,14 +62,16 @@
               src="assets/icons/collapse.svg"
               alt="no-image"
             />
-            <img
-              width="20"
-              height="20"
-              src="assets/icons/expand.svg"
-              alt="no-image"
-            />
+            <div class="px-1">
+              <img
+                width="20"
+                height="20"
+                src="assets/icons/expand.svg"
+                alt="no-image"
+              />
+            </div>
             <div class="menu-cell" #menuContainer>
-              <button class="burger-btn" (click)="toggleMenu($event)">
+              <button class="burger-btn p-0" (click)="toggleMenu($event)">
                 ☰
               </button>
 
