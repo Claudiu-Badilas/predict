@@ -199,7 +199,7 @@
         }
 
         <!-- Rows -->
-        @if (collapseAll() ? !group.completed : group.expanded) {
+        @if (!group.completed || group.expanded) {
           @for (
             row of group.instalments;
             let last = $last;

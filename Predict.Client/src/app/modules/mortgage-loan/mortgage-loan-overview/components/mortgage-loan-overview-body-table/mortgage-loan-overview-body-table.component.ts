@@ -37,7 +37,6 @@ export class MortgageLoanOverviewBodyTableComponent {
 
   store = inject(Store<fromMortgageLoan.MortgageLoanState>);
 
-  collapseAll = signal<boolean>(false);
   isMenuOpen = false;
   columns: ColumnConfig[] = DEFAULT_COLUMN_CONFIGS;
 
@@ -110,10 +109,10 @@ export class MortgageLoanOverviewBodyTableComponent {
   }
 
   onExpandAll() {
-    this.collapseAll.set(false);
+    this.monthlyInstalmentGroups().forEach((group) => (group.expanded = true));
   }
 
   onCollapseAll() {
-    this.collapseAll.set(true);
+    this.monthlyInstalmentGroups().forEach((group) => (group.expanded = false));
   }
 }
