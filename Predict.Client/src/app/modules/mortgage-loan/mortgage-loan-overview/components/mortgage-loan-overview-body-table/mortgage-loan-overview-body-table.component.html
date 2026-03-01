@@ -91,11 +91,17 @@
             @let subtotal = getSubtotal(group);
             <td colspan="2" class="group-title-cell bold">
               <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                  <span class="chevron">
-                    {{ group.expanded ? "▼" : "▶" }}
+                <div class="d-flex align-items-center justify-content-center">
+                  <span class="ml-2 chevron">
+                    @if (group.expanded) {
+                      <img src="assets/icons/collapse.svg" alt="no-image" />
+                    } @else {
+                      <img src="assets/icons/expand.svg" alt="no-image" />
+                    }
                   </span>
-                  {{ group.title | date: "dd MMM yyyy" }}
+                  <span class="ml-2">
+                    {{ group.title | date: "dd MMM yyyy" }}
+                  </span>
                 </div>
               </div>
             </td>
