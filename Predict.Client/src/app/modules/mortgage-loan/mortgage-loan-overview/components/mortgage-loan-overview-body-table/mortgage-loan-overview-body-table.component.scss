@@ -9,7 +9,7 @@
   border: 1px solid #e2e6ee;
   border-radius: 7.5px;
   background: white;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 185px);
   overflow: auto;
 }
 
@@ -80,7 +80,6 @@ thead th {
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 4px 8px;
     border-radius: 4px;
 
     &:hover {

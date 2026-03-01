@@ -54,26 +54,42 @@
           Sold Ramas
         </th>
 
-        <th class="text-right">
-          <div class="menu-cell" #menuContainer>
-            <button class="burger-btn" (click)="toggleMenu($event)">☰</button>
+        <th>
+          <div class="d-flex align-items-center justify-content-end">
+            <img
+              width="20"
+              height="20"
+              src="assets/icons/collapse.svg"
+              alt="no-image"
+            />
+            <img
+              width="20"
+              height="20"
+              src="assets/icons/expand.svg"
+              alt="no-image"
+            />
+            <div class="menu-cell" #menuContainer>
+              <button class="burger-btn" (click)="toggleMenu($event)">
+                ☰
+              </button>
 
-            @if (isMenuOpen) {
-              <div class="column-menu">
-                @for (col of columns; track col.key) {
-                  <div>
-                    <label (click)="$event.stopPropagation()">
-                      <input
-                        type="checkbox"
-                        [(ngModel)]="col.visible"
-                        (click)="$event.stopPropagation()"
-                      />
-                      {{ col.label }}
-                    </label>
-                  </div>
-                }
-              </div>
-            }
+              @if (isMenuOpen) {
+                <div class="column-menu">
+                  @for (col of columns; track col.key) {
+                    <div>
+                      <label (click)="$event.stopPropagation()">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="col.visible"
+                          (click)="$event.stopPropagation()"
+                        />
+                        {{ col.label }}
+                      </label>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           </div>
         </th>
       </tr>
