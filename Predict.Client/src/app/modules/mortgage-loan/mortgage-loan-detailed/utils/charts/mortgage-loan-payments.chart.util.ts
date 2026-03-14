@@ -67,7 +67,7 @@ export namespace MortgageLoanPaymentsChartUtils {
     return {
       chart: { zooming: { type: 'x' } },
       title: { text: 'Plati Lunare', align: 'left' },
-      xAxis: { categories },
+      xAxis: { categories, labels: { enabled: false } },
       yAxis: { title: { text: 'Amount (RON)' } },
       plotOptions: {
         column: {
@@ -104,42 +104,49 @@ export namespace MortgageLoanPaymentsChartUtils {
           name: 'Principal Rata',
           color: Colors.GREEN_300,
           data: scheduledPaymentsPrincipalData,
+          showInLegend: false,
         },
         {
           type: 'column',
           name: 'Anticipat',
           color: Colors.GREEN_300,
           data: earlyPaymentsData,
+          showInLegend: false,
         },
         {
           type: 'column',
           name: 'PAD',
           color: Colors.YELLOW_400,
           data: scheduledPaymentsinsuranceCostData,
+          showInLegend: false,
         },
         {
           type: 'column',
           name: 'Dobanda Rata',
           color: Colors.BLUE_300,
           data: scheduledPaymentsIntrestsData,
+          showInLegend: false,
         },
         {
           type: 'column',
           name: 'Principal Neplatit',
           color: Colors.BS_TEAL,
           data: unpaidPrincipalData,
+          showInLegend: false,
         },
         {
           type: 'column',
           name: 'PAD Neplatita',
           color: Colors.YELLOW_400,
           data: unpaidInsurenceData,
+          showInLegend: false,
         },
         {
           type: 'column',
           name: 'Dobanda Neplatita',
           color: Colors.BS_ORANGE,
           data: unpaidInterestData,
+          showInLegend: false,
         },
       ],
     };

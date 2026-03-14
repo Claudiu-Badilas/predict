@@ -4,7 +4,6 @@ import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import { MortgageInterestProgressChartUtils } from '../utils/charts/mortgage-interest-progress.chart.util';
 import { MortgageLoanAmountChartUtils } from '../utils/charts/mortgage-loan-amount.chart.util';
 import { MortgageLoanPaymentsChartUtils } from '../utils/charts/mortgage-loan-payments.chart.util';
-import { MortgageLoanProgressChartUtils } from '../utils/charts/mortgage-loan-progress.chart.util';
 import { HistoricalInstalmentPaymentsUtils } from '../utils/historical-instalment-payments.utils';
 import { HistoricalInstalmentPaymentBatchesUtils } from '../utils/historical-instalment-payment-batches.utils';
 
@@ -47,11 +46,6 @@ export const getHistoricalInstalmentPayments = createSelector(
 export const getHistoricalInstalmentPaymentBatches = createSelector(
   getHistoricalInstalmentPayments,
   HistoricalInstalmentPaymentBatchesUtils.getHistoricalInstalmentPaymentBatches,
-);
-
-export const getMortgageLoanProgressChart = createSelector(
-  getHistoricalInstalmentPayments,
-  MortgageLoanProgressChartUtils.getChart,
 );
 
 export const getMortgageInterestProgressChart = createSelector(

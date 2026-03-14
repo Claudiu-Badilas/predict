@@ -19,9 +19,6 @@ import { HistoricalInstalmentsTableComponent } from '../historical-instalments-t
   styleUrl: './mortgage-loan-detailed-body.component.scss',
 })
 export class MortgageLoanDetailedBodyComponent {
-  mortgageLoanProgressChart$ = this.store.select(
-    fromMortgageLoanDetailed.getMortgageLoanProgressChart,
-  );
   mortgageInterestProgressChart$ = this.store.select(
     fromMortgageLoanDetailed.getMortgageInterestProgressChart,
   );
