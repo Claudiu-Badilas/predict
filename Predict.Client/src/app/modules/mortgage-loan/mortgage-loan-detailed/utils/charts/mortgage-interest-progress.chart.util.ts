@@ -74,7 +74,7 @@ export namespace MortgageInterestProgressChartUtils {
       },
       plotOptions: {
         pie: {
-          innerSize: '60%',
+          innerSize: '70%',
           borderRadius: 5,
           dataLabels: {
             enabled: true,
