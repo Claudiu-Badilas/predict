@@ -89,8 +89,8 @@ thead th {
 
   .column-menu {
     position: absolute;
-    top: 100%;
-    right: 0;
+    top: 0; /* align top of menu with button */
+    left: 100%; /* open fully to the right of button */
     background: #fff;
     border: 1px solid #dee2e6;
     padding: 10px;
@@ -104,7 +104,7 @@ thead th {
       align-items: center;
       gap: 8px;
       cursor: pointer;
-      font-size: 11px; // 0.85rem;
+      font-size: 11px;
       padding: 4px 0;
     }
   }
