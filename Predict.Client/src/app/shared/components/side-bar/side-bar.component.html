@@ -12,13 +12,12 @@
 <ng-template #hiddenSidebar>
   <div
     class="sidebar-hidden"
-    tripleClick
-    (tripleClick)="toggleSidebar()"
+    (click)="toggleSidebar()"
     holdTrigger
     (holdTrigger)="toggleSidebar()"
   ></div>
 </ng-template>
 
-<div [ngClass]="{ content: isFullSize, 'content-full': !isFullSize }">
+<div [ngClass]="{ content: isFullSize }">
   <ng-content select="[main-content]"></ng-content>
 </div>

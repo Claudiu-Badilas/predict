@@ -9,20 +9,20 @@
     color: white;
     margin-top: 50px;
   }
+
   &-hidden {
     background-color: #801136;
-    height: 100%;
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
-    width: 25px;
+    width: 35px;
+    height: 35px;
     color: white;
     margin-top: 50px;
+    z-index: 100;
   }
 }
+
 .content {
   margin-left: 300px;
-}
-.content-full {
-  margin-left: 25px;
 }
