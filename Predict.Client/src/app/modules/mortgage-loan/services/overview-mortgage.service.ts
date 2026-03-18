@@ -11,7 +11,7 @@ import {
   providedIn: 'root',
 })
 export class MortgageLoanService {
-  private readonly STORAGE_KEY = 'repayment_schedules_dto_17mar2026';
+  private readonly STORAGE_KEY = 'repayment_schedules_dto_18mar2026';
 
   constructor(private httpClient: HttpClient) {}
 
