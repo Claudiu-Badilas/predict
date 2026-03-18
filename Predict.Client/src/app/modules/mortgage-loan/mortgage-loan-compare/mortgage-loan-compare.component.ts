@@ -83,24 +83,25 @@ export class MortgageLoanCompareComponent {
     effect(() => {
       const rs = this.repaymentSchedules();
       if (!rs.length) return;
-      const [first, second] = rs.filter((r) => !r.isBasePayment);
+      const [first] = rs.filter((r) => !r.isBasePayment);
+      const base = rs.find((r) => r.isBasePayment);
 
       if (!this.selectedLeftValue()) {
-        if (!second) return;
+        if (!first) return;
 
         this.store.dispatch(
           MortgageLoanCompareActions.selectedLeftMortgageLoanChanged({
-            selected: second.name,
+            selected: first.name,
           }),
         );
       }
 
       if (!this.selectedRightValue()) {
-        if (!first) return;
+        if (!base) return;
 
         this.store.dispatch(
           MortgageLoanCompareActions.selectedRightMortgageLoanChanged({
-            selected: first.name,
+            selected: base.name,
           }),
         );
       }
