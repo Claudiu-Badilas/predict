@@ -4,13 +4,12 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
-import { ToggleButtonComponent } from '../toggle-button/toggle-button.component';
 
 @Component({
   selector: 'p-top-bar',
   templateUrl: './top-bar.component.html',
   styleUrls: ['./top-bar.component.scss'],
-  imports: [CommonModule, NgbDropdownModule, ToggleButtonComponent],
+  imports: [CommonModule, NgbDropdownModule],
 })
 export class TopBarComponent {
   isMenuOpen = false;
@@ -33,13 +32,5 @@ export class TopBarComponent {
   onNavigateTo(url: string) {
     this.isMenuOpen = false;
     this.store.dispatch(NavigationAction.navigateTo({ route: url }));
-  }
-
-  onSelectionChange(module: string) {
-    this.store.dispatch(
-      NavigationAction.navigateTo({
-        route: `/mortgage-loan/${module.toLowerCase()}`,
-      }),
-    );
   }
 }

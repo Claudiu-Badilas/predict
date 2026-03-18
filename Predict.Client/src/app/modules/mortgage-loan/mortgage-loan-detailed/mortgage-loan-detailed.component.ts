@@ -6,18 +6,16 @@ import * as MortgageLoanDetailedActions from 'src/app/modules/mortgage-loan/mort
 import * as fromMortgageLoanDetailed from 'src/app/modules/mortgage-loan/mortgage-loan-detailed/selectors/mortgage-loan-detailed.selectors';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
-import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
+import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MortgageLoanDetailedBodyComponent } from './components/mortgage-loan-detailed-body/mortgage-loan-detailed-body.component';
 import { MortgageLoanDetailedHeaderComponent } from './components/mortgage-loan-detailed-header/mortgage-loan-detailed-header.component';
-import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 
 @Component({
   selector: 'p-mortgage-loan-detailed',
   imports: [
     CommonModule,
-    SideBarComponent,
     ToggleButtonComponent,
     MortgageLoanDetailedHeaderComponent,
     MortgageLoanDetailedBodyComponent,

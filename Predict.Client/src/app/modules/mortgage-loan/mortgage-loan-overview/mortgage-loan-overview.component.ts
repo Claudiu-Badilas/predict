@@ -8,19 +8,17 @@ import * as fromMortgageLoanOverview from 'src/app/modules/mortgage-loan/mortgag
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
-import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
+import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
 import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
-import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 
 @Component({
   selector: 'p-mortgage-loan-overview',
   imports: [
     CommonModule,
-    SideBarComponent,
     ToggleButtonComponent,
     DropdownSelectComponent,
     MortgageLoanOverviewHeaderComponent,

@@ -11,20 +11,18 @@ import * as fromAppStore from 'src/app/store/app-state.reducer';
 
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
-import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 
 import { RadioGroupComponent } from 'src/app/shared/components/radio-group/radio-group.component';
+import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import { MortgageLoanCompareBodyComponent } from './components/mortgage-loan-compare-body/mortgage-loan-compare-body.component';
 import { MortgageLoanCompareHeaderComponent } from './components/mortgage-loan-compare-header/mortgage-loan-compare-header.component';
 import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.chart.util';
-import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 
 @Component({
   selector: 'p-mortgage-loan-compare',
   imports: [
     CommonModule,
-    SideBarComponent,
     ToggleButtonComponent,
     DropdownSelectComponent,
     HighchartWrapperComponent,
