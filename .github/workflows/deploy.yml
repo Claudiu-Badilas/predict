@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Angular app
         run: |
-          npm run build -- --configuration production --base-href "/Predict/"
+          npm run build -- --configuration production --base-href "/test/"
         working-directory: ./Predict.Client
 
       - name: Deploy to GitHub Pages
