@@ -1,13 +1,11 @@
 <p-top-bar>
   <ng-container module-navigation>
     <div class="d-flex align-items-center">
-      <div>
-        <p-toggle-button
-          [options]="['Overview', 'Detailed', 'Compare']"
-          [selected]="'Overview'"
-          (selectionChange)="onSelectionChange($event)"
-        />
-      </div>
+      <p-toggle-button
+        [options]="['Overview', 'Detailed', 'Compare']"
+        [selected]="'Overview'"
+        (selectionChange)="onSelectionChange($event)"
+      />
       <div
         class="download btn py-0 px-1 btn-outline-primary mx-2"
         (click)="downloadSchedules()"
