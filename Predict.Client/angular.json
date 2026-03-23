@@ -20,6 +20,7 @@
             "outputPath": {
               "base": "dist/predict.client"
             },
+            "baseHref": "/Predict/",
             "index": "src/index.html",
             "polyfills": [],
             "tsConfig": "tsconfig.app.json",
