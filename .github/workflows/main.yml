@@ -2,7 +2,7 @@ name: Deploy Angular App to GitHub Pages
 
 on:
   push:
-    branches: [github-deploy-v2] # Change 'main' to your default branch if different
+    branches: [main] # Change 'main' to your default branch if different
 
 jobs:
   build-and-deploy:
@@ -14,7 +14,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "24.12.0"
 
       - name: Install dependencies
         working-directory: ./Predict/Predict.Client
