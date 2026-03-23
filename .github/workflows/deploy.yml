@@ -6,35 +6,45 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.12
+          node-version: "22.12"
+          cache: "npm"
 
       - name: Install dependencies
-        run: npm install
-        working-directory: ./Predict.Client
+        run: npm ci
 
       - name: Build Angular app
-        run: |
-          npm run build -- --configuration production --base-href "/predict/"
-        working-directory: ./Predict.Client
+        run: npm run build -- --configuration production --base-href "/predict/"
 
       - name: List build output
         run: ls -la ./Predict.Client/dist/predict.client/
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Predict.Client/dist/predict.client/browser
+          path: "./Predict.Client/dist/predict.client/browser"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
