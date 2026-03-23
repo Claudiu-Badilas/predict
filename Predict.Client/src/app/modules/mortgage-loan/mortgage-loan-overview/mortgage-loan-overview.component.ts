@@ -14,6 +14,7 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
 import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
+import { MortgageLoanService } from '../services/overview-mortgage.service';
 
 @Component({
   selector: 'p-mortgage-loan-overview',
@@ -49,6 +50,7 @@ export class MortgageLoanOverviewComponent {
 
   constructor(
     private readonly store: Store<fromMortgageLoan.MortgageLoanState>,
+    private mortgageService: MortgageLoanService,
   ) {
     effect(() => {
       const [instalmentPayments, earlyPayments] = mapInstalementSimulation(
@@ -62,6 +64,26 @@ export class MortgageLoanOverviewComponent {
         }),
       );
     });
+  }
+
+  downloadSchedules(): void {
+    this.mortgageService.downloadRepaymentSchedulesAsJson();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    this.mortgageService
+      .uploadRepaymentSchedulesFromJson(file)
+      .then(() => {
+        alert('File uploaded and stored successfully!');
+      })
+      .catch((error) => {
+        alert(`Error: ${error.message}`);
+      });
   }
 
   onSelectionChange(module: string) {

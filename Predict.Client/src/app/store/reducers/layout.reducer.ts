@@ -12,13 +12,13 @@ export interface State {
 }
 
 const initialState: State = {
-  loading: true,
+  loading: false,
 };
 
 const layoutReducer = createReducer(
   initialState,
-  on(LayoutActions.spinnerOn, (state) => ({ ...state, loading: true })),
-  on(LayoutActions.spinnerOff, (state) => ({ ...state, loading: false }))
+  on(LayoutActions.spinnerOn, (state) => ({ ...state, loading: false })),
+  on(LayoutActions.spinnerOff, (state) => ({ ...state, loading: false })),
 );
 
 export function reducer(state: State, action: Action) {
@@ -29,5 +29,5 @@ const getLayoutReducer = createFeatureSelector<State>('layout');
 
 export const getIsLoading = createSelector(
   getLayoutReducer,
-  (state) => state.loading
+  (state) => state.loading,
 );
