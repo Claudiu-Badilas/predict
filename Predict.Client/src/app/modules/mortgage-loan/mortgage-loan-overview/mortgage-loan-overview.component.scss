@@ -5,8 +5,14 @@
 .note {
   border: 1px solid red;
   font-size: 13px;
-  border-radius: 20px;
+  border-radius: 3px;
   font-weight: 700;
   background-color: white;
   color: red;
+}
+
+.download,
+.upload {
+  color: white;
+  border: white solid 1px;
 }
