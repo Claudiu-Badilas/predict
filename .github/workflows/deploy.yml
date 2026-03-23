@@ -18,6 +18,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./Predict.Client # All run steps execute inside this folder
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,6 +31,7 @@ jobs:
         with:
           node-version: "22.12"
           cache: "npm"
+          cache-dependency-path: "./Predict.Client/package-lock.json" # Points to the correct lock file
 
       - name: Install dependencies
         run: npm ci
@@ -35,7 +40,7 @@ jobs:
         run: npm run build -- --configuration production --base-href "/predict/"
 
       - name: List build output
-        run: ls -la ./Predict.Client/dist/predict.client/
+        run: ls -la ./dist/predict.client/browser
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
