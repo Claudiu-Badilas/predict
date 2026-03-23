@@ -30,8 +30,11 @@ jobs:
           npm run build -- --configuration production --base-href "/predict/"
         working-directory: ./Predict.Client
 
+      - name: List build output
+        run: ls -la ./Predict.Client/dist/predict.client/
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Predict.Client/dist/predict.client
+          publish_dir: ./Predict.Client/dist/predict.client/browser
