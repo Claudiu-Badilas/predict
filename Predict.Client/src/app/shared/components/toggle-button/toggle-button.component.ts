@@ -19,6 +19,8 @@ export class ToggleButtonComponent {
 
   select(option: string) {
     this._selected.set(option);
-    this.selectionChange.emit(option);
+    setTimeout(() => {
+      this.selectionChange.emit(option);
+    }, 200);
   }
 }
