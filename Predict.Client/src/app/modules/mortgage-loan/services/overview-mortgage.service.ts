@@ -6,39 +6,32 @@ import {
   RepaymentSchedule,
   RepaymentScheduleDto,
 } from '../models/mortgage.model';
+import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class MortgageLoanService {
   private readonly STORAGE_KEY = 'GraficRambursare_18-Mar-2026';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private readonly _httpClient: HttpClient,
+    private readonly _localStorage: LocalStorageService,
+  ) {}
 
   getRepaymentSchedules(): Observable<RepaymentSchedule[]> {
-    const cachedDtos = this.getDtosFromLocalStorage();
+    const cachedDtos = this._localStorage.getItem<RepaymentScheduleDto[]>(
+      this.STORAGE_KEY,
+    );
 
     if (cachedDtos) return of(this.convertToModels(cachedDtos));
 
-    return this.httpClient
+    return this._httpClient
       .get<
         RepaymentScheduleDto[]
       >('https://localhost:8080/api/v1/mortgage-loan/bcr')
       .pipe(
-        tap((dtos) => this.saveDtosToLocalStorage(dtos)),
+        tap((dtos) => this._localStorage.setItem(this.STORAGE_KEY, dtos)),
         map((dtos) => this.convertToModels(dtos)),
       );
-  }
-
-  private saveDtosToLocalStorage(dtos: RepaymentScheduleDto[]): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(dtos));
-  }
-
-  private getDtosFromLocalStorage(): RepaymentScheduleDto[] | null {
-    const raw = localStorage.getItem(this.STORAGE_KEY);
-    if (!raw) return null;
-
-    return JSON.parse(raw) as RepaymentScheduleDto[];
   }
 
   private convertToModels(dtos: RepaymentScheduleDto[]): RepaymentSchedule[] {
@@ -46,12 +39,9 @@ export class MortgageLoanService {
   }
 
   downloadRepaymentSchedulesAsJson(): void {
-    const cachedDtos = this.getDtosFromLocalStorage();
-
-    if (!cachedDtos || cachedDtos.length === 0) {
-      console.warn('No repayment schedules found in local storage');
-      return;
-    }
+    const cachedDtos = this._localStorage.getItem<RepaymentScheduleDto[]>(
+      this.STORAGE_KEY,
+    );
 
     const jsonString = JSON.stringify(cachedDtos, null, 2);
     const blob = new Blob([jsonString], { type: 'application/json' });
@@ -89,7 +79,7 @@ export class MortgageLoanService {
             return;
           }
 
-          this.saveDtosToLocalStorage(dtos);
+          this._localStorage.setItem(this.STORAGE_KEY, dtos);
 
           resolve(true);
         } catch (error) {
