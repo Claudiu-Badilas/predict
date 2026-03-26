@@ -7,6 +7,7 @@ import {
   RepaymentScheduleDto,
 } from '../models/mortgage.model';
 import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
+import { PrintoutsService } from 'src/app/platform/services/printouts.service';
 
 @Injectable({ providedIn: 'root' })
 export class MortgageLoanService {
@@ -15,6 +16,7 @@ export class MortgageLoanService {
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _localStorage: LocalStorageService,
+    private readonly _printouts: PrintoutsService,
   ) {}
 
   getRepaymentSchedules(): Observable<RepaymentSchedule[]> {
@@ -42,17 +44,7 @@ export class MortgageLoanService {
     const cachedDtos = this._localStorage.getItem<RepaymentScheduleDto[]>(
       this.STORAGE_KEY,
     );
-
-    const jsonString = JSON.stringify(cachedDtos, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${this.STORAGE_KEY}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    this._printouts.download(cachedDtos, `${this.STORAGE_KEY}.json`);
   }
 
   uploadRepaymentSchedulesFromJson(file: File): Promise<boolean> {

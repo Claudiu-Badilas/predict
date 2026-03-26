@@ -20,7 +20,7 @@ export class TopBarComponent {
     { name: 'Invoices', url: 'invoices' },
     { name: 'Receipts', url: 'receipts/summary' },
     { name: 'Settings', url: 'settings' },
-    { name: 'Log out', url: 'authentication/logout' },
+    { name: 'Logout', url: 'authentication/logout' },
   ];
 
   constructor(private store: Store<fromAppStore.AppState>) {}
