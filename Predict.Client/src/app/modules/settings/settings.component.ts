@@ -9,4 +9,11 @@ import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.compo
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })
-export class SettingsComponent {}
+export class SettingsComponent {
+  modules = [
+    { name: 'Mortgage', url: 'mortgage-loan' },
+    { name: 'Transactions', url: 'transactions' },
+    { name: 'Invoices', url: 'invoices' },
+    { name: 'Receipts', url: 'receipts' },
+  ];
+}
