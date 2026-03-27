@@ -9,7 +9,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  width: 100%;
   border-radius: 12px;
   margin: 16px;
   box-shadow: var(--shadow-md);
@@ -20,7 +19,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 16px;
   border-bottom: 2px solid #e0e7ff;
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -90,16 +88,8 @@
 
 .tabs-content {
   display: flex;
-  flex: 1;
-  padding: 24px;
-  background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 100%);
+  padding: 20px 0;
   min-height: 120px;
-  overflow-y: auto;
-
-  /* Content scrollbar styling */
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
 }
 
 /* Responsive Design */
@@ -109,7 +99,7 @@
   }
 
   .tabs-wrapper {
-    margin: 8px;
+    // margin: 8px;
     border-radius: 8px;
   }
 

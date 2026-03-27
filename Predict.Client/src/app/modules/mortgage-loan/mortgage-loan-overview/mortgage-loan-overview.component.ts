@@ -66,26 +66,6 @@ export class MortgageLoanOverviewComponent {
     });
   }
 
-  downloadSchedules(): void {
-    this.mortgageService.downloadRepaymentSchedulesAsJson();
-  }
-
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-
-    if (!file) return;
-
-    this.mortgageService
-      .uploadRepaymentSchedulesFromJson(file)
-      .then(() => {
-        alert('File uploaded and stored successfully!');
-      })
-      .catch((error) => {
-        alert(`Error: ${error.message}`);
-      });
-  }
-
   onSelectionChange(module: string) {
     this.store.dispatch(
       NavigationAction.navigateTo({

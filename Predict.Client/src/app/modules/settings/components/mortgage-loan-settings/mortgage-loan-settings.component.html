@@ -1,1 +1,16 @@
-<p>mortgage-loan-settings works!</p>
+<div
+  class="download btn py-0 px-1 btn-outline-primary mx-2"
+  (click)="downloadSchedules()"
+>
+  Download ↓
+</div>
+<label class="m-0 p-0">
+  <div class="upload btn py-0 px-1 btn-outline-primary">Upload ↑</div>
+
+  <input
+    type="file"
+    accept=".json"
+    (change)="onFileSelected($event)"
+    style="display: none"
+  />
+</label>
