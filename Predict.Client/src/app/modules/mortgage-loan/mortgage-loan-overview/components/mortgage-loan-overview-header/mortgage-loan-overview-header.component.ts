@@ -53,12 +53,6 @@ export class MortgageLoanOverviewHeaderComponent {
     Calculator.sum(this.earlyPayments().map((a) => a.principalAmount)),
   );
 
-  totalSavedInterest = computed(() =>
-    Calculator.sum(
-      this.earlyPayments().map((a) => a.totalInstalment - a.principalAmount),
-    ),
-  );
-
   paidMonthlyInstalments = computed(() =>
     Calculator.sum(
       this.monthlyInstalmentGroups()

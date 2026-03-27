@@ -51,31 +51,15 @@
       </div>
     </div>
 
-    <!-- Economii -->
-    <div class="summary-section stat-item stat-item--teal">
-      <div class="stat-row">
-        <span class="stat-item__label">Economii</span>
-        <span class="stat-item__label">Rate</span>
-      </div>
-
-      <div class="stat-row">
-        <span class="stat-item__value">
-          {{ totalSavedInterest() | numberFormat: "0.00" }}
-        </span>
-
-        <span class="stat-item__value">
-          {{ paidMonthlyInstalments() | numberFormat: "0" : 0 }}
-          /
-          {{ monthlyInstalments() | numberFormat: "0" : 0 }}
-        </span>
-      </div>
-    </div>
-
     <!-- Sold -->
     <div class="summary-section stat-item stat-item--violet">
       <div class="stat-row">
-        <span class="stat-item__label">Sold Initial</span>
-        <span class="stat-item__label">Sold Ramas</span>
+        <span class="stat-item__label">Sold</span>
+        <span class="stat-item__value">
+          {{ paidMonthlyInstalments() | numberFormat: "0" : 0 }}
+          /
+          {{ monthlyInstalments() | numberFormat: "0" : 0 }}</span
+        >
       </div>
 
       <div class="stat-row">
