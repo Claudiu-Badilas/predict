@@ -7,7 +7,9 @@ import { HistoricalInstalmentPayment } from '../../models/base-loan-rate.model';
 export namespace MortgageLoanPaymentsChartUtils {
   export function getChart(
     instalments: HistoricalInstalmentPayment[],
+    fixedPeriod: boolean,
   ): Highcharts.Options {
+    console.log('🚀 ~ getChart ~ allInstalments:', instalments);
     if (!instalments.length) return null;
 
     const scheduledPayments = instalments.filter((r) => r.instalmentPayment);
@@ -25,46 +27,63 @@ export namespace MortgageLoanPaymentsChartUtils {
           year: 'numeric',
         }),
       );
+
     const groupedscheduledPaymentsByMonth =
       groupInstalmentsByDate(scheduledPayments);
     const groupedEarlyPaymentsByMonth = groupInstalmentsByDate(earlyPayments);
     const groupedUnpaidByMonth = groupInstalmentsByDate(unpaid);
 
-    const categories = getAvailableMonths(
-      instalments.map((r) => r.paymentDate),
-    );
+    const allDates = instalments.map((r) => r.paymentDate);
+
+    const categories = fixedPeriod
+      ? getMonthsForFixedPeriod(allDates, 5)
+      : getAvailableMonths(allDates);
 
     const scheduledPaymentsIntrestsData = categories.map((cat) =>
       Calculator.sum(
-        groupedscheduledPaymentsByMonth[cat]?.map((i) => i.interestAmount),
+        groupedscheduledPaymentsByMonth[cat]?.map((i) => i.interestAmount) ||
+          [],
       ),
-    );
-    const scheduledPaymentsinsuranceCostData = categories.map((cat) =>
-      Calculator.sum(
-        groupedscheduledPaymentsByMonth[cat]?.map((i) => i.insuranceCost),
-      ),
-    );
-    const scheduledPaymentsPrincipalData = categories.map((cat) =>
-      Calculator.sum(
-        groupedscheduledPaymentsByMonth[cat]?.map((i) => i.principalAmount),
-      ),
-    );
-    const earlyPaymentsData = categories.map((cat) =>
-      Calculator.sum(
-        groupedEarlyPaymentsByMonth[cat]?.map((i) => i.principalAmount),
-      ),
-    );
-    const unpaidPrincipalData = categories.map((cat) =>
-      Calculator.sum(groupedUnpaidByMonth[cat]?.map((i) => i.principalAmount)),
-    );
-    const unpaidInterestData = categories.map((cat) =>
-      Calculator.sum(groupedUnpaidByMonth[cat]?.map((i) => i.interestAmount)),
-    );
-    const unpaidInsurenceData = categories.map((cat) =>
-      Calculator.sum(groupedUnpaidByMonth[cat]?.map((i) => i.insuranceCost)),
     );
 
-    // Calculate maximum bar value (total of all series for each category)
+    const scheduledPaymentsinsuranceCostData = categories.map((cat) =>
+      Calculator.sum(
+        groupedscheduledPaymentsByMonth[cat]?.map((i) => i.insuranceCost) || [],
+      ),
+    );
+
+    const scheduledPaymentsPrincipalData = categories.map((cat) =>
+      Calculator.sum(
+        groupedscheduledPaymentsByMonth[cat]?.map((i) => i.principalAmount) ||
+          [],
+      ),
+    );
+
+    const earlyPaymentsData = categories.map((cat) =>
+      Calculator.sum(
+        groupedEarlyPaymentsByMonth[cat]?.map((i) => i.principalAmount) || [],
+      ),
+    );
+
+    const unpaidPrincipalData = categories.map((cat) =>
+      Calculator.sum(
+        groupedUnpaidByMonth[cat]?.map((i) => i.principalAmount) || [],
+      ),
+    );
+
+    const unpaidInterestData = categories.map((cat) =>
+      Calculator.sum(
+        groupedUnpaidByMonth[cat]?.map((i) => i.interestAmount) || [],
+      ),
+    );
+
+    const unpaidInsurenceData = categories.map((cat) =>
+      Calculator.sum(
+        groupedUnpaidByMonth[cat]?.map((i) => i.insuranceCost) || [],
+      ),
+    );
+
+    // Calculate maximum stacked value per category
     const maxBarValue = categories.reduce((max, _, index) => {
       const totalAtCategory =
         (scheduledPaymentsPrincipalData[index] || 0) +
@@ -80,7 +99,7 @@ export namespace MortgageLoanPaymentsChartUtils {
 
     return {
       chart: { zooming: { type: 'x' } },
-      title: { text: 'Plati Lunare', align: 'left' },
+      title: { text: null, align: 'left' },
       xAxis: { categories, labels: { enabled: false } },
       yAxis: {
         title: { text: null },
@@ -99,21 +118,25 @@ export namespace MortgageLoanPaymentsChartUtils {
         formatter: function () {
           let total = 0;
           let category;
+
           const lines = this.points!.map((p) => {
             total += p.y as number;
             category = p.category;
+
             return `
-          <span style="color:${p.color}">●</span>
-          ${p.series.name}: <b>${NumberFormatPipe.numberFormat(p.y as number)}</b> RON
-        `;
+              <span style="color:${p.color}">●</span>
+              ${p.series.name}: <b>${NumberFormatPipe.numberFormat(
+                p.y as number,
+              )}</b> RON
+            `;
           });
 
           return `
-        <b>${category}</b><br/>
-        ${lines.join('<br/>')}
-        <hr style="margin:4px 0"/>
-        <b>Total: ${NumberFormatPipe.numberFormat(total)} RON</b>
-      `;
+            <b>${category}</b><br/>
+            ${lines.join('<br/>')}
+            <hr style="margin:4px 0"/>
+            <b>Total: ${NumberFormatPipe.numberFormat(total)} RON</b>
+          `;
         },
       },
       series: [
@@ -189,9 +212,45 @@ export namespace MortgageLoanPaymentsChartUtils {
 
     while (current <= last) {
       result.push(
-        current.toLocaleString('en-US', { month: 'short', year: 'numeric' }),
+        current.toLocaleString('en-US', {
+          month: 'short',
+          year: 'numeric',
+        }),
       );
+
       current = new Date(current.getFullYear(), current.getMonth() + 1, 1);
+    }
+
+    return result;
+  }
+
+  function getMonthsForFixedPeriod(dates: Date[], years: number): string[] {
+    if (!dates.length) return [];
+
+    const sortedDates = [...dates].sort(
+      (d1, d2) => d1.getTime() - d2.getTime(),
+    );
+
+    const firstDate = new Date(sortedDates[0]);
+    const result: string[] = [];
+
+    const current = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
+
+    const end = new Date(
+      firstDate.getFullYear() + years,
+      firstDate.getMonth(),
+      1,
+    );
+
+    while (current <= end) {
+      result.push(
+        current.toLocaleString('en-US', {
+          month: 'short',
+          year: 'numeric',
+        }),
+      );
+
+      current.setMonth(current.getMonth() + 1);
     }
 
     return result;

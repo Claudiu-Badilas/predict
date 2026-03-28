@@ -6,7 +6,23 @@
 
   <p-highcharts-wrapper
     class="chart-wrapper"
-    [chartOptions]="mortgageLoanPaymentsChart$ | async"
+    [chartOptions]="mortgageLoanPaymentsChart()"
+  >
+    <ng-container p-highcharts-wrapper-content>
+      <div class="m-2 d-flex align-items-center justify-content-between">
+        <div class="title">Plati Lunare</div>
+        <div class="w-50">
+          <p-toggle-button
+            [options]="['Prd. Fixa', 'Prd. Total']"
+            [selected]="monthlyPaymentViewChange()"
+            [gradient]="{
+              primaryColor: '#047f94',
+              secondaryColor: '#d5a326',
+            }"
+            (selectionChange)="onMonthlyPaymentViewChange($event)"
+          />
+        </div>
+      </div> </ng-container
   ></p-highcharts-wrapper>
 </div>
 
