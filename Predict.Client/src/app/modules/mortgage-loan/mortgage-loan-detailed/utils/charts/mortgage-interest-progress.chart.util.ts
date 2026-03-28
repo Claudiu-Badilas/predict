@@ -75,7 +75,6 @@ export namespace MortgageInterestProgressChartUtils {
       plotOptions: {
         pie: {
           innerSize: '70%',
-          borderRadius: 5,
           dataLabels: {
             enabled: true,
             format:
@@ -129,8 +128,8 @@ export namespace MortgageInterestProgressChartUtils {
               color: Colors.YELLOW_400,
             },
             {
-              name: 'Dobanda Salvata',
-              nameShort: 'DS',
+              name: 'Economii',
+              nameShort: 'E',
               y: percent(savedInterest),
               amount: MathUtil.round(savedInterest),
               amountCompact: NumberFormatPipe.numberFormat(savedInterest),
