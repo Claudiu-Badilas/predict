@@ -22,7 +22,7 @@ table {
   table-layout: auto;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 th,
@@ -36,7 +36,7 @@ th {
   background: white;
   font-weight: 600;
   border-bottom: 2px solid #e2e6ee;
-  font-size: 11px;
+  font-size: 15px;
 }
 
 /* ============================= */
@@ -85,6 +85,10 @@ tbody td:first-child {
   font-weight: 700;
 }
 
+.semi-bold {
+  font-weight: 600;
+}
+
 .hidden {
   display: none;
 }
@@ -124,7 +128,7 @@ tbody td:first-child {
       align-items: center;
       gap: 8px;
       cursor: pointer;
-      font-size: 11px;
+      font-size: 13px;
       padding: 4px 0;
     }
   }
@@ -135,11 +139,15 @@ tbody td:first-child {
 /* ============================= */
 .group-header-subtotal-row {
   cursor: pointer;
+  font-size: 14px;
+  td {
+    padding: 5px 0;
+  }
 }
 
 .count {
   color: #f43f5e;
-  font-size: 11px;
+  font-size: 14px;
   background: transparent;
   padding: 0 15px;
   border-radius: 30px;

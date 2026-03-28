@@ -231,7 +231,7 @@
               <td
                 class="text-center"
                 [ngClass]="{
-                  bold: row.earlyPayment || row.instalmentPayment,
+                  'semi-bold': row.earlyPayment || row.instalmentPayment,
                   'last-bottom-border': last && row.earlyPayment,
                   disabled: !group.completed && row.disabled,
                 }"
@@ -343,7 +343,8 @@
                 class="text-center"
                 [ngClass]="{
                   strike: !last && (row.earlyPayment || row.instalmentPayment),
-                  bold: last && (row.earlyPayment || row.instalmentPayment),
+                  'semi-bold':
+                    last && (row.earlyPayment || row.instalmentPayment),
                   'last-bottom-border': last && row.earlyPayment,
                   disabled: !group.completed && row.disabled,
                 }"
