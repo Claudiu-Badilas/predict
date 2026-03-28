@@ -15,7 +15,6 @@ import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/t
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 
 import { MortgageLoanCompareBodyComponent } from './components/mortgage-loan-compare-body/mortgage-loan-compare-body.component';
-import { MortgageLoanCompareHeaderComponent } from './components/mortgage-loan-compare-header/mortgage-loan-compare-header.component';
 import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.chart.util';
 
 @Component({
@@ -25,7 +24,6 @@ import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.ch
     ToggleButtonComponent,
     DropdownSelectComponent,
     HighchartWrapperComponent,
-    MortgageLoanCompareHeaderComponent,
     MortgageLoanCompareBodyComponent,
     TopBarComponent,
   ],
