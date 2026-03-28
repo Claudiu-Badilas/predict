@@ -7,7 +7,7 @@ namespace Predict.Repository.TransactionRepo;
 
 public class TransactionRepo : ITransactionRepo {
 
-    private string _npsqlConnectionString;
+    private readonly string _npsqlConnectionString;
 
     public TransactionRepo(IEnvironmentConfiguration envConfig) {
         _npsqlConnectionString = envConfig.GetNpsqlConnectionString();

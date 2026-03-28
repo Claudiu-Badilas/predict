@@ -22,7 +22,7 @@ export interface State {
 
 const initialState: State = {
   transactions: [],
-  startDate: DateUtils.getStartOfTheYear({ subtractYears: 1 }),
+  startDate: DateUtils.getStartOfTheYear({ subtractYears: 0 }),
   endDate: new Date(),
   selectedProvider: 'RAIFFEISEN',
   selectedServiceProvider: 'No Selection',
@@ -49,12 +49,12 @@ const transactionsReducer = createReducer(
     (state, { serviceProvider }) => ({
       ...state,
       selectedServiceProvider: serviceProvider,
-    })
+    }),
   ),
   on(TransactionsActions.searchTermChanged, (state, { searchTerm }) => ({
     ...state,
     searchTerm,
-  }))
+  })),
 );
 
 export function reducer(state: State, action: Action) {
@@ -65,32 +65,32 @@ const getTransactionsState = createFeatureSelector<State>('TransactionsState');
 
 export const getStartDate = createSelector(
   getTransactionsState,
-  (state) => state.startDate
+  (state) => state.startDate,
 );
 
 export const getEndDate = createSelector(
   getTransactionsState,
-  (state) => state.endDate
+  (state) => state.endDate,
 );
 
 export const getTransactions = createSelector(
   getTransactionsState,
-  (state) => state.transactions
+  (state) => state.transactions,
 );
 
 export const getSelectedProvider = createSelector(
   getTransactionsState,
-  (state) => state.selectedProvider
+  (state) => state.selectedProvider,
 );
 
 export const getSelectedServiceProvider = createSelector(
   getTransactionsState,
-  (state) => state.selectedServiceProvider
+  (state) => state.selectedServiceProvider,
 );
 
 export const getSearchTerm = createSelector(
   getTransactionsState,
-  (state) => state.searchTerm
+  (state) => state.searchTerm,
 );
 
 export const getAvailableTransactionsByProvider = createSelector(
@@ -99,8 +99,8 @@ export const getAvailableTransactionsByProvider = createSelector(
   (transactions, selectedProvider) =>
     transactions.filter(
       (t) =>
-        selectedProvider === 'No Selection' || t.provider === selectedProvider
-    )
+        selectedProvider === 'No Selection' || t.provider === selectedProvider,
+    ),
 );
 
 export const getAvailableTransactionsByServiceProvider = createSelector(
@@ -110,8 +110,8 @@ export const getAvailableTransactionsByServiceProvider = createSelector(
     transactions.filter(
       (t) =>
         selectedServiceProvider === 'No Selection' ||
-        t.serviceProvider === selectedServiceProvider
-    )
+        t.serviceProvider === selectedServiceProvider,
+    ),
 );
 
 export const getAvailableTransactionsBySearchTerm = createSelector(
@@ -126,8 +126,8 @@ export const getAvailableTransactionsBySearchTerm = createSelector(
             .map((t) => t.trim())
             .filter((t) => !!t && t !== '')
             .some((term) => t.description.toLowerCase().includes(term))
-        : transactions
-    )
+        : transactions,
+    ),
 );
 
 export const getAvailableTransactions = createSelector(
@@ -140,19 +140,19 @@ export const getAvailableTransactions = createSelector(
       seen.add(sig);
       return true;
     });
-  }
+  },
 );
 
 export const getMonthlyTransactionsChart = createSelector(
   getStartDate,
   getEndDate,
   getAvailableTransactionsBySearchTerm,
-  MonthlyTransactionChartUtils.getChart
+  MonthlyTransactionChartUtils.getChart,
 );
 
 export const getDailyTransactionsChart = createSelector(
   getStartDate,
   getEndDate,
   getAvailableTransactionsBySearchTerm,
-  DailyTransactionChartUtils.getChart
+  DailyTransactionChartUtils.getChart,
 );
