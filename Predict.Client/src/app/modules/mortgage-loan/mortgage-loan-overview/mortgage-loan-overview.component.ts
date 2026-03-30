@@ -8,24 +8,19 @@ import * as fromMortgageLoanOverview from 'src/app/modules/mortgage-loan/mortgag
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
-import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
-import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
-import * as NavigationAction from 'src/app/store/actions/navigation.actions';
+import { MortgageLoanService } from '../services/overview-mortgage.service';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
 import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
-import { MortgageLoanService } from '../services/overview-mortgage.service';
 
 @Component({
   selector: 'p-mortgage-loan-overview',
   imports: [
     CommonModule,
-    ToggleButtonComponent,
     DropdownSelectComponent,
     MortgageLoanOverviewHeaderComponent,
     MortgageLoanOverviewBodyTableComponent,
     NumericInputComponent,
-    TopBarComponent,
   ],
   templateUrl: './mortgage-loan-overview.component.html',
   styleUrls: ['./mortgage-loan-overview.component.scss'],
@@ -64,14 +59,6 @@ export class MortgageLoanOverviewComponent {
         }),
       );
     });
-  }
-
-  onSelectionChange(module: string) {
-    this.store.dispatch(
-      NavigationAction.navigateTo({
-        route: `/mortgage-loan/${module.toLowerCase()}`,
-      }),
-    );
   }
 
   onDropdownSelected(value: string) {

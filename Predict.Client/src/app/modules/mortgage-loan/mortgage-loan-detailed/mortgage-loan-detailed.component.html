@@ -1,12 +1,3 @@
-<p-top-bar>
-  <ng-container module-navigation>
-    <p-toggle-button
-      [options]="['Overview', 'Detailed', 'Compare']"
-      [selected]="'Detailed'"
-      (selectionChange)="onSelectionChange($event)"
-    />
-  </ng-container>
-</p-top-bar>
 <div class="mt-2 mx-2">
   <p-dropdown-select
     [items]="dropDownSelectOptions$ | async"

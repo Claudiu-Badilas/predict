@@ -6,13 +6,11 @@ import { Store } from '@ngrx/store';
 import * as MortgageLoanCompareActions from 'src/app/modules/mortgage-loan/mortgage-loan-compare/actions/mortgage-loan-compare.actions';
 import * as fromMortgageLoanCompare from 'src/app/modules/mortgage-loan/mortgage-loan-compare/selectors/mortgage-loan-compare.selectors';
 import * as fromMortgageLoan from 'src/app/modules/mortgage-loan/reducers/mortgage-loan.reducer';
-import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
-import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 
 import { MortgageLoanCompareBodyComponent } from './components/mortgage-loan-compare-body/mortgage-loan-compare-body.component';
 import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.chart.util';
@@ -25,7 +23,6 @@ import { CompareRatesTrendChartUtils } from './utils/compare-loan-rates-trend.ch
     DropdownSelectComponent,
     HighchartWrapperComponent,
     MortgageLoanCompareBodyComponent,
-    TopBarComponent,
   ],
   templateUrl: './mortgage-loan-compare.component.html',
   styleUrls: ['./mortgage-loan-compare.component.scss'],
@@ -124,14 +121,6 @@ export class MortgageLoanCompareComponent {
         );
       }
     });
-  }
-
-  onSelectionChange(module: string) {
-    this.store.dispatch(
-      NavigationAction.navigateTo({
-        route: `/mortgage-loan/${module.toLowerCase()}`,
-      }),
-    );
   }
 
   onLeftDropdownSelected(value: string) {

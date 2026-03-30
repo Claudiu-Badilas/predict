@@ -19,9 +19,7 @@ export class ToggleButtonComponent {
 
   select(option: string) {
     this._selected.set(option);
-    setTimeout(() => {
-      this.selectionChange.emit(option);
-    }, 200);
+    this.selectionChange.emit(option);
   }
 
   get gradientStyle(): string {
