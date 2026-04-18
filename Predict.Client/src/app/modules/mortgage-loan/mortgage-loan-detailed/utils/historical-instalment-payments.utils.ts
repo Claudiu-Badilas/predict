@@ -9,8 +9,6 @@ export namespace HistoricalInstalmentPaymentsUtils {
     if (!base?.monthlyInstalments?.length || !repaymentSchedules?.length)
       return [];
 
-    const baseInstalments = [...base.monthlyInstalments];
-
     const schedules = repaymentSchedules
       .slice()
       .sort((a, b) => a.date.valueOf() - b.date.valueOf());
@@ -33,9 +31,14 @@ export namespace HistoricalInstalmentPaymentsUtils {
         earlyPayment: isExtraPayment,
       }) as HistoricalInstalmentPayment;
 
-    const calculatedBaseLoanInstalments = schedules.flatMap((schedule) => {
-      const index = baseInstalments.length - schedule.monthlyInstalments.length;
-      const instalments = baseInstalments.splice(0, index);
+    const calculatedBaseLoanInstalments = schedules.flatMap((schedule, i) => {
+      if (i === 0) return [];
+      const prevSchedule = schedules[i - 1];
+      const index =
+        prevSchedule.monthlyInstalments.length -
+        schedule.monthlyInstalments.length;
+
+      const instalments = [...prevSchedule.monthlyInstalments].splice(0, index);
 
       return instalments.map((instalment) =>
         toBaseLoanInstalment(
