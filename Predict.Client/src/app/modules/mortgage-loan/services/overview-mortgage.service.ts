@@ -11,7 +11,7 @@ import { PrintoutsService } from 'src/app/platform/services/printouts.service';
 
 @Injectable({ providedIn: 'root' })
 export class MortgageLoanService {
-  private readonly STORAGE_KEY = 'GraficRambursare_18-Apr-2026';
+  private readonly STORAGE_KEY = 'GraficRambursare_18-Apr-2026v2';
 
   constructor(
     private readonly _httpClient: HttpClient,
