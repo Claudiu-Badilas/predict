@@ -40,7 +40,7 @@ export class MortgageLoanOverviewComponent {
     this.store.select(fromMortgageLoanOverview.getSelectedRepaymentSchedule),
   );
 
-  monthlyAmount = signal<number>(4250);
+  monthlyAmount = signal<number>(3500);
   payments = signal<number>(1);
 
   constructor(
