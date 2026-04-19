@@ -18,22 +18,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Opt into Node.js 24 behavior early (prevents future deprecation issues)
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     defaults:
       run:
-        working-directory: ./Predict.Client # All run steps execute inside this folder
+        working-directory: ./Predict.Client
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: main # Always checks out the latest commit from main
+          ref: main
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22.12"
+          node-version: "22"
           cache: "npm"
-          cache-dependency-path: "./Predict.Client/package-lock.json" # Points to the correct lock file
+          cache-dependency-path: "./Predict.Client/package-lock.json"
 
       - name: Install dependencies
         run: npm ci
