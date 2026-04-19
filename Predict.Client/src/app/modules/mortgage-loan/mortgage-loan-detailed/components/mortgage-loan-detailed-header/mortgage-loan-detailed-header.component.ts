@@ -22,10 +22,6 @@ export class MortgageLoanDetailedHeaderComponent {
     this.store.select(fromMortgageLoanDetailed.getHistoricalInstalmentPayments),
     { initialValue: null },
   );
-  readonly baseRepaymentSchedule = toSignal(
-    this.store.select(fromMortgageLoan.getBaseRepaymentSchedule),
-    { initialValue: null },
-  );
   readonly historicalInstalmentPaymentBatches = toSignal(
     this.store.select(
       fromMortgageLoanDetailed.getHistoricalInstalmentPaymentBatches,
@@ -90,15 +86,18 @@ export class MortgageLoanDetailedHeaderComponent {
     ),
   );
 
-  readonly firstInstalmentPaymentDate = computed(() => {
-    const schedule = this.baseRepaymentSchedule();
-    return schedule?.monthlyInstalments?.at(0)?.paymentDate ?? null;
-  });
-
   readonly lastInstalmentPaymentDate = computed(() => {
     const schedule = this.updatedBaseRepaymentScheduleBasedOnLatestStates();
     return schedule?.at(-1)?.paymentDate ?? null;
   });
+
+  readonly firstInstalmentPaymentDate = computed(
+    () =>
+      this.historicalInstalmentPaymentBatches()
+        .filter((s) => s.completed)
+        .at(-1)
+        ?.instalments?.at(0)?.paymentDate ?? null,
+  );
 
   readonly dateDiffYMD = computed(() => {
     const d1 = this.firstInstalmentPaymentDate();
