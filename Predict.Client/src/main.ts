@@ -29,6 +29,7 @@ import * as fromMortgageLoanCompare from 'src/app/modules/mortgage-loan/mortgage
 import { MortgageLoanEffects } from 'src/app/modules/mortgage-loan/effects/mortgage-loan.effects';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthenticationInterceptor } from 'src/app/platform/authentication/interceptor/authentication.interceptor';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 if (environment.production) {
   enableProdMode();
@@ -47,7 +48,7 @@ bootstrapApplication(AppComponent, {
       ]),
     ),
     importProvidersFrom(StoreRouterConnectingModule.forRoot()),
-
+    importProvidersFrom(NgbModule),
     // Feature stores
     importProvidersFrom(
       StoreModule.forFeature('InvoicesState', fromInvoices.reducer),

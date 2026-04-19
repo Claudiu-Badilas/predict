@@ -1,15 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MortgageLoanService } from 'src/app/modules/mortgage-loan/services/overview-mortgage.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SuccessModalComponent } from 'src/app/shared/components/modals/success-modal/success-modal.component';
 
 @Component({
   selector: 'p-mortgage-loan-settings',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './mortgage-loan-settings.component.html',
   styleUrls: ['./mortgage-loan-settings.component.scss'],
 })
 export class MortgageLoanSettingsComponent implements OnInit {
   private mortgageService = inject(MortgageLoanService);
+  private modalService = inject(NgbModal);
 
   storageKeys: {
     key: string;
@@ -29,36 +33,42 @@ export class MortgageLoanSettingsComponent implements OnInit {
 
     this.mortgageService
       .uploadRepaymentSchedulesFromJson(file)
-      .then(() => this.loadKeys())
+      .then(() => {
+        this.loadKeys();
+        this.openSuccessModal('File uploaded successfully!');
+      })
       .catch((error) => alert(`Error: ${error.message}`));
   }
 
-  // Load all keys from storage
+  // ✅ SUCCESS MODAL
+  private openSuccessModal(message: string) {
+    const modalRef = this.modalService.open(SuccessModalComponent, {
+      centered: true,
+      backdrop: 'static',
+      keyboard: true,
+    });
+
+    modalRef.componentInstance.message = message;
+  }
+
   loadKeys(): void {
     this.storageKeys = [];
 
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key) {
-        this.storageKeys.push({
-          key,
-          storageType: 'local',
-        });
+        this.storageKeys.push({ key, storageType: 'local' });
       }
     }
 
     for (let i = 0; i < sessionStorage.length; i++) {
       const key = sessionStorage.key(i);
       if (key) {
-        this.storageKeys.push({
-          key,
-          storageType: 'session',
-        });
+        this.storageKeys.push({ key, storageType: 'session' });
       }
     }
   }
 
-  // Remove single item
   removeItem(item: { key: string; storageType: 'local' | 'session' }): void {
     const storage =
       item.storageType === 'local' ? localStorage : sessionStorage;
@@ -67,7 +77,6 @@ export class MortgageLoanSettingsComponent implements OnInit {
     this.loadKeys();
   }
 
-  // Download single storage item
   downloadItem(item: { key: string; storageType: 'local' | 'session' }): void {
     const storage =
       item.storageType === 'local' ? localStorage : sessionStorage;
