@@ -1,16 +1,54 @@
-<div
-  class="download btn py-0 px-1 btn-outline-primary mx-2"
-  (click)="downloadSchedules()"
->
-  Download ↓
+<div class="d-flex gap-2 mb-3">
+  <label class="btn btn-primary btn-sm mb-0">
+    Upload
+    <input
+      type="file"
+      class="d-none"
+      accept=".json"
+      (change)="onFileSelected($event)"
+    />
+  </label>
 </div>
-<label class="m-0 p-0">
-  <div class="upload btn py-0 px-1 btn-outline-primary">Upload ↑</div>
 
-  <input
-    type="file"
-    accept=".json"
-    (change)="onFileSelected($event)"
-    style="display: none"
-  />
-</label>
+<div class="card w-100 shadow-sm">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h6 class="mb-0">Storage Keys</h6>
+    <small class="text-muted">{{ storageKeys.length }}</small>
+  </div>
+
+  @if (storageKeys.length === 0) {
+    <div class="text-center text-muted py-3">No stored items</div>
+  } @else {
+    <ul class="list-group list-group-flush">
+      @for (item of storageKeys; track item.key) {
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          <!-- Key -->
+          <span class="text-break small">
+            {{ item.key }}
+          </span>
+
+          <!-- Actions -->
+          <div class="d-flex">
+            <button
+              class="btn btn-sm btn-outline-primary mr-2 d-flex align-items-center justify-content-center"
+              (click)="downloadItem(item)"
+            >
+              <div style="transform: rotate(90deg); display: inline-block">
+                <strong>➜]</strong>
+              </div>
+            </button>
+
+            <button
+              class="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center"
+              (click)="removeItem(item)"
+            >
+              <div><strong>✘</strong></div>
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>

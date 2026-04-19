@@ -1,1 +1,16 @@
- 
+.card {
+  border-radius: 0.75rem;
+}
+
+.list-group-item span {
+  word-break: break-all;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+button {
+  width: 32px;
+  height: 32px;
+}
