@@ -12,6 +12,7 @@ import { MortgageLoanService } from '../services/overview-mortgage.service';
 import { MortgageLoanOverviewBodyTableComponent } from './components/mortgage-loan-overview-body-table/mortgage-loan-overview-body-table.component';
 import { MortgageLoanOverviewHeaderComponent } from './components/mortgage-loan-overview-header/mortgage-loan-overview-header.component';
 import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
+import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
 
 @Component({
   selector: 'p-mortgage-loan-overview',
@@ -40,11 +41,19 @@ export class MortgageLoanOverviewComponent {
     this.store.select(fromMortgageLoanOverview.getSelectedRepaymentSchedule),
   );
 
-  monthlyAmount = signal<number>(3500);
-  payments = signal<number>(1);
+  monthlyAmountKey = 'MortgageLoanOverview_MonthlyAmount';
+  paymentsKey = 'MortgageLoanOverview_Payments';
+
+  monthlyAmount = signal<number>(
+    this._localStorageService.getItem(this.monthlyAmountKey) ?? 3500,
+  );
+  payments = signal<number>(
+    this._localStorageService.getItem(this.paymentsKey) ?? 1,
+  );
 
   constructor(
     private readonly store: Store<fromMortgageLoan.MortgageLoanState>,
+    private readonly _localStorageService: LocalStorageService,
     private mortgageService: MortgageLoanService,
   ) {
     effect(() => {
@@ -69,9 +78,11 @@ export class MortgageLoanOverviewComponent {
 
   onMonthlyAmountChange(monthlyAmount: number) {
     this.monthlyAmount.set(monthlyAmount);
+    this._localStorageService.setItem(this.monthlyAmountKey, monthlyAmount);
   }
 
   onPaymentsChange(payments: number) {
     this.payments.set(payments);
+    this._localStorageService.setItem(this.paymentsKey, payments);
   }
 }
