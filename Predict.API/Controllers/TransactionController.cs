@@ -1,50 +1,40 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Predict.Reader.MortgageLoan.BCR;
 using Predict.Repository.TransactionRepo;
 using Predict.Service.AuthorizationService;
+using Predict.Service.CacheServicel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Predict.Controllers;
 
 [Route("api/v1")]
-public class TransactionController : BaseController
+public class TransactionController(ITransactionRepo transactionRepo, IAuthService authService, ICacheService cache) : BaseController
 {
-
-    private readonly ITransactionRepo _transactionRepo;
-    private readonly IAuthService _authService;
-
-    public TransactionController(ITransactionRepo transactionRepo, IAuthService authService)
-    {
-        _transactionRepo = transactionRepo;
-        _authService = authService;
-    }
 
     [HttpGet("transactions/{dataOwnerId}")]
     [Authorize]
     public async Task<ActionResult> GetTransactions(
         [FromHeader] string Authorization,
         [FromRoute] int dataOwnerId
-        )
+    )
     {
-
-        var user = await _authService.GetUser(Authorization);
+        var user = await authService.GetUser(Authorization);
         if (!user.HasAccessToDataOwner(dataOwnerId))
         {
             return BadRequest("You do not have access to the current Data Owner!");
         }
 
-        return Ok(await _transactionRepo.GetTransactionByUserIdAndOwnerId(user.Id.Value, dataOwnerId, DateTime.UtcNow, DateTime.UtcNow));
+        return Ok(await transactionRepo.GetTransactionByUserIdAndOwnerId(user.Id.Value, dataOwnerId, DateTime.UtcNow, DateTime.UtcNow));
     }
 
-    [HttpGet("free-transactions/{dataOwnerId}")]
+    [HttpGet("all-transactions")]
     public async Task<ActionResult> GetFreeTransactions(
-        [FromHeader] string Authorization,
-        [FromRoute] int dataOwnerId,
-        [FromQuery, Required] string startDate,
-        [FromQuery, Required] string endDate
+        [FromHeader] string Authorization
     )
     {
+        var transactions = await cache.GetOrSetAsync("GetAllTransactions", transactionRepo.GetAllTransactions, TimeSpan.FromMinutes(15));
 
-        return Ok(await _transactionRepo.GetTransactionByUserIdAndOwnerId(1, dataOwnerId, DateTime.Parse(startDate), DateTime.Parse(endDate)));
+        return Ok(transactions);
     }
 }
