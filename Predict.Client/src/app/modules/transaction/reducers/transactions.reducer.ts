@@ -149,10 +149,3 @@ export const getMonthlyTransactionsChart = createSelector(
   getAvailableTransactionsBySearchTerm,
   MonthlyTransactionChartUtils.getChart,
 );
-
-export const getDailyTransactionsChart = createSelector(
-  getStartDate,
-  getEndDate,
-  getAvailableTransactionsBySearchTerm,
-  DailyTransactionChartUtils.getChart,
-);
