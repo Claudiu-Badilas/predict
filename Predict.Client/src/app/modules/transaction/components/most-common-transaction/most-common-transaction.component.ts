@@ -10,7 +10,7 @@ import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
   styleUrls: ['./most-common-transaction.component.scss'],
 })
 export class MostCommonTransactionComponent {
-  transactions = input<TransactionDomain[]>([], { alias: 'transactions' });
+  transactions = input<TransactionDomain[]>([]);
 
   groupedMultiple = computed(() => {
     const transactions = this.transactions();

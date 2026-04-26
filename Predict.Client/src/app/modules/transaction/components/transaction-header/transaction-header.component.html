@@ -1,1 +1,11 @@
 <p-header-card [headerCardInputs]="headerCardInputs()" />
+
+<div class="d-flex flex-column flex-md-row gap-2">
+  <div class="w-100 w-md-50">
+    <p-most-common-transaction [transactions]="ValidTransactions()" />
+  </div>
+  <div class="m-1"></div>
+  <div class="w-100 w-md-50">
+    <p-monthly-most-common-transaction [transactions]="ValidTransactions()" />
+  </div>
+</div>
