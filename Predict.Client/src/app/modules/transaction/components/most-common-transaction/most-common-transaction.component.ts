@@ -1,70 +1,215 @@
-import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TransactionDomain } from '../../models/transactions.model';
+import { Component, computed, input, signal } from '@angular/core';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { TransactionDomain } from '../../models/transactions.model';
+import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
+
+interface GroupedTransaction {
+  provider: string;
+  count: number;
+  total: number;
+  currency: string | null;
+}
+
+interface MonthlyGroup {
+  month: string;
+  year: number;
+  monthIndex: number;
+  totalIncome: number;
+  totalExpense: number;
+  multiple: GroupedTransaction[];
+  single: GroupedTransaction[];
+  isExpanded: boolean;
+}
+
+interface YearlyGroup {
+  year: number;
+  totalIncome: number;
+  totalExpense: number;
+  multiple: GroupedTransaction[];
+  single: GroupedTransaction[];
+  isExpanded: boolean;
+}
 
 @Component({
   selector: 'p-most-common-transaction',
-  imports: [CommonModule, NumberFormatPipe],
+  imports: [CommonModule, NumberFormatPipe, ToggleButtonComponent],
   templateUrl: './most-common-transaction.component.html',
   styleUrls: ['./most-common-transaction.component.scss'],
 })
 export class MostCommonTransactionComponent {
   transactions = input<TransactionDomain[]>([]);
 
-  groupedMultiple = computed(() => {
-    const transactions = this.transactions();
-    if (!transactions?.length) return [];
-    const grouped = this.groupTransactions(transactions);
-    return grouped.filter((g) => g.count >= 2);
+  // 🔥 toggle state - monthly or yearly view
+  viewMode = signal<'monthly' | 'yearly'>('monthly');
+
+  // 🔥 track expanded items - only one at a time per view
+  private expandedMonth = signal<string | null>(null);
+  private expandedYear = signal<number | null>(null);
+
+  onToggle(value: string) {
+    this.viewMode.set(value === 'Lunar' ? 'monthly' : 'yearly');
+    // Reset expanded states when switching views
+    this.expandedMonth.set(null);
+    this.expandedYear.set(null);
+  }
+
+  // Month toggle methods
+  toggleMonth(year: number, monthIndex: number) {
+    const key = `${year}-${monthIndex}`;
+    const currentExpanded = this.expandedMonth();
+
+    if (currentExpanded === key) {
+      this.expandedMonth.set(null);
+    } else {
+      this.expandedMonth.set(key);
+    }
+  }
+
+  isMonthExpanded(year: number, monthIndex: number): boolean {
+    return this.expandedMonth() === `${year}-${monthIndex}`;
+  }
+
+  // Year toggle methods
+  toggleYear(year: number) {
+    const currentExpanded = this.expandedYear();
+
+    if (currentExpanded === year) {
+      this.expandedYear.set(null);
+    } else {
+      this.expandedYear.set(year);
+    }
+  }
+
+  isYearExpanded(year: number): boolean {
+    return this.expandedYear() === year;
+  }
+
+  // MONTHLY VIEW: Group by month
+  groupedByMonth = computed(() => {
+    const txs = this.transactions();
+    if (!txs?.length) return [];
+
+    const map = new Map<string, TransactionDomain[]>();
+
+    for (const tx of txs) {
+      const date = tx.completionDate || tx.registrationDate;
+      if (!date) continue;
+
+      const key = `${date.getFullYear()}-${date.getMonth()}`;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(tx);
+    }
+
+    return Array.from(map.entries())
+      .map(([key, txs]) => {
+        const [year, monthIndex] = key.split('-').map(Number);
+        const grouped = this.groupLocal(txs);
+
+        return {
+          year,
+          monthIndex,
+          month: new Date(year, monthIndex).toLocaleString('default', {
+            month: 'long',
+          }),
+          totalIncome: txs
+            .filter((t) => (t.amount ?? 0) > 0)
+            .reduce((s, t) => s + (t.amount ?? 0), 0),
+          totalExpense: Math.abs(
+            txs
+              .filter((t) => (t.amount ?? 0) < 0)
+              .reduce((s, t) => s + (t.amount ?? 0), 0),
+          ),
+          multiple: grouped.filter((g) => g.count >= 2),
+          single: grouped.filter((g) => g.count === 1),
+          isExpanded: this.isMonthExpanded(year, monthIndex),
+        };
+      })
+      .sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
+        return b.monthIndex - a.monthIndex;
+      });
   });
 
-  groupedSingle = computed(() => {
-    const transactions = this.transactions();
-    if (!transactions?.length) return [];
-    const grouped = this.groupTransactions(transactions);
-    return grouped.filter((g) => g.count === 1);
+  // YEARLY VIEW: Group by year
+  groupedByYear = computed(() => {
+    const txs = this.transactions();
+    if (!txs?.length) return [];
+
+    const map = new Map<number, TransactionDomain[]>();
+
+    for (const tx of txs) {
+      const date = tx.completionDate || tx.registrationDate;
+      if (!date) continue;
+
+      const year = date.getFullYear();
+      if (!map.has(year)) map.set(year, []);
+      map.get(year)!.push(tx);
+    }
+
+    return Array.from(map.entries())
+      .map(([year, txs]) => {
+        const grouped = this.groupLocal(txs);
+
+        return {
+          year,
+          totalIncome: txs
+            .filter((t) => (t.amount ?? 0) > 0)
+            .reduce((s, t) => s + (t.amount ?? 0), 0),
+          totalExpense: Math.abs(
+            txs
+              .filter((t) => (t.amount ?? 0) < 0)
+              .reduce((s, t) => s + (t.amount ?? 0), 0),
+          ),
+          multiple: grouped.filter((g) => g.count >= 2),
+          single: grouped.filter((g) => g.count === 1),
+          isExpanded: this.isYearExpanded(year),
+        };
+      })
+      .sort((a, b) => b.year - a.year);
   });
 
-  totalIncome = computed(() => {
-    const transactions = this.transactions();
-    if (!transactions?.length) return 0;
-    return transactions
-      .filter((tx) => (tx.amount ?? 0) > 0)
-      .reduce((sum, tx) => sum + (tx.amount ?? 0), 0);
-  });
+  // Base totals
+  totalIncome = computed(
+    () =>
+      this.transactions()
+        ?.filter((tx) => (tx.amount ?? 0) > 0)
+        .reduce((s, tx) => s + (tx.amount ?? 0), 0) ?? 0,
+  );
 
-  totalExpense = computed(() => {
-    const transactions = this.transactions();
-    if (!transactions?.length) return 0;
-    const total = transactions
-      .filter((tx) => (tx.amount ?? 0) < 0)
-      .reduce((sum, tx) => sum + (tx.amount ?? 0), 0);
-    return Math.abs(total);
-  });
+  totalExpense = computed(() =>
+    Math.abs(
+      this.transactions()
+        ?.filter((tx) => (tx.amount ?? 0) < 0)
+        .reduce((s, tx) => s + (tx.amount ?? 0), 0) ?? 0,
+    ),
+  );
 
-  private groupTransactions(transactions: TransactionDomain[]): any[] {
-    const grouped = transactions.reduce(
-      (acc, tx) => {
-        const key = tx.serviceProvider || 'Unknown';
-        if (!acc[key]) {
-          acc[key] = {
-            provider: key,
-            count: 0,
-            total: 0,
-            currency: tx.currency,
-          };
-        }
-        acc[key].count++;
-        acc[key].total += tx.amount ?? 0;
-        return acc;
-      },
-      {} as Record<string, any>,
+  // Helper to group transactions locally
+  private groupLocal(txs: TransactionDomain[]): GroupedTransaction[] {
+    const map = new Map<string, GroupedTransaction>();
+
+    for (const tx of txs) {
+      const key = tx.serviceProvider || 'Unknown';
+
+      if (!map.has(key)) {
+        map.set(key, {
+          provider: key,
+          count: 0,
+          total: 0,
+          currency: tx.currency,
+        });
+      }
+
+      const g = map.get(key)!;
+      g.count++;
+      g.total += tx.amount ?? 0;
+    }
+
+    return Array.from(map.values()).sort((a, b) =>
+      b.count !== a.count
+        ? b.count - a.count
+        : Math.abs(b.total) - Math.abs(a.total),
     );
-
-    return Object.values(grouped).sort((a: any, b: any) => {
-      if (a.count !== b.count) return b.count - a.count;
-      return Math.abs(b.total) - Math.abs(a.total);
-    });
   }
 }
