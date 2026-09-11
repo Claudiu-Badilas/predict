@@ -74,6 +74,20 @@ interface PeriodGroup {
           @if (viewMode() === 'all') {
             <!-- All View -->
             <div class="view-all">
+              <!-- Active filter indicator -->
+              @if (selectedCategory() !== null) {
+                <div class="filter-active">
+                  <span class="filter-label">Filtered by:</span>
+                  <span
+                    class="category-pill filter-pill"
+                    [style.background]="getCategoryColor(selectedCategory()!)"
+                    (click)="clearCategory()"
+                  >
+                    {{ getCategoryLabel(selectedCategory()!) }} ✕
+                  </span>
+                </div>
+              }
+
               <!-- Chart Section - Hidden on mobile -->
               @if (selectedCategory() === null) {
                 <div class="chart-section desktop-only">
@@ -97,9 +111,10 @@ interface PeriodGroup {
                 <div class="transactions-grid">
                   @for (
                     item of getAllGroupedTransactions();
-                    track item.provider
+                    track item.provider + '-' + item.description + '-' + $index
                   ) {
                     <div class="transaction-card highlight-card">
+                      <!-- Row 1: provider + count + category pill -->
                       <div class="card-row">
                         <div class="provider-group">
                           <span
@@ -108,16 +123,32 @@ interface PeriodGroup {
                           >
                             {{ item.provider }}
                           </span>
-                          <span class="tx-count">{{ item.count }}</span>
+                          @if (selectedCategory() === null) {
+                            <span class="tx-count">{{ item.count }}</span>
+                          }
                         </div>
-                        <div
-                          class="category-pill"
-                          (click)="onSelectCategory(item.category)"
-                          [style.background]="getCategoryColor(item.category)"
-                        >
-                          {{ getCategoryLabel(item.category) }}
-                        </div>
+                        @if (selectedCategory() === null) {
+                          <div
+                            class="category-pill"
+                            (click)="onSelectCategory(item.category)"
+                            [style.background]="getCategoryColor(item.category)"
+                          >
+                            {{ getCategoryLabel(item.category) }}
+                          </div>
+                        }
                       </div>
+
+                      <!-- Divider + Details row: only when 5 or fewer cards -->
+                      @if (getAllGroupedTransactions().length <= 5) {
+                        <hr class="card-divider" />
+                        <div class="card-row details-row">
+                          <span class="details-text">
+                            {{ item.description || item.provider }}
+                          </span>
+                        </div>
+                      }
+
+                      <!-- Middle row: date + amount -->
                       <div class="card-row middle">
                         <span class="date-text">{{
                           formatDay(item.latestDate)
@@ -206,6 +237,22 @@ interface PeriodGroup {
                   <!-- Period Content -->
                   @if (period.isExpanded) {
                     <div class="period-content">
+                      <!-- Active filter indicator -->
+                      @if (selectedCategory() !== null) {
+                        <div class="filter-active">
+                          <span class="filter-label">Filtered by:</span>
+                          <span
+                            class="category-pill filter-pill"
+                            [style.background]="
+                              getCategoryColor(selectedCategory()!)
+                            "
+                            (click)="clearCategory()"
+                          >
+                            {{ getCategoryLabel(selectedCategory()!) }} ✕
+                          </span>
+                        </div>
+                      }
+
                       <!-- Chart Section - Hidden on mobile -->
                       @if (selectedCategory() === null) {
                         <div class="chart-section compact-chart desktop-only">
@@ -219,21 +266,58 @@ interface PeriodGroup {
                       <div class="transactions-section compact">
                         <!-- Transactions Grid -->
                         <div class="transactions-grid">
-                          @for (item of period.multiple; track item.provider) {
+                          @for (
+                            item of period.multiple;
+                            track item.provider +
+                              '-' +
+                              item.description +
+                              '-' +
+                              $index
+                          ) {
                             <div class="transaction-card highlight-card">
+                              <!-- Row 1: provider/count (left) + category pill (right) -->
                               <div class="card-row">
-                                <div
-                                  class="category-pill"
-                                  (click)="onSelectCategory(item.category)"
-                                  [style.background]="
-                                    getCategoryColor(item.category)
-                                  "
-                                >
-                                  {{ getCategoryLabel(item.category) }}
-                                </div>
                                 <div class="provider-group">
-                                  <span class="tx-count">{{ item.count }}</span>
+                                  <span
+                                    class="provider-name"
+                                    [ngbTooltip]="item.description"
+                                  >
+                                    {{ item.provider }}
+                                  </span>
+                                  @if (selectedCategory() === null) {
+                                    <span class="tx-count">{{
+                                      item.count
+                                    }}</span>
+                                  }
                                 </div>
+                                @if (selectedCategory() === null) {
+                                  <div
+                                    class="category-pill"
+                                    (click)="onSelectCategory(item.category)"
+                                    [style.background]="
+                                      getCategoryColor(item.category)
+                                    "
+                                  >
+                                    {{ getCategoryLabel(item.category) }}
+                                  </div>
+                                }
+                              </div>
+
+                              <!-- Divider + Details row: only when 5 or fewer cards -->
+                              @if (period.multiple.length <= 5) {
+                                <hr class="card-divider" />
+                                <div class="card-row details-row">
+                                  <span class="details-text">
+                                    {{ item.description || item.provider }}
+                                  </span>
+                                </div>
+                              }
+
+                              <!-- Middle row: date + amount -->
+                              <div class="card-row middle">
+                                <span class="date-text">{{
+                                  formatDay(item.latestDate)
+                                }}</span>
                                 <div class="amount-group">
                                   <span
                                     class="amount-text"
@@ -325,6 +409,27 @@ interface PeriodGroup {
     .scroll-container::-webkit-scrollbar-thumb {
       background: #d1d5db;
       border-radius: 3px;
+    }
+
+    /* ===== FILTER INDICATOR ===== */
+    .filter-active {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      background: #f0f2f5;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: #6b6b8d;
+    }
+
+    .filter-label {
+      font-weight: 500;
+    }
+
+    .filter-pill {
+      cursor: pointer;
     }
 
     /* ===== CHART SECTION ===== */
@@ -501,6 +606,30 @@ interface PeriodGroup {
       border-top: 1px solid #eef0f3;
       padding: 4px 0;
       margin: 2px 0 0 0;
+    }
+
+    /* Divider between header row and details row */
+    .card-divider {
+      border: none;
+      border-top: 1px solid #eef0f3;
+      margin: 3px 0;
+    }
+
+    /* Details row (transaction description) */
+    .card-row.details-row {
+      padding: 1px 0 3px 0;
+      justify-content: flex-start;
+    }
+
+    .details-text {
+      font-size: 0.75rem;
+      color: #6b6b8d;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      min-width: 0;
     }
 
     .provider-group {
@@ -855,6 +984,10 @@ interface PeriodGroup {
         font-size: 0.75rem;
       }
 
+      .details-text {
+        font-size: 0.7rem;
+      }
+
       .amount-text {
         font-size: 0.8rem;
       }
@@ -1001,6 +1134,10 @@ interface PeriodGroup {
         font-size: 0.8rem;
       }
 
+      .details-text {
+        font-size: 0.7rem;
+      }
+
       .tx-count {
         font-size: 0.55rem;
         padding: 0 5px;
@@ -1100,6 +1237,10 @@ interface PeriodGroup {
         font-size: 0.75rem;
       }
 
+      .details-text {
+        font-size: 0.65rem;
+      }
+
       .amount-text {
         font-size: 0.8rem;
       }
@@ -1188,7 +1329,6 @@ export class MostCommonTransactionComponent {
         .reduce((s, t) => s + (t.amount ?? 0), 0),
     );
 
-    // Add percentages
     const groupedWithPercentages = grouped.map((g) => ({
       ...g,
       percentageOfIncome:
@@ -1199,28 +1339,25 @@ export class MostCommonTransactionComponent {
           : 0,
     }));
 
-    // NEW SORTING LOGIC: Income first, then expenses by category with highest expense
     return this.sortGroupedTransactions(groupedWithPercentages);
   });
 
-  /**
-   * Sorting logic:
-   * 1. Income transactions (positive total) always first
-   * 2. Then expenses (negative total) sorted by:
-   *    a. Category with highest total expense first
-   *    b. Within same category, sorted by amount descending
-   */
   private sortGroupedTransactions(
     transactions: GroupedTransaction[],
   ): GroupedTransaction[] {
-    // Separate income and expenses
+    if (this.selectedCategory() !== null) {
+      return [...transactions].sort((a, b) => {
+        const dateA = a.latestDate?.getTime() ?? 0;
+        const dateB = b.latestDate?.getTime() ?? 0;
+        return dateB - dateA;
+      });
+    }
+
     const incomeItems = transactions.filter((t) => t.total > 0);
     const expenseItems = transactions.filter((t) => t.total < 0);
 
-    // Sort income items by amount descending
     const sortedIncome = incomeItems.sort((a, b) => b.total - a.total);
 
-    // Group expenses by category
     const expenseMap = new Map<TransactionCategory, GroupedTransaction[]>();
     expenseItems.forEach((item) => {
       if (!expenseMap.has(item.category)) {
@@ -1401,7 +1538,7 @@ export class MostCommonTransactionComponent {
           : 0,
     }));
 
-    // Apply the same sorting logic
+    // Apply the same sorting logic (chronological when filtered)
     const sortedGroups = this.sortGroupedTransactions(groupsWithPercentages);
 
     return {
@@ -1432,11 +1569,18 @@ export class MostCommonTransactionComponent {
   totalTransactions = computed(() => this.selectedTransaction()?.length ?? 0);
 
   private groupLocal(txs: TransactionDomain[]): GroupedTransaction[] {
+    const isFiltered = this.selectedCategory() !== null;
     const map = new Map<string, GroupedTransaction>();
+    let counter = 0;
 
     for (const tx of txs) {
-      const key = tx.category;
       const date = tx.completionDate || tx.registrationDate;
+
+      const key = isFiltered
+        ? `${tx.serviceProvider}||${tx.description ?? ''}||${
+            date?.getTime() ?? 0
+          }||${tx.amount ?? 0}||${counter++}`
+        : tx.category;
 
       if (!map.has(key)) {
         map.set(key, {
@@ -1447,7 +1591,7 @@ export class MostCommonTransactionComponent {
           currency: tx.currency,
           latestDate: null,
           dates: [],
-          category: null,
+          category: tx.category,
           percentageOfTotal: 0,
           percentageOfIncome: 0,
           percentageOfExpense: 0,
@@ -1475,11 +1619,13 @@ export class MostCommonTransactionComponent {
   }
 
   onSelectCategory(category: TransactionCategory) {
-    if (this.selectedCategory() === null) {
-      this.selectedCategory.set(category);
-    } else {
-      this.selectedCategory.set(null);
-    }
+    this.selectedCategory.set(
+      this.selectedCategory() === category ? null : category,
+    );
+  }
+
+  clearCategory() {
+    this.selectedCategory.set(null);
   }
 
   getCategoryColor = (category: TransactionCategory): string =>
