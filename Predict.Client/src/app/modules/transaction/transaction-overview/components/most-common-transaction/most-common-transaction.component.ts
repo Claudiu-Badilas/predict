@@ -7,14 +7,12 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import {
   TransactionCategorizer,
   TransactionCategory,
   TransactionDomain,
 } from '../../../models/transactions.model';
-import { TransactionStatusBarChartUtils } from '../../utils/transaction-status-bar.chart.utils';
 import { TransactionOverviewHeaderComponent } from '../transaction-overview-header/transaction-overview-header.component';
 
 interface GroupedTransaction {
@@ -54,7 +52,6 @@ interface PeriodGroup {
   imports: [
     CommonModule,
     NumberFormatPipe,
-    HighchartWrapperComponent,
     NgbTooltip,
     TransactionOverviewHeaderComponent,
   ],
@@ -102,16 +99,6 @@ interface PeriodGroup {
                 </div>
               }
 
-              <!-- Chart Section - Hidden on mobile -->
-              <!-- @if (selectedCategory() === null) {
-                <div class="chart-section desktop-only">
-                  <p-highcharts-wrapper
-                    class="chart-wrapper"
-                    [chartOptions]="updateBarChart(selectedTransaction())"
-                  />
-                </div>
-              } -->
-
               <!-- Transactions List -->
               <div class="transactions-section">
                 <div class="section-header">
@@ -128,70 +115,105 @@ interface PeriodGroup {
                     track item.provider + '-' + item.description + '-' + $index
                   ) {
                     <div class="transaction-card highlight-card">
-                      <!-- Row 1: provider + count + category pill -->
-                      <div class="card-row">
-                        <div class="provider-group">
-                          <span
-                            class="provider-name"
-                            [ngbTooltip]="item.description"
-                            container="body"
-                          >
-                            {{ item.provider }}
-                          </span>
-                          @if (selectedCategory() === null) {
-                            <span class="tx-count">{{ item.count }}</span>
-                          }
-                        </div>
-                        @if (selectedCategory() === null) {
+                      @if (selectedCategory() === null) {
+                        <!-- Compact mode: category name, count, amount, percent in one row -->
+                        <div class="card-row compact-row">
                           <button
                             type="button"
-                            class="category-pill"
+                            class="category-pill category-name"
                             (click)="onSelectCategory(item.category)"
                             [style.background]="getCategoryColor(item.category)"
+                            [ngbTooltip]="getCategoryLabel(item.category)"
+                            container="body"
                           >
                             {{ getCategoryLabel(item.category) }}
                           </button>
-                        }
-                      </div>
 
-                      <!-- Divider + Details row: only when 5 or fewer cards -->
-                      @if (getAllGroupedTransactions().length <= 5) {
-                        <div class="card-divider"></div>
-                        <div class="card-row details-row">
-                          <span class="details-text">
-                            {{ item.description || item.provider }}
-                          </span>
+                          <span class="tx-count">{{ item.count }}x</span>
+
+                          <div class="amount-group">
+                            <span
+                              class="amount-text"
+                              [class.positive]="item.total > 0"
+                              [class.negative]="item.total < 0"
+                            >
+                              {{ item.total | numberFormat: '0.00' }}
+                            </span>
+                            @if (item.total > 0 && totalIncome() > 0) {
+                              <span class="percentage-badge income-badge">
+                                {{
+                                  item.percentageOfIncome | numberFormat: '0.0'
+                                }}%
+                              </span>
+                            } @else if (item.total < 0 && totalExpense() > 0) {
+                              <span class="percentage-badge expense-badge">
+                                {{
+                                  item.percentageOfExpense
+                                    | numberFormat: '0.0'
+                                }}%
+                              </span>
+                            }
+                          </div>
+                        </div>
+                      } @else {
+                        <!-- Detailed mode when a category is selected -->
+                        <!-- Row 1: provider -->
+                        <div class="card-row">
+                          <div class="provider-group">
+                            <span
+                              class="provider-name"
+                              [ngbTooltip]="item.description"
+                              container="body"
+                            >
+                              {{ item.provider }}
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Divider + Details row: only when 5 or fewer cards -->
+                        @if (getAllGroupedTransactions().length <= 5) {
+                          <div class="card-divider"></div>
+                          <div class="card-row details-row">
+                            <span
+                              class="details-text"
+                              [ngbTooltip]="item.description || item.provider"
+                              container="body"
+                            >
+                              {{ item.description || item.provider }}
+                            </span>
+                          </div>
+                        }
+
+                        <!-- Middle row: date + amount -->
+                        <div class="card-row middle">
+                          <span class="date-text">{{
+                            formatDay(item.latestDate)
+                          }}</span>
+                          <div class="amount-group">
+                            <span
+                              class="amount-text"
+                              [class.positive]="item.total > 0"
+                              [class.negative]="item.total < 0"
+                            >
+                              {{ item.total | numberFormat: '0.00' }}
+                            </span>
+                            @if (item.total > 0 && totalIncome() > 0) {
+                              <span class="percentage-badge income-badge">
+                                {{
+                                  item.percentageOfIncome | numberFormat: '0.0'
+                                }}%
+                              </span>
+                            } @else if (item.total < 0 && totalExpense() > 0) {
+                              <span class="percentage-badge expense-badge">
+                                {{
+                                  item.percentageOfExpense
+                                    | numberFormat: '0.0'
+                                }}%
+                              </span>
+                            }
+                          </div>
                         </div>
                       }
-
-                      <!-- Middle row: date + amount -->
-                      <div class="card-row middle">
-                        <span class="date-text">{{
-                          formatDay(item.latestDate)
-                        }}</span>
-                        <div class="amount-group">
-                          <span
-                            class="amount-text"
-                            [class.positive]="item.total > 0"
-                            [class.negative]="item.total < 0"
-                          >
-                            {{ item.total | numberFormat: '0.00' }}
-                          </span>
-                          @if (item.total > 0 && totalIncome() > 0) {
-                            <span class="percentage-badge income-badge">
-                              {{
-                                item.percentageOfIncome | numberFormat: '0.0'
-                              }}%
-                            </span>
-                          } @else if (item.total < 0 && totalExpense() > 0) {
-                            <span class="percentage-badge expense-badge">
-                              {{
-                                item.percentageOfExpense | numberFormat: '0.0'
-                              }}%
-                            </span>
-                          }
-                        </div>
-                      </div>
                     </div>
                   }
 
@@ -304,16 +326,6 @@ interface PeriodGroup {
                         </div>
                       }
 
-                      <!-- Chart Section - Hidden on mobile -->
-                      <!-- @if (selectedCategory() === null) {
-                        <div class="chart-section compact-chart desktop-only">
-                          <p-highcharts-wrapper
-                            class="chart-wrapper"
-                            [chartOptions]="updateBarChart(period.transactions)"
-                          />
-                        </div>
-                      } -->
-
                       <div class="transactions-section compact">
                         <!-- Transactions Grid -->
                         <div class="transactions-grid">
@@ -326,10 +338,66 @@ interface PeriodGroup {
                               $index
                           ) {
                             <div class="transaction-card highlight-card">
-                              <!-- Row 1: provider/count (left) + category pill (right) -->
-                              <div class="card-row">
-                                <div class="provider-group">
-                                  @if (selectedCategory() !== null) {
+                              @if (selectedCategory() === null) {
+                                <!-- Compact mode: category name, count, amount, percent in one row -->
+                                <div class="card-row compact-row">
+                                  <button
+                                    type="button"
+                                    class="category-pill category-name"
+                                    (click)="onSelectCategory(item.category)"
+                                    [style.background]="
+                                      getCategoryColor(item.category)
+                                    "
+                                    [ngbTooltip]="
+                                      getCategoryLabel(item.category)
+                                    "
+                                    container="body"
+                                  >
+                                    {{ getCategoryLabel(item.category) }}
+                                  </button>
+
+                                  <span class="tx-count"
+                                    >{{ item.count }}x</span
+                                  >
+
+                                  <div class="amount-group">
+                                    <span
+                                      class="amount-text"
+                                      [class.positive]="item.total > 0"
+                                      [class.negative]="item.total < 0"
+                                    >
+                                      {{ item.total | numberFormat: '0.00' }}
+                                    </span>
+                                    @if (
+                                      item.total > 0 && period.totalIncome > 0
+                                    ) {
+                                      <span
+                                        class="percentage-badge income-badge"
+                                      >
+                                        {{
+                                          item.percentageOfIncome
+                                            | numberFormat: '0.0'
+                                        }}%
+                                      </span>
+                                    } @else if (
+                                      item.total < 0 && period.totalExpense > 0
+                                    ) {
+                                      <span
+                                        class="percentage-badge expense-badge"
+                                      >
+                                        {{
+                                          item.percentageOfExpense
+                                            | numberFormat: '0.0'
+                                        }}%
+                                      </span>
+                                    }
+                                  </div>
+                                </div>
+                              } @else {
+                                <!-- Detailed mode when a category is selected -->
+                                <!-- Row 1: provider -->
+                                <div class="card-row">
+                                  <div class="provider-group">
                                     <span
                                       class="provider-name"
                                       [ngbTooltip]="item.description"
@@ -337,75 +405,64 @@ interface PeriodGroup {
                                     >
                                       {{ item.provider }}
                                     </span>
-                                  }
-                                  @if (selectedCategory() === null) {
-                                    <span class="tx-count">{{
-                                      item.count
-                                    }}</span>
-                                  }
+                                  </div>
                                 </div>
-                                @if (selectedCategory() === null) {
-                                  <button
-                                    type="button"
-                                    class="category-pill"
-                                    (click)="onSelectCategory(item.category)"
-                                    [style.background]="
-                                      getCategoryColor(item.category)
-                                    "
-                                  >
-                                    {{ getCategoryLabel(item.category) }}
-                                  </button>
+
+                                <!-- Divider + Details row: only when 5 or fewer cards -->
+                                @if (period.multiple.length <= 5) {
+                                  <div class="card-divider"></div>
+                                  <div class="card-row details-row">
+                                    <span
+                                      class="details-text"
+                                      [ngbTooltip]="
+                                        item.description || item.provider
+                                      "
+                                      container="body"
+                                    >
+                                      {{ item.description || item.provider }}
+                                    </span>
+                                  </div>
                                 }
-                              </div>
 
-                              <!-- Divider + Details row: only when 5 or fewer cards -->
-                              @if (period.multiple.length <= 5) {
-                                <div class="card-divider"></div>
-                                <div class="card-row details-row">
-                                  <span class="details-text">
-                                    {{ item.description || item.provider }}
-                                  </span>
-                                </div>
-                              }
-
-                              <!-- Middle row: date + amount -->
-                              <div class="card-row middle">
-                                @if (selectedCategory() !== null) {
+                                <!-- Middle row: date + amount -->
+                                <div class="card-row middle">
                                   <span class="date-text">{{
                                     formatDay(item.latestDate)
                                   }}</span>
-                                }
-                                <div class="amount-group">
-                                  <span
-                                    class="amount-text"
-                                    [class.positive]="item.total > 0"
-                                    [class.negative]="item.total < 0"
-                                  >
-                                    {{ item.total | numberFormat: '0.00' }}
-                                  </span>
-                                  @if (
-                                    item.total > 0 && period.totalIncome > 0
-                                  ) {
-                                    <span class="percentage-badge income-badge">
-                                      {{
-                                        item.percentageOfIncome
-                                          | numberFormat: '0.0'
-                                      }}%
-                                    </span>
-                                  } @else if (
-                                    item.total < 0 && period.totalExpense > 0
-                                  ) {
+                                  <div class="amount-group">
                                     <span
-                                      class="percentage-badge expense-badge"
+                                      class="amount-text"
+                                      [class.positive]="item.total > 0"
+                                      [class.negative]="item.total < 0"
                                     >
-                                      {{
-                                        item.percentageOfExpense
-                                          | numberFormat: '0.0'
-                                      }}%
+                                      {{ item.total | numberFormat: '0.00' }}
                                     </span>
-                                  }
+                                    @if (
+                                      item.total > 0 && period.totalIncome > 0
+                                    ) {
+                                      <span
+                                        class="percentage-badge income-badge"
+                                      >
+                                        {{
+                                          item.percentageOfIncome
+                                            | numberFormat: '0.0'
+                                        }}%
+                                      </span>
+                                    } @else if (
+                                      item.total < 0 && period.totalExpense > 0
+                                    ) {
+                                      <span
+                                        class="percentage-badge expense-badge"
+                                      >
+                                        {{
+                                          item.percentageOfExpense
+                                            | numberFormat: '0.0'
+                                        }}%
+                                      </span>
+                                    }
+                                  </div>
                                 </div>
-                              </div>
+                              }
                             </div>
                           }
 
@@ -563,72 +620,6 @@ interface PeriodGroup {
       opacity: 0.85;
     }
 
-    /* ===== CHART SECTION ===== */
-    .chart-section {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      padding: 12px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      transition: box-shadow var(--transition-base);
-    }
-
-    .chart-section:hover {
-      box-shadow: var(--shadow-md);
-    }
-
-    .chart-section.compact-chart {
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: var(--radius-md);
-    }
-
-    /* Hide chart on mobile */
-    .desktop-only {
-      display: block;
-    }
-
-    /* Chart wrapper */
-    .chart-wrapper {
-      width: 100%;
-      height: 300px;
-      display: block;
-      min-height: 200px;
-    }
-
-    .chart-wrapper ::ng-deep .highcharts-container {
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    /* Compact chart height */
-    .chart-section.compact-chart .chart-wrapper {
-      height: 240px;
-      min-height: 160px;
-    }
-
-    /* ===== RESPONSIVE CHART HEIGHTS ===== */
-    @media (max-width: 1024px) {
-      .chart-wrapper {
-        height: 260px;
-        min-height: 180px;
-      }
-      .chart-section.compact-chart .chart-wrapper {
-        height: 210px;
-        min-height: 150px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .desktop-only {
-        display: none !important;
-      }
-    }
-
     /* ===== TRANSACTIONS SECTION ===== */
     .transactions-section {
       background: var(--bg-card);
@@ -675,8 +666,8 @@ interface PeriodGroup {
     /* ===== TRANSACTION CARDS ===== */
     .transactions-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 5px;
     }
 
     .transaction-card {
@@ -689,22 +680,12 @@ interface PeriodGroup {
         box-shadow var(--transition-fast),
         border-color var(--transition-fast);
       position: relative;
-    }
-
-    .transaction-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--border-soft);
+      min-width: 0;
     }
 
     .transaction-card.highlight-card {
       background: var(--bg-highlight);
       border-color: var(--border-highlight);
-    }
-
-    .transaction-card.highlight-card:hover {
-      border-color: #f5d97a;
-      box-shadow: 0 4px 14px rgba(250, 230, 168, 0.4);
     }
 
     .card-row {
@@ -713,12 +694,41 @@ interface PeriodGroup {
       align-items: center;
       gap: 8px;
       padding: 2px 0;
+      min-width: 0;
+    }
+
+    /* Compact single-row layout (no category selected) */
+    .card-row.compact-row {
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 0;
+      min-width: 0;
+    }
+
+    .card-row.compact-row .category-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+    }
+
+    .card-row.compact-row .tx-count {
+      flex-shrink: 0;
+    }
+
+    .card-row.compact-row .amount-group {
+      flex-shrink: 0;
+      margin-left: auto;
     }
 
     .card-row.middle {
       border-top: 1px solid rgba(0, 0, 0, 0.05);
       padding: 6px 0 0 0;
       margin: 6px 0 0 0;
+      min-width: 0;
     }
 
     .card-divider {
@@ -731,6 +741,7 @@ interface PeriodGroup {
     .card-row.details-row {
       padding: 0 0 4px 0;
       justify-content: flex-start;
+      min-width: 0;
     }
 
     .details-text {
@@ -743,6 +754,7 @@ interface PeriodGroup {
       width: 100%;
       min-width: 0;
       letter-spacing: 0.005em;
+      cursor: help;
     }
 
     .provider-group {
@@ -763,6 +775,8 @@ interface PeriodGroup {
       letter-spacing: -0.01em;
       cursor: help;
       pointer-events: auto;
+      min-width: 0;
+      max-width: 100%;
     }
 
     .tx-count {
@@ -796,12 +810,6 @@ interface PeriodGroup {
       white-space: nowrap;
     }
 
-    .category-pill:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-      filter: brightness(1.05);
-    }
-
     .category-pill:active {
       transform: scale(0.95);
     }
@@ -818,6 +826,7 @@ interface PeriodGroup {
       align-items: center;
       gap: 6px;
       flex-shrink: 0;
+      min-width: 0;
     }
 
     .amount-text {
@@ -866,11 +875,6 @@ interface PeriodGroup {
         border-color var(--transition-base);
     }
 
-    .period-container:hover {
-      box-shadow: var(--shadow-sm);
-      border-color: var(--border-soft);
-    }
-
     .period-container.expanded {
       border-color: var(--border-strong);
       box-shadow: var(--shadow-md);
@@ -896,10 +900,6 @@ interface PeriodGroup {
 
     .period-container.expanded .period-header {
       border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    }
-
-    .period-header:hover {
-      background: var(--bg-subtle);
     }
 
     .period-header:focus-visible {
@@ -1011,10 +1011,6 @@ interface PeriodGroup {
 
     .expand-icon.rotated {
       transform: rotate(180deg);
-      color: var(--text-primary);
-    }
-
-    .period-header:hover .expand-icon {
       color: var(--text-primary);
     }
 
@@ -1141,12 +1137,6 @@ interface PeriodGroup {
 
       .period-content {
         padding: 10px 12px 12px 12px;
-      }
-
-      .chart-section {
-        padding: 10px;
-        border-radius: var(--radius-md);
-        margin-bottom: 10px;
       }
 
       .transactions-section {
@@ -1290,12 +1280,6 @@ interface PeriodGroup {
 
       .period-content {
         padding: 8px 10px 10px 10px;
-      }
-
-      .chart-section {
-        padding: 8px;
-        border-radius: var(--radius-sm);
-        margin-bottom: 8px;
       }
 
       .transactions-section {
@@ -1820,9 +1804,4 @@ export class MostCommonTransactionComponent {
 
   getCategoryLabel = (category: TransactionCategory): string =>
     TransactionCategorizer.getCategoryLabel(category);
-
-  updateBarChart = (
-    filteredTransactions: TransactionDomain[],
-  ): Highcharts.Options =>
-    TransactionStatusBarChartUtils.getChart(filteredTransactions);
 }
