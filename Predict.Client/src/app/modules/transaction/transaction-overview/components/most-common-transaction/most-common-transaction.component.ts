@@ -78,25 +78,39 @@ interface PeriodGroup {
               @if (selectedCategory() !== null) {
                 <div class="filter-active">
                   <span class="filter-label">Filtered by:</span>
-                  <span
+                  <button
+                    type="button"
                     class="category-pill filter-pill"
                     [style.background]="getCategoryColor(selectedCategory()!)"
                     (click)="clearCategory()"
                   >
-                    {{ getCategoryLabel(selectedCategory()!) }} ✕
-                  </span>
+                    <span>{{ getCategoryLabel(selectedCategory()!) }}</span>
+                    <svg
+                      class="pill-close"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M3 3l6 6M9 3l-6 6"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </button>
                 </div>
               }
 
               <!-- Chart Section - Hidden on mobile -->
-              @if (selectedCategory() === null) {
+              <!-- @if (selectedCategory() === null) {
                 <div class="chart-section desktop-only">
                   <p-highcharts-wrapper
                     class="chart-wrapper"
                     [chartOptions]="updateBarChart(selectedTransaction())"
                   />
                 </div>
-              }
+              } -->
 
               <!-- Transactions List -->
               <div class="transactions-section">
@@ -120,6 +134,7 @@ interface PeriodGroup {
                           <span
                             class="provider-name"
                             [ngbTooltip]="item.description"
+                            container="body"
                           >
                             {{ item.provider }}
                           </span>
@@ -128,19 +143,20 @@ interface PeriodGroup {
                           }
                         </div>
                         @if (selectedCategory() === null) {
-                          <div
+                          <button
+                            type="button"
                             class="category-pill"
                             (click)="onSelectCategory(item.category)"
                             [style.background]="getCategoryColor(item.category)"
                           >
                             {{ getCategoryLabel(item.category) }}
-                          </div>
+                          </button>
                         }
                       </div>
 
                       <!-- Divider + Details row: only when 5 or fewer cards -->
                       @if (getAllGroupedTransactions().length <= 5) {
-                        <hr class="card-divider" />
+                        <div class="card-divider"></div>
                         <div class="card-row details-row">
                           <span class="details-text">
                             {{ item.description || item.provider }}
@@ -180,7 +196,10 @@ interface PeriodGroup {
                   }
 
                   @if (!getAllGroupedTransactions().length) {
-                    <div class="empty-state">No transactions</div>
+                    <div class="empty-state">
+                      <div class="empty-icon">📭</div>
+                      <span>No transactions</span>
+                    </div>
                   }
                 </div>
               </div>
@@ -194,14 +213,19 @@ interface PeriodGroup {
                   [class.expanded]="period.isExpanded"
                 >
                   <!-- Period Header -->
-                  <div class="period-header" (click)="togglePeriod(period)">
+                  <button
+                    type="button"
+                    class="period-header"
+                    (click)="togglePeriod(period)"
+                    [attr.aria-expanded]="period.isExpanded"
+                  >
                     <div class="header-left">
                       <span class="header-title">{{ period.title }}</span>
                       <span class="header-count">{{
                         period.transactionCount
                       }}</span>
                       @if (period.isSalaryPeriod) {
-                        <span class="salary-tag">💰</span>
+                        <span class="salary-tag" title="Salary period">💰</span>
                       }
                     </div>
                     <div class="header-right">
@@ -228,11 +252,22 @@ interface PeriodGroup {
                           {{ period.difference | numberFormat: '0.00' }}
                         </span>
                       }
-                      <span class="expand-icon">{{
-                        period.isExpanded ? '−' : '+'
-                      }}</span>
+                      <span
+                        class="expand-icon"
+                        [class.rotated]="period.isExpanded"
+                      >
+                        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                          <path
+                            d="M4 6l4 4 4-4"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
                     </div>
-                  </div>
+                  </button>
 
                   <!-- Period Content -->
                   @if (period.isExpanded) {
@@ -241,27 +276,43 @@ interface PeriodGroup {
                       @if (selectedCategory() !== null) {
                         <div class="filter-active">
                           <span class="filter-label">Filtered by:</span>
-                          <span
+                          <button
+                            type="button"
                             class="category-pill filter-pill"
                             [style.background]="
                               getCategoryColor(selectedCategory()!)
                             "
                             (click)="clearCategory()"
                           >
-                            {{ getCategoryLabel(selectedCategory()!) }} ✕
-                          </span>
+                            <span>{{
+                              getCategoryLabel(selectedCategory()!)
+                            }}</span>
+                            <svg
+                              class="pill-close"
+                              viewBox="0 0 12 12"
+                              fill="none"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M3 3l6 6M9 3l-6 6"
+                                stroke="currentColor"
+                                stroke-width="1.6"
+                                stroke-linecap="round"
+                              />
+                            </svg>
+                          </button>
                         </div>
                       }
 
                       <!-- Chart Section - Hidden on mobile -->
-                      @if (selectedCategory() === null) {
+                      <!-- @if (selectedCategory() === null) {
                         <div class="chart-section compact-chart desktop-only">
                           <p-highcharts-wrapper
                             class="chart-wrapper"
                             [chartOptions]="updateBarChart(period.transactions)"
                           />
                         </div>
-                      }
+                      } -->
 
                       <div class="transactions-section compact">
                         <!-- Transactions Grid -->
@@ -278,12 +329,15 @@ interface PeriodGroup {
                               <!-- Row 1: provider/count (left) + category pill (right) -->
                               <div class="card-row">
                                 <div class="provider-group">
-                                  <span
-                                    class="provider-name"
-                                    [ngbTooltip]="item.description"
-                                  >
-                                    {{ item.provider }}
-                                  </span>
+                                  @if (selectedCategory() !== null) {
+                                    <span
+                                      class="provider-name"
+                                      [ngbTooltip]="item.description"
+                                      container="body"
+                                    >
+                                      {{ item.provider }}
+                                    </span>
+                                  }
                                   @if (selectedCategory() === null) {
                                     <span class="tx-count">{{
                                       item.count
@@ -291,7 +345,8 @@ interface PeriodGroup {
                                   }
                                 </div>
                                 @if (selectedCategory() === null) {
-                                  <div
+                                  <button
+                                    type="button"
                                     class="category-pill"
                                     (click)="onSelectCategory(item.category)"
                                     [style.background]="
@@ -299,13 +354,13 @@ interface PeriodGroup {
                                     "
                                   >
                                     {{ getCategoryLabel(item.category) }}
-                                  </div>
+                                  </button>
                                 }
                               </div>
 
                               <!-- Divider + Details row: only when 5 or fewer cards -->
                               @if (period.multiple.length <= 5) {
-                                <hr class="card-divider" />
+                                <div class="card-divider"></div>
                                 <div class="card-row details-row">
                                   <span class="details-text">
                                     {{ item.description || item.provider }}
@@ -315,9 +370,11 @@ interface PeriodGroup {
 
                               <!-- Middle row: date + amount -->
                               <div class="card-row middle">
-                                <span class="date-text">{{
-                                  formatDay(item.latestDate)
-                                }}</span>
+                                @if (selectedCategory() !== null) {
+                                  <span class="date-text">{{
+                                    formatDay(item.latestDate)
+                                  }}</span>
+                                }
                                 <div class="amount-group">
                                   <span
                                     class="amount-text"
@@ -353,7 +410,10 @@ interface PeriodGroup {
                           }
 
                           @if (!period.multiple.length) {
-                            <div class="empty-state">No transactions</div>
+                            <div class="empty-state">
+                              <div class="empty-icon">📭</div>
+                              <span>No transactions</span>
+                            </div>
                           }
                         </div>
                       </div>
@@ -363,7 +423,10 @@ interface PeriodGroup {
               }
 
               @if (!currentPeriods().length) {
-                <div class="empty-state-large">No data</div>
+                <div class="empty-state-large">
+                  <div class="empty-icon-lg">📊</div>
+                  <span>No data available</span>
+                </div>
               }
             </div>
           }
@@ -373,6 +436,56 @@ interface PeriodGroup {
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
+    /* ===== DESIGN TOKENS ===== */
+    :host {
+      --bg-app: #f7f8fa;
+      --bg-card: #ffffff;
+      --bg-subtle: #fafbfc;
+      --bg-muted: #f1f3f6;
+      --bg-highlight: #fffdf5;
+
+      --border-subtle: #eef0f4;
+      --border-soft: #e5e8ee;
+      --border-strong: #d8dde6;
+      --border-highlight: #fae6a8;
+
+      --text-primary: #16192c;
+      --text-secondary: #5c6375;
+      --text-tertiary: #8a91a3;
+      --text-muted: #a8aebe;
+
+      --accent-green: #0caa6c;
+      --accent-green-bg: #ecfdf5;
+      --accent-red: #e74c5e;
+      --accent-red-bg: #fef2f2;
+      --accent-blue: #4f6ef7;
+
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-pill: 999px;
+
+      --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
+      --shadow-sm:
+        0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+      --shadow-md:
+        0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
+      --shadow-lg:
+        0 8px 24px rgba(16, 24, 40, 0.1), 0 4px 8px rgba(16, 24, 40, 0.04);
+
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --transition-fast: 0.15s var(--ease-out);
+      --transition-base: 0.22s var(--ease-out);
+
+      display: block;
+      height: 100%;
+      font-family: inherit;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
     /* ===== CONTAINER ===== */
     .dashboard-container {
       display: flex;
@@ -383,71 +496,95 @@ interface PeriodGroup {
 
     .header-section {
       flex-shrink: 0;
-      padding: 4px 12px 0 12px;
+      padding: 0;
     }
 
     .content-area {
       flex: 1;
       overflow: hidden;
-      padding: 4px 12px 8px 12px;
+      padding: 0;
       min-height: 0;
     }
 
     .scroll-container {
       height: 100%;
       overflow-y: auto;
-      padding-right: 2px;
+      padding-right: 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-strong) transparent;
     }
 
     /* ===== SCROLLBAR ===== */
     .scroll-container::-webkit-scrollbar {
-      width: 3px;
+      width: 4px;
     }
     .scroll-container::-webkit-scrollbar-track {
       background: transparent;
     }
     .scroll-container::-webkit-scrollbar-thumb {
-      background: #d1d5db;
-      border-radius: 3px;
+      background: var(--border-strong);
+      border-radius: var(--radius-pill);
+    }
+    .scroll-container::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
     }
 
     /* ===== FILTER INDICATOR ===== */
     .filter-active {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 8px;
-      margin-bottom: 6px;
-      background: #f0f2f5;
-      border-radius: 6px;
+      gap: 8px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
       font-size: 0.75rem;
-      color: #6b6b8d;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-xs);
+      animation: fadeIn 0.2s var(--ease-out);
     }
 
     .filter-label {
       font-weight: 500;
+      color: var(--text-tertiary);
     }
 
     .filter-pill {
-      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: inherit;
+    }
+
+    .pill-close {
+      width: 10px;
+      height: 10px;
+      opacity: 0.85;
     }
 
     /* ===== CHART SECTION ===== */
     .chart-section {
-      background: white;
-      border-radius: 8px;
-      padding: 6px 8px;
-      margin-bottom: 6px;
-      border: 1px solid #f0f2f5;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      overflow: hidden;
+      transition: box-shadow var(--transition-base);
+    }
+
+    .chart-section:hover {
+      box-shadow: var(--shadow-md);
     }
 
     .chart-section.compact-chart {
-      padding: 4px 6px;
-      margin-bottom: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: var(--radius-md);
     }
 
     /* Hide chart on mobile */
@@ -487,54 +624,18 @@ interface PeriodGroup {
     }
 
     @media (max-width: 768px) {
-      /* Hide chart on tablets and smaller */
       .desktop-only {
         display: none !important;
-      }
-
-      .chart-wrapper {
-        height: 220px;
-        min-height: 150px;
-      }
-      .chart-section.compact-chart .chart-wrapper {
-        height: 180px;
-        min-height: 130px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      /* Hide chart on mobile */
-      .desktop-only {
-        display: none !important;
-      }
-
-      .chart-wrapper {
-        height: 180px;
-        min-height: 120px;
-      }
-      .chart-section.compact-chart .chart-wrapper {
-        height: 150px;
-        min-height: 100px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .chart-wrapper {
-        height: 150px;
-        min-height: 100px;
-      }
-      .chart-section.compact-chart .chart-wrapper {
-        height: 130px;
-        min-height: 90px;
       }
     }
 
     /* ===== TRANSACTIONS SECTION ===== */
     .transactions-section {
-      background: white;
-      border-radius: 8px;
-      padding: 6px 8px;
-      border: 1px solid #f0f2f5;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
       flex-shrink: 0;
     }
 
@@ -542,149 +643,174 @@ interface PeriodGroup {
       padding: 0;
       border: none;
       background: transparent;
+      box-shadow: none;
     }
 
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #f0f2f5;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
     .section-title {
       font-size: 0.85rem;
       font-weight: 600;
-      color: #1a1a2e;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
     }
 
     .section-badge {
       font-size: 0.7rem;
-      font-weight: 500;
-      color: #6b6b8d;
-      background: #f0f2f5;
-      padding: 0 8px;
-      border-radius: 8px;
-      line-height: 1.8;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-muted);
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      line-height: 1.6;
     }
 
     /* ===== TRANSACTION CARDS ===== */
     .transactions-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 4px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 8px;
     }
 
     .transaction-card {
-      background: #fafbfc;
-      border-radius: 6px;
-      padding: 5px;
-      border: 1px solid #eef0f3;
-      transition: all 0.15s ease;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      border: 1px solid var(--border-subtle);
+      transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast);
+      position: relative;
     }
 
     .transaction-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-soft);
     }
 
     .transaction-card.highlight-card {
-      background: #fffbf0;
-      border-color: #fde68a;
+      background: var(--bg-highlight);
+      border-color: var(--border-highlight);
+    }
+
+    .transaction-card.highlight-card:hover {
+      border-color: #f5d97a;
+      box-shadow: 0 4px 14px rgba(250, 230, 168, 0.4);
     }
 
     .card-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       padding: 2px 0;
     }
 
     .card-row.middle {
-      border-top: 1px solid #eef0f3;
-      padding: 4px 0;
-      margin: 2px 0 0 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 6px 0 0 0;
+      margin: 6px 0 0 0;
     }
 
-    /* Divider between header row and details row */
     .card-divider {
+      height: 1px;
+      background: rgba(0, 0, 0, 0.05);
+      margin: 6px 0;
       border: none;
-      border-top: 1px solid #eef0f3;
-      margin: 3px 0;
     }
 
-    /* Details row (transaction description) */
     .card-row.details-row {
-      padding: 1px 0 3px 0;
+      padding: 0 0 4px 0;
       justify-content: flex-start;
     }
 
     .details-text {
       font-size: 0.75rem;
-      color: #6b6b8d;
+      color: var(--text-secondary);
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       width: 100%;
       min-width: 0;
+      letter-spacing: 0.005em;
     }
 
     .provider-group {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       flex: 1;
       min-width: 0;
     }
 
     .provider-name {
-      font-weight: 500;
+      font-weight: 600;
       font-size: 0.85rem;
-      color: #1a1a2e;
+      color: var(--text-primary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      letter-spacing: -0.01em;
+      cursor: help;
+      pointer-events: auto;
     }
 
     .tx-count {
-      font-size: 0.6rem;
-      color: #8b8baa;
-      background: #eef0f3;
-      padding: 0 6px;
-      border-radius: 6px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      background: var(--bg-muted);
+      padding: 1px 8px;
+      border-radius: var(--radius-pill);
       flex-shrink: 0;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .category-pill {
       flex-shrink: 0;
-      padding: 0 8px;
-      border-radius: 8px;
-      color: white;
+      padding: 3px 10px;
+      border: none;
+      border-radius: var(--radius-pill);
+      color: #ffffff;
+      font-family: inherit;
       font-size: 0.7rem;
-      font-weight: 500;
+      font-weight: 600;
+      letter-spacing: 0.01em;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        filter var(--transition-fast);
       user-select: none;
-      line-height: 1.8;
+      line-height: 1.4;
+      white-space: nowrap;
     }
 
     .category-pill:hover {
-      transform: scale(1.05);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      filter: brightness(1.05);
     }
 
     .category-pill:active {
-      transform: scale(0.92);
+      transform: scale(0.95);
     }
 
     .date-text {
-      font-size: 0.75rem;
-      color: #6b6b8d;
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
       font-weight: 500;
+      letter-spacing: 0.01em;
     }
 
     .amount-group {
@@ -698,68 +824,93 @@ interface PeriodGroup {
       font-size: 0.95rem;
       font-weight: 700;
       font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
     }
 
     .amount-text.positive {
-      color: #0caa6c;
+      color: var(--accent-green);
     }
     .amount-text.negative {
-      color: #e74c5e;
+      color: var(--accent-red);
     }
 
     .percentage-badge {
-      font-size: 0.6rem;
-      font-weight: 600;
-      padding: 1px 6px;
-      border-radius: 4px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: var(--radius-pill);
       white-space: nowrap;
+      letter-spacing: 0.01em;
+      line-height: 1.6;
     }
 
     .income-badge {
-      background: #ecfdf5;
-      color: #0caa6c;
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
     }
 
     .expense-badge {
-      background: #fef2f2;
-      color: #e74c5e;
+      background: var(--accent-red-bg);
+      color: var(--accent-red);
     }
 
     /* ===== PERIOD CONTAINER ===== */
     .period-container {
-      background: white;
-      border-radius: 8px;
-      margin-bottom: 4px;
-      border: 1px solid #f0f2f5;
-      transition: all 0.2s ease;
-      overflow: hidden;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      margin-bottom: 8px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-xs);
+      transition:
+        box-shadow var(--transition-base),
+        border-color var(--transition-base);
+    }
+
+    .period-container:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--border-soft);
     }
 
     .period-container.expanded {
-      border-color: #dce0e6;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-md);
     }
 
     .period-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 10px;
+      padding: 12px 14px;
       cursor: pointer;
-      transition: background 0.15s ease;
-      gap: 6px;
-      min-height: 36px;
+      transition: background var(--transition-fast);
+      gap: 8px;
+      min-height: 52px;
       flex-wrap: nowrap;
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      text-align: left;
+      border-radius: var(--radius-lg);
+    }
+
+    .period-container.expanded .period-header {
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
 
     .period-header:hover {
-      background: #fafbfc;
+      background: var(--bg-subtle);
+    }
+
+    .period-header:focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: -2px;
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       flex: 1;
       min-width: 0;
       flex-wrap: nowrap;
@@ -768,29 +919,32 @@ interface PeriodGroup {
     .header-title {
       font-weight: 600;
       font-size: 0.95rem;
-      color: #1a1a2e;
+      color: var(--text-primary);
       white-space: nowrap;
+      letter-spacing: -0.01em;
     }
 
     .header-count {
       font-size: 0.7rem;
-      color: #6b6b8d;
-      background: #f0f2f5;
-      padding: 0 8px;
-      border-radius: 6px;
-      line-height: 1.6;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-muted);
+      padding: 2px 9px;
+      border-radius: var(--radius-pill);
+      line-height: 1.5;
       flex-shrink: 0;
     }
 
     .salary-tag {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       flex-shrink: 0;
+      line-height: 1;
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       flex-shrink: 0;
       flex-wrap: nowrap;
     }
@@ -798,61 +952,82 @@ interface PeriodGroup {
     .income-tag,
     .expense-tag,
     .diff-tag {
-      padding: 0 8px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 700;
       white-space: nowrap;
-      line-height: 1.8;
+      line-height: 1.4;
       flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
     }
 
     .income-tag {
-      background: #ecfdf5;
-      color: #0caa6c;
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
     }
 
     .expense-tag {
-      background: #fef2f2;
-      color: #e74c5e;
+      background: var(--accent-red-bg);
+      color: var(--accent-red);
     }
 
     .diff-tag {
-      background: #f0f2f5;
-      color: #6b6b8d;
-      min-width: 40px;
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+      min-width: 48px;
       text-align: center;
     }
 
     .diff-tag.positive {
-      background: #ecfdf5;
-      color: #0caa6c;
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
     }
 
     .diff-tag.negative {
-      background: #fef2f2;
-      color: #e74c5e;
+      background: var(--accent-red-bg);
+      color: var(--accent-red);
     }
 
     .expand-icon {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      transition: transform 0.2s ease;
-      margin-left: 4px;
-      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      color: var(--text-tertiary);
+      transition:
+        transform var(--transition-base),
+        color var(--transition-fast);
+      margin-left: 2px;
       flex-shrink: 0;
     }
 
+    .expand-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .expand-icon.rotated {
+      transform: rotate(180deg);
+      color: var(--text-primary);
+    }
+
+    .period-header:hover .expand-icon {
+      color: var(--text-primary);
+    }
+
     .period-content {
-      padding: 0 10px 8px 10px;
-      border-top: 1px solid #f0f2f5;
-      animation: slideDown 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      padding: 12px 14px 14px 14px;
+      border-top: 1px solid var(--border-subtle);
+      animation: slideDown 0.25s var(--ease-out);
     }
 
     @keyframes slideDown {
       from {
         opacity: 0;
-        transform: translateY(-3px);
+        transform: translateY(-4px);
       }
       to {
         opacity: 1;
@@ -860,110 +1035,128 @@ interface PeriodGroup {
       }
     }
 
-    .period-content .chart-section {
-      margin-bottom: 4px;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
 
     /* ===== EMPTY STATES ===== */
     .empty-state {
       grid-column: 1 / -1;
-      text-align: center;
-      padding: 12px;
-      color: #8b8baa;
-      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 24px 16px;
+      color: var(--text-tertiary);
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    .empty-icon {
+      font-size: 1.5rem;
+      opacity: 0.6;
     }
 
     .empty-state-large {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       text-align: center;
-      padding: 24px;
-      color: #8b8baa;
-      font-size: 0.95rem;
+      padding: 48px 24px;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .empty-icon-lg {
+      font-size: 2.5rem;
+      opacity: 0.5;
     }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1024px) {
       .transactions-grid {
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-        gap: 4px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 8px;
       }
 
       .provider-name {
-        font-size: 0.8rem;
+        font-size: 0.82rem;
       }
 
       .amount-text {
-        font-size: 0.85rem;
+        font-size: 0.88rem;
       }
 
       .category-pill {
-        font-size: 0.65rem;
+        font-size: 0.66rem;
+        padding: 2px 8px;
       }
 
       .percentage-badge {
-        font-size: 0.55rem;
-        padding: 1px 5px;
+        font-size: 0.58rem;
+        padding: 1px 6px;
       }
     }
 
     @media (max-width: 768px) {
-      .header-section {
-        padding: 4px 10px 0 10px;
-      }
-
-      .content-area {
-        padding: 4px 10px 6px 10px;
-      }
-
-      /* Mobile: 2 cards per row on tablets */
       .transactions-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 4px;
+        gap: 8px;
       }
 
       .period-header {
-        padding: 6px 10px;
-        min-height: 32px;
-        flex-wrap: nowrap;
+        padding: 10px 12px;
+        min-height: 46px;
+        gap: 6px;
       }
 
       .header-title {
-        font-size: 0.85rem;
+        font-size: 0.88rem;
       }
 
       .header-count {
-        font-size: 0.65rem;
-        padding: 0 6px;
+        font-size: 0.66rem;
+        padding: 2px 7px;
       }
 
       .income-tag,
       .expense-tag,
       .diff-tag {
-        font-size: 0.7rem;
-        padding: 0 6px;
+        font-size: 0.68rem;
+        padding: 2px 7px;
       }
 
       .diff-tag {
-        min-width: 34px;
+        min-width: 42px;
       }
 
       .period-content {
-        padding: 0 10px 6px 10px;
+        padding: 10px 12px 12px 12px;
       }
 
       .chart-section {
-        padding: 4px 6px;
-        border-radius: 6px;
-        margin-bottom: 4px;
+        padding: 10px;
+        border-radius: var(--radius-md);
+        margin-bottom: 10px;
       }
 
       .transactions-section {
-        padding: 4px 6px;
-        border-radius: 6px;
+        padding: 10px;
+        border-radius: var(--radius-md);
       }
 
       .section-header {
-        margin-bottom: 4px;
-        padding-bottom: 4px;
+        margin-bottom: 8px;
+        padding-bottom: 6px;
       }
 
       .section-title {
@@ -971,45 +1164,44 @@ interface PeriodGroup {
       }
 
       .section-badge {
-        font-size: 0.65rem;
-        padding: 0 6px;
-        line-height: 1.6;
+        font-size: 0.66rem;
+        padding: 1px 8px;
       }
 
       .transaction-card {
-        padding: 4px 6px;
+        padding: 8px 10px;
+        border-radius: var(--radius-sm);
       }
 
       .provider-name {
-        font-size: 0.75rem;
+        font-size: 0.78rem;
       }
 
       .details-text {
-        font-size: 0.7rem;
+        font-size: 0.72rem;
       }
 
       .amount-text {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
       }
 
       .date-text {
-        font-size: 0.65rem;
+        font-size: 0.68rem;
       }
 
       .category-pill {
-        font-size: 0.6rem;
-        padding: 0 6px;
-        line-height: 1.6;
+        font-size: 0.62rem;
+        padding: 2px 7px;
       }
 
       .tx-count {
-        font-size: 0.55rem;
-        padding: 0 4px;
+        font-size: 0.6rem;
+        padding: 1px 6px;
       }
 
       .percentage-badge {
-        font-size: 0.5rem;
-        padding: 0 4px;
+        font-size: 0.55rem;
+        padding: 1px 5px;
       }
 
       .card-row {
@@ -1017,151 +1209,143 @@ interface PeriodGroup {
       }
 
       .card-row.middle {
-        padding: 3px 0;
-        margin: 1px 0 0 0;
+        padding: 5px 0 0 0;
+        margin: 5px 0 0 0;
       }
 
       .amount-group {
-        gap: 4px;
+        gap: 5px;
       }
 
-      .expand-icon {
-        font-size: 0.7rem;
+      .expand-icon svg {
+        width: 13px;
+        height: 13px;
       }
     }
 
     @media (max-width: 480px) {
-      .header-section {
-        padding: 2px 6px 0 6px;
-      }
-
-      .content-area {
-        padding: 2px 6px 4px 6px;
-      }
-
-      /* Mobile: 1 card per row on phones */
       .transactions-grid {
         grid-template-columns: 1fr;
-        gap: 4px;
+        gap: 6px;
+      }
+
+      .period-container {
+        margin-bottom: 6px;
+        border-radius: var(--radius-md);
       }
 
       .period-header {
-        padding: 4px 8px;
-        min-height: 28px;
-        flex-wrap: nowrap;
-        gap: 4px;
+        padding: 8px 10px;
+        min-height: 42px;
+        gap: 5px;
       }
 
       .header-left {
         flex: 1;
         min-width: 0;
-        gap: 4px;
-        flex-wrap: nowrap;
+        gap: 5px;
       }
 
       .header-right {
         flex: 0 0 auto;
         width: auto;
         justify-content: flex-end;
-        gap: 3px;
-        flex-wrap: nowrap;
+        gap: 4px;
       }
 
       .header-title {
-        font-size: 0.7rem;
-        white-space: nowrap;
+        font-size: 0.78rem;
       }
 
       .header-count {
-        font-size: 0.55rem;
-        padding: 0 4px;
-        flex-shrink: 0;
+        font-size: 0.58rem;
+        padding: 1px 6px;
       }
 
       .income-tag,
       .expense-tag,
       .diff-tag {
         font-size: 0.6rem;
-        padding: 0 4px;
-        line-height: 1.4;
-        flex-shrink: 0;
+        padding: 2px 6px;
+        line-height: 1.3;
       }
 
       .diff-tag {
-        min-width: 24px;
+        min-width: 34px;
       }
 
       .expand-icon {
-        font-size: 0.65rem;
-        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+      }
+
+      .expand-icon svg {
+        width: 12px;
+        height: 12px;
       }
 
       .salary-tag {
-        font-size: 0.55rem;
-        flex-shrink: 0;
-      }
-
-      .period-content {
-        padding: 0 6px 4px 6px;
-      }
-
-      .chart-section {
-        padding: 3px 4px;
-        border-radius: 4px;
-        margin-bottom: 3px;
-      }
-
-      .transactions-section {
-        padding: 3px 4px;
-        border-radius: 4px;
-      }
-
-      .section-title {
-        font-size: 0.7rem;
-      }
-
-      .section-badge {
-        font-size: 0.55rem;
-        padding: 0 4px;
-      }
-
-      .transaction-card {
-        padding: 6px 8px;
-        border-radius: 6px;
-      }
-
-      .provider-name {
-        font-size: 0.8rem;
-      }
-
-      .details-text {
-        font-size: 0.7rem;
-      }
-
-      .tx-count {
-        font-size: 0.55rem;
-        padding: 0 5px;
-      }
-
-      .category-pill {
-        font-size: 0.6rem;
-        padding: 0 8px;
-        line-height: 1.8;
-        border-radius: 8px;
-      }
-
-      .amount-text {
-        font-size: 0.85rem;
-      }
-
-      .date-text {
         font-size: 0.65rem;
       }
 
+      .period-content {
+        padding: 8px 10px 10px 10px;
+      }
+
+      .chart-section {
+        padding: 8px;
+        border-radius: var(--radius-sm);
+        margin-bottom: 8px;
+      }
+
+      .transactions-section {
+        padding: 8px;
+        border-radius: var(--radius-sm);
+      }
+
+      .section-title {
+        font-size: 0.75rem;
+      }
+
+      .section-badge {
+        font-size: 0.6rem;
+        padding: 1px 7px;
+      }
+
+      .transaction-card {
+        padding: 8px 10px;
+        border-radius: var(--radius-sm);
+      }
+
+      .provider-name {
+        font-size: 0.82rem;
+      }
+
+      .details-text {
+        font-size: 0.72rem;
+      }
+
+      .tx-count {
+        font-size: 0.58rem;
+        padding: 1px 6px;
+      }
+
+      .category-pill {
+        font-size: 0.62rem;
+        padding: 2px 8px;
+      }
+
+      .amount-text {
+        font-size: 0.88rem;
+      }
+
+      .date-text {
+        font-size: 0.68rem;
+      }
+
       .percentage-badge {
-        font-size: 0.5rem;
-        padding: 1px 5px;
-        border-radius: 4px;
+        font-size: 0.55rem;
+        padding: 1px 6px;
       }
 
       .card-row {
@@ -1169,90 +1353,97 @@ interface PeriodGroup {
       }
 
       .card-row.middle {
-        padding: 4px 0;
-        margin: 2px 0 0 0;
+        padding: 6px 0 0 0;
+        margin: 6px 0 0 0;
       }
 
       .amount-group {
         gap: 5px;
       }
 
+      .filter-active {
+        padding: 5px 8px;
+        font-size: 0.7rem;
+        margin-bottom: 8px;
+      }
+
       .empty-state {
-        padding: 8px;
+        padding: 20px 12px;
         font-size: 0.75rem;
       }
 
       .empty-state-large {
-        padding: 16px;
-        font-size: 0.8rem;
+        padding: 36px 16px;
+        font-size: 0.82rem;
       }
     }
 
     @media (max-width: 380px) {
       .transactions-grid {
         grid-template-columns: 1fr;
-        gap: 3px;
+        gap: 5px;
       }
 
       .period-header {
-        padding: 3px 6px;
-        min-height: 24px;
-        gap: 2px;
+        padding: 6px 8px;
+        min-height: 38px;
+        gap: 4px;
       }
 
       .header-title {
-        font-size: 0.6rem;
+        font-size: 0.72rem;
       }
 
       .header-count {
-        font-size: 0.5rem;
-        padding: 0 3px;
+        font-size: 0.55rem;
+        padding: 1px 5px;
       }
 
       .income-tag,
       .expense-tag,
       .diff-tag {
-        font-size: 0.5rem;
-        padding: 0 3px;
+        font-size: 0.55rem;
+        padding: 1px 5px;
         line-height: 1.2;
       }
 
       .diff-tag {
-        min-width: 20px;
+        min-width: 28px;
       }
 
-      .expand-icon {
-        font-size: 0.6rem;
+      .expand-icon svg {
+        width: 11px;
+        height: 11px;
       }
 
       .salary-tag {
-        font-size: 0.5rem;
+        font-size: 0.6rem;
       }
 
       .transaction-card {
-        padding: 5px 6px;
+        padding: 7px 8px;
       }
 
       .provider-name {
-        font-size: 0.75rem;
+        font-size: 0.76rem;
       }
 
       .details-text {
-        font-size: 0.65rem;
+        font-size: 0.68rem;
       }
 
       .amount-text {
-        font-size: 0.8rem;
+        font-size: 0.82rem;
       }
 
       .category-pill {
-        font-size: 0.55rem;
-        padding: 0 6px;
+        font-size: 0.58rem;
+        padding: 2px 6px;
       }
 
       .percentage-badge {
-        font-size: 0.45rem;
-        padding: 0 4px;
+        font-size: 0.5rem;
+        padding: 1px 5px;
       }
     }
 
@@ -1366,23 +1557,20 @@ export class MostCommonTransactionComponent {
       expenseMap.get(item.category)!.push(item);
     });
 
-    // Sort categories by total expense amount (descending)
     const sortedCategories = Array.from(expenseMap.entries()).sort((a, b) => {
       const totalA = a[1].reduce((sum, item) => sum + Math.abs(item.total), 0);
       const totalB = b[1].reduce((sum, item) => sum + Math.abs(item.total), 0);
       return totalB - totalA;
     });
 
-    // For each category, sort items by amount descending
     const sortedExpenses: GroupedTransaction[] = [];
-    sortedCategories.forEach(([category, items]) => {
+    sortedCategories.forEach(([, items]) => {
       const sortedItems = items.sort(
         (a, b) => Math.abs(b.total) - Math.abs(a.total),
       );
       sortedExpenses.push(...sortedItems);
     });
 
-    // Return income first, then expenses
     return [...sortedIncome, ...sortedExpenses];
   }
 
@@ -1538,7 +1726,6 @@ export class MostCommonTransactionComponent {
           : 0,
     }));
 
-    // Apply the same sorting logic (chronological when filtered)
     const sortedGroups = this.sortGroupedTransactions(groupsWithPercentages);
 
     return {
