@@ -29,6 +29,14 @@ interface GroupedTransaction {
   percentageOfExpense: number;
 }
 
+interface CategoryBarSegment {
+  category: TransactionCategory;
+  label: string;
+  color: string;
+  total: number;
+  percentage: number;
+}
+
 interface PeriodGroup {
   id: string;
   title: string;
@@ -40,6 +48,7 @@ interface PeriodGroup {
   transactionCount: number;
   transactions: TransactionDomain[];
   multiple: GroupedTransaction[];
+  categorySegments: CategoryBarSegment[];
   isExpanded: boolean;
   month?: string;
 }
@@ -68,6 +77,64 @@ interface PeriodGroup {
           @if (viewMode() === 'all') {
             <!-- All View -->
             <div class="view-all">
+              <!-- Category Spending Bar (desktop only) -->
+              @if (
+                categoryBarSegments().length > 1 && selectedCategory() === null
+              ) {
+                <div class="category-bar-section desktop-only">
+                  <div class="category-bar-header">
+                    <span class="category-bar-title">Spending by category</span>
+                    <span class="category-bar-total">
+                      {{ totalExpense() | numberFormat: '0.00' }}
+                    </span>
+                  </div>
+                  <div class="category-bar">
+                    @for (seg of categoryBarSegments(); track seg.category) {
+                      <div
+                        class="category-bar-segment"
+                        [style.width.%]="seg.percentage"
+                        [style.background]="seg.color"
+                        [ngbTooltip]="
+                          seg.label +
+                          ': ' +
+                          (seg.total | numberFormat: '0.00') +
+                          ' (' +
+                          (seg.percentage | numberFormat: '0.0') +
+                          '%)'
+                        "
+                        container="body"
+                      ></div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Mobile-only category bar (below header, before filters) -->
+              @if (
+                categoryBarSegments().length > 1 && selectedCategory() === null
+              ) {
+                <div class="category-bar-section mobile-only">
+                  <div class="category-bar">
+                    @for (seg of categoryBarSegments(); track seg.category) {
+                      <div
+                        class="category-bar-segment"
+                        [style.width.%]="seg.percentage"
+                        [style.background]="seg.color"
+                        [ngbTooltip]="
+                          seg.label +
+                          ': ' +
+                          (seg.total | numberFormat: '0.00') +
+                          ' (' +
+                          (seg.percentage | numberFormat: '0.0') +
+                          '%)'
+                        "
+                        container="body"
+                      ></div>
+                    }
+                  </div>
+                </div>
+              }
+
               <!-- Active filter indicator -->
               @if (selectedCategory() !== null) {
                 <div class="filter-active">
@@ -238,51 +305,119 @@ interface PeriodGroup {
                     (click)="togglePeriod(period)"
                     [attr.aria-expanded]="period.isExpanded"
                   >
-                    <div class="header-left">
-                      <span class="header-title">{{ period.title }}</span>
-                      <span class="header-count">{{
-                        period.transactionCount
-                      }}</span>
-                    </div>
-                    <div class="header-right">
-                      @if (period.totalIncome > 0) {
-                        <span class="income-tag"
-                          >+{{
-                            period.totalIncome | numberFormat: '0.00'
-                          }}</span
-                        >
+                    <!-- Main top row -->
+                    <div class="header-row-main">
+                      <div class="header-left">
+                        <span class="header-title">{{ period.title }}</span>
+                        <span class="header-count">{{
+                          period.transactionCount
+                        }}</span>
+                      </div>
+
+                      <!-- Inline category bar between left and right (desktop) -->
+                      @if (
+                        period.categorySegments.length > 1 &&
+                        selectedCategory() === null
+                      ) {
+                        <div class="header-bar desktop-only">
+                          <div class="category-bar slim">
+                            @for (
+                              seg of period.categorySegments;
+                              track seg.category
+                            ) {
+                              <div
+                                class="category-bar-segment"
+                                [style.width.%]="seg.percentage"
+                                [style.background]="seg.color"
+                                [ngbTooltip]="
+                                  seg.label +
+                                  ': ' +
+                                  (seg.total | numberFormat: '0.00') +
+                                  ' (' +
+                                  (seg.percentage | numberFormat: '0.0') +
+                                  '%)'
+                                "
+                                container="body"
+                              ></div>
+                            }
+                          </div>
+                        </div>
                       }
-                      @if (period.totalExpense > 0) {
-                        <span class="expense-tag"
-                          >-{{
-                            period.totalExpense | numberFormat: '0.00'
-                          }}</span
-                        >
-                      }
-                      @if (period.difference !== 0) {
+
+                      <div class="header-right">
+                        @if (period.totalIncome > 0) {
+                          <span class="income-tag"
+                            >+{{
+                              period.totalIncome | numberFormat: '0.00'
+                            }}</span
+                          >
+                        }
+                        @if (period.totalExpense > 0) {
+                          <span class="expense-tag"
+                            >-{{
+                              period.totalExpense | numberFormat: '0.00'
+                            }}</span
+                          >
+                        }
+                        @if (period.difference !== 0) {
+                          <span
+                            class="diff-tag"
+                            [class.positive]="period.difference > 0"
+                            [class.negative]="period.difference < 0"
+                          >
+                            {{ period.difference | numberFormat: '0.00' }}
+                          </span>
+                        }
                         <span
-                          class="diff-tag"
-                          [class.positive]="period.difference > 0"
-                          [class.negative]="period.difference < 0"
+                          class="expand-icon"
+                          [class.rotated]="period.isExpanded"
                         >
-                          {{ period.difference | numberFormat: '0.00' }}
+                          <svg
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M4 6l4 4 4-4"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
                         </span>
-                      }
-                      <span
-                        class="expand-icon"
-                        [class.rotated]="period.isExpanded"
-                      >
-                        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                          <path
-                            d="M4 6l4 4 4-4"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </span>
+                      </div>
                     </div>
+
+                    <!-- Mobile-only bar: second row, always visible (even collapsed) -->
+                    @if (
+                      period.categorySegments.length > 1 &&
+                      selectedCategory() === null
+                    ) {
+                      <div class="header-bar-mobile mobile-only">
+                        <div class="category-bar slim">
+                          @for (
+                            seg of period.categorySegments;
+                            track seg.category
+                          ) {
+                            <div
+                              class="category-bar-segment"
+                              [style.width.%]="seg.percentage"
+                              [style.background]="seg.color"
+                              [ngbTooltip]="
+                                seg.label +
+                                ': ' +
+                                (seg.total | numberFormat: '0.00') +
+                                ' (' +
+                                (seg.percentage | numberFormat: '0.0') +
+                                '%)'
+                              "
+                              container="body"
+                            ></div>
+                          }
+                        </div>
+                      </div>
+                    }
                   </button>
 
                   <!-- Period Content -->
@@ -578,6 +713,105 @@ interface PeriodGroup {
     }
     .scroll-container::-webkit-scrollbar-thumb:hover {
       background: var(--text-muted);
+    }
+
+    /* ===== VISIBILITY HELPERS ===== */
+    .mobile-only {
+      display: none;
+    }
+    .desktop-only {
+      display: block;
+    }
+
+    /* ===== CATEGORY BAR (full-size, All view desktop) ===== */
+    .category-bar-section {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .category-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .category-bar-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: -0.01em;
+    }
+
+    .category-bar-total {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent-red);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+    }
+
+    .category-bar {
+      display: flex;
+      height: 18px;
+      width: 100%;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      background: var(--bg-muted);
+      gap: 1px;
+    }
+
+    /* Slim variant used inside the period header row */
+    .category-bar.slim {
+      height: 10px;
+      border-radius: var(--radius-pill);
+      gap: 1px;
+    }
+
+    .category-bar-segment {
+      height: 100%;
+      min-width: 4px;
+      transition: filter var(--transition-fast);
+      position: relative;
+    }
+
+    .category-bar-segment:hover {
+      filter: brightness(1.12);
+    }
+
+    /* ===== INLINE HEADER BAR (inside period-header, desktop) ===== */
+    /* Occupies 70% of the middle space on desktop only */
+    .header-bar {
+      flex: 0 1 70%;
+      max-width: 70%;
+      min-width: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+    }
+
+    .header-bar .category-bar.slim {
+      width: 100%;
+    }
+
+    /* Second row of the period header used only on mobile */
+    .header-bar-mobile {
+      display: none;
+      width: 100%;
+      padding-top: 8px;
+      margin-top: 8px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .header-bar-mobile .category-bar.slim {
+      width: 100%;
+      height: 8px;
     }
 
     /* ===== FILTER INDICATOR ===== */
@@ -876,14 +1110,14 @@ interface PeriodGroup {
 
     .period-header {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
+      align-items: stretch;
       padding: 12px 14px;
       cursor: pointer;
       transition: background var(--transition-fast);
-      gap: 8px;
+      gap: 0;
       min-height: 52px;
-      flex-wrap: nowrap;
       width: 100%;
       border: none;
       background: transparent;
@@ -901,11 +1135,21 @@ interface PeriodGroup {
       outline-offset: -2px;
     }
 
+    /* Top row inside the period header */
+    .header-row-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      flex-wrap: nowrap;
+    }
+
     .header-left {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex: 1;
+      flex: 0 0 auto;
       min-width: 0;
       flex-wrap: nowrap;
     }
@@ -933,7 +1177,7 @@ interface PeriodGroup {
       display: flex;
       align-items: center;
       gap: 6px;
-      flex-shrink: 0;
+      flex: 0 0 auto;
       flex-wrap: nowrap;
     }
 
@@ -1092,6 +1336,14 @@ interface PeriodGroup {
     }
 
     @media (max-width: 768px) {
+      /* Swap visibility helpers */
+      .mobile-only {
+        display: block;
+      }
+      .desktop-only {
+        display: none;
+      }
+
       .transactions-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
@@ -1100,7 +1352,15 @@ interface PeriodGroup {
       .period-header {
         padding: 10px 12px;
         min-height: 46px;
+      }
+
+      .header-row-main {
         gap: 6px;
+      }
+
+      /* Mobile second row with the bar */
+      .header-bar-mobile {
+        display: block;
       }
 
       .header-title {
@@ -1199,6 +1459,17 @@ interface PeriodGroup {
         width: 13px;
         height: 13px;
       }
+
+      /* Mobile category bar styling (All view) */
+      .category-bar-section {
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: var(--radius-md);
+      }
+
+      .category-bar {
+        height: 14px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1215,11 +1486,14 @@ interface PeriodGroup {
       .period-header {
         padding: 8px 10px;
         min-height: 42px;
+      }
+
+      .header-row-main {
         gap: 5px;
       }
 
       .header-left {
-        flex: 1;
+        flex: 0 0 auto;
         min-width: 0;
         gap: 5px;
       }
@@ -1260,6 +1534,15 @@ interface PeriodGroup {
       .expand-icon svg {
         width: 12px;
         height: 12px;
+      }
+
+      .header-bar-mobile {
+        padding-top: 6px;
+        margin-top: 6px;
+      }
+
+      .header-bar-mobile .category-bar.slim {
+        height: 7px;
       }
 
       .period-content {
@@ -1355,6 +1638,9 @@ interface PeriodGroup {
       .period-header {
         padding: 6px 8px;
         min-height: 38px;
+      }
+
+      .header-row-main {
         gap: 4px;
       }
 
@@ -1438,6 +1724,50 @@ export class MostCommonTransactionComponent {
   );
 
   private expandedPeriodId = signal<string | null>(null);
+
+  /**
+   * Global expense distribution across categories (used in the "All" view).
+   * Based on the unfiltered list so the user keeps the full picture even
+   * while drilling into a specific category.
+   */
+  categoryBarSegments = computed((): CategoryBarSegment[] =>
+    this.buildCategorySegments(this.transactions()),
+  );
+
+  /**
+   * Builds the per-category expense distribution for a given set of
+   * transactions, sorted from largest to smallest spend.
+   */
+  private buildCategorySegments(
+    txs: TransactionDomain[],
+  ): CategoryBarSegment[] {
+    if (!txs?.length) return [];
+
+    const expenseTxs = txs.filter((t) => (t.amount ?? 0) < 0);
+    if (!expenseTxs.length) return [];
+
+    const totalExpense = expenseTxs.reduce(
+      (sum, t) => sum + Math.abs(t.amount ?? 0),
+      0,
+    );
+    if (totalExpense === 0) return [];
+
+    const byCategory = new Map<TransactionCategory, number>();
+    for (const tx of expenseTxs) {
+      const amount = Math.abs(tx.amount ?? 0);
+      byCategory.set(tx.category, (byCategory.get(tx.category) ?? 0) + amount);
+    }
+
+    return Array.from(byCategory.entries())
+      .map(([category, total]) => ({
+        category,
+        label: this.getCategoryLabel(category),
+        color: this.getCategoryColor(category),
+        total,
+        percentage: (total / totalExpense) * 100,
+      }))
+      .sort((a, b) => b.total - a.total);
+  }
 
   togglePeriod(period: PeriodGroup) {
     const currentExpanded = this.expandedPeriodId();
@@ -1636,6 +1966,7 @@ export class MostCommonTransactionComponent {
       transactionCount: txs.length,
       multiple: sortedGroups,
       transactions: txs,
+      categorySegments: this.buildCategorySegments(txs),
     };
   }
 
