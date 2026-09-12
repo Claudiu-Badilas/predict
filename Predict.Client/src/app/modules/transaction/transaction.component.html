@@ -1,7 +1,7 @@
 <p-top-bar [hasFiltersContent]="true" [hasModuleNavContent]="true">
   <ng-container module-navigation>
     <p-toggle-button-actions
-      [options]="['Salary', 'Monthly', 'Yearly', 'All']"
+      [options]="['Monthly', 'Yearly', 'All']"
       [selected]="getSelectedViewLabel()"
       (selectionChange)="onToggle($event)"
   /></ng-container>

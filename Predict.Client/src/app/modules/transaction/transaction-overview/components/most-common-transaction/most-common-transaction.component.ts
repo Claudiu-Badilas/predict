@@ -42,9 +42,6 @@ interface PeriodGroup {
   multiple: GroupedTransaction[];
   isExpanded: boolean;
   month?: string;
-  salaryPeriodStart?: Date;
-  salaryPeriodEnd?: Date;
-  isSalaryPeriod?: boolean;
 }
 
 @Component({
@@ -246,9 +243,6 @@ interface PeriodGroup {
                       <span class="header-count">{{
                         period.transactionCount
                       }}</span>
-                      @if (period.isSalaryPeriod) {
-                        <span class="salary-tag" title="Salary period">💰</span>
-                      }
                     </div>
                     <div class="header-right">
                       @if (period.totalIncome > 0) {
@@ -935,12 +929,6 @@ interface PeriodGroup {
       flex-shrink: 0;
     }
 
-    .salary-tag {
-      font-size: 0.8rem;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-
     .header-right {
       display: flex;
       align-items: center;
@@ -1274,10 +1262,6 @@ interface PeriodGroup {
         height: 12px;
       }
 
-      .salary-tag {
-        font-size: 0.65rem;
-      }
-
       .period-content {
         padding: 8px 10px 10px 10px;
       }
@@ -1400,10 +1384,6 @@ interface PeriodGroup {
         height: 11px;
       }
 
-      .salary-tag {
-        font-size: 0.6rem;
-      }
-
       .transaction-card {
         padding: 7px 8px;
       }
@@ -1445,7 +1425,7 @@ interface PeriodGroup {
 })
 export class MostCommonTransactionComponent {
   transactions = input<TransactionDomain[]>([]);
-  viewMode = input<'all' | 'monthly' | 'yearly' | 'salary'>('monthly');
+  viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
 
   selectedCategory = signal<TransactionCategory | null>(null);
 
@@ -1480,8 +1460,6 @@ export class MostCommonTransactionComponent {
       return this.groupedByMonth();
     } else if (this.viewMode() === 'yearly') {
       return this.groupedByYear();
-    } else if (this.viewMode() === 'salary') {
-      return this.groupedBySalaryPeriod();
     }
     return [];
   });
@@ -1625,67 +1603,6 @@ export class MostCommonTransactionComponent {
       })
       .sort((a, b) => b.year - a.year);
   });
-
-  private groupedBySalaryPeriod = computed((): PeriodGroup[] => {
-    const txs = this.selectedTransaction();
-    if (!txs?.length) return [];
-
-    const map = new Map<string, TransactionDomain[]>();
-
-    for (const tx of txs) {
-      const date = tx.completionDate || tx.registrationDate;
-      if (!date) continue;
-
-      const periodKey = this.getSalaryPeriodKey(date);
-      if (!map.has(periodKey)) map.set(periodKey, []);
-      map.get(periodKey)!.push(tx);
-    }
-
-    return Array.from(map.entries())
-      .map(([key, txs]) => {
-        const [year, month, day] = key.split('-').map(Number);
-        const periodStart = new Date(year, month, day);
-        const periodEnd = new Date(year, month, day + 14);
-
-        const monthName = new Date(year, month).toLocaleString('default', {
-          month: 'short',
-        });
-        const id = `salary-${key}`;
-
-        const processedData = this.processTransactions(txs);
-
-        return {
-          id,
-          title: `${monthName} ${year}`,
-          year,
-          monthIndex: month,
-          month: monthName,
-          salaryPeriodStart: periodStart,
-          salaryPeriodEnd: periodEnd,
-          isSalaryPeriod: true,
-          ...processedData,
-          isExpanded: this.expandedPeriodId() === id,
-        };
-      })
-      .sort((a, b) => {
-        if (a.year !== b.year) return b.year - a.year;
-        return b.monthIndex! - a.monthIndex!;
-      });
-  });
-
-  private getSalaryPeriodKey(date: Date): string {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-
-    if (day >= 15) {
-      return `${year}-${month}-15`;
-    } else {
-      const prevMonth = month === 0 ? 11 : month - 1;
-      const prevYear = month === 0 ? year - 1 : year;
-      return `${prevYear}-${prevMonth}-15`;
-    }
-  }
 
   private processTransactions(txs: TransactionDomain[]) {
     const grouped = this.groupLocal(txs);
