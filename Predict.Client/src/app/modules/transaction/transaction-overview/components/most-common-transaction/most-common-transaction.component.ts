@@ -346,36 +346,100 @@ interface PeriodGroup {
 
                       <div class="header-right">
                         @if (period.totalIncome > 0) {
-                          <span class="income-tag"
-                            >+{{
-                              period.totalIncome | numberFormat: '0.00'
-                            }}</span
-                          >
-                        }
-                        @if (period.totalExpense > 0) {
-                          <span class="expense-tag"
-                            >-{{
-                              period.totalExpense | numberFormat: '0.00'
-                            }}</span
-                          >
-                        }
-                        @if (period.difference !== 0) {
                           <span
-                            class="diff-tag"
-                            [class.positive]="period.difference > 0"
-                            [class.negative]="period.difference < 0"
+                            class="stat-tag stat-income"
+                            [ngbTooltip]="'Total income'"
+                            container="body"
                           >
-                            {{ period.difference | numberFormat: '0.00' }}
+                            <svg
+                              class="stat-icon"
+                              viewBox="0 0 12 12"
+                              fill="none"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M6 9V3M6 3L3 6M6 3l3 3"
+                                stroke="currentColor"
+                                stroke-width="1.6"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                            <span class="stat-value">{{
+                              period.totalIncome | numberFormat: '0.00'
+                            }}</span>
                           </span>
                         }
-                        <span
-                          class="expand-icon"
-                          [class.rotated]="period.isExpanded"
-                        >
+
+                        @if (period.totalExpense > 0) {
+                          <span
+                            class="stat-tag stat-expense"
+                            [ngbTooltip]="'Total expense'"
+                            container="body"
+                          >
+                            <svg
+                              class="stat-icon"
+                              viewBox="0 0 12 12"
+                              fill="none"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M6 3v6M6 9l3-3M6 9L3 6"
+                                stroke="currentColor"
+                                stroke-width="1.6"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                            <span class="stat-value">{{
+                              period.totalExpense | numberFormat: '0.00'
+                            }}</span>
+                          </span>
+                        }
+
+                        @if (period.difference !== 0) {
+                          <span
+                            class="stat-tag stat-diff"
+                            [class.is-positive]="period.difference > 0"
+                            [class.is-negative]="period.difference < 0"
+                            [ngbTooltip]="'Net difference'"
+                            container="body"
+                          >
+                            <svg
+                              class="stat-icon"
+                              viewBox="0 0 12 12"
+                              fill="none"
+                              aria-hidden="true"
+                            >
+                              @if (period.difference > 0) {
+                                <path
+                                  d="M6 9V3M6 3L3 6M6 3l3 3"
+                                  stroke="currentColor"
+                                  stroke-width="1.6"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              } @else {
+                                <path
+                                  d="M6 3v6M6 9l3-3M6 9L3 6"
+                                  stroke="currentColor"
+                                  stroke-width="1.6"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              }
+                            </svg>
+                            <span class="stat-value">{{
+                              period.difference | numberFormat: '0.00'
+                            }}</span>
+                          </span>
+                        }
+
+                        <span class="expand-chevron" aria-hidden="true">
                           <svg
                             viewBox="0 0 16 16"
                             fill="none"
-                            aria-hidden="true"
+                            [class.rotated]="period.isExpanded"
                           >
                             <path
                               d="M4 6l4 4 4-4"
@@ -642,8 +706,10 @@ interface PeriodGroup {
 
       --accent-green: #0caa6c;
       --accent-green-bg: #ecfdf5;
+      --accent-green-border: #c6f0dd;
       --accent-red: #e74c5e;
       --accent-red-bg: #fef2f2;
+      --accent-red-border: #fcd7dc;
       --accent-blue: #4f6ef7;
 
       --radius-sm: 6px;
@@ -1140,7 +1206,7 @@ interface PeriodGroup {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       width: 100%;
       flex-wrap: nowrap;
     }
@@ -1155,15 +1221,15 @@ interface PeriodGroup {
     }
 
     .header-title {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.95rem;
       color: var(--text-primary);
       white-space: nowrap;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.015em;
     }
 
     .header-count {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
       color: var(--text-secondary);
       background: var(--bg-muted);
@@ -1171,6 +1237,7 @@ interface PeriodGroup {
       border-radius: var(--radius-pill);
       line-height: 1.5;
       flex-shrink: 0;
+      border: 1px solid var(--border-subtle);
     }
 
     .header-right {
@@ -1181,69 +1248,112 @@ interface PeriodGroup {
       flex-wrap: nowrap;
     }
 
-    .income-tag,
-    .expense-tag,
-    .diff-tag {
-      padding: 3px 9px;
+    /* ===== MODERN STAT TAGS ===== */
+    .stat-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px 4px 8px;
       border-radius: var(--radius-pill);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 600;
       white-space: nowrap;
-      line-height: 1.4;
+      line-height: 1.3;
       flex-shrink: 0;
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.01em;
-    }
-
-    .income-tag {
-      background: var(--accent-green-bg);
-      color: var(--accent-green);
-    }
-
-    .expense-tag {
-      background: var(--accent-red-bg);
-      color: var(--accent-red);
-    }
-
-    .diff-tag {
-      background: var(--bg-muted);
-      color: var(--text-secondary);
-      min-width: 48px;
-      text-align: center;
-    }
-
-    .diff-tag.positive {
-      background: var(--accent-green-bg);
-      color: var(--accent-green);
-    }
-
-    .diff-tag.negative {
-      background: var(--accent-red-bg);
-      color: var(--accent-red);
-    }
-
-    .expand-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 20px;
-      height: 20px;
-      color: var(--text-tertiary);
+      border: 1px solid transparent;
       transition:
-        transform var(--transition-base),
-        color var(--transition-fast);
-      margin-left: 2px;
+        background var(--transition-fast),
+        border-color var(--transition-fast),
+        transform var(--transition-fast);
+    }
+
+    .stat-tag:hover {
+      transform: translateY(-1px);
+    }
+
+    .stat-icon {
+      width: 12px;
+      height: 12px;
       flex-shrink: 0;
     }
 
-    .expand-icon svg {
-      width: 14px;
-      height: 14px;
+    .stat-value {
+      font-weight: 700;
     }
 
-    .expand-icon.rotated {
+    /* Income stat */
+    .stat-income {
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+      border-color: var(--accent-green-border);
+    }
+
+    /* Expense stat */
+    .stat-expense {
+      background: var(--accent-red-bg);
+      color: var(--accent-red);
+      border-color: var(--accent-red-border);
+    }
+
+    /* Net difference stat */
+    .stat-diff {
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+      border-color: var(--border-soft);
+    }
+
+    .stat-diff.is-positive {
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+      border-color: var(--accent-green-border);
+    }
+
+    .stat-diff.is-negative {
+      background: var(--accent-red-bg);
+      color: var(--accent-red);
+      border-color: var(--accent-red-border);
+    }
+
+    /* ===== EXPAND CHEVRON ===== */
+    .expand-chevron {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      color: var(--text-tertiary);
+      background: var(--bg-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      transition:
+        background var(--transition-fast),
+        color var(--transition-fast),
+        border-color var(--transition-fast);
+      flex-shrink: 0;
+      margin-left: 2px;
+    }
+
+    .expand-chevron svg {
+      width: 12px;
+      height: 12px;
+      transition: transform var(--transition-base);
+    }
+
+    .expand-chevron svg.rotated {
       transform: rotate(180deg);
+    }
+
+    .period-container.expanded .expand-chevron {
       color: var(--text-primary);
+      background: var(--bg-subtle);
+      border-color: var(--border-strong);
+    }
+
+    .period-header:hover .expand-chevron {
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
     }
 
     .period-content {
@@ -1368,19 +1478,24 @@ interface PeriodGroup {
       }
 
       .header-count {
+        font-size: 0.64rem;
+        padding: 2px 7px;
+      }
+
+      .stat-tag {
         font-size: 0.66rem;
-        padding: 2px 7px;
+        padding: 3px 8px 3px 6px;
+        gap: 4px;
       }
 
-      .income-tag,
-      .expense-tag,
-      .diff-tag {
-        font-size: 0.68rem;
-        padding: 2px 7px;
+      .stat-icon {
+        width: 10px;
+        height: 10px;
       }
 
-      .diff-tag {
-        min-width: 42px;
+      .expand-chevron {
+        width: 22px;
+        height: 22px;
       }
 
       .period-content {
@@ -1455,11 +1570,6 @@ interface PeriodGroup {
         gap: 5px;
       }
 
-      .expand-icon svg {
-        width: 13px;
-        height: 13px;
-      }
-
       /* Mobile category bar styling (All view) */
       .category-bar-section {
         padding: 10px;
@@ -1510,30 +1620,29 @@ interface PeriodGroup {
       }
 
       .header-count {
-        font-size: 0.58rem;
+        font-size: 0.56rem;
         padding: 1px 6px;
       }
 
-      .income-tag,
-      .expense-tag,
-      .diff-tag {
-        font-size: 0.6rem;
-        padding: 2px 6px;
-        line-height: 1.3;
+      .stat-tag {
+        font-size: 0.58rem;
+        padding: 2px 6px 2px 5px;
+        gap: 3px;
       }
 
-      .diff-tag {
-        min-width: 34px;
+      .stat-icon {
+        width: 9px;
+        height: 9px;
       }
 
-      .expand-icon {
-        width: 18px;
-        height: 18px;
+      .expand-chevron {
+        width: 20px;
+        height: 20px;
       }
 
-      .expand-icon svg {
-        width: 12px;
-        height: 12px;
+      .expand-chevron svg {
+        width: 10px;
+        height: 10px;
       }
 
       .header-bar-mobile {
@@ -1649,25 +1758,29 @@ interface PeriodGroup {
       }
 
       .header-count {
-        font-size: 0.55rem;
+        font-size: 0.54rem;
         padding: 1px 5px;
       }
 
-      .income-tag,
-      .expense-tag,
-      .diff-tag {
-        font-size: 0.55rem;
-        padding: 1px 5px;
-        line-height: 1.2;
+      .stat-tag {
+        font-size: 0.54rem;
+        padding: 2px 5px 2px 4px;
+        gap: 2px;
       }
 
-      .diff-tag {
-        min-width: 28px;
+      .stat-icon {
+        width: 8px;
+        height: 8px;
       }
 
-      .expand-icon svg {
-        width: 11px;
-        height: 11px;
+      .expand-chevron {
+        width: 18px;
+        height: 18px;
+      }
+
+      .expand-chevron svg {
+        width: 9px;
+        height: 9px;
       }
 
       .transaction-card {
