@@ -2,8 +2,7 @@ name: Deploy Angular to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: read
@@ -17,7 +16,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: ./Predict.Client
@@ -26,15 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          ref: main
           fetch-depth: 0
-          clean: false
-
-      - name: Verify repository state
-        run: |
-          pwd
-          ls -la
-          git status || echo "Not a git repository, continuing..."
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -44,14 +34,10 @@ jobs:
           cache-dependency-path: "./Predict.Client/package-lock.json"
 
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm ci
 
       - name: Build Angular app
         run: npm run build -- --configuration production
-
-      - name: List build output
-        run: ls -la ./dist/predict.client/browser || echo "Build directory not found"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -70,7 +56,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
