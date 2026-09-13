@@ -1,7 +1,8 @@
 import { RepaymentSchedule } from '../../models/loan.model';
 
-export function mapInstalementSimulation(
+export function mapInstalmentSimulation(
   base: RepaymentSchedule | null,
+  startOf: number = 0,
   {
     monthlyAmount = null,
     payments = null,
@@ -15,8 +16,9 @@ export function mapInstalementSimulation(
   let accAmount = 0;
   let accPayments = 1;
 
-  for (let i = 0; i < base.monthlyInstalments.length; i++) {
-    const instalment = base.monthlyInstalments[i];
+  const monthlyInstalments = [...base.monthlyInstalments].splice(startOf);
+  for (let i = 0; i < monthlyInstalments.length; i++) {
+    const instalment = monthlyInstalments[i];
     const tempAccAmount = accAmount + instalment.principalAmount;
     const maxAmountTrashhold = monthlyAmount + 100;
 
