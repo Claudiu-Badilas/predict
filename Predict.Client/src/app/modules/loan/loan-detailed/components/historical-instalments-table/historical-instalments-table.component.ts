@@ -15,19 +15,18 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
   template: `
     <section class="historical-instalments" aria-label="Istoric rate">
       @if (monthlyGroups().length) {
-        <!-- Desktop -->
+        <!-- Desktop — table with same visual language as mobile -->
         <div class="desktop-view">
           <div class="table-shell">
             <table class="instalment-table">
               <thead>
                 <tr>
-                  <th>Luna</th>
-                  <th class="center">Operațiuni</th>
-                  <th class="right">Total</th>
-                  <th class="right">Principal</th>
-                  <th class="right">Dobândă</th>
-                  <th class="right">Asigurare</th>
-                  <th class="right">Sold</th>
+                  <th colspan="2">Luna</th>
+                  <th>Total</th>
+                  <th>Principal</th>
+                  <th>Dobândă</th>
+                  <th>Asigurare</th>
+                  <th>Sold</th>
                 </tr>
               </thead>
 
@@ -36,42 +35,55 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
                   @let subtotal = group.subtotal;
 
                   <tr>
-                    <td>
-                      <div class="month">
-                        <span class="month-marker" aria-hidden="true"></span>
-                        <span>{{ group.title | date: 'MMM yyyy' }}</span>
+                    <!-- Month + count (soft-tinted like mobile) -->
+                    <td class="col-month">
+                      <div class="cell-month">
+                        <span class="cell-label month-label">
+                          {{ group.title | date: 'MMM yyyy' }}
+                        </span>
+                      </div>
+                    </td>
+                    <td class="col-month">
+                      <div class="cell-month">
+                        <span class="cell-value total-value">
+                          {{ subtotal.instalmentsCount }}
+                          @if (subtotal.earlyCount) {
+                            <span class="early-chip"
+                              >+{{ subtotal.earlyCount }}</span
+                            >
+                          }
+                        </span>
                       </div>
                     </td>
 
-                    <td class="center">
-                      <span class="operations">
-                        @if (subtotal.instalmentsCount) {
-                          <span>{{ subtotal.instalmentsCount }} rată</span>
-                        }
-                        @if (subtotal.earlyCount) {
-                          <span>{{ subtotal.earlyCount }} anticipat</span>
-                        }
+                    <td>
+                      <span class="cell-value total-value">
+                        {{ subtotal.total | numberFormat: '0.00' }}
                       </span>
                     </td>
 
-                    <td class="right total">
-                      {{ subtotal.total | numberFormat: '0.00' }}
+                    <td>
+                      <span class="cell-value principal-value">
+                        {{ subtotal.principal | numberFormat: '0.00' }}
+                      </span>
                     </td>
 
-                    <td class="right principal">
-                      {{ subtotal.principal | numberFormat: '0.00' }}
+                    <td>
+                      <span class="cell-value interest-value">
+                        {{ subtotal.interest | numberFormat: '0.00' }}
+                      </span>
                     </td>
 
-                    <td class="right interest">
-                      {{ subtotal.interest | numberFormat: '0.00' }}
+                    <td>
+                      <span class="cell-value insurance-value">
+                        {{ subtotal.insuranceCost | numberFormat: '0.00' }}
+                      </span>
                     </td>
 
-                    <td class="right insurance">
-                      {{ subtotal.insuranceCost | numberFormat: '0.00' }}
-                    </td>
-
-                    <td class="right balance">
-                      {{ subtotal.remainingBalance | numberFormat: '0.00' }}
+                    <td>
+                      <span class="cell-value balance-value">
+                        {{ subtotal.remainingBalance | numberFormat: '0.00' }}
+                      </span>
                     </td>
                   </tr>
                 }
@@ -80,7 +92,7 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
           </div>
         </div>
 
-        <!-- Mobile — merged rows, horizontal 1px separators only -->
+        <!-- Mobile — merged list, same visual language -->
         <div class="mobile-view">
           <div class="mobile-list">
             @for (group of monthlyGroups(); track group.title) {
@@ -182,7 +194,71 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
     }
 
     /* ============================================================
-       DESKTOP
+       SHARED — labels, values, chips, semantic colors
+       ============================================================ */
+    .cell-label {
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .cell-value {
+      color: var(--text-soft);
+      font-size: 10.5px;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .total-value {
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    .principal-value {
+      color: var(--green);
+    }
+
+    .interest-value {
+      color: var(--red);
+    }
+
+    .insurance-value {
+      color: var(--violet);
+    }
+
+    .balance-value {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .early-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 4px;
+      margin-left: 2px;
+      border-radius: 5px;
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-size: 8.5px;
+      font-weight: 750;
+      line-height: 1.2;
+    }
+
+    /* ============================================================
+       DESKTOP — table shell
        ============================================================ */
     .desktop-view {
       display: block;
@@ -191,137 +267,106 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
 
     .table-shell {
       width: 100%;
-      overflow: visible;
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      background: var(--surface);
+      overflow: hidden;
     }
 
     .instalment-table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      font-size: 12px;
     }
 
-    .instalment-table th,
-    .instalment-table td {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .instalment-table th {
-      padding: 8px 10px;
+    /* Header row — muted, uppercase, centered like mobile labels */
+    .instalment-table thead th {
+      padding: 14px 8px;
       background: var(--surface-soft);
       color: var(--muted);
       font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
-    .instalment-table td {
-      padding: 7px 10px;
+    /* First header cell — left aligned, tinted, anchors the table */
+    .instalment-table thead th.col-month {
+      width: 22%;
+      text-align: left;
+      padding-left: 16px;
+    }
+
+    /* Other header cells — equal width */
+    .instalment-table thead th:nth-child(n + 2) {
+      width: 15.6%;
+    }
+
+    /* Body rows */
+    .instalment-table tbody td {
+      padding: 14px 8px;
       background: var(--surface);
-      line-height: 1.15;
-      white-space: nowrap;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      vertical-align: middle;
       transition: background 100ms ease;
     }
 
     .instalment-table tbody tr:last-child td {
-      border-bottom: 0;
+      border-bottom: none;
     }
 
+    /* First body cell — left aligned, tinted */
+    .instalment-table tbody td.col-month {
+      text-align: left;
+      padding: 12px 16px;
+      background: var(--surface-soft);
+    }
+
+    /* Labels sit above values, stacked like mobile cells */
+    .instalment-table tbody td > .cell-label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .instalment-table tbody td > .cell-value {
+      display: block;
+      font-size: 13px;
+      letter-spacing: -0.015em;
+    }
+
+    /* Row hover */
     .instalment-table tbody tr:hover td {
       background: var(--surface-tint);
     }
 
-    .instalment-table th:first-child,
-    .instalment-table td:first-child {
-      width: 18%;
+    .instalment-table tbody tr:hover td.col-month {
+      background: var(--surface-soft);
     }
 
-    .instalment-table th:nth-child(2),
-    .instalment-table td:nth-child(2) {
-      width: 17%;
-    }
-
-    .instalment-table th:nth-child(n + 3),
-    .instalment-table td:nth-child(n + 3) {
-      width: 13%;
-    }
-
-    .center {
-      text-align: center;
-    }
-
-    .right {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .month {
-      display: inline-flex;
+    /* Month cell content */
+    .cell-month {
+      display: flex;
+      gap: 5px;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
       min-width: 0;
     }
 
-    .month-marker {
-      width: 7px;
-      height: 7px;
-      flex: 0 0 7px;
-      border-radius: 50%;
-      background: var(--teal);
-      box-shadow: 0 0 0 3px var(--teal-soft);
+    .cell-month .cell-value {
+      font-size: 13px;
+      letter-spacing: -0.015em;
     }
 
-    .month > span:last-child,
-    .month-title {
+    .cell-month .cell-label.month-label {
       color: #25323a;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 0.01em;
       text-transform: capitalize;
-    }
-
-    .operations {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 650;
-    }
-
-    .operations span + span::before {
-      content: '•';
-      margin-right: 5px;
-      color: #b0bbc2;
-    }
-
-    .total {
-      color: var(--teal);
-      font-weight: 800;
-    }
-
-    .principal {
-      color: var(--green);
-      font-weight: 650;
-    }
-
-    .interest {
-      color: var(--red);
-      font-weight: 650;
-    }
-
-    .insurance {
-      color: #596771;
-      font-weight: 600;
-    }
-
-    .balance {
-      color: var(--blue);
-      font-weight: 700;
     }
 
     /* ============================================================
@@ -357,23 +402,29 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
     /* ============================================================
        TABLET
        ============================================================ */
-    @media (max-width: 900px) {
-      .instalment-table {
-        font-size: 11px;
-      }
-
-      .instalment-table th {
+    @media (max-width: 900px) and (min-width: 769px) {
+      .instalment-table thead th {
+        padding: 12px 6px;
         font-size: 9px;
-        padding: 7px 8px;
       }
 
-      .instalment-table td {
-        padding: 6px 8px;
+      .instalment-table tbody td {
+        padding: 12px 6px;
+      }
+
+      .instalment-table tbody td.col-month {
+        padding: 12px 12px;
+      }
+
+      .instalment-table tbody td > .cell-value,
+      .cell-month .cell-value,
+      .cell-month .cell-label.month-label {
+        font-size: 12px;
       }
     }
 
     /* ============================================================
-       MOBILE — merged list, horizontal 1px separators only
+       MOBILE — merged list, same visual language
        ============================================================ */
     @media (max-width: 768px) {
       .desktop-view {
@@ -385,7 +436,6 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
         width: 100%;
       }
 
-      /* Single continuous container — no per-row gaps, no internal verticals */
       .mobile-list {
         display: block;
         width: 100%;
@@ -395,7 +445,6 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
         overflow: hidden;
       }
 
-      /* Each month = one row, separated only by a 1px horizontal line */
       .month-row {
         display: grid;
         grid-template-columns:
@@ -413,7 +462,6 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
         border-bottom: none;
       }
 
-      /* Cells — no borders, just spacing */
       .cell {
         display: flex;
         flex-direction: column;
@@ -425,14 +473,12 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
         text-align: center;
       }
 
-      /* First cell (month) — soft tint to anchor each row */
       .cell-month {
         gap: 4px;
         padding: 8px 6px;
         background: var(--surface-soft);
       }
 
-      /* Month label */
       .cell-month .cell-label {
         display: inline-flex;
         align-items: center;
@@ -444,77 +490,6 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
         text-transform: capitalize;
         white-space: nowrap;
       }
-
-      .month-marker {
-        width: 6px;
-        height: 6px;
-        flex-basis: 6px;
-        box-shadow: 0 0 0 2px var(--teal-soft);
-      }
-
-      /* Labels + values */
-      .cell-label {
-        color: var(--muted);
-        font-size: 8px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        line-height: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-      }
-
-      .cell-value {
-        color: var(--text-soft);
-        font-size: 10.5px;
-        font-weight: 750;
-        font-variant-numeric: tabular-nums;
-        letter-spacing: -0.02em;
-        line-height: 1.1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-      }
-
-      /* Semantic colors per cell */
-      .total-value {
-        color: var(--teal);
-        font-weight: 800;
-      }
-
-      .principal-value {
-        color: var(--green);
-      }
-
-      .interest-value {
-        color: var(--red);
-      }
-
-      .insurance-value {
-        color: var(--violet);
-      }
-
-      .balance-value {
-        color: var(--blue);
-        font-weight: 800;
-      }
-
-      /* Early chip inside the month cell */
-      .early-chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 1px 4px;
-        margin-left: 2px;
-        border-radius: 5px;
-        background: var(--amber-soft);
-        color: var(--amber);
-        font-size: 8.5px;
-        font-weight: 750;
-        line-height: 1.2;
-      }
     }
 
     /* ============================================================
@@ -522,13 +497,14 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
        ============================================================ */
     @media (max-width: 480px) {
       .cell {
-        padding: 7px 2px;
+        padding: 7px 0px;
         gap: 2px;
       }
 
       .cell-month {
-        padding: 7px 5px;
+        padding: 7px 0px;
         gap: 3px;
+        font-size: 11px;
       }
 
       .cell-month .cell-label {
@@ -589,7 +565,7 @@ import { HistoricalInstalmentPaymentBatch } from '../../models/base-loan-rate.mo
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .instalment-table td {
+      .instalment-table tbody td {
         transition: none;
       }
     }
