@@ -1,41 +1,38 @@
-<!-- Desktop Table Wrapper -->
 <div class="table-wrapper desktop-view">
-  <table>
+  <table class="instalment-table">
     <thead>
       <tr>
-        <th class="">
-          <div class="d-flex align-items-center justify-content-center">
+        <th class="col-first">
+          <div class="expand-controls">
             <img
               width="15"
               height="15"
               src="assets/icons/collapse.svg"
-              alt="no-image"
+              alt="collapse"
               (click)="onCollapseAll()"
             />
             <img
-              class="mx-1"
               width="15"
               height="15"
               src="assets/icons/expand.svg"
-              alt="no-image"
+              alt="expand"
               (click)="onExpandAll()"
             />
           </div>
         </th>
-        <th class="text-center">Data</th>
-        <th class="text-center">Credit</th>
-        <th class="text-center">Dobândă</th>
-        <th class="text-center">Asig.</th>
-        <th class="text-center">Total</th>
-        <th class="text-center">1/2</th>
-        <th class="text-center">Anticipat</th>
-        <th class="text-center">Sold</th>
+        <th>Data</th>
+        <th>Credit</th>
+        <th>Dobândă</th>
+        <th>Asig.</th>
+        <th>Total</th>
+        <th>1/2</th>
+        <th>Anticipat</th>
+        <th>Sold</th>
       </tr>
     </thead>
 
     <tbody>
       @for (group of monthlyInstalmentGroups(); track group.id) {
-        <!-- Group Header -->
         @if (group.completed) {
           <tr
             class="group-header-subtotal-row"
@@ -44,48 +41,45 @@
           >
             @let subtotal = getSubtotal(group);
 
-            <td class="text-center">
-              <span class="count bold"
+            <td class="col-first">
+              <span class="count"
                 >{{ subtotal.instalmentsCount }}
                 @if (subtotal.earlyCount > 0) {
-                  + {{ subtotal.earlyCount }}
+                  <span class="early-chip">+{{ subtotal.earlyCount }}</span>
                 }
               </span>
             </td>
 
-            <td class="bold text-center">
-              {{ group.title | date: "MMM yyyy" }}
-            </td>
+            <td class="bold">{{ group.title | date: "MMM yyyy" }}</td>
 
-            <td class="bold text-center">
+            <td class="bold">
               {{ subtotal.principal | numberFormat: "0.00" }}
             </td>
 
-            <td class="bold text-center">
+            <td class="bold">
               {{ subtotal.interest | numberFormat: "0.00" }}
             </td>
 
-            <td class="bold text-center">
+            <td class="bold">
               {{ subtotal.insurance | numberFormat: "0.00" }}
             </td>
 
-            <td class="bold text-center subtotal-total">
+            <td class="bold subtotal-total">
               {{ subtotal.total | numberFormat: "0.00" }}
             </td>
 
-            <td class="bold text-center">
+            <td class="bold">
               {{ subtotal.total / 2 | numberFormat: "0.00" }}
             </td>
-            <td class="bold text-center">
+            <td class="bold">
               {{ subtotal.earlyPaymenrt | numberFormat: "0.00" }}
             </td>
-            <td class="bold text-center">
+            <td class="bold">
               {{ subtotal.restant | numberFormat: "0.00" }}
             </td>
           </tr>
         }
 
-        <!-- Rows -->
         @if (!group.completed || group.expanded) {
           @for (
             row of group.instalments;
@@ -93,26 +87,20 @@
             track row.instalmentId
           ) {
             <tr
-              [class.yellow]="row.instalmentPayment"
-              [class.green]="row.earlyPayment"
-              [class.gray]="!row.instalmentPayment && !row.earlyPayment"
+              [class.row-selected]="row.instalmentPayment"
+              [class.row-early]="row.earlyPayment"
+              [class.row-disabled]="!row.instalmentPayment && !row.earlyPayment"
             >
-              <td
-                class="text-center gap"
-                [ngClass]="{
-                  'last-bottom-border': last && row.earlyPayment,
-                }"
-              >
-                <div class="d-flex align-items-center justify-content-center">
-                  <span> {{ row.instalmentId }} </span>
-
+              <td class="col-first">
+                <div class="row-controls">
+                  <span class="row-index">{{ row.instalmentId }}</span>
                   <p-checkbox
-                    class="mx-1"
                     [id]="row.instalmentId"
                     [checked]="row.instalmentPayment"
                     [disabled]="row.disabled || row.earlyPayment"
                     (valueChange)="onSelectInstalmentPayment(row)"
-                  /><p-checkbox
+                  />
+                  <p-checkbox
                     [id]="row.instalmentId"
                     [checked]="row.earlyPayment"
                     [disabled]="row.disabled || row.instalmentPayment"
@@ -122,100 +110,58 @@
               </td>
 
               <td
-                class="text-center"
-                [ngClass]="{
-                  strike: row.earlyPayment || row.instalmentPayment,
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
+                [class.strike]="row.earlyPayment || row.instalmentPayment"
+                [class.disabled]="!group.completed && row.disabled"
               >
                 {{ row.paymentDate | date: "MMM yyyy" }}
               </td>
               <td
-                class="text-center"
-                [ngClass]="{
-                  'semi-bold': row.earlyPayment || row.instalmentPayment,
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
+                [class.semi-bold]="row.earlyPayment || row.instalmentPayment"
+                [class.disabled]="!group.completed && row.disabled"
               >
                 {{ row.principalAmount | numberFormat: "0.00"
                 }}{{ row.recalculated ? "*" : "" }}
               </td>
               <td
-                class="text-center"
-                [ngClass]="{
-                  strike: row.earlyPayment,
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
+                [class.strike]="row.earlyPayment"
+                [class.disabled]="!group.completed && row.disabled"
               >
                 {{ row.interestAmount | numberFormat: "0.00"
                 }}{{ row.recalculated ? "*" : "" }}
               </td>
-
               <td
-                class="text-center"
-                [ngClass]="{
-                  strike: row.earlyPayment,
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
+                [class.strike]="row.earlyPayment"
+                [class.disabled]="!group.completed && row.disabled"
               >
                 {{ row.insuranceCost | numberFormat: "0.00"
                 }}{{ row.recalculated ? "*" : "" }}
               </td>
-
-              <td
-                class="text-center"
-                [ngClass]="{
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
-              >
+              <td [class.disabled]="!group.completed && row.disabled">
                 @if (!row.earlyPayment && !row.instalmentPayment) {
-                  <span [ngClass]="{ strike: row.earlyPayment }">
-                    {{ row.totalInstalment | numberFormat: "0.00"
-                    }}{{ row.recalculated ? "*" : "" }}
-                  </span>
-                } @else {
                   <span
-                    [ngClass]="{
-                      'subtotal-total':
-                        row.instalmentPayment || row.earlyPayment,
-                    }"
-                    >{{ row.batchTotalInstalment | numberFormat: "-" }}
-                  </span>
+                    >{{ row.totalInstalment | numberFormat: "0.00"
+                    }}{{ row.recalculated ? "*" : "" }}</span
+                  >
+                } @else {
+                  <span class="subtotal-total">{{
+                    row.batchTotalInstalment | numberFormat: "-"
+                  }}</span>
                 }
               </td>
-              <td
-                class="text-center"
-                [ngClass]="{
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
-              >
+              <td [class.disabled]="!group.completed && row.disabled">
                 {{ row.batchTotalInstalment / 2 | numberFormat: "-" }}
               </td>
-              <td
-                class="text-center"
-                [ngClass]="{
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
-              >
+              <td [class.disabled]="!group.completed && row.disabled">
                 {{ row.batchTotalEarlyPayment | numberFormat: "-" }}
               </td>
-
               <td
-                class="text-center"
-                [ngClass]="{
-                  strike: !last && (row.earlyPayment || row.instalmentPayment),
-                  'semi-bold':
-                    last && (row.earlyPayment || row.instalmentPayment),
-                  'last-bottom-border': last && row.earlyPayment,
-                  disabled: !group.completed && row.disabled,
-                }"
+                [class.strike]="
+                  !last && (row.earlyPayment || row.instalmentPayment)
+                "
+                [class.semi-bold]="
+                  last && (row.earlyPayment || row.instalmentPayment)
+                "
+                [class.disabled]="!group.completed && row.disabled"
               >
                 {{ row.remainingBalance | numberFormat: "0.00" }}
               </td>
@@ -227,12 +173,10 @@
   </table>
 </div>
 
-<!-- Mobile View -->
 <div class="mobile-view">
   @for (group of monthlyInstalmentGroups(); track group.id) {
     @if (group.completed) {
       @let subtotal = getSubtotal(group);
-      <!-- Mobile Group with Completed Payments -->
       <div class="mobile-group-card">
         <div
           class="mobile-group-header"
@@ -240,30 +184,25 @@
           (click)="toggleGroup(group)"
         >
           <div class="mobile-group-info">
-            <div class="d-flex align-items-center" style="gap: 10px">
+            <div class="mobile-group-left">
               <div class="mobile-group-title">
                 {{ group.title | date: "MMM yyyy" }}
               </div>
-              <span class="mobile-group-count bold"
-                >{{ subtotal.instalmentsCount }}
+              <span class="mobile-group-count">
+                {{ subtotal.instalmentsCount }}
                 @if (subtotal.earlyCount > 0) {
-                  + {{ subtotal.earlyCount }}
+                  <span class="early-chip">+{{ subtotal.earlyCount }}</span>
                 }
               </span>
             </div>
-            <div class="d-flex align-items-center" style="gap: 10px">
-              <div class="mobile-group-total mobile-group-total-red">
-                <span>TOTAL:</span>
-                <span>
-                  {{ subtotal.total | numberFormat: "0.00" }}
-                </span>
+            <div class="mobile-group-right">
+              <div class="mobile-group-total total-value">
+                <span>TOTAL</span>
+                <span>{{ subtotal.total | numberFormat: "0.00" }}</span>
               </div>
-
-              <div class="mobile-group-total mobile-group-total-black">
-                <span>SOLD:</span>
-                <span>
-                  {{ subtotal.restant | numberFormat: "0.00" }}
-                </span>
+              <div class="mobile-group-total balance-value">
+                <span>SOLD</span>
+                <span>{{ subtotal.restant | numberFormat: "0.00" }}</span>
               </div>
             </div>
           </div>
@@ -274,16 +213,17 @@
             @for (row of group.instalments; track row.instalmentId) {
               <div
                 class="mobile-item"
-                [class.orange-item]="row.instalmentPayment"
-                [class.green-item]="row.earlyPayment"
-                [class.gray-item]="!row.instalmentPayment && !row.earlyPayment"
+                [class.item-selected]="row.instalmentPayment"
+                [class.item-early]="row.earlyPayment"
+                [class.item-disabled]="
+                  !row.instalmentPayment && !row.earlyPayment
+                "
               >
                 <div class="mobile-item-row">
-                  <div class="mobile-item-col">
+                  <div class="mobile-item-col col-index">
                     <div class="checkbox-group">
                       <span class="item-index">#{{ row.instalmentId }}</span>
                       <p-checkbox
-                        class="mx-1"
                         [id]="row.instalmentId"
                         [checked]="row.instalmentPayment"
                         [disabled]="row.disabled || row.earlyPayment"
@@ -296,16 +236,12 @@
                         (valueChange)="onSelectEarlyPayment(row)"
                       />
                     </div>
-                    <div class="checkbox-group">
-                      <span
-                        class="item-date"
-                        [class.strike]="
-                          row.earlyPayment || row.instalmentPayment
-                        "
-                      >
-                        {{ row.paymentDate | date: "MMM yyyy" }}
-                      </span>
-                    </div>
+                    <span
+                      class="item-date"
+                      [class.strike]="row.earlyPayment || row.instalmentPayment"
+                    >
+                      {{ row.paymentDate | date: "MMM yyyy" }}
+                    </span>
                   </div>
                   <div class="mobile-item-col">
                     <span class="item-label">Credit</span>
@@ -334,7 +270,7 @@
                   <div class="mobile-item-col">
                     <span class="item-label">Asig.</span>
                     <span
-                      class="item-value interest-value"
+                      class="item-value insurance-value"
                       [class.strike]="row.earlyPayment"
                     >
                       {{ row.insuranceCost | numberFormat: "0.00"
@@ -365,36 +301,33 @@
         }
       </div>
     } @else {
-      <!-- Mobile Normal Rows (incomplete groups) -->
       <div class="mobile-normal-section">
         <div class="mobile-items-list">
           @for (row of group.instalments; track row.instalmentId) {
-            <div class="mobile-item gray-item">
+            <div class="mobile-item item-disabled">
               <div class="mobile-item-row">
-                <div class="mobile-item-col">
+                <div class="mobile-item-col col-index">
                   <div class="checkbox-group">
                     <span class="item-index">#{{ row.instalmentId }}</span>
                     <p-checkbox
-                      class="mx-1"
                       [id]="row.instalmentId"
                       [checked]="row.instalmentPayment"
                       [disabled]="row.disabled || row.earlyPayment"
                       (valueChange)="onSelectInstalmentPayment(row)"
-                    /><p-checkbox
+                    />
+                    <p-checkbox
                       [id]="row.instalmentId"
                       [checked]="row.earlyPayment"
                       [disabled]="row.disabled || row.instalmentPayment"
                       (valueChange)="onSelectEarlyPayment(row)"
                     />
                   </div>
-                  <div class="checkbox-group">
-                    <span
-                      class="item-date"
-                      [class.strike]="row.earlyPayment || row.instalmentPayment"
-                    >
-                      {{ row.paymentDate | date: "MMM yyyy" }}
-                    </span>
-                  </div>
+                  <span
+                    class="item-date"
+                    [class.strike]="row.earlyPayment || row.instalmentPayment"
+                  >
+                    {{ row.paymentDate | date: "MMM yyyy" }}
+                  </span>
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Credit</span>
@@ -412,7 +345,7 @@
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Asig.</span>
-                  <span class="item-value interest-value">
+                  <span class="item-value insurance-value">
                     {{ row.insuranceCost | numberFormat: "0.00"
                     }}{{ row.recalculated ? "*" : "" }}
                   </span>
@@ -426,7 +359,7 @@
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Sold</span>
-                  <span class="item-value remaining-value">
+                  <span class="item-value balance-value">
                     {{ row.remainingBalance | numberFormat: "0.00" }}
                   </span>
                 </div>
