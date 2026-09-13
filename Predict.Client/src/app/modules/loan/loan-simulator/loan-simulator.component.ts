@@ -193,7 +193,7 @@ export class LoanSimulatorComponent {
 
   private updatePaymentValidators(maxPayments?: number): void {
     this.simulationRowsFormArray.controls.forEach((row, index, rows) => {
-      const validators = [Validators.min(1)];
+      const validators = [Validators.min(0)];
       if (maxPayments !== undefined) {
         validators.push(Validators.max(maxPayments));
       }
