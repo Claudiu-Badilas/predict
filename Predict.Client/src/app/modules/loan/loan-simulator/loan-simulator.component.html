@@ -27,14 +27,12 @@
             <p-numeric-input
               [id]="'monthlyAmount_' + row.id"
               label="Suma"
-              [value]="row.monthlyAmount"
-              (valueChange)="onMonthlyAmountChange(row.id, $event)"
+              [control]="simulationRowsFormArray.at(i).controls.monthlyAmount"
             />
             <p-numeric-input
               [id]="'payments_' + row.id"
               label="Plati"
-              [value]="row.payments"
-              (valueChange)="onPaymentsChange(row.id, $event)"
+              [control]="simulationRowsFormArray.at(i).controls.payments"
             />
 
             <button
@@ -52,7 +50,12 @@
     </div>
 
     <div class="pt-2">
-      <button type="button" class="btn-add" (click)="addRow()">
+      <button
+        type="button"
+        class="btn-add"
+        [disabled]="simulationForm.invalid"
+        (click)="addRow()"
+      >
         + Add combination
       </button>
     </div>

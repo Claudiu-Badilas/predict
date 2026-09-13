@@ -71,3 +71,8 @@
   background: #f1f5f9;
   border-color: #64748b;
 }
+
+.btn-add:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

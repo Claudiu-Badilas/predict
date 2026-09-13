@@ -6,7 +6,7 @@ export function mapInstalmentSimulation(
   {
     monthlyAmount = null,
     payments = null,
-  }: { monthlyAmount?: number; payments?: number } = {},
+  }: { monthlyAmount?: number | null; payments?: number | null } = {},
 ): [number[], number[]] | null {
   if (!base || monthlyAmount === null || monthlyAmount <= 0) return [[], []];
 

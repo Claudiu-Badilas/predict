@@ -1,6 +1,13 @@
 .numeric-input-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.numeric-input-row {
+  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
   width: 100%;
@@ -48,6 +55,21 @@
   border: 1px solid #e5e7eb;
   cursor: not-allowed;
   opacity: 0.7;
+}
+
+.numeric-input-invalid,
+.numeric-input-invalid:focus,
+.numeric-input-invalid:active {
+  border-color: #dc2626;
+  background: #fef2f2;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.numeric-input-error {
+  margin-left: auto;
+  color: #dc2626;
+  font-size: 12px;
+  text-align: center;
 }
 
 /* Remove default number input arrows in Edge/IE */

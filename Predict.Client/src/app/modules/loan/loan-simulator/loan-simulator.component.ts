@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   Component,
   effect,
@@ -24,9 +25,15 @@ import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-tog
 
 export interface SimulationRow {
   id: string;
-  monthlyAmount: number;
-  payments: number;
+  monthlyAmount: number | null;
+  payments: number | null;
 }
+
+type SimulationRowForm = FormGroup<{
+  id: FormControl<string>;
+  monthlyAmount: FormControl<number | null>;
+  payments: FormControl<number | null>;
+}>;
 
 @Component({
   selector: 'p-loan-simulator',
@@ -67,15 +74,30 @@ export class LoanSimulatorComponent {
 
   /** Multiple simulation combinations — defaults to a single row */
   simulationRows = signal<SimulationRow[]>(this.loadRows());
+  readonly simulationForm = new FormGroup({
+    rows: new FormArray<SimulationRowForm>([]),
+  });
+  readonly simulationRowsFormArray = this.simulationForm.controls.rows;
 
   constructor(
     private readonly store: Store<fromLoan.LoanState>,
     private readonly _localStorageService: LocalStorageService,
   ) {
+    this.simulationRows().forEach((row) =>
+      this.simulationRowsFormArray.push(this.createRowForm(row)),
+    );
+    this.updatePaymentValidators();
+    this.simulationForm.updateValueAndValidity();
+    this.simulationForm.markAllAsTouched();
+    this.simulationRowsFormArray.valueChanges.subscribe(() =>
+      this.syncRowsFromForm(),
+    );
+
     // Recompute + dispatch simulation for every row whenever inputs change
     effect(() => {
       const rows = this.simulationRows();
       const schedule = this.selectedRepaymentScheduleBase();
+      this.updatePaymentValidators(schedule?.monthlyInstalments.length);
       const instalmentPayments: number[] = [];
       const earlyPayments: number[] = [];
 
@@ -109,7 +131,16 @@ export class LoanSimulatorComponent {
   // --- Row mutations ---
 
   addRow(): void {
-    this.simulationRows.update((rows) => [...rows, this.createEmptyRow(rows)]);
+    if (this.simulationForm.invalid) {
+      this.simulationForm.markAllAsTouched();
+      return;
+    }
+
+    this.simulationRowsFormArray.push(
+      this.createRowForm(this.createEmptyRow(this.simulationRows())),
+    );
+    this.updatePaymentValidators();
+    this.syncRowsFromForm();
   }
 
   removeRow(id: string): void {
@@ -117,19 +148,14 @@ export class LoanSimulatorComponent {
     if (this.simulationRows().length === 1) {
       return;
     }
-    this.simulationRows.update((rows) => rows.filter((r) => r.id !== id));
-  }
-
-  onMonthlyAmountChange(id: string, monthlyAmount: number): void {
-    this.simulationRows.update((rows) =>
-      rows.map((r) => (r.id === id ? { ...r, monthlyAmount } : r)),
+    const rowIndex = this.simulationRowsFormArray.controls.findIndex(
+      (row) => row.controls.id.value === id,
     );
-  }
-
-  onPaymentsChange(id: string, payments: number): void {
-    this.simulationRows.update((rows) =>
-      rows.map((r) => (r.id === id ? { ...r, payments } : r)),
-    );
+    if (rowIndex >= 0) {
+      this.simulationRowsFormArray.removeAt(rowIndex);
+      this.updatePaymentValidators();
+      this.syncRowsFromForm();
+    }
   }
 
   // --- Load / persist helpers ---
@@ -151,6 +177,36 @@ export class LoanSimulatorComponent {
       monthlyAmount: last?.monthlyAmount ?? 3750,
       payments: last?.payments ?? 1,
     };
+  }
+
+  private createRowForm(row: SimulationRow): SimulationRowForm {
+    return new FormGroup({
+      id: new FormControl(row.id, { nonNullable: true }),
+      monthlyAmount: new FormControl(row.monthlyAmount, {
+        validators: [Validators.required, Validators.min(0)],
+      }),
+      payments: new FormControl(row.payments, {
+        validators: [Validators.min(0)],
+      }),
+    });
+  }
+
+  private updatePaymentValidators(maxPayments?: number): void {
+    this.simulationRowsFormArray.controls.forEach((row, index, rows) => {
+      const validators = [Validators.min(1)];
+      if (maxPayments !== undefined) {
+        validators.push(Validators.max(maxPayments));
+      }
+      if (index < rows.length - 1) {
+        validators.unshift(Validators.required);
+      }
+      row.controls.payments.setValidators(validators);
+      row.controls.payments.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
+  private syncRowsFromForm(): void {
+    this.simulationRows.set(this.simulationRowsFormArray.getRawValue());
   }
 
   private newId(): string {

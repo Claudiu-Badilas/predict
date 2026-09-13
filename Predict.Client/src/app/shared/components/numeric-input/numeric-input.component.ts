@@ -1,17 +1,45 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'p-numeric-input',
+  imports: [ReactiveFormsModule],
   templateUrl: './numeric-input.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./numeric-input.component.scss'],
 })
 export class NumericInputComponent {
   @Input() label = '';
-  @Input() value: number | null = null;
   @Input() disabled = false;
+  @Input({ required: true }) control!: FormControl<number | null>;
 
   @Output() valueChange = new EventEmitter<number | null>();
+
+  get hasValidationError(): boolean {
+    return this.control.invalid && (this.control.touched || this.control.dirty);
+  }
+
+  get validationMessage(): string {
+    if (this.control?.hasError('required')) {
+      return 'This field is required.';
+    }
+
+    if (this.control?.hasError('min')) {
+      return `The value must be greater than ${this.control.getError('min').min}.`;
+    }
+
+    if (this.control?.hasError('max')) {
+      return `The value must be less than ${this.control.getError('max').max}.`;
+    }
+
+    return 'Enter a valid number.';
+  }
 
   onInput(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -21,7 +49,7 @@ export class NumericInputComponent {
       newValue = null;
     }
 
-    this.value = newValue;
+    this.control.setValue(newValue);
     this.valueChange.emit(newValue);
   }
 
@@ -32,7 +60,7 @@ export class NumericInputComponent {
       const numValue = Number(input.value);
       const formatted = Math.round(numValue * 100) / 100;
       if (formatted !== numValue) {
-        this.value = formatted;
+        this.control.setValue(formatted);
         this.valueChange.emit(formatted);
       }
     }

@@ -1,13 +1,19 @@
 <div class="numeric-input-container">
-  @if (label) {
-    <label class="numeric-input-label">{{ label }}</label>
+  <div class="numeric-input-row">
+    @if (label) {
+      <label class="numeric-input-label">{{ label }}</label>
+    }
+    <input
+      type="number"
+      class="numeric-input"
+      [class.numeric-input-invalid]="hasValidationError"
+      [formControl]="control"
+      [disabled]="disabled"
+      (input)="onInput($event)"
+      (blur)="onBlur($event)"
+    />
+  </div>
+  @if (hasValidationError) {
+    <div class="numeric-input-error" role="alert">{{ validationMessage }}</div>
   }
-  <input
-    type="number"
-    class="numeric-input"
-    [value]="value ?? ''"
-    [disabled]="disabled"
-    (input)="onInput($event)"
-    (blur)="onBlur($event)"
-  />
 </div>
