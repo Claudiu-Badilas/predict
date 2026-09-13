@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  effect,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
@@ -14,8 +19,14 @@ import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.compo
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { LoanSimulatorBodyTableComponent } from './components/loan-simulator-body-table/loan-simulator-body-table.component';
 import { LoanSimulatorHeaderComponent } from './components/loan-simulator-header/loan-simulator-header.component';
-import { mapInstalementSimulation } from './utils/instalment-simulation.utils';
+import { mapInstalmentSimulation } from './utils/instalment-simulation.utils';
 import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-toggle.component';
+
+export interface SimulationRow {
+  id: string;
+  monthlyAmount: number;
+  payments: number;
+}
 
 @Component({
   selector: 'p-loan-simulator',
@@ -51,25 +62,33 @@ export class LoanSimulatorComponent {
     this.store.select(fromLoan.getCalculateRepaymentSchedules),
   );
 
-  monthlyAmountKey = 'LoanSimulator_MonthlyAmount';
-  paymentsKey = 'LoanSimulator_Payments';
+  /** LocalStorage key */
+  private readonly simulationRowsKey = 'LoanSimulator_SimulationRows';
 
-  monthlyAmount = signal<number>(
-    this._localStorageService.getItem(this.monthlyAmountKey) ?? 3750,
-  );
-  payments = signal<number>(
-    this._localStorageService.getItem(this.paymentsKey) ?? 1,
-  );
+  /** Multiple simulation combinations — defaults to a single row */
+  simulationRows = signal<SimulationRow[]>(this.loadRows());
 
   constructor(
     private readonly store: Store<fromLoan.LoanState>,
     private readonly _localStorageService: LocalStorageService,
   ) {
+    // Recompute + dispatch simulation for every row whenever inputs change
     effect(() => {
-      const [instalmentPayments, earlyPayments] = mapInstalementSimulation(
-        this.selectedRepaymentScheduleBase(),
-        { monthlyAmount: this.monthlyAmount(), payments: this.payments() },
-      );
+      const rows = this.simulationRows();
+      const schedule = this.selectedRepaymentScheduleBase();
+      const instalmentPayments: number[] = [];
+      const earlyPayments: number[] = [];
+
+      rows.forEach((row) => {
+        const startOf = instalmentPayments.length + earlyPayments.length;
+        const [instalment, early] = mapInstalmentSimulation(schedule, startOf, {
+          monthlyAmount: row.monthlyAmount,
+          payments: row.payments,
+        });
+        instalmentPayments.push(...(instalment ?? []));
+        earlyPayments.push(...(early ?? []));
+      });
+
       this.store.dispatch(
         LoanActions.simulateInstalmentPaymentsChanged({
           selectedInstalmentPayments: instalmentPayments,
@@ -77,20 +96,71 @@ export class LoanSimulatorComponent {
         }),
       );
     });
+
+    // Persist rows on any change
+    effect(() => {
+      this._localStorageService.setItem(
+        this.simulationRowsKey,
+        this.simulationRows(),
+      );
+    });
   }
+
+  // --- Row mutations ---
+
+  addRow(): void {
+    this.simulationRows.update((rows) => [...rows, this.createEmptyRow(rows)]);
+  }
+
+  removeRow(id: string): void {
+    // Guard: always keep at least one combination
+    if (this.simulationRows().length === 1) {
+      return;
+    }
+    this.simulationRows.update((rows) => rows.filter((r) => r.id !== id));
+  }
+
+  onMonthlyAmountChange(id: string, monthlyAmount: number): void {
+    this.simulationRows.update((rows) =>
+      rows.map((r) => (r.id === id ? { ...r, monthlyAmount } : r)),
+    );
+  }
+
+  onPaymentsChange(id: string, payments: number): void {
+    this.simulationRows.update((rows) =>
+      rows.map((r) => (r.id === id ? { ...r, payments } : r)),
+    );
+  }
+
+  // --- Load / persist helpers ---
+
+  private loadRows(): SimulationRow[] {
+    const stored = this._localStorageService.getItem(this.simulationRowsKey);
+    if (Array.isArray(stored) && stored.length > 0) {
+      return stored as SimulationRow[];
+    }
+
+    return [{ id: this.newId(), monthlyAmount: 3750, payments: 1 }];
+  }
+
+  private createEmptyRow(existing: SimulationRow[]): SimulationRow {
+    // Pre-fill from the last row for convenience
+    const last = existing[existing.length - 1];
+    return {
+      id: this.newId(),
+      monthlyAmount: last?.monthlyAmount ?? 3750,
+      payments: last?.payments ?? 1,
+    };
+  }
+
+  private newId(): string {
+    return `row_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  // --- Existing handlers ---
 
   onDropdownSelected(value: string) {
     this.store.dispatch(LoanActions.selectedLoanChanged({ selected: value }));
-  }
-
-  onMonthlyAmountChange(monthlyAmount: number) {
-    this.monthlyAmount.set(monthlyAmount);
-    this._localStorageService.setItem(this.monthlyAmountKey, monthlyAmount);
-  }
-
-  onPaymentsChange(payments: number) {
-    this.payments.set(payments);
-    this._localStorageService.setItem(this.paymentsKey, payments);
   }
 
   onSelectionChange(module: string) {

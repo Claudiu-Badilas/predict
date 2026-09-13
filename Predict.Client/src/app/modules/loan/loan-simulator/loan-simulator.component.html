@@ -8,6 +8,7 @@
       />
     </div>
   </ng-container>
+
   <ng-container filter-content>
     <div class="pt-2">
       <p-dropdown-select
@@ -17,21 +18,43 @@
         (selectionChange)="onDropdownSelected($event)"
       />
     </div>
-    <div class="pt-2">
-      <p-numeric-input
-        id="targetAmount"
-        label="Monthly Amount"
-        [value]="monthlyAmount()"
-        (valueChange)="onMonthlyAmountChange($event)"
-      />
+
+    <!-- Simulation combination rows -->
+    <div class="simulation-rows">
+      @for (row of simulationRows(); track row.id; let i = $index) {
+        <div class="simulation-row pt-2">
+          <div class="gap-4 d-flex align-items-center justify-content-between">
+            <p-numeric-input
+              [id]="'monthlyAmount_' + row.id"
+              label="Suma"
+              [value]="row.monthlyAmount"
+              (valueChange)="onMonthlyAmountChange(row.id, $event)"
+            />
+            <p-numeric-input
+              [id]="'payments_' + row.id"
+              label="Plati"
+              [value]="row.payments"
+              (valueChange)="onPaymentsChange(row.id, $event)"
+            />
+
+            <button
+              type="button"
+              class="btn-delete"
+              [disabled]="simulationRows().length === 1"
+              [attr.aria-label]="'Delete simulation row ' + (i + 1)"
+              (click)="removeRow(row.id)"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      }
     </div>
+
     <div class="pt-2">
-      <p-numeric-input
-        id="targetAmount"
-        label="Payments"
-        [value]="payments()"
-        (valueChange)="onPaymentsChange($event)"
-      />
+      <button type="button" class="btn-add" (click)="addRow()">
+        + Add combination
+      </button>
     </div>
 
     <div class="pt-2 d-flex align-items-center justify-content-between">
@@ -45,6 +68,7 @@
     </div>
   </ng-container>
 </p-top-bar>
+
 <div class="m-2">
   <p-loan-simulator-header
     [monthlyInstalmentGroups]="monthlyInstalmentBatches()"
