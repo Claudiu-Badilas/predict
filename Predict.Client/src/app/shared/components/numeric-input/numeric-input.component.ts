@@ -27,18 +27,18 @@ export class NumericInputComponent {
 
   get validationMessage(): string {
     if (this.control?.hasError('required')) {
-      return 'This field is required.';
+      return 'Required';
     }
 
     if (this.control?.hasError('min')) {
-      return `The value must be greater than ${this.control.getError('min').min}.`;
+      return `Min: ${this.control.getError('min').min}`;
     }
 
     if (this.control?.hasError('max')) {
-      return `The value must be less than ${this.control.getError('max').max}.`;
+      return `Max: ${this.control.getError('max').max}`;
     }
 
-    return 'Enter a valid number.';
+    return 'Invalid number';
   }
 
   onInput(event: Event) {

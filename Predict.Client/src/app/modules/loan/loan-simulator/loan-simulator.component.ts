@@ -183,17 +183,17 @@ export class LoanSimulatorComponent {
     return new FormGroup({
       id: new FormControl(row.id, { nonNullable: true }),
       monthlyAmount: new FormControl(row.monthlyAmount, {
-        validators: [Validators.required, Validators.min(0)],
+        validators: [Validators.required, Validators.min(1)],
       }),
       payments: new FormControl(row.payments, {
-        validators: [Validators.min(0)],
+        validators: [Validators.min(1)],
       }),
     });
   }
 
   private updatePaymentValidators(maxPayments?: number): void {
     this.simulationRowsFormArray.controls.forEach((row, index, rows) => {
-      const validators = [Validators.min(0)];
+      const validators = [Validators.min(1)];
       if (maxPayments !== undefined) {
         validators.push(Validators.max(maxPayments));
       }
