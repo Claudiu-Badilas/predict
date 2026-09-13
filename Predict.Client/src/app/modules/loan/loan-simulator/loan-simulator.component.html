@@ -10,20 +10,18 @@
   </ng-container>
 
   <ng-container filter-content>
-    <div class="pt-2">
-      <p-dropdown-select
-        [items]="dropDownSelectOptions$ | async"
-        [selectedItem]="selectedRepaymentScheduleName$ | async"
-        placeholder="No Selection"
-        (selectionChange)="onDropdownSelected($event)"
-      />
-    </div>
+    <p-dropdown-select
+      [items]="dropDownSelectOptions$ | async"
+      [selectedItem]="selectedRepaymentScheduleName$ | async"
+      placeholder="No Selection"
+      (selectionChange)="onDropdownSelected($event)"
+    />
 
     <!-- Simulation combination rows -->
     <div class="simulation-rows">
       @for (row of simulationRows(); track row.id; let i = $index) {
         <div class="simulation-row pt-2">
-          <div class="gap-4 d-flex align-items-center justify-content-between">
+          <div class="gap-2 d-flex align-items-center justify-content-between">
             <p-numeric-input
               [id]="'monthlyAmount_' + row.id"
               label="Amount"
