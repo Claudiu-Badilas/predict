@@ -1,125 +1,141 @@
-<div class="historical-instalments">
-  <!-- Desktop Table Wrapper -->
-  <div class="desktop-view">
-    <div class="table-wrapper">
-      <table class="instalment-table">
-        <thead>
-          <tr>
-            <th class="text-center">Data Plății</th>
-            <th class="text-center"></th>
-            <th class="text-center">Total</th>
-            <th class="text-center">Rată Credit</th>
-            <th class="text-center">Rată Dobândă</th>
-            <th class="text-center">Asig.</th>
-            <th class="text-center">Sold Rest Plată</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (group of monthlyGroups(); track group.title) {
-            <!-- Monthly Group Header -->
-            <tr class="monthly-group-header-row">
+<section class="historical-instalments" aria-label="Istoric rate">
+  @if (monthlyGroups().length) {
+    <div class="desktop-view">
+      <div class="table-shell">
+        <table class="instalment-table">
+          <thead>
+            <tr>
+              <th colspan="2">Luna</th>
+              <th>Total</th>
+              <th>Principal</th>
+              <th>Dobândă</th>
+              <th>Asigurare</th>
+              <th>Sold</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (group of monthlyGroups(); track group.title) {
               @let subtotal = group.subtotal;
 
-              <td class="text-center">
-                <span class="group-title">{{
-                  group.title | date: "MMM yyyy"
-                }}</span>
-              </td>
-              <td class="text-center">
-                <span class="count bold"
-                  >{{ subtotal.instalmentsCount }} +
-                  {{ subtotal.earlyCount }}</span
-                >
-              </td>
-              <td class="text-center">
-                <span class="subtotal-total">
-                  {{ subtotal.total | numberFormat: "0.00" }}</span
-                >
-              </td>
-              <td class="text-center">
-                <span class="semi-bold">
-                  {{ subtotal.principal | numberFormat: "0.00" }}</span
-                >
-              </td>
-              <td class="text-center">
-                <span class="semi-bold">
-                  {{ subtotal.interest | numberFormat: "0.00" }}</span
-                >
-              </td>
-              <td class="text-center">
-                <span class="semi-bold">
-                  {{ subtotal.insuranceCost | numberFormat: "0.00" }}</span
-                >
-              </td>
-              <td class="text-center">
-                <span class="semi-bold">
-                  {{ subtotal.remainingBalance | numberFormat: "0.00" }}</span
-                >
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+              <tr>
+                <td class="col-month">
+                  <div class="cell-month">
+                    <span class="cell-label month-label">
+                      {{ group.title | date: "MMM yyyy" }}
+                    </span>
+                  </div>
+                </td>
+                <td class="col-month">
+                  <div class="cell-month">
+                    <span class="cell-value total-value">
+                      {{ subtotal.instalmentsCount }}
+                      @if (subtotal.earlyCount) {
+                        <span class="early-chip"
+                          >+{{ subtotal.earlyCount }}</span
+                        >
+                      }
+                    </span>
+                  </div>
+                </td>
 
-      @if (!monthlyGroups().length) {
-        <div class="empty-state">No instalment data available</div>
-      }
+                <td>
+                  <span class="cell-value total-value">
+                    {{ subtotal.total | numberFormat: "0.00" }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="cell-value principal-value">
+                    {{ subtotal.principal | numberFormat: "0.00" }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="cell-value interest-value">
+                    {{ subtotal.interest | numberFormat: "0.00" }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="cell-value insurance-value">
+                    {{ subtotal.insuranceCost | numberFormat: "0.00" }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="cell-value balance-value">
+                    {{ subtotal.remainingBalance | numberFormat: "0.00" }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Mobile View -->
-  <div class="mobile-view">
-    @for (group of monthlyGroups(); track group.title) {
-      <!-- Mobile Month Card -->
-      <div class="mobile-group-card">
-        <!-- Month Details as Individual Items -->
-        <div class="mobile-items-list">
-          <!-- Month Total as first item -->
-          <div class="mobile-item mobile-total-item">
-            <div class="mobile-item-row">
-              <div class="mobile-item-col">
-                <span class="item-label">{{
-                  group.title | date: "MMM yyyy"
-                }}</span>
-                <span class="item-value total-value">
-                  {{ group.subtotal.instalmentsCount }} +
-                  {{ group.subtotal.earlyCount }}
-                </span>
-              </div>
-              <div class="mobile-item-col">
-                <span class="item-label">Total</span>
-                <span class="item-value total-value">
-                  {{ group.subtotal.total | numberFormat: "0.00" }}
-                </span>
-              </div>
-              <div class="mobile-item-col">
-                <span class="item-label">Principal</span>
-                <span class="item-value principal-value">
-                  {{ group.subtotal.principal | numberFormat: "0.00" }}
-                </span>
-              </div>
-              <div class="mobile-item-col">
-                <span class="item-label">Dobândă</span>
-                <span class="item-value interest-value">
-                  {{ group.subtotal.interest | numberFormat: "0.00" }}
-                </span>
-              </div>
-              <div class="mobile-item-col">
-                <span class="item-label">Asig.</span>
-                <span class="item-value">
-                  {{ group.subtotal.insuranceCost | numberFormat: "0.00" }}
-                </span>
-              </div>
-              <div class="mobile-item-col">
-                <span class="item-label">Sold</span>
-                <span class="item-value remaining-value">
-                  {{ group.subtotal.remainingBalance | numberFormat: "0.00" }}
-                </span>
-              </div>
+    <div class="mobile-view">
+      <div class="mobile-list">
+        @for (group of monthlyGroups(); track group.title) {
+          @let subtotal = group.subtotal;
+
+          <div class="month-row">
+            <div class="cell cell-month">
+              <span class="cell-value total-value">
+                {{ subtotal.instalmentsCount }}
+                @if (subtotal.earlyCount) {
+                  <span class="early-chip">+{{ subtotal.earlyCount }}</span>
+                }</span
+              ><span class="cell-label month-label">
+                {{ group.title | date: "MMM yyyy" }}
+              </span>
+            </div>
+
+            <div class="cell">
+              <span class="cell-label">Total</span>
+              <span class="cell-value total-value">
+                {{ subtotal.total | numberFormat: "0.00" }}
+              </span>
+            </div>
+
+            <div class="cell">
+              <span class="cell-label">Principal</span>
+              <span class="cell-value principal-value">
+                {{ subtotal.principal | numberFormat: "0.00" }}
+              </span>
+            </div>
+
+            <div class="cell">
+              <span class="cell-label">Dobândă</span>
+              <span class="cell-value interest-value">
+                {{ subtotal.interest | numberFormat: "0.00" }}
+              </span>
+            </div>
+
+            <div class="cell">
+              <span class="cell-label">Asig.</span>
+              <span class="cell-value insurance-value">
+                {{ subtotal.insuranceCost | numberFormat: "0.00" }}
+              </span>
+            </div>
+
+            <div class="cell">
+              <span class="cell-label">Sold</span>
+              <span class="cell-value balance-value">
+                {{ subtotal.remainingBalance | numberFormat: "0.00" }}
+              </span>
             </div>
           </div>
-        </div>
+        }
       </div>
-    }
-  </div>
-</div>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <div class="empty-title">Nu există date de plată</div>
+      <div class="empty-text">
+        Istoricul ratelor va apărea aici după înregistrarea unei plăți.
+      </div>
+    </div>
+  }
+</section>
