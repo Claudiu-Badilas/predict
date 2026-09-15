@@ -139,7 +139,7 @@ function createMonthlyInstalmentBatches(
   });
 
   return batches.map((b, i) => {
-    b.expanded = i === 0;
+    // b.expanded = i === 0;
     return b;
   });
 }
