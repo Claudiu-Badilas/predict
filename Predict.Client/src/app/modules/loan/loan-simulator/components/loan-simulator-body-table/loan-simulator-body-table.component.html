@@ -72,10 +72,10 @@
               {{ subtotal.total / 2 | numberFormat: "0.00" }}
             </td>
             <td class="bold">
-              {{ subtotal.earlyPaymenrt | numberFormat: "0.00" }}
+              {{ subtotal.earlyPayment | numberFormat: "0.00" }}
             </td>
             <td class="bold">
-              {{ subtotal.restant | numberFormat: "0.00" }}
+              {{ subtotal.remaining | numberFormat: "0.00" }}
             </td>
           </tr>
         }
@@ -183,27 +183,49 @@
           (holdTrigger)="onExpandOrCollapse()"
           (click)="toggleGroup(group)"
         >
-          <div class="mobile-group-info">
-            <div class="mobile-group-left">
-              <div class="mobile-group-title">
-                {{ group.title | date: "MMM yyyy" }}
-              </div>
+          <div class="mobile-item-row">
+            <div class="mobile-group-value-col">
               <span class="mobile-group-count">
                 {{ subtotal.instalmentsCount }}
                 @if (subtotal.earlyCount > 0) {
                   <span class="early-chip">+{{ subtotal.earlyCount }}</span>
                 }
               </span>
+              <span class="mobile-group-title">
+                {{ group.title | date: "MMM yyyy" }}
+              </span>
             </div>
-            <div class="mobile-group-right">
-              <div class="mobile-group-total total-value">
-                <span>TOTAL</span>
-                <span>{{ subtotal.total | numberFormat: "0.00" }}</span>
-              </div>
-              <div class="mobile-group-total balance-value">
-                <span>SOLD</span>
-                <span>{{ subtotal.restant | numberFormat: "0.00" }}</span>
-              </div>
+
+            <div class="mobile-group-value-col">
+              <span class="item-label">Anticipat</span>
+              <span class="item-value principal-value">
+                {{ subtotal.earlyPayment | numberFormat: "0.00" }}
+              </span>
+            </div>
+            <div class="mobile-group-value-col">
+              <span class="item-label">Rata</span>
+              <span class="item-value interest-value">
+                {{ subtotal.instalment | numberFormat: "0.00" }}
+              </span>
+            </div>
+            <div class="mobile-group-value-col">
+              <span class="item-label">Total</span>
+              <span class="item-value total-value">
+                {{ subtotal.total | numberFormat: "0.00" }}
+              </span>
+            </div>
+            <div class="mobile-group-value-col">
+              <span class="item-label">1/2</span>
+              <span class="item-value">
+                {{ subtotal.total / 2 | numberFormat: "0.00" }}
+              </span>
+            </div>
+
+            <div class="mobile-group-value-col">
+              <span class="item-label">Sold</span>
+              <span class="item-value balance-value">
+                {{ subtotal.remaining | numberFormat: "0.00" }}
+              </span>
             </div>
           </div>
         </div>
