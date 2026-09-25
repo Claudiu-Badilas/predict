@@ -224,33 +224,6 @@ import {
           <div class="mobile-group-card">
             <div class="mobile-group-header">
               <div class="mobile-item-row" (click)="toggleGroup(group)">
-                <div class="mobile-row-actions">
-                  <button
-                    type="button"
-                    class="action-btn add-early"
-                    title="Adaugă următoarea rată ca anticipată"
-                    (click)="onAddEarlyPayment(group, $event)"
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    class="action-btn remove-early"
-                    title="Elimină o rată anticipată"
-                    (click)="onRemoveEarlyPayment(group, $event)"
-                  >
-                    −
-                  </button>
-                  <button
-                    type="button"
-                    class="action-btn dispatch-instalment"
-                    title="Marchează o rată ca plătită"
-                    (click)="onDispatchInstalment(group, $event)"
-                  >
-                    ✓
-                  </button>
-                </div>
-
                 <div class="mobile-group-value-col">
                   <span class="mobile-group-count">
                     {{ subtotal.instalmentsCount }}
@@ -293,6 +266,32 @@ import {
                   <span class="item-value balance-value">
                     {{ subtotal.remaining | numberFormat: '0.00' }}
                   </span>
+                </div>
+                <div class="mobile-row-actions">
+                  <button
+                    type="button"
+                    class="action-btn add-early"
+                    title="Adaugă următoarea rată ca anticipată"
+                    (click)="onAddEarlyPayment(group, $event)"
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    class="action-btn remove-early"
+                    title="Elimină o rată anticipată"
+                    (click)="onRemoveEarlyPayment(group, $event)"
+                  >
+                    −
+                  </button>
+                  <button
+                    type="button"
+                    class="action-btn dispatch-instalment"
+                    title="Marchează o rată ca plătită"
+                    (click)="onDispatchInstalment(group, $event)"
+                  >
+                    ✓
+                  </button>
                 </div>
               </div>
             </div>
