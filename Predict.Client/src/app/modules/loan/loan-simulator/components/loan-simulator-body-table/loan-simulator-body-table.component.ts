@@ -141,7 +141,7 @@ import {
                     !row.instalmentPayment && !row.earlyPayment
                   "
                 >
-                  <td class="">
+                  <td class="col-first">
                     <div class="row-controls">
                       <span class="row-index">{{ row.instalmentId }}</span>
                     </div>
@@ -439,28 +439,28 @@ import {
     </div> `,
   styles: `
     :host {
-      --surface: #fff;
-      --surface-soft: #f8fafb;
-      --surface-tint: #fbfdfd;
-      --border: #e7ecef;
-      --border-soft: #eef2f5;
-      --text: #24313a;
-      --text-soft: #334155;
-      --muted: #7a8790;
-      --teal: #0f766e;
-      --green: #059669;
-      --red: #dc2626;
-      --blue: #2563eb;
-      --violet: #7c3aed;
-      --amber: #b45309;
+      --surface: #ffffff;
+      --surface-soft: #eef2f6;
+      --surface-tint: #e2e8f0;
+      --border: #cbd5e1;
+      --border-soft: #e2e8f0;
+      --text: #0f172a;
+      --text-soft: #1e293b;
+      --muted: #475569;
+      --teal: #0b5c56;
+      --green: #046c4e;
+      --red: #b91c1c;
+      --blue: #1d4ed8;
+      --violet: #5b21b6;
+      --amber: #92400e;
       --amber-soft: #fef3c7;
 
-      --selected-bg: #fffbeb;
-      --selected-border: #f59e0b;
+      --selected-bg: #fff7ed;
+      --selected-border: #b45309;
       --early-bg: #ecfdf5;
-      --early-border: #10b981;
-      --disabled-bg: #f8fafc;
-      --disabled-border: #94a3b8;
+      --early-border: #046c4e;
+      --disabled-bg: #f1f5f9;
+      --disabled-border: #64748b;
       --group-bg: #fef2f2;
       --group-bg-hover: #fee2e2;
 
@@ -657,7 +657,7 @@ import {
     }
 
     .action-btn:hover {
-      background: var(--surface-soft);
+      background: var(--surface-tint);
     }
 
     .action-btn.add-early {
@@ -692,7 +692,7 @@ import {
       font-size: 11px;
       font-weight: 700;
       background: var(--surface);
-      padding: 2px 8px;
+      padding: 0px 10px;
       border-radius: 20px;
       border: 1px solid var(--border);
       display: inline-flex;
@@ -724,7 +724,7 @@ import {
     }
 
     .disabled {
-      color: #c0c0c0;
+      color: #94a3b8;
     }
 
     .row-controls {
@@ -782,7 +782,7 @@ import {
     }
 
     tbody tr:hover td {
-      filter: brightness(0.98);
+      filter: brightness(0.97);
     }
 
     .mobile-view {
@@ -840,17 +840,17 @@ import {
       .mobile-group-title {
         font-weight: 700;
         font-size: 10px;
-        color: #1f2937;
+        color: var(--text);
       }
 
       .mobile-group-count {
-        color: #ef4444;
+        color: var(--red);
         font-size: 10px;
         font-weight: 700;
         background: white;
-        padding: 2px 8px;
+        padding: 0px 10px;
         border-radius: 30px;
-        border: 1px solid #ef4444;
+        border: 1px solid var(--red);
         white-space: nowrap;
         display: inline-flex;
         align-items: center;
@@ -875,7 +875,7 @@ import {
 
       .mobile-group-value-col .item-label {
         font-size: 8px;
-        color: #6b7280;
+        color: var(--muted);
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.3px;
@@ -912,7 +912,7 @@ import {
 
       .mobile-item {
         padding: 12px;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid var(--border-soft);
         background: var(--surface);
         min-height: 84px;
         display: flex;
@@ -977,12 +977,12 @@ import {
       .item-index {
         font-weight: 700;
         font-size: 13px;
-        color: #1f2937;
+        color: var(--text);
       }
 
       .item-date {
         font-size: 11px;
-        color: #6b7280;
+        color: var(--muted);
         text-transform: capitalize;
       }
 
@@ -1004,7 +1004,7 @@ import {
 
       .item-label {
         font-size: 9px;
-        color: #6b7280;
+        color: var(--muted);
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.3px;
@@ -1015,35 +1015,35 @@ import {
       .item-value {
         font-weight: 600;
         font-size: 12px;
-        color: #1f2937;
+        color: var(--text);
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
       }
 
       .principal-value {
-        color: #10b981;
+        color: var(--green);
       }
 
       .interest-value {
-        color: #ef4444;
+        color: var(--red);
       }
 
       .insurance-value {
-        color: #7c3aed;
+        color: var(--violet);
       }
 
       .total-value {
-        color: #0f766e;
+        color: var(--teal);
         font-weight: 700;
       }
 
       .balance-value {
-        color: #2563eb;
+        color: var(--blue);
       }
 
       .strike {
         text-decoration: line-through;
-        color: #9ca3af;
+        color: var(--muted);
       }
     }
 
@@ -1055,8 +1055,8 @@ import {
 
       .mobile-group-header {
         height: auto;
-        padding: 10px 5px;
-        border-left: 3px solid #ef4444;
+        padding: 8px 5px;
+        border-left: 3px solid var(--red);
       }
 
       .mobile-group-count {
@@ -1099,8 +1099,7 @@ import {
       }
 
       .mobile-row-actions {
-        gap: 4px;
-        margin-top: 5px;
+        gap: 2px;
       }
 
       .mobile-row-actions .action-btn {
