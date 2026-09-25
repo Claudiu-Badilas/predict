@@ -41,7 +41,6 @@ import {
                 />
               </div>
             </th>
-            <th class="col-actions"></th>
             <th>Data</th>
             <th>Credit</th>
             <th>Dobândă</th>
@@ -61,8 +60,15 @@ import {
                 [class.expanded-group]="group.expanded"
               >
                 @let subtotal = getSubtotal(group);
-                <td class="col-actions">
-                  <div class="group-actions">
+
+                <td class="col-first" (click)="toggleGroup(group)">
+                  <span class="count"
+                    >{{ subtotal.instalmentsCount }}
+                    @if (subtotal.earlyCount > 0) {
+                      <span class="early-chip">+{{ subtotal.earlyCount }}</span>
+                    }
+                  </span>
+                  <div class="mt-1 group-actions">
                     <button
                       type="button"
                       class="action-btn add-early"
@@ -88,15 +94,6 @@ import {
                       ✓
                     </button>
                   </div>
-                </td>
-
-                <td class="col-first" (click)="toggleGroup(group)">
-                  <span class="count"
-                    >{{ subtotal.instalmentsCount }}
-                    @if (subtotal.earlyCount > 0) {
-                      <span class="early-chip">+{{ subtotal.earlyCount }}</span>
-                    }
-                  </span>
                 </td>
 
                 <td class="bold" (click)="toggleGroup(group)">
@@ -144,7 +141,6 @@ import {
                     !row.instalmentPayment && !row.earlyPayment
                   "
                 >
-                  <td class="col-first col-actions"></td>
                   <td class="">
                     <div class="row-controls">
                       <span class="row-index">{{ row.instalmentId }}</span>
@@ -499,7 +495,6 @@ import {
       padding: 8px 10px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
-      min-width: 80px;
       text-align: center;
       transition: background 100ms ease;
     }
@@ -528,7 +523,6 @@ import {
       left: 0;
       z-index: 30;
       width: 90px;
-      min-width: 90px;
       text-align: center;
     }
 
@@ -574,7 +568,6 @@ import {
     th.col-actions,
     td.col-actions {
       width: 90px;
-      min-width: 90px;
       text-align: center;
       padding: 8px 4px;
     }
@@ -646,8 +639,8 @@ import {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       border-radius: 4px;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -877,7 +870,6 @@ import {
         align-items: center;
         justify-content: center;
         flex: 1;
-        min-width: 0;
         text-align: center;
       }
 
@@ -962,14 +954,12 @@ import {
         align-items: center;
         justify-content: center;
         flex: 1;
-        min-width: 60px;
         height: 100%;
         text-align: center;
       }
 
       .mobile-item-col.col-index {
         flex: 0 0 auto;
-        min-width: 90px;
         align-items: center;
         justify-content: center;
         gap: 6px;
@@ -1002,14 +992,13 @@ import {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-width: 0;
         text-align: center;
       }
 
       .mobile-row-actions .action-btn {
-        width: 24px;
-        height: 24px;
-        font-size: 14px;
+        width: 18px;
+        height: 18px;
+        font-size: 13px;
         border-radius: 5px;
       }
 
@@ -1066,7 +1055,7 @@ import {
 
       .mobile-group-header {
         height: auto;
-        padding: 10px 8px;
+        padding: 10px 5px;
         border-left: 3px solid #ef4444;
       }
 
@@ -1099,14 +1088,6 @@ import {
       .mobile-item {
         padding: 10px;
         min-height: 78px;
-      }
-
-      .mobile-item-col {
-        min-width: 50px;
-      }
-
-      .mobile-item-col.col-index {
-        min-width: 82px;
       }
 
       .item-index {
