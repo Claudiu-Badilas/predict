@@ -304,7 +304,7 @@ import {
                     "
                   >
                     <div class="mobile-item-row">
-                      <div class="mobile-item-col col-index">
+                      <div class="mobile-item-col">
                         <div class="checkbox-group">
                           <span class="item-index"
                             >#{{ row.instalmentId }}</span
@@ -382,7 +382,7 @@ import {
               @for (row of group.instalments; track row.instalmentId) {
                 <div class="mobile-item item-disabled">
                   <div class="mobile-item-row">
-                    <div class="mobile-item-col col-index">
+                    <div class="mobile-item-col">
                       <div class="checkbox-group">
                         <span class="item-index">#{{ row.instalmentId }}</span>
                       </div>
@@ -603,7 +603,7 @@ import {
     }
 
     .group-header-subtotal-row td {
-      padding: 10px;
+      padding: 5px 10px;
       font-size: 13px;
       background: var(--group-bg);
       cursor: pointer;
@@ -914,7 +914,7 @@ import {
         padding: 12px;
         border-bottom: 1px solid var(--border-soft);
         background: var(--surface);
-        min-height: 84px;
+        min-height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -954,15 +954,6 @@ import {
         align-items: center;
         justify-content: center;
         flex: 1;
-        height: 100%;
-        text-align: center;
-      }
-
-      .mobile-item-col.col-index {
-        flex: 0 0 auto;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
         height: 100%;
         text-align: center;
       }
@@ -1087,7 +1078,7 @@ import {
 
       .mobile-item {
         padding: 10px;
-        min-height: 78px;
+        min-height: 60px;
       }
 
       .item-index {
@@ -1172,18 +1163,6 @@ export class LoanSimulatorBodyTableComponent {
       remaining: instalments?.at(-1)?.remainingBalance,
       count: instalments.length,
     };
-  }
-
-  /**
-   * First row that hasn't been touched yet — neither paid nor early.
-   * No `disabled` check, as requested.
-   */
-  private getNextNewRow(
-    group: MonthlyInstalmentManager,
-  ): LoanSimulatorInstalment | undefined {
-    return group.instalments.find(
-      (row) => !row.instalmentPayment && !row.earlyPayment,
-    );
   }
 
   onAddEarlyPayment(group: MonthlyInstalmentManager, event: Event) {

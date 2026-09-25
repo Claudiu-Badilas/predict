@@ -27,7 +27,10 @@ export const getSelectedRepaymentSchedule = createSelector(
 
 export const selectedInstalmentPayments = createSelector(
   getOverviewLoanState,
-  (state) => state.selectedInstalmentPayments,
+  (state) =>
+    state.selectedInstalmentPayments?.length > 0
+      ? state.selectedInstalmentPayments
+      : [1],
 );
 
 export const selectedEarlyPayments = createSelector(
