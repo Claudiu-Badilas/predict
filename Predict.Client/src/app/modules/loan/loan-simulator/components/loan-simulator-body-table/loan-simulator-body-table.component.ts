@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
 } from '@angular/core';
@@ -23,24 +24,7 @@ import {
       <table class="instalment-table">
         <thead>
           <tr>
-            <th class="col-first">
-              <div class="expand-controls">
-                <img
-                  width="15"
-                  height="15"
-                  src="assets/icons/collapse.svg"
-                  alt="collapse"
-                  (click)="onCollapseAll()"
-                />
-                <img
-                  width="15"
-                  height="15"
-                  src="assets/icons/expand.svg"
-                  alt="expand"
-                  (click)="onExpandAll()"
-                />
-              </div>
-            </th>
+            <th class="col-first"></th>
             <th>Data</th>
             <th>Credit</th>
             <th>Dobândă</th>
@@ -49,11 +33,33 @@ import {
             <th>1/2</th>
             <th>Anticipat</th>
             <th>Sold</th>
+            <th>
+              <div class="expand-controls">
+                <img
+                  width="20"
+                  height="20"
+                  src="assets/icons/collapse.svg"
+                  alt="collapse"
+                  (click)="onCollapseAll()"
+                />
+                <img
+                  width="20"
+                  height="20"
+                  src="assets/icons/expand.svg"
+                  alt="expand"
+                  (click)="onExpandAll()"
+                />
+              </div>
+            </th>
           </tr>
         </thead>
 
         <tbody>
-          @for (group of monthlyInstalmentGroups(); track group.id) {
+          @for (
+            group of monthlyInstalmentGroups();
+            track group.id;
+            let index = $index
+          ) {
             @if (group.completed) {
               <tr
                 class="group-header-subtotal-row"
@@ -68,32 +74,6 @@ import {
                       <span class="early-chip">+{{ subtotal.earlyCount }}</span>
                     }
                   </span>
-                  <div class="mt-1 group-actions">
-                    <button
-                      type="button"
-                      class="action-btn add-early"
-                      title="Adaugă următoarea rată ca anticipată"
-                      (click)="onAddEarlyPayment(group, $event)"
-                    >
-                      +
-                    </button>
-                    <button
-                      type="button"
-                      class="action-btn remove-early"
-                      title="Elimină o rată anticipată"
-                      (click)="onRemoveEarlyPayment(group, $event)"
-                    >
-                      −
-                    </button>
-                    <button
-                      type="button"
-                      class="action-btn dispatch-instalment"
-                      title="Marchează o rată ca plătită"
-                      (click)="onDispatchInstalment(group, $event)"
-                    >
-                      ✓
-                    </button>
-                  </div>
                 </td>
 
                 <td class="bold" (click)="toggleGroup(group)">
@@ -124,6 +104,37 @@ import {
                 </td>
                 <td class="bold" (click)="toggleGroup(group)">
                   {{ subtotal.remaining | numberFormat: '0.00' }}
+                </td>
+
+                <td (click)="toggleGroup(group)">
+                  @if (index + 1 == completedMonthlyInstalmentGroupsCount()) {
+                    <div class="mt-1 group-actions">
+                      <button
+                        type="button"
+                        class="action-btn add-early"
+                        title="Adaugă următoarea rată ca anticipată"
+                        (click)="onAddEarlyPayment(group, $event)"
+                      >
+                        +
+                      </button>
+                      <button
+                        type="button"
+                        class="action-btn remove-early"
+                        title="Elimină o rată anticipată"
+                        (click)="onRemoveEarlyPayment(group, $event)"
+                      >
+                        −
+                      </button>
+                      <button
+                        type="button"
+                        class="action-btn dispatch-instalment"
+                        title="Marchează o rată ca plătită"
+                        (click)="onDispatchInstalment(group, $event)"
+                      >
+                        ✓
+                      </button>
+                    </div>
+                  }
                 </td>
               </tr>
             }
@@ -205,6 +216,15 @@ import {
                   >
                     {{ row.remainingBalance | numberFormat: '0.00' }}
                   </td>
+                  <td
+                    [class.strike]="
+                      !last && (row.earlyPayment || row.instalmentPayment)
+                    "
+                    [class.semi-bold]="
+                      last && (row.earlyPayment || row.instalmentPayment)
+                    "
+                    [class.disabled]="!group.completed && row.disabled"
+                  ></td>
                 </tr>
               }
             }
@@ -214,7 +234,11 @@ import {
     </div>
 
     <div class="mobile-view">
-      @for (group of monthlyInstalmentGroups(); track group.id) {
+      @for (
+        group of monthlyInstalmentGroups();
+        track group.id;
+        let index = $index
+      ) {
         @if (group.completed) {
           @let subtotal = getSubtotal(group);
           <div class="mobile-group-card">
@@ -263,6 +287,9 @@ import {
                     {{ subtotal.remaining | numberFormat: '0.00' }}
                   </span>
                 </div>
+              </div>
+              @if (index + 1 == completedMonthlyInstalmentGroupsCount()) {
+                <hr class="my-1" />
                 <div class="mobile-row-actions">
                   <button
                     type="button"
@@ -289,7 +316,7 @@ import {
                     ✓
                   </button>
                 </div>
-              </div>
+              }
             </div>
 
             @if (group.expanded) {
@@ -603,7 +630,7 @@ import {
     }
 
     .group-header-subtotal-row td {
-      padding: 5px 10px;
+      padding: 15px;
       font-size: 13px;
       background: var(--group-bg);
       cursor: pointer;
@@ -639,8 +666,8 @@ import {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 4px;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -698,7 +725,7 @@ import {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 5px;
     }
 
     .early-chip {
@@ -855,7 +882,7 @@ import {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 2px;
+        gap: 5px;
       }
 
       .mobile-group-values {
@@ -980,15 +1007,14 @@ import {
       /* Mobile row action buttons under the date */
       .mobile-row-actions {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        text-align: center;
+        justify-content: end;
+        text-align: right;
       }
 
       .mobile-row-actions .action-btn {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         font-size: 13px;
         border-radius: 5px;
       }
@@ -1046,7 +1072,7 @@ import {
 
       .mobile-group-header {
         height: auto;
-        padding: 8px 5px;
+        padding: 15px 5px;
         border-left: 3px solid var(--red);
       }
 
@@ -1065,14 +1091,14 @@ import {
 
       /* Even more compact actions on small screens */
       .mobile-group-actions {
-        gap: 2px;
+        gap: 5px;
         margin-top: 4px;
       }
 
       .mobile-group-actions .action-btn {
-        width: 18px;
-        height: 18px;
-        font-size: 11px;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
         border-radius: 3px;
       }
 
@@ -1090,12 +1116,12 @@ import {
       }
 
       .mobile-row-actions {
-        gap: 2px;
+        gap: 5px;
       }
 
       .mobile-row-actions .action-btn {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         font-size: 12px;
       }
 
@@ -1114,8 +1140,8 @@ import {
 
       /* Compact desktop action buttons for small screens */
       .action-btn {
-        width: 15px;
-        height: 15px;
+        width: 20px;
+        height: 20px;
         font-size: 10px;
       }
     }
@@ -1131,6 +1157,11 @@ import {
 })
 export class LoanSimulatorBodyTableComponent {
   monthlyInstalmentGroups = input<MonthlyInstalmentManager[]>([]);
+
+  completedMonthlyInstalmentGroupsCount = computed(
+    () =>
+      this.monthlyInstalmentGroups().filter((group) => group.completed).length,
+  );
 
   store = inject(Store<fromLoan.LoanState>);
 
