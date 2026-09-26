@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { APP_CONFIG, AppConfig } from 'src/app/core/services/app-config';
 import { PrintoutsService } from 'src/app/platform/services/printouts.service';
 import { RepaymentSchedule, RepaymentScheduleDto } from '../models/loan.model';
 
@@ -20,7 +19,6 @@ export class LoanService {
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _printouts: PrintoutsService,
-    @Inject(APP_CONFIG) private readonly _appConfig: AppConfig,
   ) {}
 
   getRepaymentSchedules(): Observable<RepaymentSchedule[]> {
@@ -63,7 +61,7 @@ export class LoanService {
 
     const key = await crypto.subtle.importKey(
       'raw',
-      this.base64ToBytes(this._appConfig.loanEncryptionKeyBase64),
+      this.base64ToBytes(''),
       'AES-GCM',
       false,
       ['encrypt', 'decrypt'],
