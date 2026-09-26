@@ -24,6 +24,7 @@
 
     <div class="topbar__custom-actions">
       <ng-content select="[topbar-actions]"></ng-content>
+      <p-theme-toggle />
     </div>
 
     <div class="actions actions--desktop">
@@ -76,6 +77,19 @@
         ☰
       </button>
     </div>
+
+    @if (hasUploadAction) {
+      <button
+        type="button"
+        class="topbar-upload-action"
+        aria-label="Upload JSON"
+        title="Upload JSON"
+        (click)="onUploadRequested()"
+      >
+        <img [src]="getUploadIconPath()" alt="" aria-hidden="true" />
+        <span>Upload JSON</span>
+      </button>
+    }
   </div>
 
   <!-- Extended Menu - Single row with icons below top bar -->

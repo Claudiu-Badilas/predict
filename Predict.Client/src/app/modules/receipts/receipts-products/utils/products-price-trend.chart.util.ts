@@ -51,9 +51,7 @@ export namespace ProductPriceTrendChartUtils {
       marker: {
         enabled: true,
         radius: 5,
-        fillColor: '#FFFFFF',
         lineWidth: 2,
-        lineColor: '#666666',
         symbol: 'circle',
         states: {
           hover: {
@@ -74,7 +72,7 @@ export namespace ProductPriceTrendChartUtils {
           return `
             <strong>${point.productName}</strong><br/>
             <strong>${point.provider}</strong><br/>
-            <span style="color: #666; font-size: 12px;">${point.date}</span><br/>
+            <span style="color: var(--theme-text-secondary); font-size: 12px;">${point.date}</span><br/>
             <span style="font-size: 16px; font-weight: bold;">${point.y.toFixed(2)}</span>
           `;
         },
@@ -93,8 +91,6 @@ export namespace ProductPriceTrendChartUtils {
       tooltip: {
         enabled: true,
         shared: false,
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        borderColor: '#E0E0E0',
         borderRadius: 8,
         borderWidth: 1,
         shadow: true,
@@ -102,14 +98,13 @@ export namespace ProductPriceTrendChartUtils {
         style: {
           fontSize: '13px',
           fontFamily: 'Arial, sans-serif',
-          color: '#333333',
         },
         headerFormat: '',
         pointFormat: `
           <strong>{point.productName}</strong><br/>
           <strong>{point.provider}</strong><br/>
           <span style="color: #666; font-size: 12px;">{point.date}</span><br/>
-          <span style="font-size: 18px; font-weight: bold; color: #2E7D32;">{point.y:.2f}</span>
+          <span style="font-size: 18px; font-weight: bold; color: var(--theme-success);">{point.y:.2f}</span>
         `,
       },
       xAxis: {
@@ -118,26 +113,22 @@ export namespace ProductPriceTrendChartUtils {
         gridLineWidth: 0,
         tickWidth: 0,
         lineWidth: 1,
-        lineColor: '#E0E0E0',
         labels: {
           enabled: false,
           style: {
             fontSize: '11px',
-            color: '#999999',
           },
         },
       },
       yAxis: {
         title: { text: null },
         gridLineWidth: 0,
-        gridLineColor: '#F0F0F0',
         lineWidth: 0,
         tickWidth: 0,
         labels: {
           enabled: false,
           style: {
             fontSize: '11px',
-            color: '#999999',
           },
         },
       },

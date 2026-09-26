@@ -184,15 +184,15 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
 
     /* Receipt Card */
     .receipt-card {
-      background: #fff;
+      background: var(--theme-surface);
       border-radius: 16px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--theme-shadow-raised);
       overflow: hidden;
     }
 
     .receipt-card.expanded {
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
+      box-shadow: var(--theme-shadow-raised);
     }
 
     /* Card Header */
@@ -203,11 +203,11 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       padding: 20px 24px;
       cursor: pointer;
       transition: all 0.2s;
-      background: #fff;
+      background: var(--theme-surface);
     }
     .receipt-card.expanded .card-header {
-      background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%);
-      border-bottom: 2px solid #e2e8f0;
+      background: linear-gradient(135deg, var(--theme-surface) 0%, #f0f9ff 100%);
+      border-bottom: 2px solid var(--theme-border);
     }
 
     /* Header Sections */
@@ -244,14 +244,14 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       background: linear-gradient(
         135deg,
         #1e3a8a 0%,
-        #3b82f6 50%,
-        #dc2626 100%
+        var(--theme-accent) 50%,
+        var(--theme-danger) 100%
       );
-      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+      box-shadow: var(--theme-shadow-raised);
     }
 
     .provider-icon-carrefour .provider-initial {
-      color: #ffffff;
+      color: var(--theme-surface);
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
@@ -262,13 +262,13 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         #0050AA 50%,
         #ffc107 100%
       );
-      color: #ffffff;
+      color: var(--theme-surface);
       position: relative;
-      box-shadow: 0 4px 10px rgba(0, 80, 179, 0.3);
+      box-shadow: var(--theme-shadow-raised);
     }
 
     .provider-icon-lidl .provider-initial {
-      color: #ffffff;
+      color: var(--theme-surface);
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
@@ -276,24 +276,24 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       background: linear-gradient(
         135deg,
         #991b1b 0%,
-        #dc2626 50%,
-        #ef4444 100%
+        var(--theme-danger) 50%,
+        var(--theme-danger) 100%
       );
-      box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+      box-shadow: var(--theme-shadow-raised);
     }
 
     .provider-icon-kaufland .provider-initial {
-      color: #ffffff;
+      color: var(--theme-surface);
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     .provider-icon-default {
-      background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+      background: linear-gradient(135deg, var(--theme-accent) 0%, #6366f1 100%);
+      box-shadow: var(--theme-shadow-raised);
     }
 
     .provider-icon-default .provider-initial {
-      color: #fff;
+      color: var(--theme-surface);
     }
 
     .provider-details {
@@ -304,7 +304,7 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
     .provider-name {
       font-size: 18px;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--theme-text-primary);
       margin: 0;
       letter-spacing: -0.3px;
     }
@@ -312,12 +312,12 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #64748b;
+      color: var(--theme-text-secondary);
       font-size: 12px;
       font-weight: 500;
     }
     .receipt-date svg {
-      color: #94a3b8;
+      color: var(--theme-text-muted);
     }
 
     /* Header Right */
@@ -340,28 +340,28 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
     .price-label {
       font-size: 11px;
       font-weight: 600;
-      color: #94a3b8;
+      color: var(--theme-text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
     .price-value {
       font-size: 20px;
       font-weight: 800;
-      color: #059669;
+      color: var(--theme-success);
       letter-spacing: -0.5px;
     }
     .discount-badge {
-      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      background: linear-gradient(135deg, var(--theme-danger-subtle) 0%, var(--theme-danger-subtle) 100%);
       padding: 6px 12px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 700;
-      color: #dc2626;
+      color: var(--theme-danger);
     }
 
     /* Expand Button */
     .expand-btn {
-      background: #f1f5f9;
+      background: var(--theme-hover);
       border: none;
       width: 36px;
       height: 36px;
@@ -371,7 +371,7 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s;
-      color: #64748b;
+      color: var(--theme-text-secondary);
     }
 
     .expand-btn.rotated svg {
@@ -384,7 +384,7 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
     /* Expanded Content */
     .card-expanded {
       animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+      background: linear-gradient(180deg, var(--theme-surface-muted) 0%, var(--theme-surface) 100%);
     }
     @keyframes slideDown {
       from {
@@ -420,12 +420,12 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
     .section-title h4 {
       font-size: 18px;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--theme-text-primary);
       margin: 0;
     }
     .products-count {
-      background: #3b82f6;
-      color: #fff;
+      background: var(--theme-accent);
+      color: var(--theme-surface);
       padding: 4px 10px;
       border-radius: 20px;
       font-size: 13px;
@@ -442,24 +442,24 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       align-items: center;
       gap: 6px;
       font-size: 13px;
-      color: #64748b;
+      color: var(--theme-text-secondary);
       padding: 6px 12px;
-      background: #fff;
+      background: var(--theme-surface);
       border-radius: 8px;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      box-shadow: var(--theme-shadow-raised);
     }
     .summary-item strong {
-      color: #1e293b;
+      color: var(--theme-text-primary);
       font-weight: 700;
     }
     .summary-item.discount strong {
-      color: #dc2626;
+      color: var(--theme-danger);
     }
     .summary-item.total {
-      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      background: linear-gradient(135deg, var(--theme-success-subtle) 0%, var(--theme-success-subtle) 100%);
     }
     .summary-item.total strong {
-      color: #059669;
+      color: var(--theme-success);
       font-size: 14px;
     }
 
@@ -467,8 +467,8 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
     .products-table-wrapper {
       overflow-x: auto;
       border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      background: #fff;
+      border: 1px solid var(--theme-border);
+      background: var(--theme-surface);
     }
     .products-table {
       width: 100%;
@@ -477,20 +477,20 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
     }
     .products-table th {
       padding: 14px 16px;
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      color: #475569;
+      background: linear-gradient(135deg, var(--theme-surface-muted) 0%, var(--theme-hover) 100%);
+      color: var(--theme-text-secondary);
       font-weight: 600;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
 
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid var(--theme-border);
     }
     .products-table td {
       padding: 14px 16px;
-      color: #334155;
+      color: var(--theme-text-primary);
       font-size: 13px;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid var(--theme-hover);
     }
     .product-row {
       transition: all 0.2s;
@@ -501,7 +501,7 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
     }
     .product-name-cell {
       font-weight: 600;
-      color: #1e293b;
+      color: var(--theme-text-primary);
     }
     .product-name {
       display: flex;
@@ -509,40 +509,40 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       gap: 8px;
     }
     .product-price {
-      color: #059669;
+      color: var(--theme-success);
       font-weight: 600;
     }
 
     .quantity-badge {
       display: inline-block;
-      background: #e2e8f0;
+      background: var(--theme-border);
       padding: 4px 10px;
       border-radius: 20px;
       font-weight: 600;
       font-size: 12px;
-      color: #475569;
+      color: var(--theme-text-secondary);
     }
     .type-badge {
       display: inline-block;
-      background: #dbeafe;
+      background: var(--theme-accent-subtle);
       padding: 4px 10px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 600;
-      color: #3b82f6;
+      color: var(--theme-accent);
     }
     .vat-badge {
       display: inline-block;
-      background: #fef2f2;
+      background: var(--theme-danger-subtle);
       padding: 4px 10px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 700;
-      color: #dc2626;
+      color: var(--theme-danger);
     }
     .product-total {
       font-weight: 700;
-      color: #0f766e;
+      color: var(--theme-accent);
     }
 
     /* Mobile View */
@@ -562,23 +562,23 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         height: calc(100vh - 100px);
       }
       .mobile-card {
-        background: #fff;
+        background: var(--theme-surface);
         border: 1px solid #e2e6ee;
         border-radius: 12px;
         margin-bottom: 12px;
         overflow: hidden;
-        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--theme-shadow-raised);
       }
       .mobile-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 12px;
-        background: #eff6ff;
+        background: var(--theme-accent-subtle);
         cursor: pointer;
       }
       .mobile-card-header:active {
-        background: #e0f2fe;
+        background: var(--theme-accent-subtle);
       }
       .mobile-header-left {
         display: flex;
@@ -604,10 +604,10 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         background: linear-gradient(
           135deg,
           #1e3a8a 0%,
-          #3b82f6 50%,
-          #dc2626 100%
+          var(--theme-accent) 50%,
+          var(--theme-danger) 100%
         );
-        color: #ffffff;
+        color: var(--theme-surface);
       }
 
       .provider-icon-lidl {
@@ -617,7 +617,7 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
           #0050AA 50%,
           #ffc107 100%
         );
-        color: #ffffff;
+        color: var(--theme-surface);
         position: relative;
       }
 
@@ -625,15 +625,15 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         background: linear-gradient(
           135deg,
           #991b1b 0%,
-          #dc2626 50%,
-          #ef4444 100%
+          var(--theme-danger) 50%,
+          var(--theme-danger) 100%
         );
-        color: #ffffff;
+        color: var(--theme-surface);
       }
 
       .provider-icon-default {
-        background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-        color: #fff;
+        background: linear-gradient(135deg, var(--theme-accent) 0%, #6366f1 100%);
+        color: var(--theme-surface);
       }
 
       .mobile-provider-info {
@@ -644,11 +644,11 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       .mobile-provider-name {
         font-weight: 600;
         font-size: 14px;
-        color: #1e293b;
+        color: var(--theme-text-primary);
       }
       .mobile-date {
         font-size: 11px;
-        color: #6b7280;
+        color: var(--theme-text-secondary);
       }
       .mobile-header-right {
         display: flex;
@@ -658,25 +658,25 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
 
       .total-label {
         font-size: 9px;
-        color: #6b7280;
+        color: var(--theme-text-secondary);
         text-transform: uppercase;
         display: block;
       }
       .total-value {
         font-weight: 700;
         font-size: 14px;
-        color: #059669;
+        color: var(--theme-success);
       }
       .mobile-discount {
-        background: #fee2e2;
+        background: var(--theme-danger-subtle);
         padding: 4px 8px;
         border-radius: 12px;
         font-size: 11px;
         font-weight: 600;
-        color: #dc2626;
+        color: var(--theme-danger);
       }
       .mobile-expand-btn {
-        background: #fff;
+        background: var(--theme-surface);
         border: none;
         width: 32px;
         height: 32px;
@@ -685,7 +685,7 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        color: #64748b;
+        color: var(--theme-text-secondary);
       }
       .mobile-expand-btn.rotated svg {
         transform: rotate(180deg);
@@ -701,11 +701,11 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         padding: 12px;
       }
       .mobile-product-item {
-        background: #f8fafc;
+        background: var(--theme-surface-muted);
         border-radius: 10px;
         margin-bottom: 10px;
         padding: 12px;
-        border-left: 3px solid #3b82f6;
+        border-left: 3px solid var(--theme-accent);
       }
       .mobile-product-item:last-child {
         margin-bottom: 0;
@@ -716,20 +716,20 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         align-items: center;
         margin-bottom: 10px;
         padding-bottom: 8px;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid var(--theme-border);
       }
       .mobile-product-header .product-name {
         font-weight: 600;
         font-size: 13px;
-        color: #1e293b;
+        color: var(--theme-text-primary);
       }
       .product-quantity-badge {
-        background: #e2e8f0;
+        background: var(--theme-border);
         padding: 2px 8px;
         border-radius: 12px;
         font-size: 11px;
         font-weight: 600;
-        color: #475569;
+        color: var(--theme-text-secondary);
       }
       .mobile-product-details {
         display: flex;
@@ -744,42 +744,42 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
       }
       .detail-label {
         font-size: 9px;
-        color: #6b7280;
+        color: var(--theme-text-secondary);
         text-transform: uppercase;
         letter-spacing: 0.3px;
       }
       .detail-value {
         font-weight: 600;
         font-size: 12px;
-        color: #1e293b;
+        color: var(--theme-text-primary);
       }
       .detail-value.vat {
-        color: #dc2626;
+        color: var(--theme-danger);
       }
       .detail-value.total {
-        color: #0f766e;
+        color: var(--theme-accent);
       }
       .mobile-summary {
         padding: 12px;
-        background: #f1f5f9;
-        border-top: 1px solid #e2e8f0;
+        background: var(--theme-hover);
+        border-top: 1px solid var(--theme-border);
       }
       .summary-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-size: 12px;
-        color: #64748b;
+        color: var(--theme-text-secondary);
         margin-bottom: 6px;
       }
       .summary-row:last-child {
         margin-bottom: 0;
       }
       .summary-row strong {
-        color: #1e293b;
+        color: var(--theme-text-primary);
       }
       .summary-row.discount strong {
-        color: #dc2626;
+        color: var(--theme-danger);
       }
       .summary-row.total {
         font-size: 14px;
@@ -789,7 +789,7 @@ import { ReceiptDomain } from '../../../models/receipts-domain.model';
         margin-top: 6px;
       }
       .summary-row.total strong {
-        color: #059669;
+        color: var(--theme-success);
         font-size: 16px;
       }
     }

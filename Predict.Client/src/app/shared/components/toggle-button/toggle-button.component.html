@@ -9,7 +9,7 @@
     >
       @if (option.iconPath) {
         <img
-          [src]="option.iconPath"
+          [src]="getThemeIconPath(option.iconPath)"
           alt="{{ option.label }} icon"
           class="option-icon"
         />

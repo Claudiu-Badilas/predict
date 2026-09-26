@@ -56,10 +56,8 @@ export namespace DailyTransactionChartUtils {
         type: 'datetime',
         min: startDate.getTime(),
         max: endDate.getTime(),
-        lineColor: '#E0E0E0',
-        tickColor: '#E0E0E0',
       },
-      yAxis: { title: { text: null }, gridLineColor: '#F0F0F0' },
+      yAxis: { title: { text: null } },
       tooltip: {
         formatter: function (this: any) {
           const point = this.point as any;
@@ -77,7 +75,7 @@ export namespace DailyTransactionChartUtils {
                   <span style="opacity:0.8;">
                     ${t.serviceProvider || '—'}
                   </span>
-                  <b style="color:${t.amount < 0 ? '#E53935' : '#43A047'}">
+                  <b style="color:${t.amount < 0 ? 'var(--theme-danger)' : 'var(--theme-success)'}">
                    ${NumberFormatPipe.numberFormat(t.amount as number)}  
                   </b>
                 </div>
@@ -97,7 +95,7 @@ export namespace DailyTransactionChartUtils {
               <b>${NumberFormatPipe.numberFormat(point.y)}  </b>
               </div>
 
-              <hr style="margin:8px 0; border:none; border-top:1px solid #E0E0E0;" />
+              <hr style="margin:8px 0; border:none; border-top:1px solid var(--theme-border);" />
 
               <div style="display:flex; flex-direction:column; gap:4px;">
                 ${transactionsHtml}
@@ -107,8 +105,6 @@ export namespace DailyTransactionChartUtils {
           `;
         },
         useHTML: true,
-        backgroundColor: '#FFFFFF',
-        borderColor: '#E0E0E0',
         borderRadius: 8,
         shadow: true,
       },

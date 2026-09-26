@@ -688,29 +688,29 @@ interface PeriodGroup {
   styles: `
     /* ===== DESIGN TOKENS ===== */
     :host {
-      --bg-app: #f7f8fa;
-      --bg-card: #ffffff;
-      --bg-subtle: #fafbfc;
-      --bg-muted: #f1f3f6;
-      --bg-highlight: #fffdf5;
+      --bg-app: var(--theme-background);
+      --bg-card: var(--theme-surface);
+      --bg-subtle: var(--theme-surface-muted);
+      --bg-muted: var(--theme-hover);
+      --bg-highlight: var(--theme-warning-subtle);
 
-      --border-subtle: #eef0f4;
-      --border-soft: #e5e8ee;
-      --border-strong: #d8dde6;
-      --border-highlight: #fae6a8;
+      --border-subtle: var(--theme-border);
+      --border-soft: var(--theme-border);
+      --border-strong: var(--theme-border-strong);
+      --border-highlight: var(--theme-warning);
 
-      --text-primary: #16192c;
-      --text-secondary: #5c6375;
-      --text-tertiary: #8a91a3;
-      --text-muted: #a8aebe;
+      --text-primary: var(--theme-text-primary);
+      --text-secondary: var(--theme-text-secondary);
+      --text-tertiary: var(--theme-text-secondary);
+      --text-muted: var(--theme-text-muted);
 
-      --accent-green: #0caa6c;
-      --accent-green-bg: #ecfdf5;
-      --accent-green-border: #c6f0dd;
-      --accent-red: #e74c5e;
-      --accent-red-bg: #fef2f2;
-      --accent-red-border: #fcd7dc;
-      --accent-blue: #4f6ef7;
+      --accent-green: var(--theme-success);
+      --accent-green-bg: var(--theme-success-subtle);
+      --accent-green-border: var(--theme-success);
+      --accent-red: var(--theme-danger);
+      --accent-red-bg: var(--theme-danger-subtle);
+      --accent-red-border: var(--theme-danger);
+      --accent-blue: var(--theme-accent);
 
       --radius-sm: 6px;
       --radius-md: 8px;
@@ -718,18 +718,15 @@ interface PeriodGroup {
       --radius-xl: 16px;
       --radius-pill: 999px;
 
-      --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
-      --shadow-sm:
-        0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
-      --shadow-md:
-        0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
-      --shadow-lg:
-        0 8px 24px rgba(16, 24, 40, 0.1), 0 4px 8px rgba(16, 24, 40, 0.04);
+      --shadow-xs: var(--theme-shadow);
+      --shadow-sm: var(--theme-shadow);
+      --shadow-md: var(--theme-shadow-raised);
+      --shadow-lg: var(--theme-shadow-raised);
 
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
       --transition-fast: 0.15s var(--ease-out);
-      --transition-base: 0.22s var(--ease-out);
+      --transition-base: 0.2s var(--ease-out);
 
       display: block;
       height: 100%;
@@ -1019,7 +1016,7 @@ interface PeriodGroup {
     }
 
     .card-row.middle {
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      border-top: 1px solid var(--border-subtle);
       padding: 6px 0 0 0;
       margin: 6px 0 0 0;
       min-width: 0;
@@ -1027,7 +1024,7 @@ interface PeriodGroup {
 
     .card-divider {
       height: 1px;
-      background: rgba(0, 0, 0, 0.05);
+      background: var(--border-subtle);
       margin: 6px 0;
       border: none;
     }

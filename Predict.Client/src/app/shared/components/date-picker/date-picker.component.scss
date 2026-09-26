@@ -7,10 +7,10 @@
   width: 100%;
   padding: 6px 28px 6px 8px;
   cursor: pointer;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--theme-border);
   border-radius: 4px;
-  color: #111827;
-  background-color: #ffffff;
+  color: var(--theme-text-primary);
+  background-color: var(--theme-surface);
   font-size: 15px;
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -22,16 +22,16 @@
 
 .date-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  border-color: var(--theme-accent);
+  box-shadow: var(--theme-focus-ring);
 }
 
 .date-input:hover {
-  border-color: #9ca3af;
+  border-color: var(--theme-border-strong);
 }
 
 .date-input::placeholder {
-  color: #9ca3af;
+  color: var(--theme-text-muted);
   font-size: 11px;
 }
 
@@ -41,7 +41,7 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: #6b7280;
+  color: var(--theme-text-secondary);
   font-size: 12px;
 }
 
@@ -49,14 +49,18 @@
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: var(--theme-surface);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-border);
   padding: 10px 10px 0 10px;
   z-index: 1000;
   border-radius: 8px;
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--theme-shadow-raised);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   width: 225px;
   box-sizing: border-box;
 }
@@ -79,13 +83,17 @@
 .month-dropdown {
   flex: 1;
   padding: 8px 0px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--theme-border);
   border-radius: 6px;
-  background-color: white;
+  background-color: var(--theme-surface);
   font-size: 12px;
-  color: #111827;
+  color: var(--theme-text-primary);
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   min-width: 55px;
 }
 
@@ -100,8 +108,8 @@
 .year-dropdown:focus,
 .month-dropdown:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  border-color: var(--theme-accent);
+  box-shadow: var(--theme-focus-ring);
 }
 
 /* Month Navigation */
@@ -114,11 +122,11 @@
   width: 32px;
   height: 32px;
   background: none;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--theme-border);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  color: #4b5563;
+  color: var(--theme-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,15 +135,15 @@
 }
 
 .nav-button:hover:not(:disabled) {
-  background-color: #f3f4f6;
-  border-color: #9ca3af;
-  color: #111827;
+  background-color: var(--theme-hover);
+  border-color: var(--theme-border-strong);
+  color: var(--theme-text-primary);
 }
 
 .nav-button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  background-color: #f9fafb;
+  background-color: var(--theme-surface-muted);
 }
 
 /* Weekdays */
@@ -150,7 +158,7 @@
 .weekday {
   font-size: 11px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--theme-text-secondary);
   padding: 6px 0;
 }
 
@@ -169,33 +177,33 @@
   font-size: 12px;
   border-radius: 4px;
   transition: all 0.2s ease;
-  color: #111827;
+  color: var(--theme-text-primary);
   user-select: none;
   position: relative;
 }
 
 .day:not(.empty):not(.disabled):hover {
-  background-color: #f3f4f6;
+  background-color: var(--theme-hover);
 }
 
 .day.selected {
-  background: #3b82f6;
-  color: #ffffff;
+  background: var(--theme-accent);
+  color: var(--theme-accent-contrast);
   font-weight: 600;
 }
 
 .day.today:not(.selected) {
-  background-color: #eff6ff;
-  color: #1d4ed8;
+  background-color: var(--theme-accent-subtle);
+  color: var(--theme-accent);
   font-weight: 600;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--theme-border);
 }
 
 .day.disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  background-color: #f9fafb;
-  color: #9ca3af;
+  background-color: var(--theme-surface-muted);
+  color: var(--theme-text-muted);
 }
 
 .day.empty {

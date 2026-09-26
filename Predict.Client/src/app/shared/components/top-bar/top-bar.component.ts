@@ -2,12 +2,17 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
+  inject,
   Input,
   OnInit,
+  Output,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { ThemeService } from 'src/app/core/services/theme.service';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 
@@ -16,11 +21,15 @@ import * as fromAppStore from 'src/app/store/app-state.reducer';
   templateUrl: './top-bar.component.html',
   styleUrl: './top-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [CommonModule],
+  imports: [CommonModule, ThemeToggleComponent],
 })
 export class TopBarComponent implements OnInit {
   @Input() hasModuleNavContent: boolean = false;
   @Input() hasFiltersContent: boolean = false;
+  @Input() hasUploadAction: boolean = false;
+  @Output() readonly uploadRequested = new EventEmitter<void>();
+
+  private readonly themeService = inject(ThemeService);
 
   modules = [
     { label: 'Loan', icon: 'wallet', url: '/loan' },
@@ -134,5 +143,13 @@ export class TopBarComponent implements OnInit {
 
   onNavigateTo(url: any) {
     this.store.dispatch(NavigationAction.navigateTo({ route: url }));
+  }
+
+  getUploadIconPath(): string {
+    return `assets/icons/${this.themeService.getCurrentTheme()}/upload.svg`;
+  }
+
+  onUploadRequested(): void {
+    this.uploadRequested.emit();
   }
 }

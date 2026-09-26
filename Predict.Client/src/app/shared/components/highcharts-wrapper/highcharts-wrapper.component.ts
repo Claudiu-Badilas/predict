@@ -3,12 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  effect,
   Input,
+  inject,
   OnChanges,
   OnDestroy,
   SimpleChanges,
 } from '@angular/core';
 import Highcharts from 'highcharts';
+import { ThemeService } from 'src/app/core/services/theme.service';
 import { HighchartsWrapperUtils } from './utils/highcharts-wrapper.utils';
 
 @Component({
@@ -25,7 +28,16 @@ export class HighchartWrapperComponent
   @Input({ required: true }) chartOptions: Highcharts.Options;
   private chart: Highcharts.Chart | undefined;
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef<HTMLElement>) {
+    effect(() => {
+      this.themeService.theme();
+      if (this.chart && this.chartOptions) {
+        this.updateChart();
+      }
+    });
+  }
+
+  private readonly themeService = inject(ThemeService);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.chart && changes['chartOptions']) {
@@ -40,10 +52,14 @@ export class HighchartWrapperComponent
   }
 
   private createChart(): void {
-    const container = this.el.nativeElement.querySelector('.chart-container');
+    const container =
+      this.el.nativeElement.querySelector<HTMLElement>('.chart-container');
     if (!container || this.chart) return;
 
-    const options = HighchartsWrapperUtils.buildChartOptions(this.chartOptions);
+    const options = HighchartsWrapperUtils.buildChartOptions(
+      this.chartOptions,
+      this.getThemeColors(),
+    );
     this.chart = Highcharts.chart(container, options);
   }
 
@@ -51,9 +67,26 @@ export class HighchartWrapperComponent
     if (this.chart && this.chartOptions) {
       const updatedOptions = HighchartsWrapperUtils.buildChartOptions(
         this.chartOptions,
+        this.getThemeColors(),
       );
       this.chart.update(updatedOptions);
     }
+  }
+
+  private getThemeColors(): HighchartsWrapperUtils.ChartThemeColors {
+    const document = this.el.nativeElement.ownerDocument;
+    const styles = document.defaultView?.getComputedStyle(
+      document.documentElement,
+    );
+    const read = (name: string) => styles?.getPropertyValue(name).trim() ?? '';
+
+    return {
+      surface: read('--theme-surface'),
+      textPrimary: read('--theme-text-primary'),
+      textSecondary: read('--theme-text-secondary'),
+      border: read('--theme-border'),
+      accent: read('--theme-accent'),
+    };
   }
 
   ngOnDestroy(): void {

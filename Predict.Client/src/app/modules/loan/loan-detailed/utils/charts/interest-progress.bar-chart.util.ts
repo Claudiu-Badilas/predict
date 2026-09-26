@@ -236,7 +236,8 @@ export namespace InterestProgressChartBarUtils {
                   ? ((diff / compareValue) * 100).toFixed(1)
                   : '0';
               const sign = diff < 0 ? '' : '+';
-              const color = diff < 0 ? '#F44336' : '#4CAF50';
+              const color =
+                diff < 0 ? 'var(--theme-danger)' : 'var(--theme-success)';
               const arrow = diff < 0 ? '▼' : '▲';
 
               tooltipText += `
@@ -250,8 +251,6 @@ export namespace InterestProgressChartBarUtils {
           tooltipText += `</div>`;
           return tooltipText;
         },
-        backgroundColor: 'rgba(255,255,255,0.96)',
-        borderColor: '#ddd',
         borderWidth: 1,
         borderRadius: 6,
         shadow: true,
@@ -268,8 +267,6 @@ export namespace InterestProgressChartBarUtils {
             fontWeight: 'normal',
           },
         },
-        lineColor: '#E0E0E0',
-        tickColor: '#E0E0E0',
       },
       yAxis: {
         title: { text: null },
@@ -282,7 +279,6 @@ export namespace InterestProgressChartBarUtils {
         },
         min: 0,
         max: maxY * 1.2,
-        gridLineColor: '#f0f0f0',
         gridLineWidth: 0.5,
       },
       plotOptions: {
@@ -294,7 +290,7 @@ export namespace InterestProgressChartBarUtils {
             style: {
               fontSize: '8px',
               fontWeight: 'bold',
-              color: '#333333',
+              color: 'var(--theme-text-primary)',
               textOutline: 'none',
             },
             position: 'right',

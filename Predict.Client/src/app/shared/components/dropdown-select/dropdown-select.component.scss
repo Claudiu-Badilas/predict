@@ -16,11 +16,11 @@
 
 .dropdown-toggle-btn {
   height: 40px;
-  background: white;
-  border: 1px solid #e2e8f0;
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-border);
   border-radius: 5px;
   padding: 0 16px;
-  color: #1a202c;
+  color: var(--theme-text-primary);
   transition: all 0.2s ease;
   cursor: pointer;
   position: relative;
@@ -28,23 +28,23 @@
 }
 
 .dropdown-toggle-btn:hover:not(:disabled) {
-  border-color: #cbd5e1;
-  background: #fafbfc;
+  border-color: var(--theme-border-strong);
+  background: var(--theme-hover);
 }
 
 .dropdown-toggle-btn:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--theme-accent);
+  box-shadow: var(--theme-focus-ring);
 }
 
 .dropdown-toggle-btn.open {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--theme-accent);
+  box-shadow: var(--theme-focus-ring);
 }
 
 .dropdown-toggle-btn.filled {
-  color: #1a202c;
+  color: var(--theme-text-primary);
   font-weight: 500;
 }
 
@@ -57,7 +57,7 @@
 
 .dropdown-icon {
   transition: transform 0.2s ease;
-  color: #64748b;
+  color: var(--theme-text-secondary);
   flex-shrink: 0;
   margin-left: 8px;
 }
@@ -68,12 +68,16 @@
 
 /* Dropdown Menu - Rendered at body level via CDK Overlay */
 .dropdown-menu-custom {
-  border: none;
+  border: 1px solid var(--theme-border);
   border-radius: 12px;
-  box-shadow:
-    0 10px 25px -5px rgba(0, 0, 0, 0.15),
-    0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  background: white;
+  box-shadow: var(--theme-shadow-raised);
+  background: var(--theme-surface);
+  color: var(--theme-text-primary);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   padding: 8px;
   z-index: 100000 !important;
   display: flex;
@@ -125,29 +129,30 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #94a3b8;
+  color: var(--theme-text-muted);
   pointer-events: none;
 }
 
 .search-input {
   width: 100%;
   padding: 8px 12px 8px 36px;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid var(--theme-border);
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.2s ease;
-  background: white;
+  background: var(--theme-surface);
+  color: var(--theme-text-primary);
   box-sizing: border-box;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--theme-accent);
+  box-shadow: var(--theme-focus-ring);
 }
 
 .search-input::placeholder {
-  color: #94a3b8;
+  color: var(--theme-text-muted);
 }
 
 .options-scrollable-container {
@@ -162,17 +167,17 @@
 }
 
 .options-scrollable-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--theme-surface-muted);
   border-radius: 3px;
 }
 
 .options-scrollable-container::-webkit-scrollbar-thumb {
-  background: #c1c7cd;
+  background: var(--theme-border-strong);
   border-radius: 3px;
 }
 
 .options-scrollable-container::-webkit-scrollbar-thumb:hover {
-  background: #a0a7ae;
+  background: var(--theme-text-muted);
 }
 
 .dropdown-item-custom {
@@ -186,28 +191,28 @@
   background: transparent;
   border-radius: 8px;
   font-size: 14px;
-  color: #1e293b;
+  color: var(--theme-text-primary);
   cursor: pointer;
   transition: all 0.15s ease;
   text-align: left;
 }
 
 .dropdown-item-custom:hover {
-  background: #f8fafc;
+  background: var(--theme-hover);
 }
 
 .dropdown-item-custom.selected {
-  background: #eff6ff;
-  color: #3b82f6;
+  background: var(--theme-accent-subtle);
+  color: var(--theme-accent);
   font-weight: 500;
 }
 
 .dropdown-item-custom.selected .check-icon {
-  color: #3b82f6;
+  color: var(--theme-accent);
 }
 
 .check-icon {
-  color: #3b82f6;
+  color: var(--theme-accent);
   flex-shrink: 0;
   margin-left: 8px;
 }
@@ -215,12 +220,12 @@
 .no-results {
   text-align: center;
   padding: 24px 16px;
-  color: #94a3b8;
+  color: var(--theme-text-muted);
 }
 
 .no-results svg {
   margin-bottom: 8px;
-  color: #cbd5e1;
+  color: var(--theme-text-secondary);
 }
 
 .no-results span {

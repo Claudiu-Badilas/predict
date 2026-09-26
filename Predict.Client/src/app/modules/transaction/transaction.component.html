@@ -1,20 +1,15 @@
-<p-top-bar [hasFiltersContent]="true" [hasModuleNavContent]="true">
+<p-top-bar
+  [hasFiltersContent]="true"
+  [hasModuleNavContent]="true"
+  [hasUploadAction]="true"
+  (uploadRequested)="openStorageSettings()"
+>
   <ng-container module-navigation>
     <p-toggle-button-actions
       [options]="['Monthly', 'Yearly', 'All']"
       [selected]="getSelectedViewLabel()"
       (selectionChange)="onToggle($event)"
   /></ng-container>
-  <button
-    type="button"
-    class="topbar-storage-button"
-    topbar-actions
-    aria-label="Transaction storage"
-    title="Transaction storage"
-    (click)="openStorageSettings()"
-  >
-    <img src="assets/icons/info.svg" alt="" aria-hidden="true" />
-  </button>
   <ng-container filter-content>
     <div class="mb-2">
       <p-date-range-picker

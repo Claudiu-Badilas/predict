@@ -466,30 +466,30 @@ import {
     </div> `,
   styles: `
     :host {
-      --surface: #ffffff;
-      --surface-soft: #eef2f6;
-      --surface-tint: #e2e8f0;
-      --border: #cbd5e1;
-      --border-soft: #e2e8f0;
-      --text: #0f172a;
-      --text-soft: #1e293b;
-      --muted: #475569;
-      --teal: #0b5c56;
-      --green: #046c4e;
-      --red: #b91c1c;
-      --blue: #1d4ed8;
-      --violet: #5b21b6;
-      --amber: #92400e;
-      --amber-soft: #fef3c7;
+      --surface: var(--theme-surface);
+      --surface-soft: var(--theme-hover);
+      --surface-tint: var(--theme-surface-muted);
+      --border: var(--theme-border);
+      --border-soft: var(--theme-border);
+      --text: var(--theme-text-primary);
+      --text-soft: var(--theme-text-secondary);
+      --muted: var(--theme-text-secondary);
+      --teal: var(--theme-accent);
+      --green: var(--theme-success);
+      --red: var(--theme-danger);
+      --blue: var(--theme-accent);
+      --violet: var(--theme-accent);
+      --amber: var(--theme-warning);
+      --amber-soft: var(--theme-warning-subtle);
 
-      --selected-bg: #fff7ed;
-      --selected-border: #b45309;
-      --early-bg: #ecfdf5;
-      --early-border: #046c4e;
-      --disabled-bg: #f1f5f9;
-      --disabled-border: #64748b;
-      --group-bg: #fef2f2;
-      --group-bg-hover: #fee2e2;
+      --selected-bg: var(--theme-accent-subtle);
+      --selected-border: var(--theme-accent);
+      --early-bg: var(--theme-success-subtle);
+      --early-border: var(--theme-success);
+      --disabled-bg: var(--theme-surface-muted);
+      --disabled-border: var(--theme-border-strong);
+      --group-bg: var(--theme-danger-subtle);
+      --group-bg-hover: var(--theme-danger-subtle);
 
       display: block;
       color: var(--text);
@@ -703,7 +703,7 @@ import {
     }
 
     .action-btn.remove-early:hover {
-      background: #fef2f2;
+      background: var(--theme-danger-subtle);
     }
 
     .action-btn.dispatch-instalment {
@@ -712,12 +712,12 @@ import {
     }
 
     .action-btn.dispatch-instalment:hover {
-      background: #eff6ff;
+      background: var(--theme-accent-subtle);
     }
 
     .count {
       color: var(--teal);
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 700;
       background: var(--surface);
       padding: 0px 10px;
@@ -874,9 +874,9 @@ import {
 
       .mobile-group-count {
         color: var(--red);
-        font-size: 10px;
+        font-size: 12px;
         font-weight: 700;
-        background: white;
+        background: var(--surface);
         padding: 0px 10px;
         border-radius: 30px;
         border: 1px solid var(--red);
@@ -1078,7 +1078,7 @@ import {
       }
 
       .mobile-group-count {
-        font-size: 8px;
+        font-size: 10px;
         padding: 0px 5px;
       }
 

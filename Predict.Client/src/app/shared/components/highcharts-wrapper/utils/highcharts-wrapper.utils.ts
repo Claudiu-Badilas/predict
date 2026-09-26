@@ -1,4 +1,36 @@
 export namespace HighchartsWrapperUtils {
+  export interface ChartThemeColors {
+    surface: string;
+    textPrimary: string;
+    textSecondary: string;
+    border: string;
+    accent: string;
+  }
+
+  function themeAxes<
+    T extends Highcharts.XAxisOptions | Highcharts.YAxisOptions,
+  >(axes: T | T[] | undefined, colors: ChartThemeColors): T | T[] | undefined {
+    if (!axes) return axes;
+
+    const wasArray = Array.isArray(axes);
+    const axisList = wasArray ? axes : [axes];
+    const themedAxes = axisList.map((axis) => ({
+      ...axis,
+      lineColor: colors.border,
+      tickColor: colors.border,
+      gridLineColor: colors.border,
+      labels: {
+        ...axis.labels,
+        style: {
+          ...axis.labels?.style,
+          color: colors.textSecondary,
+        },
+      },
+    })) as T[];
+
+    return wasArray ? themedAxes : themedAxes[0];
+  }
+
   export const tooltipPositioner: Highcharts.TooltipPositionerCallbackFunction =
     function (
       this: Highcharts.Tooltip,
@@ -117,12 +149,54 @@ export namespace HighchartsWrapperUtils {
   // Common function to build chart options with responsiveness
   export function buildChartOptions(
     baseOptions: Highcharts.Options,
+    colors: ChartThemeColors,
   ): Highcharts.Options {
     return {
       ...baseOptions,
+      chart: {
+        ...baseOptions.chart,
+        backgroundColor: 'transparent',
+        style: {
+          ...baseOptions.chart?.style,
+          color: colors.textPrimary,
+        },
+      },
+      title: {
+        ...baseOptions.title,
+        style: {
+          ...baseOptions.title?.style,
+          color: colors.textPrimary,
+        },
+      },
+      subtitle: {
+        ...baseOptions.subtitle,
+        style: {
+          ...baseOptions.subtitle?.style,
+          color: colors.textSecondary,
+        },
+      },
+      xAxis: themeAxes(baseOptions.xAxis, colors),
+      yAxis: themeAxes(baseOptions.yAxis, colors),
+      legend: {
+        ...baseOptions.legend,
+        itemStyle: {
+          ...baseOptions.legend?.itemStyle,
+          color: colors.textPrimary,
+        },
+        itemHoverStyle: {
+          ...baseOptions.legend?.itemHoverStyle,
+          color: colors.accent,
+        },
+      },
       credits: { enabled: false },
       tooltip: {
         ...baseOptions.tooltip,
+        backgroundColor: colors.surface,
+        borderColor: colors.border,
+        style: {
+          ...baseOptions.tooltip?.style,
+          color: colors.textPrimary,
+        },
         positioner: tooltipPositioner,
       },
       responsive: baseOptions.responsive ?? getResponsiveConfig(),

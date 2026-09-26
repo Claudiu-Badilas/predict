@@ -8,13 +8,20 @@
   padding: 8px 36px 8px 12px;
   font-size: 16px;
   border-radius: 4px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-surface);
+  color: var(--theme-text-primary);
   height: 40px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .search-box:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  border-color: var(--theme-accent);
+  box-shadow: var(--theme-focus-ring);
 }
 
 .clear-btn {
@@ -27,14 +34,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #eee;
+  background: var(--theme-hover);
+  color: var(--theme-text-secondary);
   border: none;
   border-radius: 50%;
   cursor: pointer;
   font-size: 12px;
   line-height: 1;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .clear-btn:hover {
-  background: #ddd;
+  background: var(--theme-border-strong);
 }

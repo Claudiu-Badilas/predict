@@ -25,19 +25,19 @@
 }
 
 .note {
-  border: 1px solid red;
+  border: 1px solid var(--theme-danger);
   font-size: 13px;
   border-radius: 3px;
   font-weight: 700;
-  background-color: white;
-  color: red;
+  background-color: var(--theme-danger-subtle);
+  color: var(--theme-danger);
   padding: 11px 5px;
 }
 
 .sidebar-label {
   font-size: 14px;
   font-weight: 500;
-  color: #1e293b;
+  color: var(--theme-text-primary);
   margin: 0;
   line-height: 1.4;
 }
@@ -52,21 +52,21 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1px solid #cbd5e1;
-  background: white;
-  color: #64748b;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-surface);
+  color: var(--theme-text-secondary);
   cursor: pointer;
   line-height: 1;
   flex-shrink: 0;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .btn-delete:hover:not(:disabled) {
-  background: #fee2e2;
-  color: #dc2626;
-  border-color: #fca5a5;
+  background: var(--theme-danger-subtle);
+  color: var(--theme-danger);
+  border-color: var(--theme-danger);
 }
 
 .btn-delete:disabled {
@@ -77,21 +77,21 @@
 .btn-add {
   width: 100%;
   padding: 8px 12px;
-  border: 1px dashed #94a3b8;
+  border: 1px dashed var(--theme-text-muted);
   border-radius: 6px;
   background: transparent;
-  color: #334155;
+  color: var(--theme-text-primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease;
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .btn-add:hover {
-  background: #f1f5f9;
-  border-color: #64748b;
+  background: var(--theme-hover);
+  border-color: var(--theme-border-strong);
 }
 
 .btn-add:disabled {

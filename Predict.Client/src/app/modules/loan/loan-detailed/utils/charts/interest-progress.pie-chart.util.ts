@@ -235,14 +235,13 @@ export namespace InterestProgressChartPieUtils {
         animation: { duration: 750 },
         dataLabels: {
           enabled: true,
-          format:
-            '<b>{point.nameShort}</b> {point.amountCompact} ({point.y}%)',
+          format: '<b>{point.nameShort}</b> {point.amountCompact} ({point.y}%)',
           style: {
             fontSize: isMobile ? '8px' : '10px',
             textOutline: isMobile ? '1px contrast' : 'none',
             fontWeight: 'bold',
-            color: '#333',
-            textShadow: isMobile ? '0 0 3px rgba(255,255,255,0.8)' : 'none',
+            color: 'var(--theme-text-primary)',
+            textShadow: 'none',
           },
           connectorWidth: 1,
           connectorPadding: isMobile ? 6 : 15,
@@ -266,7 +265,7 @@ export namespace InterestProgressChartPieUtils {
         animation: { duration: 800 },
         dataLabels: { enabled: false },
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.8)',
+        borderColor: 'var(--theme-surface)',
         opacity: 0.5,
         states: { hover: { enabled: false }, inactive: { enabled: false } },
         allowPointSelect: false,
@@ -303,7 +302,7 @@ export namespace InterestProgressChartPieUtils {
           cursor: 'default',
           showInLegend: false,
           borderWidth: 2,
-          borderColor: '#fff',
+          borderColor: 'var(--theme-surface)',
           states: {
             hover: { enabled: false },
             inactive: { enabled: false },

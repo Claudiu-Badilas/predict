@@ -97,14 +97,14 @@ export namespace CompareRatesTrendChartUtils {
           );
 
           let tooltipHtml = `
-      <div  >
+      <div style="color: var(--theme-text-primary);">
         <b style="font-size: 11px;"> Date: ${date}</b>
     `;
 
           // === PRINCIPAL AREA ===
           if (principalPoints.length > 0) {
             tooltipHtml += `
-        <div style="margin: 6px 0; padding: 8px; background: #f0f7fa; border-radius: 6px; border-left: 4px solid #00838f;">
+        <div style="margin: 6px 0; padding: 8px; background: var(--theme-accent-subtle); border-radius: 6px; border-left: 4px solid var(--theme-accent);">
        `;
 
             principalPoints.forEach((p: any) => {
@@ -126,7 +126,7 @@ export namespace CompareRatesTrendChartUtils {
           // === INTEREST AREA ===
           if (interestPoints.length > 0) {
             tooltipHtml += `
-        <div style="margin: 6px 0; padding: 8px; background: #fcf4f4; border-radius: 6px; border-left: 4px solid #e91e63;">
+        <div style="margin: 6px 0; padding: 8px; background: var(--theme-danger-subtle); border-radius: 6px; border-left: 4px solid var(--theme-danger);">
        `;
 
             interestPoints.forEach((p: any) => {

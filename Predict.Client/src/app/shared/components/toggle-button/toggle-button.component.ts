@@ -1,5 +1,14 @@
 import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Input, Output, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+} from '@angular/core';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'p-toggle-button',
@@ -9,6 +18,8 @@ import { Component, EventEmitter, Input, Output, signal, ChangeDetectionStrategy
   styleUrl: './toggle-button.component.scss',
 })
 export class ToggleButtonComponent {
+  private readonly themeService = inject(ThemeService);
+
   @Input({ required: true }) options: { label: string; iconPath?: string }[] =
     [];
   @Input() set selected(value: string | null) {
@@ -22,6 +33,11 @@ export class ToggleButtonComponent {
   select(option: string) {
     this._selected.set(option);
     this.selectionChange.emit(option);
+  }
+
+  getThemeIconPath(iconPath: string): string {
+    const theme = this.themeService.theme();
+    return iconPath.replace(/\/icons\//i, `/icons/${theme}/`);
   }
 
   get gradientStyle(): string {

@@ -11,10 +11,16 @@
 .topbar {
   position: relative;
   backdrop-filter: blur(14px);
-  background: color-mix(in oklab, white 95%, transparent);
-  border-bottom: 1px solid #e5e7eb;
+  background: color-mix(in oklab, var(--theme-surface) 95%, transparent);
+  color: var(--theme-text-primary);
+  border-bottom: 1px solid var(--theme-border);
   width: 100%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--theme-shadow);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   overflow: visible !important;
   position: relative;
   z-index: 1000;
@@ -34,7 +40,7 @@
   gap: 16px;
   position: relative;
   overflow-x: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--theme-shadow);
 }
 
 .brand {
@@ -80,6 +86,43 @@
   flex-shrink: 0;
 }
 
+.topbar-upload-action {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--theme-border);
+  border-radius: 6px;
+  background: var(--theme-accent-subtle);
+  color: var(--theme-accent);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.topbar-upload-action:hover {
+  border-color: var(--theme-accent);
+  color: var(--theme-text-primary);
+}
+
+.topbar-upload-action:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 2px;
+}
+
+.topbar-upload-action img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
 /* Mobile Filter Button */
 .mobile-filter {
   display: none;
@@ -104,44 +147,48 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #64748b;
+  color: var(--theme-text-secondary);
   white-space: nowrap;
 }
 
 .actions__link:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--theme-hover);
+  color: var(--theme-text-primary);
 }
 
 .actions__link:active {
   transform: scale(0.98);
 }
 
+.actions__link img,
+.mobile-extended-menu__item img,
+.filter-btn img {
+  filter: var(--theme-icon-filter);
+}
+
 /* Active state styles */
 .actions__link.active {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: var(--theme-accent-subtle);
+  color: var(--theme-accent);
 }
 
 .actions__link.active img {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(91%) saturate(1884%)
-    hue-rotate(186deg) brightness(97%) contrast(101%);
+  filter: var(--theme-accent-icon-filter);
 }
 
 .filter-btn {
   margin-left: 4px;
-  border-left: 1px solid #e5e7eb;
+  border-left: 1px solid var(--theme-border);
   border-radius: 8px;
 }
 
 .filter-btn.active {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: var(--theme-accent-subtle);
+  color: var(--theme-accent);
 }
 
 .filter-btn.active img {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(91%) saturate(1884%)
-    hue-rotate(186deg) brightness(97%) contrast(101%);
+  filter: var(--theme-accent-icon-filter);
 }
 
 /* Hide filter button on mobile */
@@ -161,7 +208,7 @@
 }
 
 .filter-btn--mobile:hover {
-  background: #f1f5f9;
+  background: var(--theme-hover);
 }
 
 .filter-btn--mobile img {
@@ -179,28 +226,32 @@
   padding: 5px;
   border-radius: 8px;
   transition: all 0.2s ease;
-  color: #64748b;
+  color: var(--theme-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .burger-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--theme-hover);
+  color: var(--theme-text-primary);
 }
 
 .burger-btn.active {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--theme-hover);
+  color: var(--theme-text-primary);
 }
 
 /* Mobile Extended Menu - Single row with icons */
 .mobile-extended-menu {
-  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  background: linear-gradient(
+    to bottom,
+    var(--theme-surface),
+    var(--theme-background)
+  );
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--theme-border);
+  box-shadow: var(--theme-shadow-raised);
   animation: slideDown 0.25s ease;
   overflow: hidden;
 }
@@ -241,7 +292,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s ease;
-  color: #64748b;
+  color: var(--theme-text-secondary);
   font-size: 0.625rem;
   font-weight: 500;
   text-align: center;
@@ -250,8 +301,8 @@
 }
 
 .mobile-extended-menu__item:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--theme-hover);
+  color: var(--theme-text-primary);
 }
 
 .mobile-extended-menu__item:active {
@@ -260,13 +311,12 @@
 
 /* Active state for extended menu items */
 .mobile-extended-menu__item.active {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: var(--theme-accent-subtle);
+  color: var(--theme-accent);
 }
 
 .mobile-extended-menu__item.active img {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(91%) saturate(1884%)
-    hue-rotate(186deg) brightness(97%) contrast(101%);
+  filter: var(--theme-accent-icon-filter);
 }
 
 .mobile-extended-menu__item img {
@@ -283,10 +333,14 @@
 
 /* Filter Panel - Extends from top bar with hardware acceleration */
 .filter-panel {
-  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  background: linear-gradient(
+    to bottom,
+    var(--theme-surface),
+    var(--theme-background)
+  );
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--theme-border);
+  box-shadow: var(--theme-shadow-raised);
   overflow: hidden;
   max-height: 0;
   opacity: 0;
@@ -335,11 +389,15 @@
   cursor: pointer;
   transition: all 0.2s ease;
   gap: 2px;
-  background: #ffffff;
+  background: var(--theme-surface);
 }
 
 .filter-panel__close-btn:hover {
-  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  background: linear-gradient(
+    to bottom,
+    var(--theme-surface),
+    var(--theme-background)
+  );
 }
 
 .filter-panel__close-btn:active {
@@ -355,9 +413,18 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+  :host ::ng-deep .topbar__custom-actions .topbar-storage-button,
+  :host ::ng-deep .topbar__custom-actions .loan-info-button {
+    display: none !important;
+  }
+
   .topbar__inner {
     padding: 0 16px;
     gap: 12px;
+  }
+
+  .topbar-upload-action {
+    padding: 0 8px;
   }
 
   /* Hide desktop actions with labels */
@@ -452,6 +519,10 @@
     height: 56px;
     padding: 0 8px;
     gap: 0px;
+  }
+
+  .topbar-upload-action span {
+    display: none;
   }
 
   .actions--mobile {

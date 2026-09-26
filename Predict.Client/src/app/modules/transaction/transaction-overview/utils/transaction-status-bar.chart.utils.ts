@@ -63,7 +63,7 @@ export namespace TransactionStatusBarChartUtils {
           center: ['50%', '50%'],
           borderRadius: 5,
           borderWidth: 2,
-          borderColor: '#ffffff',
+          borderColor: 'var(--theme-surface)',
           states: {
             hover: {
               enabled: true,

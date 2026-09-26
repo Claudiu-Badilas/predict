@@ -26,9 +26,10 @@
   padding: 0.75rem;
   border-radius: 12px;
   min-height: 70px;
-  transition: all 0.15s ease;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  background: var(--theme-surface);
+  color: var(--theme-text-primary);
+  box-shadow: var(--theme-shadow);
 }
 
 .stat-row {
@@ -44,7 +45,7 @@
 .stat-item__label {
   font-size: 12px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--theme-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
@@ -52,15 +53,15 @@
 .stat-item__value {
   font-size: 14px;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--theme-text-primary);
 }
 
 .stat-item__value.positive {
-  color: #10b981;
+  color: var(--theme-success);
 }
 
 .stat-item__value.negative {
-  color: #ef4444;
+  color: var(--theme-danger);
 }
 
 /* Color styles */
@@ -69,11 +70,11 @@
 }
 
 .stat-item--green {
-  border-left-color: #10b981;
+  border-left-color: var(--theme-success);
 }
 
 .stat-item--blue {
-  border-left-color: #3b82f6;
+  border-left-color: var(--theme-accent);
 }
 
 /* Mobile View */
@@ -109,9 +110,10 @@
     padding: 0.75rem;
     border-radius: 12px;
     min-height: 70px;
-    transition: all 0.15s ease;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+    box-shadow: var(--theme-shadow);
   }
 
   .mobile-view .stat-row {
@@ -127,7 +129,7 @@
   .mobile-view .stat-item__label {
     font-size: 11px;
     font-weight: 600;
-    color: #6b7280;
+    color: var(--theme-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.3px;
   }
@@ -135,23 +137,23 @@
   .mobile-view .stat-item__value {
     font-size: 13px;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--theme-text-primary);
   }
 
   .mobile-view .stat-item__value.positive {
-    color: #10b981;
+    color: var(--theme-success);
   }
 
   .mobile-view .stat-item__value.negative {
-    color: #ef4444;
+    color: var(--theme-danger);
   }
 
   .mobile-view .stat-item--green {
-    border-left-color: #10b981;
+    border-left-color: var(--theme-success);
   }
 
   .mobile-view .stat-item--blue {
-    border-left-color: #3b82f6;
+    border-left-color: var(--theme-accent);
   }
 }
 

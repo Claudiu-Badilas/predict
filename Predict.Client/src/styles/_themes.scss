@@ -1,0 +1,61 @@
+:root {
+  color-scheme: light;
+  --theme-background: #f8fafc;
+  --theme-surface: #ffffff;
+  --theme-text-primary: #17202a;
+  --theme-text-secondary: #64748b;
+  --theme-text-muted: #94a3b8;
+  --theme-border: #e2e8f0;
+  --theme-border-strong: #cbd5e1;
+  --theme-accent: #0284c7;
+  --theme-accent-hover: #0369a1;
+  --theme-accent-contrast: #ffffff;
+  --theme-icon-filter: none;
+  --theme-accent-gradient: linear-gradient(135deg, #0284c7 0%, #0f766e 100%);
+  --theme-accent-subtle: #e0f2fe;
+  --theme-hover: #f1f5f9;
+  --theme-surface-muted: #f8fafc;
+  --theme-focus-ring: 0 0 0 3px rgb(2 132 199 / 0.16);
+  --theme-overlay: rgb(15 23 42 / 0.45);
+  --theme-success: #059669;
+  --theme-success-subtle: #ecfdf5;
+  --theme-warning: #b45309;
+  --theme-warning-subtle: #fffbeb;
+  --theme-danger: #dc2626;
+  --theme-danger-subtle: #fef2f2;
+  --theme-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
+  --theme-shadow-raised: 0 4px 6px -1px rgb(15 23 42 / 0.12);
+  --theme-accent-icon-filter: brightness(0) saturate(100%) invert(32%)
+    sepia(91%) saturate(1884%) hue-rotate(186deg) brightness(97%) contrast(101%);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-background: #111827;
+  --theme-surface: #1f2937;
+  --theme-text-primary: #f1f5f9;
+  --theme-text-secondary: #cbd5e1;
+  --theme-text-muted: #94a3b8;
+  --theme-border: #374151;
+  --theme-border-strong: #64748b;
+  --theme-accent: #38bdf8;
+  --theme-accent-hover: #0ea5e9;
+  --theme-accent-contrast: #082f49;
+  --theme-icon-filter: brightness(0) invert(1);
+  --theme-accent-gradient: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
+  --theme-accent-subtle: #164e63;
+  --theme-hover: #334155;
+  --theme-surface-muted: #273449;
+  --theme-focus-ring: 0 0 0 3px rgb(56 189 248 / 0.24);
+  --theme-overlay: rgb(0 0 0 / 0.62);
+  --theme-success: #34d399;
+  --theme-success-subtle: #064e3b;
+  --theme-warning: #fbbf24;
+  --theme-warning-subtle: #422006;
+  --theme-danger: #f87171;
+  --theme-danger-subtle: #451a1a;
+  --theme-shadow: 0 1px 2px rgb(0 0 0 / 0.28);
+  --theme-shadow-raised: 0 4px 6px -1px rgb(0 0 0 / 0.36);
+  --theme-accent-icon-filter: brightness(0) saturate(100%) invert(69%)
+    sepia(68%) saturate(597%) hue-rotate(163deg) brightness(101%) contrast(101%);
+}

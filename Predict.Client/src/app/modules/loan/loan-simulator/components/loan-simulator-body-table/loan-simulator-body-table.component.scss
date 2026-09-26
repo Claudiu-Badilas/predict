@@ -1,28 +1,28 @@
 :host {
-  --surface: #fff;
-  --surface-soft: #e9efec;
-  --surface-tint: #f1f5f2;
-  --border: #cbd6d1;
-  --border-soft: #dce4e0;
-  --text: #1d2d2b;
-  --text-soft: #405451;
-  --muted: #596b67;
-  --teal: #0b5e56;
-  --green: #176b4a;
-  --red: #9b343b;
-  --blue: #285b83;
-  --violet: #5c5075;
-  --amber: #86520b;
-  --amber-soft: #f2e7ce;
+  --surface: var(--theme-surface);
+  --surface-soft: var(--theme-hover);
+  --surface-tint: var(--theme-surface-muted);
+  --border: var(--theme-border);
+  --border-soft: var(--theme-border);
+  --text: var(--theme-text-primary);
+  --text-soft: var(--theme-text-secondary);
+  --muted: var(--theme-text-secondary);
+  --teal: var(--theme-accent);
+  --green: var(--theme-success);
+  --red: var(--theme-danger);
+  --blue: var(--theme-accent);
+  --violet: var(--theme-accent);
+  --amber: var(--theme-warning);
+  --amber-soft: var(--theme-warning-subtle);
 
-  --selected-bg: #f3ecd9;
-  --selected-border: #a77921;
-  --early-bg: #e3eee7;
-  --early-border: #2d7653;
-  --disabled-bg: #e8eded;
-  --disabled-border: #889895;
-  --group-bg: #e7eeea;
-  --group-bg-hover: #d9e4de;
+  --selected-bg: var(--theme-accent-subtle);
+  --selected-border: var(--theme-accent);
+  --early-bg: var(--theme-success-subtle);
+  --early-border: var(--theme-success);
+  --disabled-bg: var(--theme-surface-muted);
+  --disabled-border: var(--theme-border-strong);
+  --group-bg: var(--theme-danger-subtle);
+  --group-bg-hover: var(--theme-danger-subtle);
 
   display: block;
   color: var(--text);
@@ -146,7 +146,7 @@ tbody td.col-first {
 
 .count {
   color: var(--teal);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   background: var(--surface);
   padding: 2px 8px;
@@ -181,7 +181,7 @@ tbody td.col-first {
 }
 
 .disabled {
-  color: #c0c0c0;
+  color: var(--theme-text-muted);
 }
 
 .row-controls {
@@ -302,7 +302,7 @@ tbody tr:hover td {
 
   .mobile-group-count {
     color: var(--red);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     background: var(--surface);
     padding: 2px 8px;
@@ -488,7 +488,7 @@ tbody tr:hover td {
   }
 
   .mobile-group-count {
-    font-size: 8px;
+    font-size: 10px;
     padding: 0px 5px;
   }
 

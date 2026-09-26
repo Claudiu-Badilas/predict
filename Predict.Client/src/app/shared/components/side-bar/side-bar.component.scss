@@ -1,23 +1,29 @@
 .sidebar {
   &-visible {
-    background-color: #036475;
+    background-color: var(--theme-accent);
     height: 100%;
     position: fixed;
     left: 0;
     top: 0;
     width: 300px;
-    color: white;
+    color: var(--theme-accent-contrast);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
     margin-top: 50px;
   }
 
   &-hidden {
-    background-color: #036475;
+    background-color: var(--theme-accent);
     position: absolute;
     left: 0;
     top: 0;
     width: 35px;
     height: 35px;
-    color: white;
+    color: var(--theme-accent-contrast);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
     margin-top: 50px;
     z-index: 100;
   }
