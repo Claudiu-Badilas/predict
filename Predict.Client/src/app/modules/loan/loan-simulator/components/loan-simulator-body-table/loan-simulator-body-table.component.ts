@@ -24,16 +24,7 @@ import {
       <table class="instalment-table">
         <thead>
           <tr>
-            <th class="col-first"></th>
-            <th>Data</th>
-            <th>Credit</th>
-            <th>Dobândă</th>
-            <th>Asig.</th>
-            <th>Total</th>
-            <th>1/2</th>
-            <th>Anticipat</th>
-            <th>Sold</th>
-            <th>
+            <th class="col-first">
               <div class="expand-controls">
                 <img
                   width="20"
@@ -51,6 +42,14 @@ import {
                 />
               </div>
             </th>
+            <th>Data</th>
+            <th>Credit</th>
+            <th>Dobândă</th>
+            <th>Asig.</th>
+            <th>Total</th>
+            <th>1/2</th>
+            <th>Anticipat</th>
+            <th>Sold</th>
           </tr>
         </thead>
 
@@ -105,9 +104,11 @@ import {
                 <td class="bold" (click)="toggleGroup(group)">
                   {{ subtotal.remaining | numberFormat: '0.00' }}
                 </td>
-
-                <td (click)="toggleGroup(group)">
-                  @if (index + 1 == completedMonthlyInstalmentGroupsCount()) {
+              </tr>
+              @if (index + 1 == completedMonthlyInstalmentGroupsCount()) {
+                <tr class="group-header-subtotal-row">
+                  <td class="p-0" colspan="8"></td>
+                  <td class="p-1">
                     <div class="mt-1 group-actions">
                       <button
                         type="button"
@@ -134,9 +135,9 @@ import {
                         ✓
                       </button>
                     </div>
-                  }
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              }
             }
 
             @if (!group.completed || group.expanded) {
@@ -216,15 +217,6 @@ import {
                   >
                     {{ row.remainingBalance | numberFormat: '0.00' }}
                   </td>
-                  <td
-                    [class.strike]="
-                      !last && (row.earlyPayment || row.instalmentPayment)
-                    "
-                    [class.semi-bold]="
-                      last && (row.earlyPayment || row.instalmentPayment)
-                    "
-                    [class.disabled]="!group.completed && row.disabled"
-                  ></td>
                 </tr>
               }
             }
