@@ -3,21 +3,23 @@
     <div class="summary-row">
       <div class="summary-section stat-item stat-item--green">
         <div class="stat-row">
-          <span class="stat-item__label">Revenue</span>
-          <span class="stat-item__label">Items Sold</span>
+          <span class="stat-item__label">Cheltuieli</span>
+          <span class="stat-item__label">Items </span>
         </div>
         <div class="stat-row">
           <span class="stat-item__value positive">{{
             totalRevenue() | numberFormat: "0.00"
           }}</span>
-          <span class="stat-item__value">{{ totalItemsSold() }}</span>
+          <span class="stat-item__value">{{
+            totalItemsSold() | numberFormat: "0.00"
+          }}</span>
         </div>
       </div>
 
       <div class="summary-section stat-item stat-item--blue">
         <div class="stat-row">
-          <span class="stat-item__label">Unique Products</span>
-          <span class="stat-item__label">Average Price</span>
+          <span class="stat-item__label"> Products</span>
+          <span class="stat-item__label">Avg. Price</span>
         </div>
         <div class="stat-row">
           <span class="stat-item__value">{{ uniqueProductsCount() }}</span>
