@@ -642,6 +642,7 @@ import {
 
     .group-header-subtotal-row td.col-first {
       background: var(--group-bg);
+      border-left: 3px solid var(--red);
     }
 
     .group-header-subtotal-row:hover td,
@@ -845,6 +846,7 @@ import {
         background: var(--group-bg);
         cursor: pointer;
         transition: background 0.2s ease;
+        border-bottom: 1px solid var(--border) !important;
       }
 
       .mobile-group-header:active {
