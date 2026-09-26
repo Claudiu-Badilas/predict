@@ -31,6 +31,53 @@ body {
   }
 }
 
+/* Scrollbars stay quiet until the user approaches a scroll surface. */
+.scrollable-container {
+  position: relative;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: auto;
+  scrollbar-width: none;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-thumb {
+  position: absolute;
+  z-index: 2;
+  display: none;
+  pointer-events: none;
+  border-radius: 999px;
+  background: var(--theme-border-strong);
+  opacity: 0;
+  transition:
+    opacity 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.scrollable-thumb--vertical {
+  top: 0;
+  right: 2px;
+  width: 6px;
+}
+
+.scrollable-thumb--horizontal {
+  bottom: 2px;
+  left: 0;
+  height: 6px;
+}
+
+.scrollable-container:hover .scrollable-thumb {
+  display: block;
+  opacity: 0.9 !important;
+}
+
+.scrollable-container:hover .scrollable-thumb:hover {
+  background: var(--theme-text-muted);
+}
+
 .topbar-storage-button {
   display: inline-flex;
   width: 32px;

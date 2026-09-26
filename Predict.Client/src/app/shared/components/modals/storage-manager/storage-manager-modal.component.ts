@@ -15,6 +15,7 @@ import { Actions } from '@ngrx/effects';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
 import { StorageSettingsService } from 'src/app/shared/services/storage-settings.service';
+import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 
 export interface StorageManagerConfig {
   title: string;
@@ -40,7 +41,7 @@ type ViewedStorageData = {
 
 @Component({
   selector: 'p-storage-manager-modal',
-  imports: [CommonModule],
+  imports: [CommonModule, ScrollableDirective],
   templateUrl: './storage-manager-modal.component.html',
   styleUrl: './storage-manager-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,

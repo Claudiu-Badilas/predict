@@ -14,6 +14,7 @@ import {
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import { ReceiptsProductDomain } from '../../models/receipts-products.model';
 import { ProductPriceTrendChartUtils } from '../../utils/products-price-trend.chart.util';
 
@@ -61,7 +62,12 @@ interface Receipt {
 
 @Component({
   selector: 'p-most-common-products',
-  imports: [CommonModule, NumberFormatPipe, HighchartWrapperComponent],
+  imports: [
+    CommonModule,
+    NumberFormatPipe,
+    HighchartWrapperComponent,
+    ScrollableDirective,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './most-common-products.component.html',
   styleUrl: './most-common-products.component.scss',

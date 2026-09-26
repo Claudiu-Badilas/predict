@@ -83,7 +83,7 @@
       <p>No stored items</p>
     </div>
   } @else {
-    <div class="storage-list">
+    <div scrollable class="storage-list">
       @for (item of storageItems(); track item.storageType + ":" + item.key) {
         <div class="storage-item">
           <div class="storage-item-info">
@@ -171,7 +171,9 @@
           viewedData()?.key === item.key &&
           viewedData()?.storageType === item.storageType
         ) {
-          <pre class="storage-item-preview">{{ viewedData()?.content }}</pre>
+          <pre scrollable class="storage-item-preview">{{
+            viewedData()?.content
+          }}</pre>
         }
       }
     </div>

@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import {
   LoanSimulatorInstalment,
@@ -19,8 +20,8 @@ import {
 
 @Component({
   selector: 'p-loan-simulator-body-table',
-  imports: [CommonModule, FormsModule, NumberFormatPipe],
-  template: `<div class="table-wrapper desktop-view">
+  imports: [CommonModule, FormsModule, NumberFormatPipe, ScrollableDirective],
+  template: `<div scrollable class="table-wrapper desktop-view">
       <table class="instalment-table">
         <thead>
           <tr>
@@ -225,7 +226,7 @@ import {
       </table>
     </div>
 
-    <div class="mobile-view">
+    <div scrollable class="mobile-view">
       @for (
         group of monthlyInstalmentGroups();
         track group.id;

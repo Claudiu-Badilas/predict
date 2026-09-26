@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import {
   TransactionCategorizer,
   TransactionCategory,
@@ -60,6 +61,7 @@ interface PeriodGroup {
     NumberFormatPipe,
     NgbTooltip,
     TransactionOverviewHeaderComponent,
+    ScrollableDirective,
   ],
   template: `
     <div class="dashboard-container">
@@ -73,7 +75,7 @@ interface PeriodGroup {
 
       <!-- Main Content -->
       <div class="content-area">
-        <div class="scroll-container">
+        <div scrollable class="scroll-container">
           @if (viewMode() === 'all') {
             <!-- All View -->
             <div class="view-all">
@@ -757,25 +759,7 @@ interface PeriodGroup {
 
     .scroll-container {
       height: 100%;
-      overflow-y: auto;
       padding-right: 0;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border-strong) transparent;
-    }
-
-    /* ===== SCROLLBAR ===== */
-    .scroll-container::-webkit-scrollbar {
-      width: 4px;
-    }
-    .scroll-container::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .scroll-container::-webkit-scrollbar-thumb {
-      background: var(--border-strong);
-      border-radius: var(--radius-pill);
-    }
-    .scroll-container::-webkit-scrollbar-thumb:hover {
-      background: var(--text-muted);
     }
 
     /* ===== VISIBILITY HELPERS ===== */
