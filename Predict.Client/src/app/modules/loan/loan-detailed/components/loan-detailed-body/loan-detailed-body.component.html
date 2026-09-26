@@ -5,46 +5,23 @@
       [chartOptions]="interestProgressPieChart()"
       ><ng-container p-highcharts-wrapper-content>
         <div class="my-2 d-flex align-items-center justify-content-between">
-          <div style="width: 45%">
+          <div class="w-100">
             <ng-container *ngTemplateOutlet="chartTypeSelector"></ng-container>
-          </div>
-          <div class="w-50">
-            <p-toggle-button
-              [options]="[
-                { label: 'Credit' },
-                { label: 'Dobanda' },
-                { label: 'Total' },
-              ]"
-              [selected]="progressPaymentViewChange()"
-              [gradient]="{
-                primaryColor: '#047f94',
-                secondaryColor: '#d5a326',
-              }"
-              (selectionChange)="onProgressPaymentViewChange($event)"
-            />
           </div>
         </div> </ng-container
     ></p-highcharts-wrapper>
-  } @else if (chartBasePaymentChange() === "columns-chart") {
+  } @else if (
+    chartBasePaymentChange() === "Prd. Fixa" ||
+    chartBasePaymentChange() === "Prd. Totala"
+  ) {
     <p-highcharts-wrapper
       class="chart-wrapper"
       [chartOptions]="loanMonthlyPaymentsChart()"
     >
       <ng-container p-highcharts-wrapper-content>
         <div class="my-2 d-flex align-items-center justify-content-between">
-          <div style="width: 45%">
+          <div class="w-100">
             <ng-container *ngTemplateOutlet="chartTypeSelector"></ng-container>
-          </div>
-          <div class="w-50">
-            <p-toggle-button
-              [options]="[{ label: 'Prd. Fixa' }, { label: 'Prd. Totala' }]"
-              [selected]="monthlyPaymentViewChange()"
-              [gradient]="{
-                primaryColor: '#047f94',
-                secondaryColor: '#d5a326',
-              }"
-              (selectionChange)="onMonthlyPaymentViewChange($event)"
-            />
           </div>
         </div> </ng-container
     ></p-highcharts-wrapper>
@@ -52,7 +29,7 @@
     <p-highcharts-wrapper class="chart-wrapper" [chartOptions]="dotBarChart()">
       <ng-container p-highcharts-wrapper-content>
         <div class="my-2 d-flex align-items-center justify-content-between">
-          <div style="width: 45%">
+          <div class="w-100">
             <ng-container *ngTemplateOutlet="chartTypeSelector"></ng-container>
           </div>
         </div> </ng-container
@@ -63,7 +40,7 @@
       [chartOptions]="interestProgressBarChart()"
       ><ng-container p-highcharts-wrapper-content>
         <div class="my-2 d-flex align-items-center justify-content-between">
-          <div style="width: 45%">
+          <div class="w-100">
             <ng-container *ngTemplateOutlet="chartTypeSelector"></ng-container>
           </div>
         </div> </ng-container
@@ -83,7 +60,11 @@
         iconPath: 'assets/icons/bar-chart.svg',
       },
       {
-        label: 'columns-chart',
+        label: 'Prd. Fixa',
+        iconPath: 'assets/icons/column-chart.svg',
+      },
+      {
+        label: 'Prd. Totala',
         iconPath: 'assets/icons/column-chart.svg',
       },
       {

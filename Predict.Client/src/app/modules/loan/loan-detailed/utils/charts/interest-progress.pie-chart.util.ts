@@ -9,7 +9,6 @@ export namespace InterestProgressChartPieUtils {
   export function getChart(
     rates: HistoricalInstalmentPayment[],
     comparedToRates: HistoricalInstalmentPayment[],
-    selection: 'Credit' | 'Dobanda' | 'Total',
   ): Highcharts.Options | null {
     if (!rates?.length) return null;
 
@@ -103,70 +102,65 @@ export namespace InterestProgressChartPieUtils {
       category: string;
     }[] = [];
 
-    if (selection === 'Credit' || selection === 'Total') {
-      if (paidPrincipal > 0 || comparedPaidPrincipal > 0) {
-        rawData.push({
-          name: 'Principal Platit',
-          nameShort: 'PP',
-          value: paidPrincipal,
-          comparedValue: comparedPaidPrincipal,
-          color: Colors.TEAL_400,
-          category: 'Principal',
-        });
-      }
-      if (unpaidPrincipal > 0 || comparedUnpaidPrincipal > 0) {
-        rawData.push({
-          name: 'Principal Neplatit',
-          nameShort: 'PN',
-          value: unpaidPrincipal,
-          comparedValue: comparedUnpaidPrincipal,
-          color: Colors.BS_DANGER,
-          category: 'Principal',
-        });
-      }
+    if (paidPrincipal > 0 || comparedPaidPrincipal > 0) {
+      rawData.push({
+        name: 'Principal Platit',
+        nameShort: 'PP',
+        value: paidPrincipal,
+        comparedValue: comparedPaidPrincipal,
+        color: Colors.TEAL_400,
+        category: 'Principal',
+      });
     }
-
-    if (selection === 'Dobanda' || selection === 'Total') {
-      if (paidInterest > 0 || comparedPaidInterest > 0) {
-        rawData.push({
-          name: 'Dobanda Platita',
-          nameShort: 'DP',
-          value: paidInterest,
-          comparedValue: comparedPaidInterest,
-          color: Colors.BLUE_400,
-          category: 'Dobanda',
-        });
-      }
-      if (paidInsurance > 0 || comparedPaidInsurance > 0) {
-        rawData.push({
-          name: 'Asig. Platita',
-          nameShort: 'Asig.',
-          value: paidInsurance,
-          comparedValue: comparedPaidInsurance,
-          color: Colors.YELLOW_400,
-          category: 'Asigurare',
-        });
-      }
-      if (savedInterest > 0 || comparedSavedInterest > 0) {
-        rawData.push({
-          name: 'Economii',
-          nameShort: 'E',
-          value: savedInterest,
-          comparedValue: comparedSavedInterest,
-          color: Colors.GREEN_400,
-          category: 'Economii',
-        });
-      }
-      if (unpaidInterest > 0 || comparedUnpaidInterest > 0) {
-        rawData.push({
-          name: 'Dobanda Neplatita',
-          nameShort: 'DN',
-          value: unpaidInterest,
-          comparedValue: comparedUnpaidInterest,
-          color: Colors.BS_ORANGE,
-          category: 'Dobanda',
-        });
-      }
+    if (unpaidPrincipal > 0 || comparedUnpaidPrincipal > 0) {
+      rawData.push({
+        name: 'Principal Neplatit',
+        nameShort: 'PN',
+        value: unpaidPrincipal,
+        comparedValue: comparedUnpaidPrincipal,
+        color: Colors.BS_DANGER,
+        category: 'Principal',
+      });
+    }
+    if (paidInterest > 0 || comparedPaidInterest > 0) {
+      rawData.push({
+        name: 'Dobanda Platita',
+        nameShort: 'DP',
+        value: paidInterest,
+        comparedValue: comparedPaidInterest,
+        color: Colors.BLUE_400,
+        category: 'Dobanda',
+      });
+    }
+    if (paidInsurance > 0 || comparedPaidInsurance > 0) {
+      rawData.push({
+        name: 'Asig. Platita',
+        nameShort: 'Asig.',
+        value: paidInsurance,
+        comparedValue: comparedPaidInsurance,
+        color: Colors.YELLOW_400,
+        category: 'Asigurare',
+      });
+    }
+    if (savedInterest > 0 || comparedSavedInterest > 0) {
+      rawData.push({
+        name: 'Economii',
+        nameShort: 'E',
+        value: savedInterest,
+        comparedValue: comparedSavedInterest,
+        color: Colors.GREEN_400,
+        category: 'Economii',
+      });
+    }
+    if (unpaidInterest > 0 || comparedUnpaidInterest > 0) {
+      rawData.push({
+        name: 'Dobanda Neplatita',
+        nameShort: 'DN',
+        value: unpaidInterest,
+        comparedValue: comparedUnpaidInterest,
+        color: Colors.BS_ORANGE,
+        category: 'Dobanda',
+      });
     }
 
     if (!rawData.length) return null;
