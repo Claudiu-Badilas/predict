@@ -50,32 +50,32 @@
               </span>
             </td>
 
-            <td class="bold">{{ group.title | date: "MMM yyyy" }}</td>
+            <td class="bold">{{ group.title | date: 'MMM yyyy' }}</td>
 
             <td class="bold">
-              {{ subtotal.principal | numberFormat: "0.00" }}
+              {{ subtotal.principal | numberFormat: '0.00' }}
             </td>
 
             <td class="bold">
-              {{ subtotal.interest | numberFormat: "0.00" }}
+              {{ subtotal.interest | numberFormat: '0.00' }}
             </td>
 
             <td class="bold">
-              {{ subtotal.insurance | numberFormat: "0.00" }}
+              {{ subtotal.insurance | numberFormat: '0.00' }}
             </td>
 
             <td class="bold subtotal-total">
-              {{ subtotal.total | numberFormat: "0.00" }}
+              {{ subtotal.total | numberFormat: '0.00' }}
             </td>
 
             <td class="bold">
-              {{ subtotal.total / 2 | numberFormat: "0.00" }}
+              {{ subtotal.total / 2 | numberFormat: '0.00' }}
             </td>
             <td class="bold">
-              {{ subtotal.earlyPayment | numberFormat: "0.00" }}
+              {{ subtotal.earlyPayment | numberFormat: '0.00' }}
             </td>
             <td class="bold">
-              {{ subtotal.remaining | numberFormat: "0.00" }}
+              {{ subtotal.remaining | numberFormat: '0.00' }}
             </td>
           </tr>
         }
@@ -113,46 +113,46 @@
                 [class.strike]="row.earlyPayment || row.instalmentPayment"
                 [class.disabled]="!group.completed && row.disabled"
               >
-                {{ row.paymentDate | date: "MMM yyyy" }}
+                {{ row.paymentDate | date: 'MMM yyyy' }}
               </td>
               <td
                 [class.semi-bold]="row.earlyPayment || row.instalmentPayment"
                 [class.disabled]="!group.completed && row.disabled"
               >
-                {{ row.principalAmount | numberFormat: "0.00"
-                }}{{ row.recalculated ? "*" : "" }}
+                {{ row.principalAmount | numberFormat: '0.00'
+                }}{{ row.recalculated ? '*' : '' }}
               </td>
               <td
                 [class.strike]="row.earlyPayment"
                 [class.disabled]="!group.completed && row.disabled"
               >
-                {{ row.interestAmount | numberFormat: "0.00"
-                }}{{ row.recalculated ? "*" : "" }}
+                {{ row.interestAmount | numberFormat: '0.00'
+                }}{{ row.recalculated ? '*' : '' }}
               </td>
               <td
                 [class.strike]="row.earlyPayment"
                 [class.disabled]="!group.completed && row.disabled"
               >
-                {{ row.insuranceCost | numberFormat: "0.00"
-                }}{{ row.recalculated ? "*" : "" }}
+                {{ row.insuranceCost | numberFormat: '0.00'
+                }}{{ row.recalculated ? '*' : '' }}
               </td>
               <td [class.disabled]="!group.completed && row.disabled">
                 @if (!row.earlyPayment && !row.instalmentPayment) {
                   <span
-                    >{{ row.totalInstalment | numberFormat: "0.00"
-                    }}{{ row.recalculated ? "*" : "" }}</span
+                    >{{ row.totalInstalment | numberFormat: '0.00'
+                    }}{{ row.recalculated ? '*' : '' }}</span
                   >
                 } @else {
                   <span class="subtotal-total">{{
-                    row.batchTotalInstalment | numberFormat: "-"
+                    row.batchTotalInstalment | numberFormat: '-'
                   }}</span>
                 }
               </td>
               <td [class.disabled]="!group.completed && row.disabled">
-                {{ row.batchTotalInstalment / 2 | numberFormat: "-" }}
+                {{ row.batchTotalInstalment / 2 | numberFormat: '-' }}
               </td>
               <td [class.disabled]="!group.completed && row.disabled">
-                {{ row.batchTotalEarlyPayment | numberFormat: "-" }}
+                {{ row.batchTotalEarlyPayment | numberFormat: '-' }}
               </td>
               <td
                 [class.strike]="
@@ -163,7 +163,7 @@
                 "
                 [class.disabled]="!group.completed && row.disabled"
               >
-                {{ row.remainingBalance | numberFormat: "0.00" }}
+                {{ row.remainingBalance | numberFormat: '0.00' }}
               </td>
             </tr>
           }
@@ -192,39 +192,39 @@
                 }
               </span>
               <span class="mobile-group-title">
-                {{ group.title | date: "MMM yyyy" }}
+                {{ group.title | date: 'MMM yyyy' }}
               </span>
             </div>
 
             <div class="mobile-group-value-col">
               <span class="item-label">Anticipat</span>
               <span class="item-value principal-value">
-                {{ subtotal.earlyPayment | numberFormat: "0.00" }}
+                {{ subtotal.earlyPayment | numberFormat: '0.00' }}
               </span>
             </div>
             <div class="mobile-group-value-col">
               <span class="item-label">Rata</span>
               <span class="item-value interest-value">
-                {{ subtotal.instalment | numberFormat: "0.00" }}
+                {{ subtotal.instalment | numberFormat: '0.00' }}
               </span>
             </div>
             <div class="mobile-group-value-col">
               <span class="item-label">Total</span>
               <span class="item-value total-value">
-                {{ subtotal.total | numberFormat: "0.00" }}
+                {{ subtotal.total | numberFormat: '0.00' }}
               </span>
             </div>
             <div class="mobile-group-value-col">
               <span class="item-label">1/2</span>
               <span class="item-value">
-                {{ subtotal.total / 2 | numberFormat: "0.00" }}
+                {{ subtotal.total / 2 | numberFormat: '0.00' }}
               </span>
             </div>
 
             <div class="mobile-group-value-col">
               <span class="item-label">Sold</span>
               <span class="item-value balance-value">
-                {{ subtotal.remaining | numberFormat: "0.00" }}
+                {{ subtotal.remaining | numberFormat: '0.00' }}
               </span>
             </div>
           </div>
@@ -262,21 +262,21 @@
                       class="item-date"
                       [class.strike]="row.earlyPayment || row.instalmentPayment"
                     >
-                      {{ row.paymentDate | date: "MMM yyyy" }}
+                      {{ row.paymentDate | date: 'MMM yyyy' }}
                     </span>
                   </div>
                   <div class="mobile-item-col">
                     <span class="item-label">Credit</span>
                     <span class="item-value principal-value"
-                      >{{ row.principalAmount | numberFormat: "0.00"
-                      }}{{ row.recalculated ? "*" : "" }}
+                      >{{ row.principalAmount | numberFormat: '0.00'
+                      }}{{ row.recalculated ? '*' : '' }}
                     </span>
                   </div>
                   <div class="mobile-item-col">
                     <span class="item-label">Anticipat</span>
                     <span class="item-value principal-value">
-                      {{ row.batchTotalEarlyPayment | numberFormat: "-"
-                      }}{{ row.recalculated ? "*" : "" }}
+                      {{ row.batchTotalEarlyPayment | numberFormat: '-'
+                      }}{{ row.recalculated ? '*' : '' }}
                     </span>
                   </div>
                   <div class="mobile-item-col">
@@ -285,8 +285,8 @@
                       class="item-value interest-value"
                       [class.strike]="row.earlyPayment"
                     >
-                      {{ row.interestAmount | numberFormat: "0.00"
-                      }}{{ row.recalculated ? "*" : "" }}
+                      {{ row.interestAmount | numberFormat: '0.00'
+                      }}{{ row.recalculated ? '*' : '' }}
                     </span>
                   </div>
                   <div class="mobile-item-col">
@@ -295,25 +295,25 @@
                       class="item-value insurance-value"
                       [class.strike]="row.earlyPayment"
                     >
-                      {{ row.insuranceCost | numberFormat: "0.00"
-                      }}{{ row.recalculated ? "*" : "" }}
+                      {{ row.insuranceCost | numberFormat: '0.00'
+                      }}{{ row.recalculated ? '*' : '' }}
                     </span>
                   </div>
                   <div class="mobile-item-col">
                     <span class="item-label">Total</span>
                     <span class="item-value total-value">
                       @if (!row.earlyPayment && !row.instalmentPayment) {
-                        {{ row.totalInstalment | numberFormat: "0.00"
-                        }}{{ row.recalculated ? "*" : "" }}
+                        {{ row.totalInstalment | numberFormat: '0.00'
+                        }}{{ row.recalculated ? '*' : '' }}
                       } @else {
-                        {{ row.batchTotalInstalment | numberFormat: "-" }}
+                        {{ row.batchTotalInstalment | numberFormat: '-' }}
                       }
                     </span>
                   </div>
                   <div class="mobile-item-col">
                     <span class="item-label">1/2</span>
                     <span class="item-value">
-                      {{ row.batchTotalInstalment / 2 | numberFormat: "-" }}
+                      {{ row.batchTotalInstalment / 2 | numberFormat: '-' }}
                     </span>
                   </div>
                 </div>
@@ -348,41 +348,41 @@
                     class="item-date"
                     [class.strike]="row.earlyPayment || row.instalmentPayment"
                   >
-                    {{ row.paymentDate | date: "MMM yyyy" }}
+                    {{ row.paymentDate | date: 'MMM yyyy' }}
                   </span>
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Credit</span>
                   <span class="item-value principal-value"
-                    >{{ row.principalAmount | numberFormat: "0.00"
-                    }}{{ row.recalculated ? "*" : "" }}
+                    >{{ row.principalAmount | numberFormat: '0.00'
+                    }}{{ row.recalculated ? '*' : '' }}
                   </span>
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Dobândă</span>
                   <span class="item-value interest-value">
-                    {{ row.interestAmount | numberFormat: "0.00"
-                    }}{{ row.recalculated ? "*" : "" }}
+                    {{ row.interestAmount | numberFormat: '0.00'
+                    }}{{ row.recalculated ? '*' : '' }}
                   </span>
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Asig.</span>
                   <span class="item-value insurance-value">
-                    {{ row.insuranceCost | numberFormat: "0.00"
-                    }}{{ row.recalculated ? "*" : "" }}
+                    {{ row.insuranceCost | numberFormat: '0.00'
+                    }}{{ row.recalculated ? '*' : '' }}
                   </span>
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Total</span>
                   <span class="item-value total-value">
-                    {{ row.totalInstalment | numberFormat: "0.00"
-                    }}{{ row.recalculated ? "*" : "" }}
+                    {{ row.totalInstalment | numberFormat: '0.00'
+                    }}{{ row.recalculated ? '*' : '' }}
                   </span>
                 </div>
                 <div class="mobile-item-col">
                   <span class="item-label">Sold</span>
                   <span class="item-value balance-value">
-                    {{ row.remainingBalance | numberFormat: "0.00" }}
+                    {{ row.remainingBalance | numberFormat: '0.00' }}
                   </span>
                 </div>
               </div>

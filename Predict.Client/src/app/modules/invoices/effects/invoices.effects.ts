@@ -13,7 +13,7 @@ export class InvoicesEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store<fromInvoices.State>,
-    private readonly _invoicesService: InvoicesService
+    private readonly _invoicesService: InvoicesService,
   ) {}
 
   loadInvoices$ = createEffect(() =>
@@ -22,15 +22,15 @@ export class InvoicesEffects {
       tap(() => LayoutActions.spinnerOn()),
       withLatestFrom(
         this.store.select(fromInvoices.getStartDate),
-        this.store.select(fromInvoices.getEndDate)
+        this.store.select(fromInvoices.getEndDate),
       ),
       switchMap(([, startDate, endDate]) =>
-        this._invoicesService.getInvoices(startDate, endDate)
+        this._invoicesService.getInvoices(startDate, endDate),
       ),
       switchMap((invoices) => [
         InvoicesActions.setInvoicesSuccess({ invoices }),
         LayoutActions.spinnerOff(),
-      ])
-    )
+      ]),
+    ),
   );
 }

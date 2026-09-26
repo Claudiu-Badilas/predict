@@ -1,5 +1,5 @@
 <div class="charts-container mb-2">
-  @if (chartBasePaymentChange() === "pie-chart") {
+  @if (chartBasePaymentChange() === 'pie-chart') {
     <p-highcharts-wrapper
       class="chart-wrapper"
       [chartOptions]="interestProgressPieChart()"
@@ -11,8 +11,8 @@
         </div> </ng-container
     ></p-highcharts-wrapper>
   } @else if (
-    chartBasePaymentChange() === "Prd. Fixa" ||
-    chartBasePaymentChange() === "Prd. Totala"
+    chartBasePaymentChange() === 'Prd. Fixa' ||
+    chartBasePaymentChange() === 'Prd. Totala'
   ) {
     <p-highcharts-wrapper
       class="chart-wrapper"
@@ -25,7 +25,7 @@
           </div>
         </div> </ng-container
     ></p-highcharts-wrapper>
-  } @else if (chartBasePaymentChange() === "dot-bar-chart") {
+  } @else if (chartBasePaymentChange() === 'dot-bar-chart') {
     <p-highcharts-wrapper class="chart-wrapper" [chartOptions]="dotBarChart()">
       <ng-container p-highcharts-wrapper-content>
         <div class="my-2 d-flex align-items-center justify-content-between">

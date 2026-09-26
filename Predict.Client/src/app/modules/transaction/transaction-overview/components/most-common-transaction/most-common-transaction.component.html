@@ -8,7 +8,7 @@
 <div class="transaction-analytics mt-2">
   <div class="table-container">
     <div>
-      @if (viewMode() === "all") {
+      @if (viewMode() === 'all') {
         <div class="period-card expanded">
           <div class="period-content">
             @if (selectedCategory() === null) {
@@ -65,7 +65,7 @@
                         [class.positive]="item.total > 0"
                         [class.negative]="item.total < 0"
                       >
-                        {{ item.total | numberFormat: "0.00" }}
+                        {{ item.total | numberFormat: '0.00' }}
                       </td>
                       <td class="percentage-cell">
                         @if (item.total > 0 && totalIncome() > 0) {
@@ -76,7 +76,7 @@
                             ></div>
                             <span class="percentage-text"
                               >{{
-                                item.percentageOfIncome | numberFormat: "0.0"
+                                item.percentageOfIncome | numberFormat: '0.0'
                               }}%</span
                             >
                           </div>
@@ -88,7 +88,7 @@
                             ></div>
                             <span class="percentage-text"
                               >{{
-                                item.percentageOfExpense | numberFormat: "0.0"
+                                item.percentageOfExpense | numberFormat: '0.0'
                               }}%</span
                             >
                           </div>
@@ -144,7 +144,7 @@
                         [class.positive]="item.total > 0"
                         [class.negative]="item.total < 0"
                       >
-                        {{ item.total | numberFormat: "0.00" }}
+                        {{ item.total | numberFormat: '0.00' }}
                       </span>
                       <div class="mobile-percentages">
                         @if (item.total > 0 && totalIncome() > 0) {
@@ -155,7 +155,7 @@
                             ></div>
                             <span class="percentage-text-mobile">
                               {{
-                                item.percentageOfIncome | numberFormat: "0.0"
+                                item.percentageOfIncome | numberFormat: '0.0'
                               }}%</span
                             >
                           </div>
@@ -168,7 +168,7 @@
                             ></div>
                             <span class="percentage-text-mobile">
                               {{
-                                item.percentageOfExpense | numberFormat: "0.0"
+                                item.percentageOfExpense | numberFormat: '0.0'
                               }}%</span
                             >
                           </div>
@@ -198,12 +198,12 @@
                 <span class="buble">{{ period.transactionCount }} </span>
                 @if (period.totalIncome > 0) {
                   <span class="income-badge">{{
-                    period.totalIncome | numberFormat: "0.00"
+                    period.totalIncome | numberFormat: '0.00'
                   }}</span>
                 }
                 @if (period.totalExpense > 0) {
                   <span class="expense-badge"
-                    >-{{ period.totalExpense | numberFormat: "0.00" }}</span
+                    >-{{ period.totalExpense | numberFormat: '0.00' }}</span
                   >
                 }
                 @if (period.difference !== 0) {
@@ -212,7 +212,7 @@
                     [class.positive]="period.difference > 0"
                     [class.negative]="period.difference < 0"
                   >
-                    {{ period.difference | numberFormat: "0.00" }}
+                    {{ period.difference | numberFormat: '0.00' }}
                   </span>
                 }
               </div>
@@ -271,7 +271,7 @@
                             [class.positive]="item.total > 0"
                             [class.negative]="item.total < 0"
                           >
-                            {{ item.total | numberFormat: "0.00" }}
+                            {{ item.total | numberFormat: '0.00' }}
                           </td>
                           <td class="percentage-cell">
                             @if (item.total > 0 && period.totalIncome > 0) {
@@ -283,7 +283,7 @@
                                 <span class="percentage-text"
                                   >{{
                                     item.percentageOfIncome
-                                      | numberFormat: "0.0"
+                                      | numberFormat: '0.0'
                                   }}%</span
                                 >
                               </div>
@@ -296,7 +296,7 @@
                                 <span class="percentage-text"
                                   >{{
                                     item.percentageOfExpense
-                                      | numberFormat: "0.0"
+                                      | numberFormat: '0.0'
                                   }}%</span
                                 >
                               </div>
@@ -349,7 +349,7 @@
                             [class.positive]="item.total > 0"
                             [class.negative]="item.total < 0"
                           >
-                            {{ item.total | numberFormat: "0.00" }}
+                            {{ item.total | numberFormat: '0.00' }}
                           </span>
                           <div class="mobile-percentages">
                             @if (item.total > 0 && period.totalIncome > 0) {
@@ -361,7 +361,7 @@
                                 <span class="percentage-text-mobile">
                                   {{
                                     item.percentageOfIncome
-                                      | numberFormat: "0.0"
+                                      | numberFormat: '0.0'
                                   }}%</span
                                 >
                               </div>
@@ -375,7 +375,7 @@
                                 <span class="percentage-text-mobile">
                                   {{
                                     item.percentageOfExpense
-                                      | numberFormat: "0.0"
+                                      | numberFormat: '0.0'
                                   }}%</span
                                 >
                               </div>
@@ -397,7 +397,7 @@
           </div>
         }
       }
-      @if (viewMode() !== "all" && !currentPeriods().length) {
+      @if (viewMode() !== 'all' && !currentPeriods().length) {
         <div class="empty-state">No transaction data available</div>
       }
     </div>

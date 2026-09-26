@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'p-toggle-button-actions',

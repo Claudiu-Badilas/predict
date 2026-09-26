@@ -14,9 +14,7 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
   styleUrls: ['./loan.component.scss'],
 })
 export class LoanComponent {
-  constructor(
-    private readonly store: Store<fromLoan.LoanState>,
-  ) {
+  constructor(private readonly store: Store<fromLoan.LoanState>) {
     this.store.dispatch(LoanActions.loadRepaymentSchedules());
   }
 

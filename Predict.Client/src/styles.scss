@@ -1,6 +1,6 @@
-@use "./styles/themes";
+@use './styles/themes';
 
-@import "bootstrap/dist/css/bootstrap.min.css";
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
 .modal-backdrop {
   z-index: 1040 !important;

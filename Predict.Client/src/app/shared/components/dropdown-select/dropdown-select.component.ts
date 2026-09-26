@@ -14,7 +14,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';

@@ -4,7 +4,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export namespace AuthenticationValidators {
   export const email = (control: AbstractControl): ValidationErrors | null => {
     const emailRegex = new RegExp(
-      /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,4})+$/
+      /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,4})+$/,
     );
     return emailRegex.test(control?.value)
       ? null
@@ -24,7 +24,7 @@ export namespace AuthenticationValidators {
   };
 
   export const identityRevealedValidator: ValidatorFn = (
-    control: AbstractControl
+    control: AbstractControl,
   ): ValidationErrors | null => {
     const authenticationAction = control.get('authenticationAction').value;
     const password = control.get('password').value;

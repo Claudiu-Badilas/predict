@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { HoldTriggerDirective } from '../../directives/hold-trigger.directive';
 import { TripleClickDirective } from '../../directives/triple-click.directive';
 

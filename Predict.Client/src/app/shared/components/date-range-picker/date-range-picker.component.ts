@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
 import { DateRangePicker } from './models/date-range-picker.model';

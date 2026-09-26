@@ -8,10 +8,10 @@
         </div>
         <div class="stat-row">
           <span class="stat-item__value positive">{{
-            totalRevenue() | numberFormat: "0.00"
+            totalRevenue() | numberFormat: '0.00'
           }}</span>
           <span class="stat-item__value">{{
-            totalItemsSold() | numberFormat: "0.00"
+            totalItemsSold() | numberFormat: '0.00'
           }}</span>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <div class="stat-row">
           <span class="stat-item__value">{{ uniqueProductsCount() }}</span>
           <span class="stat-item__value">{{
-            averagePrice() | numberFormat: "0.00"
+            averagePrice() | numberFormat: '0.00'
           }}</span>
         </div>
       </div>
@@ -33,7 +33,7 @@
 
   <div class="table-container">
     <div class="period-view">
-      @if (viewMode() === "all") {
+      @if (viewMode() === 'all') {
         <!-- All View - Modern Card Design -->
         <div class="receipts-container">
           <div class="desktop-view m-2">
@@ -88,7 +88,7 @@
                               <td class="product-total">
                                 <strong
                                   >{{
-                                    item.totalRevenue | numberFormat: "0.00"
+                                    item.totalRevenue | numberFormat: '0.00'
                                   }}
                                   RON</strong
                                 >
@@ -188,7 +188,7 @@
                         <div class="detail-item">
                           <span class="detail-value total"
                             >{{
-                              item.totalRevenue | numberFormat: "0.00"
+                              item.totalRevenue | numberFormat: '0.00'
                             }}
                             RON</span
                           >
@@ -205,7 +205,7 @@
             </div>
           </div>
         </div>
-      } @else if (viewMode() === "receipts") {
+      } @else if (viewMode() === 'receipts') {
         <!-- Receipts View with Modern Styling -->
         <div class="receipts-container">
           <!-- Desktop View -->
@@ -230,7 +230,7 @@
                         {{ receipt.provider }}
                       </div>
                       <div class="receipt-date-small">
-                        {{ receipt.date | date: "dd MMM yyyy" }}
+                        {{ receipt.date | date: 'dd MMM yyyy' }}
                       </div>
                       <span class="products-count">{{
                         receipt.products.length
@@ -241,7 +241,7 @@
                         <div class="total-price">
                           <span class="price-value"
                             >{{
-                              receipt.totalPrice | numberFormat: "0.00"
+                              receipt.totalPrice | numberFormat: '0.00'
                             }}
                             RON</span
                           >
@@ -250,7 +250,7 @@
                           <div class="discount-badge">
                             <span
                               >-{{
-                                receipt.totalDiscount | numberFormat: "0.00"
+                                receipt.totalDiscount | numberFormat: '0.00'
                               }}
                               RON</span
                             >
@@ -296,7 +296,7 @@
                                   </td>
                                   <td class="product-price">
                                     {{
-                                      product.price ?? 0 | numberFormat: "0.00"
+                                      product.price ?? 0 | numberFormat: '0.00'
                                     }}
                                     RON
                                   </td>
@@ -310,7 +310,7 @@
                                       >{{
                                         (product.price ?? 0) *
                                           (product.quantity ?? 0)
-                                          | numberFormat: "0.00"
+                                          | numberFormat: '0.00'
                                       }}
                                       RON</strong
                                     >
@@ -375,7 +375,7 @@
                         {{ receipt.provider }}
                       </div>
                       <div class="mobile-date">
-                        {{ receipt.date | date: "dd MMM yyyy" }}
+                        {{ receipt.date | date: 'dd MMM yyyy' }}
                       </div>
                     </div>
                     <span class="products-count">{{
@@ -386,14 +386,14 @@
                     <div class="mobile-total">
                       <span class="total-value"
                         >{{
-                          receipt.totalPrice | numberFormat: "0.00"
+                          receipt.totalPrice | numberFormat: '0.00'
                         }}
                         RON</span
                       >
                     </div>
                     @if (receipt.totalDiscount) {
                       <div class="mobile-discount">
-                        -{{ receipt.totalDiscount | numberFormat: "0.00" }}
+                        -{{ receipt.totalDiscount | numberFormat: '0.00' }}
                         RON
                       </div>
                     }
@@ -451,7 +451,7 @@
                               <span class="detail-label">Price</span>
                               <span class="detail-value"
                                 >{{
-                                  product.price ?? 0 | numberFormat: "0.00"
+                                  product.price ?? 0 | numberFormat: '0.00'
                                 }}
                                 RON</span
                               >
@@ -461,7 +461,7 @@
                               <span class="detail-value total"
                                 >{{
                                   (product.price ?? 0) * (product.quantity ?? 0)
-                                    | numberFormat: "0.00"
+                                    | numberFormat: '0.00'
                                 }}
                                 RON</span
                               >
@@ -504,7 +504,7 @@
                         <div class="total-price">
                           <span class="price-value"
                             >{{
-                              period.totalRevenue | numberFormat: "0.00"
+                              period.totalRevenue | numberFormat: '0.00'
                             }}
                             RON</span
                           >
@@ -559,7 +559,7 @@
                                   <td class="product-total">
                                     <strong
                                       >{{
-                                        item.totalRevenue | numberFormat: "0.00"
+                                        item.totalRevenue | numberFormat: '0.00'
                                       }}
                                       RON</strong
                                     >
@@ -627,7 +627,7 @@
                     <div class="mobile-total">
                       <span class="total-value"
                         >{{
-                          period.totalRevenue | numberFormat: "0.00"
+                          period.totalRevenue | numberFormat: '0.00'
                         }}
                         RON</span
                       >
@@ -689,7 +689,7 @@
                             <div class="detail-item">
                               <span class="detail-value total"
                                 >{{
-                                  item.totalRevenue | numberFormat: "0.00"
+                                  item.totalRevenue | numberFormat: '0.00'
                                 }}
                                 RON</span
                               >
@@ -749,7 +749,7 @@
           <div class="summary-item">
             <span class="label">Total</span>
             <span class="value total"
-              >{{ getProductTotalRevenue() | numberFormat: "0.00" }} RON</span
+              >{{ getProductTotalRevenue() | numberFormat: '0.00' }} RON</span
             >
           </div>
         </div>

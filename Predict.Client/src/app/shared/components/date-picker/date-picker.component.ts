@@ -11,7 +11,7 @@ import {
   Output,
   signal,
   SimpleChanges,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePickerService } from './services/date-picker.service';
@@ -200,7 +200,7 @@ export class DatePickerComponent implements OnInit, OnChanges, OnDestroy {
     const firstDayOfMonth = new Date(
       this.selectedYear,
       this.selectedMonth,
-      1
+      1,
     ).getDay(); // 0 = Sunday, 1 = Monday, etc.
 
     // Adjust for custom first day of week
@@ -213,7 +213,7 @@ export class DatePickerComponent implements OnInit, OnChanges, OnDestroy {
     const days = new Date(
       this.selectedYear,
       this.selectedMonth + 1,
-      0
+      0,
     ).getDate();
     return Array.from({ length: days }, (_, i) => i + 1);
   }

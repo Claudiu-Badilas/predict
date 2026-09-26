@@ -5,13 +5,13 @@ import { LocationInvoice } from '../../models/invoice.model';
 
 export namespace InvoiceIndexTrentChartUtils {
   export function getChart(
-    locationInvoice: LocationInvoice
+    locationInvoice: LocationInvoice,
   ): Highcharts.Options {
     if (!locationInvoice) return null;
 
     const grouped = ObjectUtil.groupBy(
       locationInvoice.invoices,
-      (p) => p.invoiceType
+      (p) => p.invoiceType,
     );
 
     const series: Highcharts.SeriesLineOptions[] = Object.keys(grouped)
@@ -57,7 +57,7 @@ export namespace InvoiceIndexTrentChartUtils {
               .map(
                 (p: any) =>
                   `<span style="color:${p.series.color}">●</span>
-                   Index: <b>${p.y}</b><br/>`
+                   Index: <b>${p.y}</b><br/>`,
               )
               .join('')}
           `;

@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Output, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'p-search-input',

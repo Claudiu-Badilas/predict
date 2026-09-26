@@ -25,7 +25,7 @@ export class AuthenticationEffects {
     private actions$: Actions,
 
     private _authService: AuthenticationService,
-    private store: Store<fromAppStore.AppState>
+    private store: Store<fromAppStore.AppState>,
   ) {}
 
   checkToken$ = createEffect(() =>
@@ -39,8 +39,8 @@ export class AuthenticationEffects {
         return NavigationAction.navigateTo({
           route,
         });
-      })
-    )
+      }),
+    ),
   );
 
   login$ = createEffect(
@@ -54,11 +54,11 @@ export class AuthenticationEffects {
               this.store.dispatch(
                 ToastActions.showToast({
                   message: error.error,
-                })
+                }),
               );
               return EMPTY;
-            })
-          )
+            }),
+          ),
         ),
         map(({ token }) => {
           if (AuthenticationUtils.isTokenValid(token)) {
@@ -69,9 +69,9 @@ export class AuthenticationEffects {
           return NavigationAction.navigateTo({
             route: 'authentication/login',
           });
-        })
+        }),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 
   register$ = createEffect(
@@ -85,14 +85,14 @@ export class AuthenticationEffects {
               this.store.dispatch(
                 ToastActions.showToast({
                   message: error.error,
-                })
+                }),
               );
               return EMPTY;
-            })
-          )
-        )
+            }),
+          ),
+        ),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 
   logout$ = createEffect(
@@ -105,8 +105,8 @@ export class AuthenticationEffects {
           return NavigationAction.navigateTo({
             route: '/authentication/login',
           });
-        })
+        }),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }

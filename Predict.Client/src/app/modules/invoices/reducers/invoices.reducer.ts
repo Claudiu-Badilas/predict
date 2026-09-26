@@ -31,7 +31,7 @@ const invoicesReducer = createReducer(
     ...state,
     startDate,
     endDate,
-  }))
+  })),
 );
 
 export function reducer(state: State, action: Action) {
@@ -42,15 +42,15 @@ const getInvoicesState = createFeatureSelector<State>('InvoicesState');
 
 export const getStartDate = createSelector(
   getInvoicesState,
-  (state) => state.startDate
+  (state) => state.startDate,
 );
 
 export const getEndDate = createSelector(
   getInvoicesState,
-  (state) => state.endDate
+  (state) => state.endDate,
 );
 
 export const getInvoices = createSelector(
   getInvoicesState,
-  (state) => state.invoices
+  (state) => state.invoices,
 );

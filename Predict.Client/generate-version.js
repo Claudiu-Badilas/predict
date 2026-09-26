@@ -18,11 +18,16 @@ try {
 
 const versionFile = {
   version: version,
-  timestamp: new Date().toISOString()
+  timestamp: new Date().toISOString(),
 };
 
 // Write to dist folder - matches your angular.json outputPath
-const outputPath = path.join(process.cwd(), 'dist', 'predict.client', 'version.json');
+const outputPath = path.join(
+  process.cwd(),
+  'dist',
+  'predict.client',
+  'version.json',
+);
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(versionFile, null, 2));
 

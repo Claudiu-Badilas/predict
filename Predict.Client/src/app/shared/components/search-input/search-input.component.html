@@ -6,9 +6,9 @@
     (input)="onInput($event)"
     placeholder="Search..."
   />
-  @if(query()){
-  <button class="clear-btn" (click)="clear()" aria-label="Clear search">
-    ✕
-  </button>
+  @if (query()) {
+    <button class="clear-btn" (click)="clear()" aria-label="Clear search">
+      ✕
+    </button>
   }
 </div>

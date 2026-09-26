@@ -9,10 +9,10 @@
         </div>
         <div class="stat-row">
           <span class="stat-item__value positive">
-            {{ totalIncome() | numberFormat: "0.00" }}
+            {{ totalIncome() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value negative">
-            -{{ totalExpense() | numberFormat: "0.00" }}
+            -{{ totalExpense() | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -30,7 +30,7 @@
           >
             {{
               (totalIncome() || 0) - (totalExpense() || 0)
-                | numberFormat: "0.00"
+                | numberFormat: '0.00'
             }}
           </span>
           <span class="stat-item__value">
@@ -53,10 +53,10 @@
         </div>
         <div class="stat-row">
           <span class="stat-item__value positive">
-            {{ totalIncome() | numberFormat: "0.00" }}
+            {{ totalIncome() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value negative">
-            -{{ totalExpense() | numberFormat: "0.00" }}
+            -{{ totalExpense() | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -74,7 +74,7 @@
           >
             {{
               (totalIncome() || 0) - (totalExpense() || 0)
-                | numberFormat: "0.00"
+                | numberFormat: '0.00'
             }}
           </span>
           <span class="stat-item__value">

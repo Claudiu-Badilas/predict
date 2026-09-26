@@ -14,7 +14,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   intercept(
     httpRequest: HttpRequest<any>,
-    httpHandler: HttpHandler
+    httpHandler: HttpHandler,
   ): Observable<HttpEvent<any>> {
     if (httpRequest.url.includes(`server/api/v1/account/login`))
       return httpHandler.handle(httpRequest);
@@ -26,7 +26,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     return httpHandler.handle(
       httpRequest.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
-      })
+      }),
     );
   }
 }

@@ -27,9 +27,9 @@ export class ReceiptsService {
     const source$ = cachedDtos
       ? of(cachedDtos)
       : this.httpClient
-          .get<
-            ReceiptDto[]
-          >(`https://localhost:8080/api/v1/receipts?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`)
+          .get<ReceiptDto[]>(
+            `https://localhost:8080/api/v1/receipts?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`,
+          )
           .pipe(
             tap((dtos) =>
               this.localStorage.setItem(ReceiptsService_STORAGE_KEY, dtos),

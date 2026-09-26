@@ -21,12 +21,8 @@
     "useDefineForClassFields": false,
     "strictNullChecks": false,
     "paths": {
-      "src/*": [
-        "./src/*"
-      ],
-      "@src/*": [
-        "./src/*"
-      ]
+      "src/*": ["./src/*"],
+      "@src/*": ["./src/*"]
     }
   },
   "angularCompilerOptions": {

@@ -9,7 +9,7 @@ export class AuthenticationService {
   public login(user: any): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(
       `server/api/v1/account/login`,
-      user
+      user,
     );
   }
 

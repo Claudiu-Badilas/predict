@@ -23,7 +23,9 @@
     class="toggle-slider"
     [style.width.%]="100 / options.length"
     [style.transform]="
-      'translateX(' + options.map(o => o.label).indexOf(_selected()) * 100 + '%)'
+      'translateX(' +
+      options.map((o) => o.label).indexOf(_selected()) * 100 +
+      '%)'
     "
     [style.background]="gradientStyle"
   ></div>

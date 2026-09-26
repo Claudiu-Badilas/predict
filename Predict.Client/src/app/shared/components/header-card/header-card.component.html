@@ -25,18 +25,18 @@
             @if (isDate(section.value)) {
               <p class="value" [ngClass]="section.color">
                 {{
-                  (section.value | date: section.pattern ?? "yyyy-MM-dd") ??
+                  (section.value | date: section.pattern ?? 'yyyy-MM-dd') ??
                     section.default ??
-                    "-"
+                    '-'
                 }}
               </p>
             } @else if (isNumber(section.value)) {
               <p class="value" [ngClass]="section.color">
-                {{ section.value ?? section.default ?? "-" | numberFormat }}
+                {{ section.value ?? section.default ?? '-' | numberFormat }}
               </p>
             } @else {
               <p class="value" [ngClass]="section.color">
-                {{ section.value ?? section.default ?? "-" }}
+                {{ section.value ?? section.default ?? '-' }}
               </p>
             }
           </div>

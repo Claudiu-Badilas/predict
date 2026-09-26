@@ -84,7 +84,7 @@
     </div>
   } @else {
     <div scrollable class="storage-list">
-      @for (item of storageItems(); track item.storageType + ":" + item.key) {
+      @for (item of storageItems(); track item.storageType + ':' + item.key) {
         <div class="storage-item">
           <div class="storage-item-info">
             <span class="storage-item-key">{{ item.key }}</span>
@@ -101,13 +101,13 @@
                 [class.storage-badge--manual]="item.origin === 'manual'"
                 [class.storage-badge--automatic]="item.origin === 'automatic'"
               >
-                {{ item.origin === "manual" ? "Manual upload" : "Automatic" }}
+                {{ item.origin === 'manual' ? 'Manual upload' : 'Automatic' }}
               </span>
             }
           </div>
 
           <div class="storage-item-actions">
-            @if (item.storageType === "local") {
+            @if (item.storageType === 'local') {
               <button
                 type="button"
                 class="action-btn view-btn"

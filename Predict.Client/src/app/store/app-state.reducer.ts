@@ -52,7 +52,7 @@ export const selectRouteNestedParams = createSelector(
       };
     }
     return params;
-  }
+  },
 );
 
 export const getRouterParams = createSelector(
@@ -62,7 +62,7 @@ export const getRouterParams = createSelector(
       return state.state.params;
     }
     return null;
-  }
+  },
 );
 
 export const getRouterUrl = createSelector(
@@ -72,7 +72,7 @@ export const getRouterUrl = createSelector(
       return state.state.url;
     }
     return null;
-  }
+  },
 );
 
 export const selectRouteNestedParam = (param: string) =>

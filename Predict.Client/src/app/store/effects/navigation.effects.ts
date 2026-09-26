@@ -7,14 +7,17 @@ import * as NavigationActions from '../actions/navigation.actions';
 
 @Injectable()
 export class NavigationEffects {
-  constructor(private actions$: Actions, private router: Router) {}
+  constructor(
+    private actions$: Actions,
+    private router: Router,
+  ) {}
 
   navigateTo$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(NavigationActions.navigateTo),
-        tap((action) => this.router.navigate([action.route]))
+        tap((action) => this.router.navigate([action.route])),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }

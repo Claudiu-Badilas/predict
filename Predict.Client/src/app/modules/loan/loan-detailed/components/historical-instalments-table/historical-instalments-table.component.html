@@ -22,7 +22,7 @@
                 <td class="col-month">
                   <div class="cell-month">
                     <span class="cell-label month-label">
-                      {{ group.title | date: "MMM yyyy" }}
+                      {{ group.title | date: 'MMM yyyy' }}
                     </span>
                   </div>
                 </td>
@@ -41,31 +41,31 @@
 
                 <td>
                   <span class="cell-value total-value">
-                    {{ subtotal.total | numberFormat: "0.00" }}
+                    {{ subtotal.total | numberFormat: '0.00' }}
                   </span>
                 </td>
 
                 <td>
                   <span class="cell-value principal-value">
-                    {{ subtotal.principal | numberFormat: "0.00" }}
+                    {{ subtotal.principal | numberFormat: '0.00' }}
                   </span>
                 </td>
 
                 <td>
                   <span class="cell-value interest-value">
-                    {{ subtotal.interest | numberFormat: "0.00" }}
+                    {{ subtotal.interest | numberFormat: '0.00' }}
                   </span>
                 </td>
 
                 <td>
                   <span class="cell-value insurance-value">
-                    {{ subtotal.insuranceCost | numberFormat: "0.00" }}
+                    {{ subtotal.insuranceCost | numberFormat: '0.00' }}
                   </span>
                 </td>
 
                 <td>
                   <span class="cell-value balance-value">
-                    {{ subtotal.remainingBalance | numberFormat: "0.00" }}
+                    {{ subtotal.remainingBalance | numberFormat: '0.00' }}
                   </span>
                 </td>
               </tr>
@@ -88,42 +88,42 @@
                   <span class="early-chip">+{{ subtotal.earlyCount }}</span>
                 }</span
               ><span class="cell-label month-label">
-                {{ group.title | date: "MMM yyyy" }}
+                {{ group.title | date: 'MMM yyyy' }}
               </span>
             </div>
 
             <div class="cell">
               <span class="cell-label">Total</span>
               <span class="cell-value total-value">
-                {{ subtotal.total | numberFormat: "0.00" }}
+                {{ subtotal.total | numberFormat: '0.00' }}
               </span>
             </div>
 
             <div class="cell">
               <span class="cell-label">Principal</span>
               <span class="cell-value principal-value">
-                {{ subtotal.principal | numberFormat: "0.00" }}
+                {{ subtotal.principal | numberFormat: '0.00' }}
               </span>
             </div>
 
             <div class="cell">
               <span class="cell-label">Dobândă</span>
               <span class="cell-value interest-value">
-                {{ subtotal.interest | numberFormat: "0.00" }}
+                {{ subtotal.interest | numberFormat: '0.00' }}
               </span>
             </div>
 
             <div class="cell">
               <span class="cell-label">Asig.</span>
               <span class="cell-value insurance-value">
-                {{ subtotal.insuranceCost | numberFormat: "0.00" }}
+                {{ subtotal.insuranceCost | numberFormat: '0.00' }}
               </span>
             </div>
 
             <div class="cell">
               <span class="cell-label">Sold</span>
               <span class="cell-value balance-value">
-                {{ subtotal.remainingBalance | numberFormat: "0.00" }}
+                {{ subtotal.remainingBalance | numberFormat: '0.00' }}
               </span>
             </div>
           </div>

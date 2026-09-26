@@ -11,10 +11,10 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ totalInstalmentPayments() | numberFormat: "0.00" }}
+            {{ totalInstalmentPayments() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
-            {{ totalEarlyPayment() | numberFormat: "0.00" }}
+            {{ totalEarlyPayment() | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -28,10 +28,10 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ totalInterestPayment() | numberFormat: "0.00" }}
+            {{ totalInterestPayment() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
-            {{ totalPrincipalPayment() | numberFormat: "0.00" }}
+            {{ totalPrincipalPayment() | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -45,10 +45,10 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ totalPayment() | numberFormat: "0.00" }}
+            {{ totalPayment() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
-            {{ totalPayment() / 2 | numberFormat: "0.00" }}
+            {{ totalPayment() / 2 | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -58,9 +58,9 @@
         <div class="stat-row">
           <span class="stat-item__label"> {{ nextPayment }}</span>
           <span class="stat-item__value">
-            {{ paidMonthlyInstalments() | numberFormat: "0" : 0 }}
+            {{ paidMonthlyInstalments() | numberFormat: '0' : 0 }}
             /
-            {{ monthlyInstalments() | numberFormat: "0" : 0 }} ({{
+            {{ monthlyInstalments() | numberFormat: '0' : 0 }} ({{
               simulatedPeriod()
             }})
           </span>
@@ -68,12 +68,12 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ initialRemainingBalance() | numberFormat: "0.00" }}
+            {{ initialRemainingBalance() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
             {{
               $safeNavigationMigration(payments()?.at(-1)?.remainingBalance)
-                | numberFormat: "0.00"
+                | numberFormat: '0.00'
             }}
           </span>
         </div>
@@ -95,10 +95,10 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ totalInstalmentPayments() | numberFormat: "0.00" }}
+            {{ totalInstalmentPayments() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
-            {{ totalEarlyPayment() | numberFormat: "0.00" }}
+            {{ totalEarlyPayment() | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -112,10 +112,10 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ totalInterestPayment() | numberFormat: "0.00" }}
+            {{ totalInterestPayment() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
-            {{ totalPrincipalPayment() | numberFormat: "0.00" }}
+            {{ totalPrincipalPayment() | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -129,10 +129,10 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ totalPayment() | numberFormat: "0.00" }}
+            {{ totalPayment() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
-            {{ totalPayment() / 2 | numberFormat: "0.00" }}
+            {{ totalPayment() / 2 | numberFormat: '0.00' }}
           </span>
         </div>
       </div>
@@ -142,8 +142,8 @@
         <div class="stat-row">
           <span class="stat-item__label">{{ nextPayment }}</span>
           <span class="stat-item__value">
-            {{ paidMonthlyInstalments() | numberFormat: "0" : 0 }} /
-            {{ monthlyInstalments() | numberFormat: "0" : 0 }} ({{
+            {{ paidMonthlyInstalments() | numberFormat: '0' : 0 }} /
+            {{ monthlyInstalments() | numberFormat: '0' : 0 }} ({{
               simulatedPeriod()
             }})
           </span>
@@ -151,12 +151,12 @@
 
         <div class="stat-row">
           <span class="stat-item__value">
-            {{ initialRemainingBalance() | numberFormat: "0.00" }}
+            {{ initialRemainingBalance() | numberFormat: '0.00' }}
           </span>
           <span class="stat-item__value">
             {{
               $safeNavigationMigration(payments()?.at(-1)?.remainingBalance)
-                | numberFormat: "0.00"
+                | numberFormat: '0.00'
             }}
           </span>
         </div>

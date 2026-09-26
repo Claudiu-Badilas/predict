@@ -19,13 +19,13 @@ export class AuthenticationGuard implements CanActivate {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Observable<boolean> | Promise<boolean> | boolean | UrlTree {
     if (AuthenticationUtils.isTokenValid()) {
       return true;
     } else {
       this.store.dispatch(
-        NavigationAction.navigateTo({ route: '/authentication/login' })
+        NavigationAction.navigateTo({ route: '/authentication/login' }),
       );
       return false;
     }

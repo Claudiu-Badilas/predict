@@ -10,7 +10,7 @@ export class InvoicesService {
   getInvoices(startDate: Date, endDate: Date): Observable<LocationInvoice[]> {
     return this.httpClient
       .get<LocationInvoiceDto[]>(
-        `/server/api/v1/invoices?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
+        `/server/api/v1/invoices?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`,
       )
       .pipe(map((res) => res.map((data) => new LocationInvoice(data))));
   }

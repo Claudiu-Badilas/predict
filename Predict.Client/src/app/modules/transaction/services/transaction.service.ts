@@ -35,9 +35,9 @@ export class TransactionService {
     const source$ = cachedDtos
       ? of(cachedDtos)
       : this.httpClient
-          .get<
-            TransactionResponse[]
-          >('https://localhost:8080/api/v1/transactions')
+          .get<TransactionResponse[]>(
+            'https://localhost:8080/api/v1/transactions',
+          )
           .pipe(
             tap((dtos) =>
               this.localStorage.setItem(TransactionService_STORAGE_KEY, dtos),

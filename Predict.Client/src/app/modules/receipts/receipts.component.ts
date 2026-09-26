@@ -55,10 +55,7 @@ export class ReceiptsComponent {
     this.store.dispatch(
       ReceiptsActions.productsViewModeChanged({
         viewMode: value.toLowerCase() as
-          | 'all'
-          | 'monthly'
-          | 'yearly'
-          | 'receipts',
+          'all' | 'monthly' | 'yearly' | 'receipts',
       }),
     );
   }

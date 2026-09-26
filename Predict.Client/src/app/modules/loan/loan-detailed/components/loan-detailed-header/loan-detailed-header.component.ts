@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import * as fromLoanDetailed from 'src/app/modules/loan/loan-detailed/selectors/loan-detailed.selectors';
@@ -24,9 +29,7 @@ export class LoanDetailedHeaderComponent {
     { initialValue: null },
   );
   readonly historicalInstalmentPaymentBatches = toSignal(
-    this.store.select(
-      fromLoanDetailed.getHistoricalInstalmentPaymentBatches,
-    ),
+    this.store.select(fromLoanDetailed.getHistoricalInstalmentPaymentBatches),
     { initialValue: [] },
   );
 
