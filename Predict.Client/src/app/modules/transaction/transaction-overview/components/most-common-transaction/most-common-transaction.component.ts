@@ -731,7 +731,8 @@ interface PeriodGroup {
       --transition-base: 0.2s var(--ease-out);
 
       display: block;
-      height: 100%;
+      height: calc(100dvh - 50px);
+      min-height: 0;
       font-family: inherit;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -759,7 +760,14 @@ interface PeriodGroup {
 
     .scroll-container {
       height: 100%;
+      min-height: 0;
       padding-right: 0;
+    }
+
+    @media (max-width: 768px) {
+      :host {
+        height: calc(100dvh - 56px);
+      }
     }
 
     /* ===== VISIBILITY HELPERS ===== */
