@@ -57,7 +57,7 @@ export class LoanService {
   private async decode(
     encrypted: EncryptedRepaymentSchedules,
   ): Promise<RepaymentScheduleDto[]> {
-    console.log('Encoded loan data:', JSON.stringify(encrypted));
+    // console.log('Encoded loan data:', JSON.stringify(encrypted));
 
     const key = await crypto.subtle.importKey(
       'raw',
