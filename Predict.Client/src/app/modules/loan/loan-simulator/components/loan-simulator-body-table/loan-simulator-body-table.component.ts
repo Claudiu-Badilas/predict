@@ -111,19 +111,19 @@ import {
                     <div class="mt-1 group-actions">
                       <button
                         type="button"
-                        class="action-btn add-early"
-                        title="Adaugă următoarea rată ca anticipată"
-                        (click)="onAddEarlyPayment(group, $event)"
-                      >
-                        +
-                      </button>
-                      <button
-                        type="button"
                         class="action-btn remove-early"
                         title="Elimină o rată anticipată"
                         (click)="onRemoveEarlyPayment(group, $event)"
                       >
                         −
+                      </button>
+                      <button
+                        type="button"
+                        class="action-btn add-early"
+                        title="Adaugă următoarea rată ca anticipată"
+                        (click)="onAddEarlyPayment(group, $event)"
+                      >
+                        +
                       </button>
                       <button
                         type="button"
@@ -293,19 +293,19 @@ import {
                 <div class="mobile-row-actions">
                   <button
                     type="button"
-                    class="action-btn add-early"
-                    title="Adaugă următoarea rată ca anticipată"
-                    (click)="onAddEarlyPayment(group, $event)"
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
                     class="action-btn remove-early"
                     title="Elimină o rată anticipată"
                     (click)="onRemoveEarlyPayment(group, $event)"
                   >
                     −
+                  </button>
+                  <button
+                    type="button"
+                    class="action-btn add-early"
+                    title="Adaugă următoarea rată ca anticipată"
+                    (click)="onAddEarlyPayment(group, $event)"
+                  >
+                    +
                   </button>
                   <button
                     type="button"
@@ -658,7 +658,7 @@ import {
     .group-actions {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 10px;
       justify-content: center;
     }
 
@@ -923,8 +923,7 @@ import {
       .mobile-group-actions {
         display: flex;
         align-items: center;
-        gap: 3px;
-        margin-top: 6px;
+        gap: 10px;
         justify-content: flex-end;
       }
 
@@ -1093,8 +1092,7 @@ import {
 
       /* Even more compact actions on small screens */
       .mobile-group-actions {
-        gap: 5px;
-        margin-top: 4px;
+        gap: 10px;
       }
 
       .mobile-group-actions .action-btn {
@@ -1118,7 +1116,7 @@ import {
       }
 
       .mobile-row-actions {
-        gap: 5px;
+        gap: 10px;
       }
 
       .mobile-row-actions .action-btn {
