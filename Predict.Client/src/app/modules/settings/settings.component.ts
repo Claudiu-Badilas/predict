@@ -14,10 +14,9 @@ import * as fromAppStore from 'src/app/store/app-state.reducer';
   styleUrl: './settings.component.scss',
 })
 export class SettingsComponent {
-  activeTab: string = 'tab1';
+  activeTab: string = 'tab2';
 
   tabs = [
-    { id: 'tab1', label: 'Loan', url: 'loan' },
     { id: 'tab2', label: 'Transactions', url: 'transactions' },
     { id: 'tab3', label: 'Receipts', url: 'receipts' },
   ];

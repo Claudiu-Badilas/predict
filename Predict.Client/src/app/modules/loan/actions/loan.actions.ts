@@ -15,6 +15,11 @@ export const setLoansSuccess = createAction(
   props<{ repaymentSchedules: RepaymentSchedule[] }>(),
 );
 
+export const loadRepaymentSchedulesFailure = createAction(
+  '[Loan] Load Repayment Schedules Failure',
+  props<{ message: string }>(),
+);
+
 export const selectedLoanChanged = createAction(
   '[Loan] Selected Loan Changed',
   props<{ selected: string }>(),

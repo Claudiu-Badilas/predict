@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
@@ -20,7 +26,7 @@ export class TopBarComponent implements OnInit {
     { label: 'Loan', icon: 'wallet', url: '/loan' },
     { label: 'Transactions', icon: 'trending', url: '/transactions' },
     { label: 'Receipts', icon: 'receipt', url: '/receipts' },
-    { label: 'Invoices', icon: 'file', url: '/invoices' },
+    // { label: 'Invoices', icon: 'file', url: '/invoices' },
     { label: 'Settings', icon: 'settings', url: '/settings' },
   ];
 

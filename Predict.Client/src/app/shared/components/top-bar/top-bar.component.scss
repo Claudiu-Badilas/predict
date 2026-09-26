@@ -74,6 +74,12 @@
   flex-shrink: 0;
 }
 
+.topbar__custom-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 /* Mobile Filter Button */
 .mobile-filter {
   display: none;
@@ -357,6 +363,10 @@
   /* Hide desktop actions with labels */
   .actions--desktop {
     display: none;
+  }
+
+  .topbar__custom-actions {
+    margin-left: auto;
   }
 
   /* Show mobile actions (icons only) */

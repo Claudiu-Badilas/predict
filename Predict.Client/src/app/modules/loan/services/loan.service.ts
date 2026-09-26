@@ -7,6 +7,8 @@ import { PrintoutsService } from 'src/app/platform/services/printouts.service';
 import { RepaymentSchedule, RepaymentScheduleDto } from '../models/loan.model';
 
 export const LoanService_STORAGE_KEY = 'GraficRambursare_18-Sep-2026';
+export const LoanService_MANUAL_STORAGE_KEY = `${LoanService_STORAGE_KEY}_ManualUpload`;
+export const LoanService_MANUAL_FILENAME_KEY = `${LoanService_MANUAL_STORAGE_KEY}_FileName`;
 
 @Injectable({ providedIn: 'root' })
 export class LoanService {
@@ -17,6 +19,13 @@ export class LoanService {
   ) {}
 
   getRepaymentSchedules(): Observable<RepaymentSchedule[]> {
+    const manuallyUploadedDtos = this._localStorage.getItem<
+      RepaymentScheduleDto[]
+    >(LoanService_MANUAL_STORAGE_KEY);
+    if (manuallyUploadedDtos) {
+      return of(this.convertToModels(manuallyUploadedDtos));
+    }
+
     const cachedDtos = this._localStorage.getItem<RepaymentScheduleDto[]>(
       LoanService_STORAGE_KEY,
     );

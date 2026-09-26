@@ -1,19 +1,35 @@
 .storage-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    0 1px 2px rgba(0, 0, 0, 0.03);
+  background: #ffffff;
   overflow: hidden;
-  transition: all 0.2s ease;
+}
+
+.storage-modal-header {
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f8faf9;
+}
+
+.storage-modal-header .modal-title {
+  color: #182b2a;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.storage-modal-subtitle {
+  display: block;
+  margin-top: 3px;
+  color: #667875;
+  font-size: 0.78rem;
 }
 
 .storage-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px;
-  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  gap: 12px;
+  padding: 16px 22px;
+  background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -22,29 +38,41 @@
   align-items: center;
   gap: 12px;
   font-weight: 600;
-  font-size: 1rem;
-  color: #0f172a;
-  letter-spacing: -0.01em;
+  font-size: 0.95rem;
+  color: #243735;
 }
 
 .upload-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background: transparent;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  gap: 7px;
+  padding: 7px 11px;
+  background: #eaf5f2;
+  border: 1px solid #cce5df;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #64748b;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+  color: #176b5d;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .upload-btn:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-  color: #0f172a;
+  background: #dcefe9;
+  border-color: #aed7cc;
+  color: #10594e;
+}
+
+.upload-btn:focus-within {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+}
+
+.upload-btn-label {
+  white-space: nowrap;
 }
 
 .hidden-input {
@@ -52,12 +80,14 @@
 }
 
 .storage-count {
-  font-size: 0.875rem;
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-weight: 500;
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border: 1px solid #e4e9e8;
+  border-radius: 6px;
+  background: #f7f9f8;
+  color: #687976;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 /* Empty State */
@@ -97,13 +127,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid #f1f5f9;
-  transition: all 0.2s ease;
+  gap: 16px;
+  padding: 14px 22px;
+  border-bottom: 1px solid #edf1f0;
+  transition: background-color 0.15s ease;
 }
 
 .storage-item:hover {
-  background: #fafcff;
+  background: #f8fbfa;
 }
 
 .storage-item:last-child {
@@ -120,29 +151,59 @@
 
 .storage-item-key {
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #0f172a;
+  font-weight: 550;
+  color: #253533;
   word-break: break-all;
   font-family: "Monaco", "Menlo", monospace;
 }
 
+.storage-item-preview {
+  max-height: 280px;
+  overflow: auto;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f8fafc;
+  color: #334155;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+}
+
 .storage-item-type {
   font-size: 0.75rem;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 12px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 5px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .storage-item-type.local {
-  background: #dbeafe;
-  color: #1e40af;
+  background: #e9f1f8;
+  color: #315b7c;
 }
 
 .storage-item-type.session {
-  background: #fef3c7;
-  color: #92400e;
+  background: #fbf0dc;
+  color: #826128;
+}
+
+.storage-item-origin {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.storage-item-origin.manual-upload {
+  background: #e7f4ec;
+  color: #276344;
+}
+
+.storage-item-origin.automatic {
+  background: #e8f3f2;
+  color: #28685f;
 }
 
 .storage-item-actions {
@@ -159,20 +220,33 @@
   width: 32px;
   height: 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   background: transparent;
 }
 
 .download-btn {
-  color: #3b82f6;
+  color: #426b7b;
+}
+
+.view-btn {
+  color: #28766b;
+}
+
+.view-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+.view-btn:hover {
+  background: #e8f4f1;
+  color: #17665b;
 }
 
 .download-btn:hover {
-  background: #eff6ff;
-  color: #2563eb;
-  transform: scale(1.05);
+  background: #edf3f5;
+  color: #305768;
 }
 
 .delete-btn {
@@ -180,9 +254,8 @@
 }
 
 .delete-btn:hover {
-  background: #fef2f2;
-  color: #dc2626;
-  transform: scale(1.05);
+  background: #fbefed;
+  color: #b94c3d;
 }
 
 .action-btn:active {
@@ -191,8 +264,12 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .storage-modal-header {
+    padding: 16px 18px;
+  }
+
   .storage-card-header {
-    padding: 16px 20px;
+    padding: 14px 18px;
   }
 
   .storage-card-title {
@@ -204,7 +281,7 @@
   }
 
   .storage-item {
-    padding: 14px 20px;
+    padding: 13px 18px;
   }
 
   .storage-item-key {
@@ -214,36 +291,62 @@
 
 @media (max-width: 640px) {
   .storage-card-header {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .storage-modal-header {
     padding: 14px 16px;
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
   }
 
   .storage-card-title {
-    width: 100%;
-    justify-content: space-between;
+    flex: 1;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .storage-count {
+    flex-shrink: 0;
+    padding: 4px 8px;
   }
 
   .storage-item {
-    padding: 12px 16px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 8px;
+    padding: 12px;
   }
 
   .storage-item-info {
-    width: 100%;
+    width: auto;
     flex-wrap: wrap;
+    align-content: start;
+    gap: 6px 8px;
   }
 
   .storage-item-key {
-    flex: 1;
+    flex: 0 1 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .storage-item-original-key {
+    flex: 0 1 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .storage-item-actions {
-    width: 100%;
+    width: auto;
     justify-content: flex-end;
+    gap: 2px;
+  }
+
+  .storage-item-preview {
+    max-width: 100%;
+    padding: 8px 12px;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -253,7 +356,19 @@
   }
 
   .storage-card-header {
-    padding: 12px;
+    padding: 10px 12px;
+  }
+
+  .storage-modal-subtitle {
+    font-size: 0.72rem;
+  }
+
+  .upload-btn {
+    padding: 7px;
+  }
+
+  .upload-btn-label {
+    display: none;
   }
 
   .storage-item {

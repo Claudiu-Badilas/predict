@@ -8,6 +8,16 @@
       />
     </div>
   </ng-container>
+  <button
+    type="button"
+    class="loan-info-button"
+    topbar-actions
+    aria-label="Loan storage information"
+    title="Loan storage information"
+    (click)="openLoanSettings()"
+  >
+    <img src="assets/icons/info.svg" alt="" aria-hidden="true" />
+  </button>
   <ng-container filter-content>
     <p-dropdown-select
       [items]="dropDownSelectOptions$ | async"

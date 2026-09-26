@@ -7,11 +7,13 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as fromLoanSimulator from 'src/app/modules/loan/loan-simulator/selectors/loan-simulator.selectors';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { LoanSettingsComponent } from 'src/app/modules/settings/components/loan-settings/loan-settings.component';
 import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
@@ -82,6 +84,7 @@ export class LoanSimulatorComponent {
   constructor(
     private readonly store: Store<fromLoan.LoanState>,
     private readonly _localStorageService: LocalStorageService,
+    private readonly modalService: NgbModal,
   ) {
     this.simulationRows().forEach((row) =>
       this.simulationRowsFormArray.push(this.createRowForm(row)),
@@ -125,6 +128,14 @@ export class LoanSimulatorComponent {
         this.simulationRowsKey,
         this.simulationRows(),
       );
+    });
+  }
+
+  openLoanSettings(): void {
+    this.modalService.open(LoanSettingsComponent, {
+      centered: true,
+      size: 'lg',
+      scrollable: true,
     });
   }
 

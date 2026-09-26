@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as LoanDetailedActions from 'src/app/modules/loan/loan-detailed/actions/loan-detailed.actions';
 import * as fromLoanDetailed from 'src/app/modules/loan/loan-detailed/selectors/loan-detailed.selectors';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { LoanSettingsComponent } from 'src/app/modules/settings/components/loan-settings/loan-settings.component';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-toggle.component';
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
@@ -40,7 +42,18 @@ export class LoanDetailedComponent {
   calculateRepaymentSchedules = toSignal(
     this.store.select(fromLoan.getCalculateRepaymentSchedules),
   );
-  constructor(private store: Store<fromLoan.LoanState>) {}
+  constructor(
+    private store: Store<fromLoan.LoanState>,
+    private modalService: NgbModal,
+  ) {}
+
+  openLoanSettings(): void {
+    this.modalService.open(LoanSettingsComponent, {
+      centered: true,
+      size: 'lg',
+      scrollable: true,
+    });
+  }
 
   onDropdownSelected(value: string) {
     this.store.dispatch(
