@@ -1,95 +1,30 @@
 <div class="products-analytics mt-2">
-  <div class="analytics-header">
-    <div class="text-center">
-      <p class="subtitle">Products Insights Overview</p>
-    </div>
-    <div class="header-right">
-      <p-toggle-button
-        [options]="[
-          { label: 'Monthly' },
-          { label: 'Yearly' },
-          { label: 'All' },
-          { label: 'Receipts' },
-        ]"
-        [selected]="getSelectedViewLabel()"
-        [gradient]="{
-          primaryColor: '#3b82f6',
-          secondaryColor: '#10b981',
-        }"
-        (selectionChange)="onToggle($event)"
-      />
-    </div>
-  </div>
+  <div class="summary-grid">
+    <div class="summary-row">
+      <div class="summary-section stat-item stat-item--green">
+        <div class="stat-row">
+          <span class="stat-item__label">Revenue</span>
+          <span class="stat-item__label">Items Sold</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-item__value positive">{{
+            totalRevenue() | numberFormat: "0.00"
+          }}</span>
+          <span class="stat-item__value">{{ totalItemsSold() }}</span>
+        </div>
+      </div>
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon revenue-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M12 2v20M17 7l-5-5-5 5M7 17l5 5 5-5"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
-      </div>
-      <div class="stat-info">
-        <span class="stat-value positive">{{
-          totalRevenue() | numberFormat: "0.00"
-        }}</span>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon quantity-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M20 7L4 7M20 12L4 12M20 17L4 17"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
-      </div>
-      <div class="stat-info">
-        <span class="stat-label">Total Items Sold</span>
-        <span class="stat-value">{{ totalItemsSold() }}</span>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon products-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M20 7L4 7M20 12L4 12M20 17L4 17"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
-      </div>
-      <div class="stat-info">
-        <span class="stat-label">Unique Products</span>
-        <span class="stat-value">{{ uniqueProductsCount() }}</span>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon avg-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M3 6h18M9 12h6M7 18h10"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
-      </div>
-      <div class="stat-info">
-        <span class="stat-label">Avg Price</span>
-        <span class="stat-value">{{
-          averagePrice() | numberFormat: "0.00"
-        }}</span>
+      <div class="summary-section stat-item stat-item--blue">
+        <div class="stat-row">
+          <span class="stat-item__label">Unique Products</span>
+          <span class="stat-item__label">Average Price</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-item__value">{{ uniqueProductsCount() }}</span>
+          <span class="stat-item__value">{{
+            averagePrice() | numberFormat: "0.00"
+          }}</span>
+        </div>
       </div>
     </div>
   </div>

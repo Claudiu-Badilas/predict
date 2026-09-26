@@ -13,13 +13,13 @@ import { ProductPriceTrendChartUtils } from '../receipts-products/utils/products
 
 interface ReceiptsProductsState {
   searchTerm: string;
+  viewMode: 'all' | 'monthly' | 'yearly' | 'receipts';
 }
 
 export interface State {
   receipts: ReceiptDomain[];
   startDate: Date;
   endDate: Date;
-
   receiptsProducts: ReceiptsProductsState;
 }
 
@@ -27,9 +27,9 @@ const initialState: State = {
   receipts: [],
   startDate: DateUtils.getStartOfTheYear({ subtractYears: 1 }),
   endDate: new Date(),
-
   receiptsProducts: {
     searchTerm: null,
+    viewMode: 'monthly',
   },
 };
 
@@ -44,13 +44,18 @@ const receiptsReducer = createReducer(
     startDate,
     endDate,
   })),
-
-  // Receipts Products
   on(ReceiptsActions.searchTermChanged, (state, { searchTerm }) => ({
     ...state,
     receiptsProducts: {
       ...state.receiptsProducts,
       searchTerm,
+    },
+  })),
+  on(ReceiptsActions.productsViewModeChanged, (state, { viewMode }) => ({
+    ...state,
+    receiptsProducts: {
+      ...state.receiptsProducts,
+      viewMode,
     },
   })),
 );
@@ -76,7 +81,6 @@ export const getReceipts = createSelector(
   (state) => state.receipts,
 );
 
-// Receipts Products selectors
 export const getReceiptsProducts = createSelector(
   getReceiptsState,
   (state) => state.receiptsProducts,
@@ -97,18 +101,23 @@ export const getProductsSearchTerm = createSelector(
   (state) => state.searchTerm,
 );
 
+export const getProductsViewMode = createSelector(
+  getReceiptsProducts,
+  (state) => state.viewMode,
+);
+
 export const getAvailableReceiptsProductBySearchTerm = createSelector(
   getReceiptsProductDomain,
   getProductsSearchTerm,
   (receiptsProduct, searchTerm) =>
-    receiptsProduct.filter((p) =>
+    receiptsProduct.filter((product) =>
       !!searchTerm
         ? searchTerm
             .toLowerCase()
             .split(',')
-            .map((t) => t.trim())
-            .filter((t) => !!t && t !== '')
-            .some((term) => p.name.toLowerCase().includes(term))
+            .map((term) => term.trim())
+            .filter((term) => !!term && term !== '')
+            .some((term) => product.name.toLowerCase().includes(term))
         : receiptsProduct,
     ),
 );

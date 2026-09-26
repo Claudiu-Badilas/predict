@@ -23,3 +23,8 @@ export const searchTermChanged = createAction(
   '[Receipts Products] Search Term Changed',
   props<{ searchTerm: string }>(),
 );
+
+export const productsViewModeChanged = createAction(
+  '[Receipts Products] View Mode Changed',
+  props<{ viewMode: 'all' | 'monthly' | 'yearly' | 'receipts' }>(),
+);

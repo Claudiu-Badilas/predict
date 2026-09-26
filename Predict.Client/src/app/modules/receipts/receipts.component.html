@@ -1,1 +1,31 @@
+<p-top-bar
+  [hasFiltersContent]="true"
+  [hasModuleNavContent]="true"
+  [hasUploadAction]="true"
+  (uploadRequested)="openStorageSettings()"
+>
+  <ng-container module-navigation>
+    <p-toggle-button-actions
+      [options]="['Monthly', 'Yearly', 'All', 'Receipts']"
+      [selected]="getSelectedViewLabel()"
+      (selectionChange)="onToggle($event)"
+    />
+  </ng-container>
+
+  <ng-container filter-content>
+    <div class="mb-2">
+      <p-date-range-picker
+        [startDate]="startDate$ | async"
+        [endDate]="endDate$ | async"
+        [minDate]="minDate"
+        [maxDate]="now"
+        (valueChanged)="handleRangeChange($event)"
+      />
+    </div>
+    <div class="mb-2">
+      <p-search-input (search)="onSearch($event)" />
+    </div>
+  </ng-container>
+</p-top-bar>
+
 <router-outlet></router-outlet>

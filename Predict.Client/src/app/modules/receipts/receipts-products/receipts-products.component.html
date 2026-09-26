@@ -1,27 +1,4 @@
-<p-top-bar
-  [hasFiltersContent]="true"
-  [hasModuleNavContent]="true"
-  [hasUploadAction]="true"
-  (uploadRequested)="openStorageSettings()"
->
-  <ng-container module-navigation>
-    <p-toggle-button-actions
-      [options]="['Summary', 'Products']"
-      [selected]="'Products'"
-      (selectionChange)="onSelectionChange($event)"
-  /></ng-container>
-  <ng-container filter-content>
-    <p-date-range-picker
-      [startDate]="startDate$ | async"
-      [endDate]="endDate$ | async"
-      [minDate]="minDate"
-      [maxDate]="now"
-      (valueChanged)="handleRangeChange($event)"
-    />
-    <div class="mt-2">
-      <p-search-input (search)="onSearch($event)" />
-    </div>
-  </ng-container>
-</p-top-bar>
-
-<p-most-common-products [receipts]="receipts$ | async"></p-most-common-products>
+<p-most-common-products
+  [receipts]="receipts$ | async"
+  [viewMode]="viewMode()"
+></p-most-common-products>

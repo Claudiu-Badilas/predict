@@ -61,12 +61,7 @@ interface Receipt {
 
 @Component({
   selector: 'p-most-common-products',
-  imports: [
-    CommonModule,
-    NumberFormatPipe,
-    ToggleButtonComponent,
-    HighchartWrapperComponent,
-  ],
+  imports: [CommonModule, NumberFormatPipe, HighchartWrapperComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './most-common-products.component.html',
   styleUrl: './most-common-products.component.scss',
@@ -81,7 +76,7 @@ export class MostCommonProductsComponent implements OnChanges {
   private chartLoading = new Map<string, boolean>();
   private chartLoaded = new Map<string, boolean>();
 
-  viewMode = signal<'all' | 'monthly' | 'yearly' | 'receipts'>('monthly');
+  viewMode = input<'all' | 'monthly' | 'yearly' | 'receipts'>('monthly');
   expandedPeriodId = signal<string | null>(null);
   expandedReceiptId = signal<string | null>(null);
 
@@ -294,27 +289,6 @@ export class MostCommonProductsComponent implements OnChanges {
     this.isModalOpen.set(false);
     this.selectedProduct.set(null);
     this.modalChartOptions.set(null);
-  }
-
-  onToggle(value: string) {
-    if (value === 'All') {
-      this.viewMode.set('all');
-    } else if (value === 'Monthly') {
-      this.viewMode.set('monthly');
-    } else if (value === 'Yearly') {
-      this.viewMode.set('yearly');
-    } else if (value === 'Receipts') {
-      this.viewMode.set('receipts');
-    }
-    this.expandedPeriodId.set(null);
-    this.expandedReceiptId.set(null);
-  }
-
-  getSelectedViewLabel(): string {
-    if (this.viewMode() === 'all') return 'All';
-    if (this.viewMode() === 'monthly') return 'Monthly';
-    if (this.viewMode() === 'yearly') return 'Yearly';
-    return 'Receipts';
   }
 
   togglePeriod(periodId: string) {
