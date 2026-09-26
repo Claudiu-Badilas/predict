@@ -13,7 +13,7 @@ import { map } from 'rxjs';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as fromLoanSimulator from 'src/app/modules/loan/loan-simulator/selectors/loan-simulator.selectors';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
-import { LoanSettingsComponent } from 'src/app/modules/settings/components/loan-settings/loan-settings.component';
+import { LoanSettingsComponent } from 'src/app/modules/loan/components/loan-settings/loan-settings.component';
 import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';

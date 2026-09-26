@@ -5,6 +5,7 @@ import { LocalStorageService } from 'src/app/platform/services/local-storage.ser
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import { ReceiptDomain } from '../models/receipts-domain.model';
 import { ReceiptDto } from '../models/receipts-dto.model';
+import { ReceiptsService_MANUAL_STORAGE_KEY } from './receipts-settings.constants';
 
 export const ReceiptsService_STORAGE_KEY = 'Receipts_Cache_May_2025';
 
@@ -16,9 +17,12 @@ export class ReceiptsService {
   ) {}
 
   getReceipts(startDate: Date, endDate: Date): Observable<ReceiptDomain[]> {
-    const cachedDtos = this.localStorage.getItem<ReceiptDto[]>(
-      ReceiptsService_STORAGE_KEY,
+    const manuallyUploadedDtos = this.localStorage.getItem<ReceiptDto[]>(
+      ReceiptsService_MANUAL_STORAGE_KEY,
     );
+    const cachedDtos =
+      manuallyUploadedDtos ??
+      this.localStorage.getItem<ReceiptDto[]>(ReceiptsService_STORAGE_KEY);
 
     const source$ = cachedDtos
       ? of(cachedDtos)

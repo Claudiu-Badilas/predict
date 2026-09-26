@@ -34,13 +34,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'settings',
-    loadChildren: () =>
-      import('./modules/settings/settings.routing').then(
-        (m) => m.settingsRoutes,
-      ),
-  },
-  {
     path: 'authentication',
     loadChildren: () =>
       import('./platform/authentication/authentication.routing').then(

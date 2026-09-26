@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import * as TransactionsActions from 'src/app/modules/transaction/actions/transactions.actions';
@@ -25,12 +27,30 @@ export class TransactionsEffects {
         this.store.select(fromTransactions.getEndDate),
       ),
       switchMap(([, startDate, endDate]) =>
-        this._transactionService.getTransactions(startDate, endDate),
+        this._transactionService.getTransactions(startDate, endDate).pipe(
+          switchMap((transactions) =>
+            of(
+              TransactionsActions.setTransactionsSuccess({ transactions }),
+              LayoutActions.spinnerOff(),
+            ),
+          ),
+          catchError((error: unknown) =>
+            of(
+              TransactionsActions.loadTransactionsFailure({
+                message:
+                  error instanceof HttpErrorResponse
+                    ? error.status === 0
+                      ? 'Could not reach the transactions API.'
+                      : `Transactions API request failed (${error.status}).`
+                    : error instanceof Error
+                      ? error.message
+                      : 'Failed to load transactions.',
+              }),
+              LayoutActions.spinnerOff(),
+            ),
+          ),
+        ),
       ),
-      switchMap((transactions) => [
-        TransactionsActions.setTransactionsSuccess({ transactions }),
-        LayoutActions.spinnerOff(),
-      ]),
     ),
   );
 }

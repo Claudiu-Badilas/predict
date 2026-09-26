@@ -5,6 +5,16 @@
       [selected]="getSelectedViewLabel()"
       (selectionChange)="onToggle($event)"
   /></ng-container>
+  <button
+    type="button"
+    class="topbar-storage-button"
+    topbar-actions
+    aria-label="Transaction storage"
+    title="Transaction storage"
+    (click)="openStorageSettings()"
+  >
+    <img src="assets/icons/info.svg" alt="" aria-hidden="true" />
+  </button>
   <ng-container filter-content>
     <div class="mb-2">
       <p-date-range-picker

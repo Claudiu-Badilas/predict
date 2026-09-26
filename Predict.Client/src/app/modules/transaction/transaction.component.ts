@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -14,6 +15,7 @@ import * as TransactionsActions from 'src/app/modules/transaction/actions/transa
 import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
 import { Colors } from 'src/app/shared/styles/colors';
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
+import { TransactionsSettingsComponent } from './components/transaction-settings/transaction-settings.component';
 
 @Component({
   selector: 'p-transaction',
@@ -70,8 +72,19 @@ export class TransactionComponent {
   minDate = new Date('2016-01-01');
   maxDate = new Date('2030-01-01');
 
-  constructor(private readonly store: Store<fromTransactions.State>) {
+  constructor(
+    private readonly store: Store<fromTransactions.State>,
+    private readonly modalService: NgbModal,
+  ) {
     this.store.dispatch(TransactionsActions.loadTransactions());
+  }
+
+  openStorageSettings(): void {
+    this.modalService.open(TransactionsSettingsComponent, {
+      centered: true,
+      size: 'lg',
+      scrollable: true,
+    });
   }
 
   handleRangeChange(value: any) {

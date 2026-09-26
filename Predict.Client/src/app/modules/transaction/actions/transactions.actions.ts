@@ -10,6 +10,11 @@ export const setTransactionsSuccess = createAction(
   props<{ transactions: TransactionDomain[] }>(),
 );
 
+export const loadTransactionsFailure = createAction(
+  '[Transactions] Load Transactions Failure',
+  props<{ message: string }>(),
+);
+
 export const dateRangeChanged = createAction(
   '[Transactions] Date Range Changed',
   props<{ startDate: Date; endDate: Date }>(),

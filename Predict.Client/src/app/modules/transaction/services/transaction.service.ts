@@ -8,6 +8,7 @@ import {
   TransactionDomain,
   TransactionResponse,
 } from '../models/transactions.model';
+import { TransactionService_MANUAL_STORAGE_KEY } from './transaction-settings.constants';
 
 export const TransactionService_STORAGE_KEY = 'Transactions_Cache_Jul_2026';
 
@@ -22,9 +23,14 @@ export class TransactionService {
     startDate: Date,
     endDate: Date,
   ): Observable<TransactionDomain[]> {
-    const cachedDtos = this.localStorage.getItem<TransactionResponse[]>(
-      TransactionService_STORAGE_KEY,
-    );
+    const manuallyUploadedDtos = this.localStorage.getItem<
+      TransactionResponse[]
+    >(TransactionService_MANUAL_STORAGE_KEY);
+    const cachedDtos =
+      manuallyUploadedDtos ??
+      this.localStorage.getItem<TransactionResponse[]>(
+        TransactionService_STORAGE_KEY,
+      );
 
     const source$ = cachedDtos
       ? of(cachedDtos)

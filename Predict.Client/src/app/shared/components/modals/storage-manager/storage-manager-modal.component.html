@@ -1,98 +1,105 @@
-@if (errorMessage(); as message) {
-  <div class="alert alert-danger mx-3 mt-3 mb-0" role="alert">
-    {{ message }}
+<div class="storage-modal-header">
+  <div class="storage-modal-heading">
+    <h5 class="storage-modal-title">{{ config.title }}</h5>
+    <span class="storage-modal-subtitle"
+      >{{ storageItems().length }} stored items</span
+    >
   </div>
-}
-
-<div class="storage-card modal-body p-0">
-  <div class="storage-card-header">
-    <div class="storage-card-title">
-      <span>Storage items</span>
-      <label class="upload-btn">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12 16V4M8 8L12 4L16 8"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M4 20H20"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-        <span class="upload-btn-label">Upload JSON</span>
-        <input
-          type="file"
-          class="hidden-input"
-          accept=".json"
-          (change)="onFileSelected($event)"
-        />
-      </label>
-    </div>
-    <div class="storage-count">{{ storageKeys().length }} items</div>
-
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="activeModal.dismiss()"
-    ></button>
-  </div>
-
-  @if (storageKeys().length === 0) {
-    <div class="empty-state">
+  <div class="storage-modal-actions">
+    <label class="upload-btn">
       <svg
-        width="48"
-        height="48"
+        width="16"
+        height="16"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         <path
-          d="M20 12V8H4V12M20 12L4 12M20 12V16H4V12M4 12H2M22 12H20M4 12H2M4 16H2M22 16H20M4 16V20H20V16"
+          d="M12 16V4M8 8L12 4L16 8"
           stroke="currentColor"
           stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M4 20H20"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="upload-btn-label">Upload JSON</span>
+      <input
+        type="file"
+        class="hidden-input"
+        accept=".json,application/json"
+        aria-label="Upload JSON file"
+        (change)="onFileSelected($event)"
+      />
+    </label>
+    @if (activeModal) {
+      <button
+        type="button"
+        class="modal-close-btn"
+        aria-label="Close"
+        (click)="activeModal.dismiss()"
+      >
+        ×
+      </button>
+    }
+  </div>
+</div>
+
+@if (errorMessage(); as message) {
+  <div class="storage-error" role="alert">{{ message }}</div>
+}
+
+<div class="storage-modal-body">
+  @if (storageItems().length === 0) {
+    <div class="empty-state">
+      <svg
+        width="42"
+        height="42"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          d="M20 12V8H4V12M20 12L4 12M20 12V16H4V12M4 12H2M22 12H20M4 16H2M22 16H20M4 16V20H20V16"
+          stroke="currentColor"
+          stroke-width="1.7"
           stroke-linecap="round"
         />
         <path
           d="M8 6H16"
           stroke="currentColor"
-          stroke-width="2"
+          stroke-width="1.7"
           stroke-linecap="round"
         />
       </svg>
-      <p>No stored items found</p>
-      <span>Upload a JSON file to get started</span>
+      <p>No stored items</p>
     </div>
   } @else {
     <div class="storage-list">
-      @for (item of storageKeys(); track item.storageType + ":" + item.key) {
+      @for (item of storageItems(); track item.storageType + ":" + item.key) {
         <div class="storage-item">
           <div class="storage-item-info">
             <span class="storage-item-key">{{ item.key }}</span>
             <span
-              class="storage-item-type"
-              [class.local]="item.storageType === 'local'"
-              [class.session]="item.storageType === 'session'"
+              class="storage-badge"
+              [class.storage-badge--local]="item.storageType === 'local'"
+              [class.storage-badge--session]="item.storageType === 'session'"
             >
               {{ item.storageType }}
             </span>
             @if (item.origin) {
               <span
-                class="storage-item-origin"
-                [class.manual-upload]="item.origin === 'manual'"
-                [class.automatic]="item.origin === 'automatic'"
+                class="storage-badge"
+                [class.storage-badge--manual]="item.origin === 'manual'"
+                [class.storage-badge--automatic]="item.origin === 'automatic'"
               >
                 {{ item.origin === "manual" ? "Manual upload" : "Automatic" }}
               </span>
@@ -116,26 +123,21 @@
               class="action-btn download-btn"
               (click)="downloadItem(item)"
               title="Download"
+              aria-label="Download"
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
                 <path
-                  d="M12 16V4M8 12L12 16L16 12"
+                  d="M12 16V4M8 12L12 16L16 12M4 20H20"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                />
-                <path
-                  d="M4 20H20"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
                 />
               </svg>
             </button>
@@ -144,13 +146,14 @@
               class="action-btn delete-btn"
               (click)="removeItem(item)"
               title="Delete"
+              aria-label="Delete"
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
                 <path
                   d="M18 6L6 18M6 6L18 18"
@@ -163,6 +166,7 @@
             </button>
           </div>
         </div>
+
         @if (
           viewedData()?.key === item.key &&
           viewedData()?.storageType === item.storageType

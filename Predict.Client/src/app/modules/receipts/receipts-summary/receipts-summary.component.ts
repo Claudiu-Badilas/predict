@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import * as ReceiptsActions from 'src/app/modules/receipts/actions/receipts.actions';
 import * as fromReceipts from 'src/app/modules/receipts/reducers/receipts.reducer';
@@ -9,6 +10,7 @@ import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-b
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { ReceiptListComponent } from './components/receipts-list/receipts-list.component';
+import { ReceiptsSettingsComponent } from '../components/receipts-settings/receipts-settings.component';
 
 @Component({
   selector: 'p-receipts-summary',
@@ -28,7 +30,18 @@ export class ReceiptsSummaryComponent {
   endDate$ = this.store.select(fromReceipts.getEndDate);
   receipts$ = this.store.select(fromReceipts.getReceipts);
 
-  constructor(private readonly store: Store<fromReceipts.State>) {}
+  constructor(
+    private readonly store: Store<fromReceipts.State>,
+    private readonly modalService: NgbModal,
+  ) {}
+
+  openStorageSettings(): void {
+    this.modalService.open(ReceiptsSettingsComponent, {
+      centered: true,
+      size: 'lg',
+      scrollable: true,
+    });
+  }
 
   minDate = new Date('2016-01-01');
   now = new Date();

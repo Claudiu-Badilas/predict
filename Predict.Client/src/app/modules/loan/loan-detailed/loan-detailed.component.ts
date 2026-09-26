@@ -8,7 +8,7 @@ import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as LoanDetailedActions from 'src/app/modules/loan/loan-detailed/actions/loan-detailed.actions';
 import * as fromLoanDetailed from 'src/app/modules/loan/loan-detailed/selectors/loan-detailed.selectors';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
-import { LoanSettingsComponent } from 'src/app/modules/settings/components/loan-settings/loan-settings.component';
+import { LoanSettingsComponent } from 'src/app/modules/loan/components/loan-settings/loan-settings.component';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-toggle.component';
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';

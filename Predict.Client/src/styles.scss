@@ -22,3 +22,34 @@ body {
     box-shadow: 0 0 20px rgba(5, 3, 3, 0.1);
   }
 }
+
+.topbar-storage-button {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.topbar-storage-button img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.topbar-storage-button:hover,
+.topbar-storage-button:active {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.topbar-storage-button:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+}

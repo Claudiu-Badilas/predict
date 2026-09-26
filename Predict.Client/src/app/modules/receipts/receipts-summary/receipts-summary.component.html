@@ -5,6 +5,16 @@
       [selected]="'Summary'"
       (selectionChange)="onSelectionChange($event)"
   /></ng-container>
+  <button
+    type="button"
+    class="topbar-storage-button"
+    topbar-actions
+    aria-label="Receipt storage"
+    title="Receipt storage"
+    (click)="openStorageSettings()"
+  >
+    <img src="assets/icons/info.svg" alt="" aria-hidden="true" />
+  </button>
   <ng-container filter-content>
     <p-date-range-picker
       [startDate]="startDate$ | async"
