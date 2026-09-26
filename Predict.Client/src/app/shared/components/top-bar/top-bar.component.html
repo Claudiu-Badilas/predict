@@ -95,16 +95,6 @@
           <span class="mobile-extended-menu__label">{{ option.label }}</span>
         </button>
       }
-      <!-- Filter option inside extended menu - only shown when there are filters -->
-      @if (hasFiltersContent) {
-        <button
-          class="mobile-extended-menu__item"
-          (click)="toggleFilterPanel(); closeMenu()"
-        >
-          <img src="assets/icons/filter.svg" alt="filter" />
-          <span class="mobile-extended-menu__label">Filter</span>
-        </button>
-      }
     </div>
   </div>
 
