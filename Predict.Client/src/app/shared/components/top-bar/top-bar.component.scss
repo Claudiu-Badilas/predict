@@ -424,7 +424,7 @@
   }
 
   .topbar-upload-action {
-    padding: 0 8px;
+    display: none;
   }
 
   /* Hide desktop actions with labels */
@@ -496,6 +496,10 @@
     width: 20px;
     height: 20px;
   }
+
+  .mobile-upload-action img {
+    filter: var(--theme-accent-icon-filter);
+  }
 }
 
 /* Tablet Responsive */
@@ -519,10 +523,6 @@
     height: 56px;
     padding: 0 8px;
     gap: 0px;
-  }
-
-  .topbar-upload-action span {
-    display: none;
   }
 
   .actions--mobile {

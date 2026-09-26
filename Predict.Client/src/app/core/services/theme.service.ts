@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable, signal } from '@angular/core';
 
-export type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark' | 'blue-dark';
 
 const THEME_STORAGE_KEY = 'theme';
 
@@ -26,7 +26,11 @@ export class ThemeService {
   constructor() {
     const savedTheme = this.view?.localStorage.getItem(THEME_STORAGE_KEY);
 
-    if (savedTheme === 'light' || savedTheme === 'dark') {
+    if (
+      savedTheme === 'light' ||
+      savedTheme === 'dark' ||
+      savedTheme === 'blue-dark'
+    ) {
       // A saved selection is explicit and must not be overridden by OS changes.
       this.manuallyChosen = true;
       this.applyTheme(savedTheme);
@@ -43,7 +47,9 @@ export class ThemeService {
   }
 
   toggleTheme(): void {
-    this.setTheme(this.getCurrentTheme() === 'light' ? 'dark' : 'light');
+    const themes: Theme[] = ['light', 'dark', 'blue-dark'];
+    const currentIndex = themes.indexOf(this.getCurrentTheme());
+    this.setTheme(themes[(currentIndex + 1) % themes.length]);
   }
 
   setTheme(theme: Theme): void {

@@ -109,6 +109,18 @@
           <span class="mobile-extended-menu__label">{{ option.label }}</span>
         </button>
       }
+
+      @if (hasUploadAction) {
+        <button
+          type="button"
+          class="mobile-extended-menu__item mobile-upload-action"
+          aria-label="Upload JSON"
+          (click)="onUploadRequested(); closeMenu()"
+        >
+          <img [src]="getUploadIconPath()" alt="" aria-hidden="true" />
+          <span class="mobile-extended-menu__label">Upload</span>
+        </button>
+      }
     </div>
   </div>
 

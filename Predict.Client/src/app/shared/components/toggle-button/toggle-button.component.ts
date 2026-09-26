@@ -36,7 +36,7 @@ export class ToggleButtonComponent {
   }
 
   getThemeIconPath(iconPath: string): string {
-    const theme = this.themeService.theme();
+    const theme = this.themeService.theme() === 'light' ? 'light' : 'dark';
     return iconPath.replace(/\/icons\//i, `/icons/${theme}/`);
   }
 
