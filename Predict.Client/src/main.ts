@@ -10,6 +10,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { AuthenticationEffects } from 'src/app/platform/authentication/effects/authentication.effects';
 import { ToastNotificationEffects } from 'src/app/platform/toast-notifications/effects/toast-notification.effects';
+import { APP_CONFIG, AppConfig } from 'src/app/core/services/app-config';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { NavigationEffects } from 'src/app/store/effects/navigation.effects';
 import { AppComponent } from './app/app.component';
@@ -33,41 +34,52 @@ if (environment.production) {
   enableProdMode();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZonelessChangeDetection(),
-    importProvidersFrom(AppRouting),
-    importProvidersFrom(StoreModule.forRoot(fromAppStore.appReducer)),
-    importProvidersFrom(
-      EffectsModule.forRoot([
-        NavigationEffects,
-        AuthenticationEffects,
-        ToastNotificationEffects,
-      ]),
-    ),
-    importProvidersFrom(StoreRouterConnectingModule.forRoot()),
-    importProvidersFrom(NgbModule),
-    // Feature stores
-    importProvidersFrom(
-      EffectsModule.forFeature([
-        InvoicesEffects,
-        ReceiptsEffects,
-        TransactionsEffects,
-        LoanEffects,
-      ]),
-    ),
+fetch(new URL('assets/config.json', document.baseURI))
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Failed to load app configuration (${response.status}).`);
+    }
+    return response.json() as Promise<AppConfig>;
+  })
+  .then((config) =>
+    bootstrapApplication(AppComponent, {
+      providers: [
+        provideZonelessChangeDetection(),
+        { provide: APP_CONFIG, useValue: config },
+        importProvidersFrom(AppRouting),
+        importProvidersFrom(StoreModule.forRoot(fromAppStore.appReducer)),
+        importProvidersFrom(
+          EffectsModule.forRoot([
+            NavigationEffects,
+            AuthenticationEffects,
+            ToastNotificationEffects,
+          ]),
+        ),
+        importProvidersFrom(StoreRouterConnectingModule.forRoot()),
+        importProvidersFrom(NgbModule),
+        // Feature stores
+        importProvidersFrom(
+          EffectsModule.forFeature([
+            InvoicesEffects,
+            ReceiptsEffects,
+            TransactionsEffects,
+            LoanEffects,
+          ]),
+        ),
 
-    importProvidersFrom([
-      StoreModule.forFeature('LoanState', fromLoan.reducer),
-      StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
-      StoreModule.forFeature('ReceiptsState', fromReceipts.reducer),
-      StoreModule.forFeature('InvoicesState', fromInvoices.reducer),
-    ]),
+        importProvidersFrom([
+          StoreModule.forFeature('LoanState', fromLoan.reducer),
+          StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
+          StoreModule.forFeature('ReceiptsState', fromReceipts.reducer),
+          StoreModule.forFeature('InvoicesState', fromInvoices.reducer),
+        ]),
 
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthenticationInterceptor,
-      multi: true,
-    },
-  ],
-}).catch((err) => console.error(err));
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthenticationInterceptor,
+          multi: true,
+        },
+      ],
+    }),
+  )
+  .catch((err) => console.error(err));
