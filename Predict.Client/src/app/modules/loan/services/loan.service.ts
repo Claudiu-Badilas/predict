@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
+import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
 import { PrintoutsService } from 'src/app/platform/services/printouts.service';
 import { RepaymentSchedule, RepaymentScheduleDto } from '../models/loan.model';
 
@@ -10,15 +11,14 @@ interface EncryptedRepaymentSchedules {
   ciphertext: string;
 }
 
-export const LoanService_STORAGE_KEY = 'GraficRambursare_18-Sep-2026';
-export const LoanService_MANUAL_STORAGE_KEY = `${LoanService_STORAGE_KEY}_ManualUpload`;
-export const LoanService_MANUAL_FILENAME_KEY = `${LoanService_MANUAL_STORAGE_KEY}_FileName`;
+export const LoanEncryptionKeyBase64 = 'LoanEncryptionKeyBase64';
 
 @Injectable({ providedIn: 'root' })
 export class LoanService {
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _printouts: PrintoutsService,
+    private readonly localStorage: LocalStorageService,
   ) {}
 
   getRepaymentSchedules(): Observable<RepaymentSchedule[]> {
@@ -61,7 +61,9 @@ export class LoanService {
 
     const key = await crypto.subtle.importKey(
       'raw',
-      this.base64ToBytes(''),
+      this.base64ToBytes(
+        this.localStorage.getItem<string>(LoanEncryptionKeyBase64),
+      ),
       'AES-GCM',
       false,
       ['encrypt', 'decrypt'],
@@ -74,7 +76,6 @@ export class LoanService {
     const decoded = JSON.parse(
       new TextDecoder().decode(decodedBytes),
     ) as RepaymentScheduleDto[];
-    console.log('Decoded loan API response:', decoded);
 
     return decoded;
   }
@@ -86,21 +87,5 @@ export class LoanService {
       bytes[index] = binary.charCodeAt(index);
     }
     return bytes;
-  }
-
-  downloadRepaymentSchedulesAsJson(): void {
-    this.getRepaymentScheduleDtos()
-      .pipe(
-        catchError((error: unknown) => {
-          console.warn(
-            'Could not load repayment schedules from the asset; falling back to the loan API.',
-            error,
-          );
-          return this.getRepaymentScheduleDtosFromApi();
-        }),
-      )
-      .subscribe((dtos) =>
-        this._printouts.download(dtos, `${LoanService_STORAGE_KEY}.json`),
-      );
   }
 }
