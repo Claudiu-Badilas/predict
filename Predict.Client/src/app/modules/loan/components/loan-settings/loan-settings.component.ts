@@ -35,9 +35,6 @@ import { LoanEncryptionKeyBase64 } from '../../services/loan.service';
           </span>
           <div class="settings__heading-text">
             <h2 class="settings__title">Encryption Key</h2>
-            <p class="settings__hint">
-              Base64-encoded key used to decrypt repayment schedules.
-            </p>
           </div>
         </div>
 
