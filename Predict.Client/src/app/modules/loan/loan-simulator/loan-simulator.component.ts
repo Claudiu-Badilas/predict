@@ -14,7 +14,7 @@ import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as fromLoanSimulator from 'src/app/modules/loan/loan-simulator/selectors/loan-simulator.selectors';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
 import { LoanSettingsComponent } from 'src/app/modules/loan/components/loan-settings/loan-settings.component';
-import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, of, tap } from 'rxjs';
-import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import { ReceiptDomain } from '../models/receipts-domain.model';
 import { ReceiptDto } from '../models/receipts-dto.model';

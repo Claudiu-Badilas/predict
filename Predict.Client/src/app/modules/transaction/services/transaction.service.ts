@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
 import {
   TransactionDomain,

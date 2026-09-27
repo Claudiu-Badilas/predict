@@ -1,21 +1,21 @@
-import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators,
-  ReactiveFormsModule,
   FormsModule,
+  ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
-import { AuthenticationValidators } from 'src/app/platform/authentication/login-register/validators/authentication-validator';
-import { AuthenticationAction } from './models/authentication-actions.enum';
-import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { select, Store } from '@ngrx/store';
-import * as AuthActions from '../actions/authentication.actions';
 import { combineLatest, debounceTime, filter, Subject, takeUntil } from 'rxjs';
-import * as fromState from 'src/app/store/app-state.reducer';
+import { AuthenticationValidators } from 'src/app/core/authentication/login-register/validators/authentication-validator';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
+import * as fromAppStore from 'src/app/store/app-state.reducer';
+import * as fromState from 'src/app/store/app-state.reducer';
+import * as AuthActions from '../actions/authentication.actions';
+import { AuthenticationAction } from './models/authentication-actions.enum';
 
 @Component({
   selector: 'p-login-register',

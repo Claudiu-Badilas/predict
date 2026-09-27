@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
-import { PrintoutsService } from 'src/app/platform/services/printouts.service';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+import { PrintoutsService } from 'src/app/core/services/printouts.service';
 import { RepaymentSchedule, RepaymentScheduleDto } from '../models/loan.model';
 
 interface EncryptedRepaymentSchedules {

@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
-import { LocalStorageService } from 'src/app/platform/services/local-storage.service';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { LoanEncryptionKeyBase64 } from '../../services/loan.service';
 
 @Component({
