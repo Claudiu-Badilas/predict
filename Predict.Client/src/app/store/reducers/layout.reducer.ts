@@ -9,15 +9,21 @@ import * as LayoutActions from 'src/app/store/actions/layout.actions';
 
 export interface State {
   loading: boolean;
+  minimumVisibleMs: number;
 }
 
 const initialState: State = {
   loading: false,
+  minimumVisibleMs: 500,
 };
 
 const layoutReducer = createReducer(
   initialState,
-  on(LayoutActions.spinnerOn, (state) => ({ ...state, loading: true })),
+  on(LayoutActions.spinnerOn, (state, { minimumVisibleMs }) => ({
+    ...state,
+    loading: true,
+    minimumVisibleMs,
+  })),
   on(LayoutActions.spinnerOff, (state) => ({ ...state, loading: false })),
 );
 
@@ -30,4 +36,9 @@ const getLayoutReducer = createFeatureSelector<State>('layout');
 export const getIsLoading = createSelector(
   getLayoutReducer,
   (state) => state.loading,
+);
+
+export const getSpinnerMinimumVisibleMs = createSelector(
+  getLayoutReducer,
+  (state) => state.minimumVisibleMs,
 );

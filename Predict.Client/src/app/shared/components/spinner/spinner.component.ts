@@ -18,14 +18,24 @@ export class SpinnerComponent implements OnDestroy {
   private readonly loadingSubscription: Subscription;
   private shownAt = 0;
   private hideTimer?: ReturnType<typeof setTimeout>;
-  private readonly minimumVisibleMs = 500;
+  private minimumVisibleMs = 500;
   readonly isLoading$ = this.visibleSubject.asObservable();
 
   constructor(store: Store<fromLayout.State>) {
     this.loadingSubscription = store
-      .select(fromLayout.getIsLoading)
-      .pipe(distinctUntilChanged())
-      .subscribe((loading) => {
+      .select((state) => ({
+        loading: fromLayout.getIsLoading(state),
+        minimumVisibleMs: fromLayout.getSpinnerMinimumVisibleMs(state),
+      }))
+      .pipe(
+        distinctUntilChanged(
+          (previous, current) =>
+            previous.loading === current.loading &&
+            previous.minimumVisibleMs === current.minimumVisibleMs,
+        ),
+      )
+      .subscribe(({ loading, minimumVisibleMs }) => {
+        this.minimumVisibleMs = minimumVisibleMs;
         if (this.hideTimer) {
           clearTimeout(this.hideTimer);
           this.hideTimer = undefined;
