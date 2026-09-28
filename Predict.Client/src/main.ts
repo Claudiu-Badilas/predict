@@ -20,8 +20,6 @@ import { environment } from './environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationInterceptor } from 'src/app/core/authentication/interceptor/authentication.interceptor';
-import { InvoicesEffects } from 'src/app/modules/invoices/effects/invoices.effects';
-import * as fromInvoices from 'src/app/modules/invoices/reducers/invoices.reducer';
 import { LoanEffects } from 'src/app/modules/loan/effects/loan.effects';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
 import { ReceiptsEffects } from 'src/app/modules/receipts/effects/receipts.effects';
@@ -50,7 +48,6 @@ bootstrapApplication(AppComponent, {
     // Feature stores
     importProvidersFrom(
       EffectsModule.forFeature([
-        InvoicesEffects,
         ReceiptsEffects,
         TransactionsEffects,
         LoanEffects,
@@ -61,7 +58,6 @@ bootstrapApplication(AppComponent, {
       StoreModule.forFeature('LoanState', fromLoan.reducer),
       StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
       StoreModule.forFeature('ReceiptsState', fromReceipts.reducer),
-      StoreModule.forFeature('InvoicesState', fromInvoices.reducer),
     ]),
 
     {

@@ -20,13 +20,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'invoices',
-    loadChildren: () =>
-      import('./modules/invoices/invoices.routing').then(
-        (m) => m.invoicesRoutes,
-      ),
-  },
-  {
     path: 'receipts',
     loadChildren: () =>
       import('./modules/receipts/receipts.routing').then(

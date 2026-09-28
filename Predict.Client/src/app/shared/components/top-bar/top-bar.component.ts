@@ -35,7 +35,6 @@ export class TopBarComponent implements OnInit {
     { label: 'Loan', icon: 'wallet', url: '/loan' },
     { label: 'Transactions', icon: 'trending', url: '/transactions' },
     { label: 'Receipts', icon: 'receipt', url: '/receipts' },
-    // { label: 'Invoices', icon: 'file', url: '/invoices' },
   ];
 
   isMenuOpen = false;

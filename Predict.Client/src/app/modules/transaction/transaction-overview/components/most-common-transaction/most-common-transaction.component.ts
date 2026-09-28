@@ -1,14 +1,13 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   input,
   signal,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
-import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import {
   TransactionCategorizer,
   TransactionCategory,
@@ -61,7 +60,6 @@ interface PeriodGroup {
     NumberFormatPipe,
     NgbTooltip,
     TransactionOverviewHeaderComponent,
-    ScrollableDirective,
   ],
   templateUrl: './most-common-transaction.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
