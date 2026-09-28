@@ -9,7 +9,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { AuthenticationEffects } from 'src/app/core/authentication/effects/authentication.effects';
-import { ToastNotificationEffects } from 'src/app/core/toast-notifications/effects/toast-notification.effects';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { NavigationEffects } from 'src/app/store/effects/navigation.effects';
 import { AppComponent } from './app/app.component';
@@ -40,7 +39,6 @@ bootstrapApplication(AppComponent, {
       EffectsModule.forRoot([
         NavigationEffects,
         AuthenticationEffects,
-        ToastNotificationEffects,
       ]),
     ),
     importProvidersFrom(StoreRouterConnectingModule.forRoot()),

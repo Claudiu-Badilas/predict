@@ -8,16 +8,64 @@ import {
 } from '@ngrx/store';
 import * as fromLayout from 'src/app/store/reducers/layout.reducer';
 import { RouterState } from './services/router-serializer';
+import { ToastType } from '../core/toast-notifications/models/toast-type.model';
+import * as ToastActions from '../core/toast-notifications/actions/toast-notification.actions';
+import { createReducer, on } from '@ngrx/store';
+import { ToastMessage } from '../core/toast-notifications/actions/toast-notification.actions';
+
+export interface Toast extends ToastMessage {
+  id: number;
+  toastType: ToastType;
+}
+
+export interface ToastState {
+  toasts: Toast[];
+  nextId: number;
+}
+
+const initialToastState: ToastState = { toasts: [], nextId: 1 };
+
+const createToast = (id: number, toast: ToastMessage): Toast => ({
+  id,
+  message: toast.message,
+  toastType: toast.toastType ?? ToastType.Info,
+});
+
+export const toastReducer = createReducer(
+  initialToastState,
+  on(ToastActions.showToast, (state, toast) => ({
+    toasts: [...state.toasts, createToast(state.nextId, toast)],
+    nextId: state.nextId + 1,
+  })),
+  on(ToastActions.showMultipleToasts, (state, { toasts }) => ({
+    toasts: [
+      ...state.toasts,
+      ...toasts.map((toast, index) => createToast(state.nextId + index, toast)),
+    ],
+    nextId: state.nextId + toasts.length,
+  })),
+  on(ToastActions.dismissToast, (state, { id }) => ({
+    ...state,
+    toasts: state.toasts.filter((toast) => toast.id !== id),
+  })),
+);
 
 export interface AppState {
   router: fromRouter.RouterReducerState<RouterState>;
   layout: fromLayout.State;
+  toast: ToastState;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
   router: fromRouter.routerReducer,
   layout: fromLayout.reducer,
+  toast: toastReducer,
 };
+
+export const selectToast = createSelector(
+  createFeatureSelector<ToastState>('toast'),
+  (state) => state.toasts,
+);
 
 const getRouterState =
   createFeatureSelector<fromRouter.RouterReducerState<RouterState>>('router');

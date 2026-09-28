@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 import * as TransactionsActions from 'src/app/modules/transaction/actions/transactions.actions';
 import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
 import * as LayoutActions from 'src/app/store/actions/layout.actions';
+import * as ToastActions from 'src/app/core/toast-notifications/actions/toast-notification.actions';
+import { ToastType } from 'src/app/core/toast-notifications/models/toast-type.model';
 import { TransactionService } from '../services/transaction.service';
 
 @Injectable()
@@ -45,6 +47,10 @@ export class TransactionsEffects {
                     : error instanceof Error
                       ? error.message
                       : 'Failed to load transactions.',
+              }),
+              ToastActions.showToast({
+                message: 'Something went wrong. Please try again.',
+                toastType: ToastType.Error,
               }),
               LayoutActions.spinnerOff(),
             ),

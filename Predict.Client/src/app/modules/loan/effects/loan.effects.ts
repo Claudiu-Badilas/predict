@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
@@ -12,6 +11,8 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+import * as ToastActions from 'src/app/core/toast-notifications/actions/toast-notification.actions';
+import { ToastType } from 'src/app/core/toast-notifications/models/toast-type.model';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
 import * as LayoutActions from 'src/app/store/actions/layout.actions';
@@ -72,17 +73,11 @@ export class LoanEffects {
               LayoutActions.spinnerOff(),
             );
           }),
-          catchError((error: unknown) =>
+          catchError(() =>
             of(
-              LoanActions.loadRepaymentSchedulesFailure({
-                message:
-                  error instanceof HttpErrorResponse
-                    ? error.status === 0
-                      ? 'Could not reach the loan API. Check that it is running and accessible.'
-                      : `Loan API request failed (${error.status}): ${error.message}`
-                    : error instanceof Error
-                      ? error.message
-                      : 'Failed to load repayment schedules.',
+              ToastActions.showToast({
+                message: 'Something went wrong. Please try again.',
+                toastType: ToastType.Error,
               }),
               LayoutActions.spinnerOff(),
             ),

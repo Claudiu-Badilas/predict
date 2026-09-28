@@ -53,7 +53,8 @@ export class AuthenticationEffects {
             catchError((error) => {
               this.store.dispatch(
                 ToastActions.showToast({
-                  message: error.error,
+                  message: 'Something went wrong. Please try again.',
+                  toastType: ToastType.Error,
                 }),
               );
               return EMPTY;
@@ -84,7 +85,8 @@ export class AuthenticationEffects {
             catchError((error) => {
               this.store.dispatch(
                 ToastActions.showToast({
-                  message: error.error,
+                  message: 'Something went wrong. Please try again.',
+                  toastType: ToastType.Error,
                 }),
               );
               return EMPTY;

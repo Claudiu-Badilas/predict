@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 import * as ReceiptsActions from 'src/app/modules/receipts/actions/receipts.actions';
 import * as fromReceipts from 'src/app/modules/receipts/reducers/receipts.reducer';
 import * as LayoutActions from 'src/app/store/actions/layout.actions';
+import * as ToastActions from 'src/app/core/toast-notifications/actions/toast-notification.actions';
+import { ToastType } from 'src/app/core/toast-notifications/models/toast-type.model';
 import { ReceiptsService } from '../services/receipts.service';
 
 @Injectable()
@@ -45,6 +47,10 @@ export class ReceiptsEffects {
                     : error instanceof Error
                       ? error.message
                       : 'Failed to load receipts.',
+              }),
+              ToastActions.showToast({
+                message: 'Something went wrong. Please try again.',
+                toastType: ToastType.Error,
               }),
               LayoutActions.spinnerOff(),
             ),
