@@ -77,7 +77,27 @@ export class LoanSimulatorBodyTableComponent {
   }
 
   onRemoveEarlyPayment(group: MonthlyInstalmentManager, event: Event) {
-    this.store.toggleEarlyPayments([group.instalments?.at(-1)?.instalmentId]);
+    const selectedEarlyPayments = this.store.selectedEarlyPayments();
+    const instalmentId = [...group.instalments]
+      .reverse()
+      .find((instalment) =>
+        selectedEarlyPayments.includes(instalment.instalmentId),
+      )?.instalmentId;
+
+    if (instalmentId !== undefined && instalmentId !== null) {
+      return this.store.toggleEarlyPayments([instalmentId]);
+    }
+
+    const selectedNormalPayments = this.store.selectedInstalmentPayments();
+    const normalInstalmentId = [...group.instalments]
+      .reverse()
+      .find((instalment) =>
+        selectedNormalPayments.includes(instalment.instalmentId),
+      )?.instalmentId;
+
+    if (normalInstalmentId !== undefined && normalInstalmentId !== null) {
+      return this.store.toggleInstalmentPayments([normalInstalmentId]);
+    }
   }
 
   onDispatchInstalment(group: MonthlyInstalmentManager, event: Event) {
