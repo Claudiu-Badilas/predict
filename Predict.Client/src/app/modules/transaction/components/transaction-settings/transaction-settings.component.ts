@@ -12,12 +12,7 @@ import {
 @Component({
   selector: 'p-transactions-settings',
   imports: [StorageManagerModalComponent],
-  template: `
-    <p-storage-manager-modal
-      [config]="config"
-      (reloadRequested)="reloadData()"
-    />
-  `,
+  templateUrl: './transaction-settings.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class TransactionsSettingsComponent {

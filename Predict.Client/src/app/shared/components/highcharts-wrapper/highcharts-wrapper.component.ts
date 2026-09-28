@@ -16,10 +16,7 @@ import { HighchartsWrapperUtils } from './utils/highcharts-wrapper.utils';
 
 @Component({
   selector: 'p-highcharts-wrapper',
-  template: `<div class="card">
-    <ng-content select="[p-highcharts-wrapper-content]"></ng-content>
-    <div class="chart-container" style="width: 100%; height: 100%"></div>
-  </div> `,
+  templateUrl: './highcharts-wrapper.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HighchartWrapperComponent

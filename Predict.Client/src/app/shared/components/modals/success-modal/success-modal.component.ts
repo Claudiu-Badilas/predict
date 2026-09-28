@@ -10,28 +10,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'p-success-modal',
   changeDetection: ChangeDetectionStrategy.Eager,
-  template: `
-    <div class="modal-header">
-      <h5 class="modal-title">Success</h5>
-      <button
-        type="button"
-        class="btn-close"
-        (click)="activeModal.dismiss()"
-      ></button>
-    </div>
-
-    <div class="modal-body">
-      {{ message }}
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn btn-secondary" (click)="activeModal.dismiss()">
-        Close
-      </button>
-
-      <button class="btn btn-primary" (click)="goToPage()">Continue</button>
-    </div>
-  `,
+  templateUrl: './success-modal.component.html',
 })
 export class SuccessModalComponent {
   @Input() message = 'Operation completed successfully';

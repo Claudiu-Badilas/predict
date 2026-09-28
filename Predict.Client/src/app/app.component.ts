@@ -14,11 +14,7 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
     HttpClientModule,
   ],
   providers: [],
-  template: `
-    <p-spinner />
-    <p-toast />
-    <router-outlet />
-  `,
+  templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['app.component.scss'],
 })

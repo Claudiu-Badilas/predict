@@ -12,12 +12,7 @@ import {
 @Component({
   selector: 'p-receipts-settings',
   imports: [StorageManagerModalComponent],
-  template: `
-    <p-storage-manager-modal
-      [config]="config"
-      (reloadRequested)="reloadData()"
-    />
-  `,
+  templateUrl: './receipts-settings.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class ReceiptsSettingsComponent {
