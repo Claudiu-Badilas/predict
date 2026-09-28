@@ -232,6 +232,21 @@
   justify-content: center;
 }
 
+.burger-btn img {
+  width: 18px;
+  height: 18px;
+  filter: var(--theme-icon-filter);
+}
+
+.burger-btn.active img {
+  filter: var(--theme-accent-icon-filter);
+}
+
+.burger-btn span {
+  font-size: 20px;
+  line-height: 1;
+}
+
 .burger-btn:hover {
   background: var(--theme-hover);
   color: var(--theme-text-primary);

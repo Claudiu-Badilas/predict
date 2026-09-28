@@ -56,25 +56,18 @@
     </div>
 
     <!-- Mobile Filter Button - Only shown when module-nav has content AND filters exist -->
-    <div class="mobile-filter" *ngIf="hasModuleNavContent && hasFiltersContent">
-      <button
-        type="button"
-        class="filter-btn filter-btn--mobile"
-        [class.active]="isFilterPanelOpen"
-        (click)="toggleFilterPanel()"
-      >
-        <img src="assets/icons/filter.svg" alt="filter" />
-      </button>
-    </div>
-
-    <!-- Burger Menu - Only shown when module-nav has content AND on mobile -->
+    <!-- Combined mobile menu and filter control -->
     <div class="mobile-menu" *ngIf="hasModuleNavContent">
       <button
+        type="button"
         class="burger-btn"
-        [class.active]="isMenuOpen"
-        (click)="toggleMenu()"
+        [class.active]="isMenuOpen || isFilterPanelOpen"
+        [attr.aria-expanded]="isMenuOpen || isFilterPanelOpen"
+        aria-label="Open navigation and filters"
+        (click)="toggleMobileControls()"
       >
-        ☰
+        <img src="assets/icons/filter.svg" alt="" aria-hidden="true" />
+        <span aria-hidden="true">☰</span>
       </button>
     </div>
 

@@ -81,6 +81,25 @@ export class TopBarComponent implements OnInit {
     this.isMenuOpen = true;
   }
 
+  /** Toggle the mobile navigation and filter panel together. */
+  toggleMobileControls() {
+    if (this.isAnimating) return;
+
+    const shouldOpen = !(this.isMenuOpen && this.isFilterPanelOpen);
+    this.isMenuOpen = shouldOpen;
+    this.isFilterPanelOpen = shouldOpen && this.hasFiltersContent;
+
+    if (this.isFilterPanelOpen) {
+      this.isAnimating = true;
+      requestAnimationFrame(() => {
+        this.isAnimating = false;
+        this.cdr.detectChanges();
+      });
+    }
+
+    this.cdr.detectChanges();
+  }
+
   /**
    * Close the mobile navigation menu
    */
