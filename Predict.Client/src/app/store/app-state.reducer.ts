@@ -23,8 +23,10 @@ const getRouterState =
   createFeatureSelector<fromRouter.RouterReducerState<RouterState>>('router');
 
 // `router` is used as the default feature name. You can use the feature name
-// of your choice by creating a feature selector and pass it to the `getRouterSelectors` function
-export const selectRouter = createFeatureSelector<RouterReducerState>('router');
+// of your choice by creating a feature selector and pass it to the
+// `getRouterSelectors` function.
+export const selectRouter =
+  createFeatureSelector<RouterReducerState<RouterState>>('router');
 
 export const {
   selectCurrentRoute, // select the current route
@@ -37,43 +39,32 @@ export const {
   selectRouteDataParam, // factory function to select a route data param
   selectUrl, // select the current url
   selectTitle, // select the title if available
-} = getRouterSelectors();
+} = getRouterSelectors(selectRouter);
 
-export const selectRouteNestedParams = createSelector(
-  selectRouter,
-  (router) => {
-    let currentRoute = router?.state?.root;
-    let params: Params = {};
-    while (currentRoute?.firstChild) {
-      currentRoute = currentRoute.firstChild;
-      params = {
-        ...params,
-        ...currentRoute.params,
-      };
-    }
-    return params;
-  },
-);
+// Your serializer already flattens params from every route level,
+// so `selectRouteParams` is effectively the same as "nested params".
+export const selectRouteNestedParams = selectRouteParams;
 
 export const getRouterParams = createSelector(
   getRouterState,
-  (state: fromRouter.RouterReducerState<RouterState>) => {
-    if (state) {
-      return state.state.params;
-    }
-    return null;
-  },
+  (state: fromRouter.RouterReducerState<RouterState> | undefined) =>
+    state?.state?.params ?? null,
 );
 
 export const getRouterUrl = createSelector(
   getRouterState,
-  (state: fromRouter.RouterReducerState<RouterState>) => {
-    if (state) {
-      return state.state.url;
-    }
-    return null;
-  },
+  (state: fromRouter.RouterReducerState<RouterState> | undefined) =>
+    state?.state?.url ?? null,
+);
+
+export const getRouterQueryParams = createSelector(
+  getRouterState,
+  (state: fromRouter.RouterReducerState<RouterState> | undefined) =>
+    state?.state?.queryParams ?? null,
 );
 
 export const selectRouteNestedParam = (param: string) =>
-  createSelector(selectRouteNestedParams, (params) => params && params[param]);
+  createSelector(
+    selectRouteParams,
+    (params: Params) => params?.[param] ?? null,
+  );
