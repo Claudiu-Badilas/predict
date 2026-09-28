@@ -41,8 +41,21 @@ export class LoanEffects {
       }),
       switchMap(() => [
         NavigationAction.navigateTo({ route: `/loan` }),
+        ToastActions.showToast({
+          message: 'Key was updated',
+          toastType: ToastType.Info,
+        }),
         LoanActions.loadRepaymentSchedules(),
       ]),
+      catchError(() =>
+        of(
+          ToastActions.showToast({
+            message: 'Something went wrong. Please try again.',
+            toastType: ToastType.Error,
+          }),
+          LayoutActions.spinnerOff(),
+        ),
+      ),
     ),
   );
 
