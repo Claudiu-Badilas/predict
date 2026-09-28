@@ -1,16 +1,4 @@
-@if (updateAvailable()) {
-  <aside class="deployment-banner" role="status" aria-live="polite">
-    <span class="deployment-banner__message">A new version is available!</span>
-    <button
-      class="deployment-banner__button"
-      type="button"
-      (click)="reloadForUpdate()"
-    >
-      Refresh now
-    </button>
-  </aside>
-}
-
+<p-deployment-banner />
 <p-spinner />
 <p-toast />
 <router-outlet />
