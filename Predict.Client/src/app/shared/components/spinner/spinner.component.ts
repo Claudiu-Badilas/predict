@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
-
 import * as fromLayout from 'src/app/store/reducers/layout.reducer';
 
 @Component({
@@ -13,62 +17,52 @@ import * as fromLayout from 'src/app/store/reducers/layout.reducer';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./spinner.component.scss'],
 })
-export class SpinnerComponent implements OnDestroy {
-  private readonly visibleSubject = new BehaviorSubject(false);
-  private readonly loadingSubscription: Subscription;
+export class SpinnerComponent {
+  private readonly store = inject(Store<fromLayout.State>);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly isLoading = this.store.selectSignal(fromLayout.getIsLoading);
+  private readonly minimumVisibleMs = this.store.selectSignal(
+    fromLayout.getSpinnerMinimumVisibleMs,
+  );
+  readonly isVisible = signal(false);
   private shownAt = 0;
   private hideTimer?: ReturnType<typeof setTimeout>;
-  private minimumVisibleMs = 500;
-  readonly isLoading$ = this.visibleSubject.asObservable();
 
-  constructor(store: Store<fromLayout.State>) {
-    this.loadingSubscription = store
-      .select((state) => ({
-        loading: fromLayout.getIsLoading(state),
-        minimumVisibleMs: fromLayout.getSpinnerMinimumVisibleMs(state),
-      }))
-      .pipe(
-        distinctUntilChanged(
-          (previous, current) =>
-            previous.loading === current.loading &&
-            previous.minimumVisibleMs === current.minimumVisibleMs,
-        ),
-      )
-      .subscribe(({ loading, minimumVisibleMs }) => {
-        this.minimumVisibleMs = minimumVisibleMs;
-        if (this.hideTimer) {
-          clearTimeout(this.hideTimer);
+  constructor() {
+    effect(() => {
+      const loading = this.isLoading();
+      const minimumVisibleMs = this.minimumVisibleMs();
+      if (this.hideTimer) {
+        clearTimeout(this.hideTimer);
+        this.hideTimer = undefined;
+      }
+
+      if (loading) {
+        this.shownAt = Date.now();
+        this.isVisible.set(true);
+        return;
+      }
+
+      if (!this.shownAt) {
+        this.isVisible.set(false);
+        return;
+      }
+
+      const remaining = minimumVisibleMs - (Date.now() - this.shownAt);
+      if (remaining > 0) {
+        this.hideTimer = setTimeout(() => {
           this.hideTimer = undefined;
-        }
-
-        if (loading) {
-          this.shownAt = Date.now();
-          this.visibleSubject.next(true);
-          return;
-        }
-
-        if (!this.shownAt) {
-          this.visibleSubject.next(false);
-          return;
-        }
-
-        const remaining = this.minimumVisibleMs - (Date.now() - this.shownAt);
-        if (remaining > 0) {
-          this.hideTimer = setTimeout(() => {
-            this.hideTimer = undefined;
-            this.shownAt = 0;
-            this.visibleSubject.next(false);
-          }, remaining);
-        } else {
           this.shownAt = 0;
-          this.visibleSubject.next(false);
-        }
-      });
-  }
+          this.isVisible.set(false);
+        }, remaining);
+      } else {
+        this.shownAt = 0;
+        this.isVisible.set(false);
+      }
+    });
 
-  ngOnDestroy(): void {
-    this.loadingSubscription.unsubscribe();
-    this.visibleSubject.complete();
-    if (this.hideTimer) clearTimeout(this.hideTimer);
+    this.destroyRef.onDestroy(() => {
+      if (this.hideTimer) clearTimeout(this.hideTimer);
+    });
   }
 }
