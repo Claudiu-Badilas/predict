@@ -1,21 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
+  ChangeDetectionStrategy,
   Component,
   effect,
   signal,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import * as fromLoanSimulator from 'src/app/modules/loan/loan-simulator/selectors/loan-simulator.selectors';
 import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
-import { LoanSettingsComponent } from 'src/app/modules/loan/components/loan-settings/loan-settings.component';
-import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
+import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-toggle.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
@@ -23,7 +22,6 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { LoanSimulatorBodyTableComponent } from './components/loan-simulator-body-table/loan-simulator-body-table.component';
 import { LoanSimulatorHeaderComponent } from './components/loan-simulator-header/loan-simulator-header.component';
 import { mapInstalmentSimulation } from './utils/instalment-simulation.utils';
-import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-toggle.component';
 
 export interface SimulationRow {
   id: string;
@@ -84,7 +82,6 @@ export class LoanSimulatorComponent {
   constructor(
     private readonly store: Store<fromLoan.LoanState>,
     private readonly _localStorageService: LocalStorageService,
-    private readonly modalService: NgbModal,
   ) {
     this.simulationRows().forEach((row) =>
       this.simulationRowsFormArray.push(this.createRowForm(row)),
@@ -128,14 +125,6 @@ export class LoanSimulatorComponent {
         this.simulationRowsKey,
         this.simulationRows(),
       );
-    });
-  }
-
-  openLoanSettings(): void {
-    this.modalService.open(LoanSettingsComponent, {
-      centered: true,
-      size: 'lg',
-      scrollable: true,
     });
   }
 
