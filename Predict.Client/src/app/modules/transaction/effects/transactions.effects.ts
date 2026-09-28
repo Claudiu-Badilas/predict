@@ -21,7 +21,7 @@ export class TransactionsEffects {
   loadTransactions$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TransactionsActions.loadTransactions),
-      tap(() => LayoutActions.spinnerOn()),
+      tap(() => this.store.dispatch(LayoutActions.spinnerOn())),
       withLatestFrom(
         this.store.select(fromTransactions.getStartDate),
         this.store.select(fromTransactions.getEndDate),

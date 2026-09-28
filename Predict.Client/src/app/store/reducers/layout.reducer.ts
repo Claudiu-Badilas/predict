@@ -17,7 +17,7 @@ const initialState: State = {
 
 const layoutReducer = createReducer(
   initialState,
-  on(LayoutActions.spinnerOn, (state) => ({ ...state, loading: false })),
+  on(LayoutActions.spinnerOn, (state) => ({ ...state, loading: true })),
   on(LayoutActions.spinnerOff, (state) => ({ ...state, loading: false })),
 );
 

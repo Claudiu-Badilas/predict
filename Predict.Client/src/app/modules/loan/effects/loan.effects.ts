@@ -48,7 +48,7 @@ export class LoanEffects {
   loadRepaymentSchedules$ = createEffect(() =>
     this.actions$.pipe(
       ofType(LoanActions.loadRepaymentSchedules),
-      tap(() => LayoutActions.spinnerOn()),
+      tap(() => this.store.dispatch(LayoutActions.spinnerOn())),
       switchMap(() =>
         this._loanService.getRepaymentSchedules().pipe(
           withLatestFrom(

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { delay, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import * as InvoicesActions from 'src/app/modules/invoices/actions/invoices.actions';
@@ -19,7 +19,7 @@ export class InvoicesEffects {
   loadInvoices$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoicesActions.loadInvoices),
-      tap(() => LayoutActions.spinnerOn()),
+      switchMap((action) => [action, LayoutActions.spinnerOn()]),
       withLatestFrom(
         this.store.select(fromInvoices.getStartDate),
         this.store.select(fromInvoices.getEndDate),

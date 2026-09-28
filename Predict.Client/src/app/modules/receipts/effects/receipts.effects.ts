@@ -21,7 +21,7 @@ export class ReceiptsEffects {
   loadReceipts$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReceiptsActions.loadReceipts),
-      tap(() => LayoutActions.spinnerOn()),
+      tap(() => this.store.dispatch(LayoutActions.spinnerOn())),
       withLatestFrom(
         this.store.select(fromReceipts.getStartDate),
         this.store.select(fromReceipts.getEndDate),
