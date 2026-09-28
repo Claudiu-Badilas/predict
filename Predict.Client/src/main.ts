@@ -20,7 +20,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationInterceptor } from 'src/app/core/authentication/interceptor/authentication.interceptor';
 import { LoanEffects } from 'src/app/modules/loan/effects/loan.effects';
-import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
 import { ReceiptsEffects } from 'src/app/modules/receipts/effects/receipts.effects';
 import * as fromReceipts from 'src/app/modules/receipts/reducers/receipts.reducer';
 import { TransactionsEffects } from 'src/app/modules/transaction/effects/transactions.effects';
@@ -36,10 +35,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(AppRouting),
     importProvidersFrom(StoreModule.forRoot(fromAppStore.appReducer)),
     importProvidersFrom(
-      EffectsModule.forRoot([
-        NavigationEffects,
-        AuthenticationEffects,
-      ]),
+      EffectsModule.forRoot([NavigationEffects, AuthenticationEffects]),
     ),
     importProvidersFrom(StoreRouterConnectingModule.forRoot()),
     importProvidersFrom(NgbModule),
@@ -53,7 +49,6 @@ bootstrapApplication(AppComponent, {
     ),
 
     importProvidersFrom([
-      StoreModule.forFeature('LoanState', fromLoan.reducer),
       StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
       StoreModule.forFeature('ReceiptsState', fromReceipts.reducer),
     ]),

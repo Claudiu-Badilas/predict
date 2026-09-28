@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, of } from 'rxjs';
@@ -6,15 +6,15 @@ import {
   catchError,
   debounceTime,
   filter,
+  map,
   switchMap,
   tap,
-  withLatestFrom,
 } from 'rxjs/operators';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import * as ToastActions from 'src/app/core/toast-notifications/actions/toast-notification.actions';
 import { ToastType } from 'src/app/core/toast-notifications/models/toast-type.model';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
-import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { LoanStore } from 'src/app/modules/loan/stores/loan.store';
 import * as LayoutActions from 'src/app/store/actions/layout.actions';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromState from 'src/app/store/app-state.reducer';
@@ -25,7 +25,9 @@ export class LoanEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly _loanService: LoanService,
-    private readonly store: Store<fromLoan.LoanState>,
+    private readonly store: Store<fromState.AppState>,
+    @Inject(LoanStore)
+    private readonly loanStore: InstanceType<typeof LoanStore>,
     private readonly _localStorageService: LocalStorageService,
   ) {}
 
@@ -65,10 +67,9 @@ export class LoanEffects {
       tap(() => this.store.dispatch(LayoutActions.spinnerOn())),
       switchMap(() =>
         this._loanService.getRepaymentSchedules().pipe(
-          withLatestFrom(
-            this.store.select(fromLoan.getCalculateRepaymentSchedules),
-          ),
-          switchMap(([loans, calculateRepaymentSchedules]) => {
+          map((loans) => {
+            const calculateRepaymentSchedules =
+              this.loanStore.calculateRepaymentSchedules();
             const base = loans.find((loan) => loan.isBasePayment);
 
             const variableInterestStartDate =
@@ -81,10 +82,8 @@ export class LoanEffects {
               return schedule;
             });
 
-            return of(
-              LoanActions.setLoansSuccess({ repaymentSchedules }),
-              LayoutActions.spinnerOff(),
-            );
+            this.loanStore.setRepaymentSchedules(repaymentSchedules);
+            return LayoutActions.spinnerOff();
           }),
           catchError(() =>
             of(

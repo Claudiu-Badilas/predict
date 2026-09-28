@@ -11,8 +11,8 @@
 
   <ng-container filter-content>
     <p-dropdown-select
-      [items]="dropDownSelectOptions$ | async"
-      [selectedItem]="selectedRepaymentScheduleName$ | async"
+      [items]="dropDownSelectOptions()"
+      [selectedItem]="selectedRepaymentScheduleName()"
       placeholder="No Selection"
       (selectionChange)="onDropdownSelected($event)"
     />

@@ -5,10 +5,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Store } from '@ngrx/store';
-import * as fromLoanDetailed from 'src/app/modules/loan/loan-detailed/selectors/loan-detailed.selectors';
-import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { LoanStore } from 'src/app/modules/loan/stores/loan.store';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
 import { JsDateUtils } from 'src/app/shared/utils/js-date.utils';
@@ -22,16 +19,12 @@ import { MathUtil } from 'src/app/shared/utils/math.utils';
   styleUrl: './loan-detailed-header.component.scss',
 })
 export class LoanDetailedHeaderComponent {
-  private readonly store = inject(Store<fromLoan.LoanState>);
+  private readonly store = inject(LoanStore);
 
-  readonly updatedBaseRepaymentScheduleBasedOnLatestStates = toSignal(
-    this.store.select(fromLoanDetailed.getHistoricalInstalmentPayments),
-    { initialValue: null },
-  );
-  readonly historicalInstalmentPaymentBatches = toSignal(
-    this.store.select(fromLoanDetailed.getHistoricalInstalmentPaymentBatches),
-    { initialValue: [] },
-  );
+  readonly updatedBaseRepaymentScheduleBasedOnLatestStates =
+    this.store.historicalInstalments;
+  readonly historicalInstalmentPaymentBatches =
+    this.store.historicalInstalmentPaymentBatches;
 
   readonly paidPrincipal = computed(() =>
     Calculator.sum(

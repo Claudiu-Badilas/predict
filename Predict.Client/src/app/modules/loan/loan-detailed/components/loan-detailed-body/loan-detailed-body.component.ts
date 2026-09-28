@@ -3,12 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Store } from '@ngrx/store';
-import * as fromLoanDetailed from 'src/app/modules/loan/loan-detailed/selectors/loan-detailed.selectors';
-import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { LoanStore } from 'src/app/modules/loan/stores/loan.store';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 import { Colors } from 'src/app/shared/styles/colors';
@@ -31,28 +29,18 @@ import { HistoricalInstalmentsTableComponent } from '../historical-instalments-t
   styleUrl: './loan-detailed-body.component.scss',
 })
 export class LoanDetailedBodyComponent {
-  historicalCompareToInstalmentPayments = toSignal(
-    this.store.select(
-      fromLoanDetailed.getHistoricalCompareToInstalmentPayments,
-    ),
-  );
-  detailedCompareToRepaymentSchedule = toSignal(
-    this.store.select(fromLoanDetailed.getDetailedCompareToRepaymentSchedule),
-  );
-  historicalInstalments = toSignal(
-    this.store.select(fromLoanDetailed.getHistoricalInstalmentPayments),
-  );
+  private readonly loanStore = inject(LoanStore);
 
-  historicalInstalmentPaymentBatches = toSignal(
-    this.store.select(fromLoanDetailed.getHistoricalInstalmentPaymentBatches),
-  );
+  historicalCompareToInstalmentPayments =
+    this.loanStore.historicalCompareInstalments;
+  detailedCompareToRepaymentSchedule = this.loanStore.detailedCompareToSchedule;
+  historicalInstalments = this.loanStore.historicalInstalments;
 
-  baseRepaymentSchedule = toSignal(
-    this.store.select(fromLoan.getBaseRepaymentSchedule),
-  );
-  selectedRepaymentSchedule = toSignal(
-    this.store.select(fromLoanDetailed.getDetailedSelectedRepaymentSchedule),
-  );
+  historicalInstalmentPaymentBatches =
+    this.loanStore.historicalInstalmentPaymentBatches;
+
+  baseRepaymentSchedule = this.loanStore.baseRepaymentSchedule;
+  selectedRepaymentSchedule = this.loanStore.detailedSelectedSchedule;
 
   interestProgressPieChart = computed(() =>
     InterestProgressChartPieUtils.getChart(
@@ -88,8 +76,6 @@ export class LoanDetailedBodyComponent {
       this.chartBasePaymentChange() === 'Prd. Fixa',
     ),
   );
-
-  constructor(private store: Store<fromLoan.LoanState>) {}
 
   colors = Colors;
   chartBasePaymentChange = signal<

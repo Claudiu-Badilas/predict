@@ -7,9 +7,7 @@ import {
   input,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
-import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { LoanStore } from 'src/app/modules/loan/stores/loan.store';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
@@ -34,7 +32,7 @@ export class LoanSimulatorBodyTableComponent {
       this.monthlyInstalmentGroups().filter((group) => group.completed).length,
   );
 
-  store = inject(Store<fromLoan.LoanState>);
+  store = inject(LoanStore);
   private readonly themeService = inject(ThemeService);
 
   getThemeIconPath(icon: string): string {
@@ -73,43 +71,27 @@ export class LoanSimulatorBodyTableComponent {
   }
 
   onAddEarlyPayment(group: MonthlyInstalmentManager, event: Event) {
-    this.store.dispatch(
-      LoanActions.selectedEarlyPaymentChanged({
-        values: [group.instalments?.at(-1)?.instalmentId + 1],
-      }),
-    );
+    this.store.toggleEarlyPayments([
+      group.instalments?.at(-1)?.instalmentId + 1,
+    ]);
   }
 
   onRemoveEarlyPayment(group: MonthlyInstalmentManager, event: Event) {
-    this.store.dispatch(
-      LoanActions.selectedEarlyPaymentChanged({
-        values: [group.instalments?.at(-1)?.instalmentId],
-      }),
-    );
+    this.store.toggleEarlyPayments([group.instalments?.at(-1)?.instalmentId]);
   }
 
   onDispatchInstalment(group: MonthlyInstalmentManager, event: Event) {
-    this.store.dispatch(
-      LoanActions.selectedInstalmentPaymentChanged({
-        values: [group.instalments?.at(-1)?.instalmentId + 1],
-      }),
-    );
+    this.store.toggleInstalmentPayments([
+      group.instalments?.at(-1)?.instalmentId + 1,
+    ]);
   }
 
   onSelectInstalmentPayment(instalment: LoanSimulatorInstalment) {
-    this.store.dispatch(
-      LoanActions.selectedInstalmentPaymentChanged({
-        values: [instalment.instalmentId],
-      }),
-    );
+    this.store.toggleInstalmentPayments([instalment.instalmentId]);
   }
 
   onSelectEarlyPayment(instalment: LoanSimulatorInstalment) {
-    this.store.dispatch(
-      LoanActions.selectedEarlyPaymentChanged({
-        values: [instalment.instalmentId],
-      }),
-    );
+    this.store.toggleEarlyPayments([instalment.instalmentId]);
   }
 
   onExpandAll() {

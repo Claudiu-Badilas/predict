@@ -2,23 +2,23 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
+  Inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
-import * as fromLoanSimulator from 'src/app/modules/loan/loan-simulator/selectors/loan-simulator.selectors';
-import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { LoanStore } from 'src/app/modules/loan/stores/loan.store';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
 import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-toggle.component';
 import { NumericInputComponent } from 'src/app/shared/components/numeric-input/numeric-input.component';
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
+import { AppState } from 'src/app/store/app-state.reducer';
 import { LoanSimulatorBodyTableComponent } from './components/loan-simulator-body-table/loan-simulator-body-table.component';
 import { LoanSimulatorHeaderComponent } from './components/loan-simulator-header/loan-simulator-header.component';
 import { mapInstalmentSimulation } from './utils/instalment-simulation.utils';
@@ -52,22 +52,14 @@ type SimulationRowForm = FormGroup<{
   styleUrls: ['./loan-simulator.component.scss'],
 })
 export class LoanSimulatorComponent {
-  monthlyInstalmentBatches = toSignal(
-    this.store.select(fromLoanSimulator.getMonthlyInstalmentBatches),
+  monthlyInstalmentBatches = this.loanStore.monthlyInstalmentBatches;
+  selectedRepaymentScheduleName = this.loanStore.overviewSelectedName;
+  dropDownSelectOptions = computed(() =>
+    this.loanStore.repaymentSchedules().map((schedule) => schedule.name),
   );
-  selectedRepaymentScheduleName$ = this.store.select(
-    fromLoanSimulator.getSelectedRepaymentScheduleName,
-  );
-  dropDownSelectOptions$ = this.store
-    .select(fromLoan.getRepaymentSchedules)
-    .pipe(map((rs) => rs.map((r) => r.name)));
 
-  selectedRepaymentScheduleBase = toSignal(
-    this.store.select(fromLoanSimulator.getSelectedRepaymentSchedule),
-  );
-  calculateRepaymentSchedules = toSignal(
-    this.store.select(fromLoan.getCalculateRepaymentSchedules),
-  );
+  selectedRepaymentScheduleBase = this.loanStore.selectedOverviewSchedule;
+  calculateRepaymentSchedules = this.loanStore.calculateRepaymentSchedules;
 
   /** LocalStorage key */
   private readonly simulationRowsKey = 'LoanSimulator_SimulationRows';
@@ -80,7 +72,9 @@ export class LoanSimulatorComponent {
   readonly simulationRowsFormArray = this.simulationForm.controls.rows;
 
   constructor(
-    private readonly store: Store<fromLoan.LoanState>,
+    private readonly store: Store<AppState>,
+    @Inject(LoanStore)
+    private readonly loanStore: InstanceType<typeof LoanStore>,
     private readonly _localStorageService: LocalStorageService,
   ) {
     this.simulationRows().forEach((row) =>
@@ -111,12 +105,7 @@ export class LoanSimulatorComponent {
         earlyPayments.push(...(early ?? []));
       });
 
-      this.store.dispatch(
-        LoanActions.simulateInstalmentPaymentsChanged({
-          selectedInstalmentPayments: instalmentPayments,
-          selectedEarlyPayments: earlyPayments,
-        }),
-      );
+      this.loanStore.setSimulationPayments(instalmentPayments, earlyPayments);
     });
 
     // Persist rows on any change
@@ -216,7 +205,7 @@ export class LoanSimulatorComponent {
   // --- Existing handlers ---
 
   onDropdownSelected(value: string) {
-    this.store.dispatch(LoanActions.selectedLoanChanged({ selected: value }));
+    this.loanStore.selectOverviewLoan(value);
   }
 
   onSelectionChange(module: string) {
@@ -228,11 +217,7 @@ export class LoanSimulatorComponent {
   }
 
   onCalculateRepaymentSchedulesChanged(state: boolean) {
-    this.store.dispatch(
-      LoanActions.calculateRepaymentSchedulesChanged({
-        calculateRepaymentSchedules: state,
-      }),
-    );
+    this.loanStore.setCalculateRepaymentSchedules(state);
 
     this.store.dispatch(LoanActions.loadRepaymentSchedules());
   }

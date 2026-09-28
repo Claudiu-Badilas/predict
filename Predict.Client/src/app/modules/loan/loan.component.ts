@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
-import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
+import { AppState } from 'src/app/store/app-state.reducer';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 
 @Component({
@@ -14,7 +14,7 @@ import * as NavigationAction from 'src/app/store/actions/navigation.actions';
   styleUrls: ['./loan.component.scss'],
 })
 export class LoanComponent {
-  constructor(private readonly store: Store<fromLoan.LoanState>) {
+  constructor(private readonly store: Store<AppState>) {
     this.store.dispatch(LoanActions.loadRepaymentSchedules());
   }
 
