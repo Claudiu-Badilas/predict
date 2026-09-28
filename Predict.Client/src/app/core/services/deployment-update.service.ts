@@ -2,9 +2,16 @@ import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 
 const VERSION_CHECK_INTERVAL_MS = 10_000;
 
+export interface DeploymentVersion {
+  version: string;
+  timestamp?: string;
+  workflowRunNumber?: number | string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class DeploymentUpdateService {
   readonly updateAvailable = signal(false);
+  readonly availableDeployment = signal<DeploymentVersion | null>(null);
 
   private readonly destroyRef = inject(DestroyRef);
   private currentVersion: string | null = null;
@@ -34,7 +41,8 @@ export class DeploymentUpdateService {
 
       if (!response.ok) return;
 
-      const deployedVersion = (await response.json())?.version;
+      const deployment = (await response.json()) as DeploymentVersion;
+      const deployedVersion = deployment?.version;
       if (typeof deployedVersion !== 'string' || deployedVersion.length === 0) {
         return;
       }
@@ -45,6 +53,7 @@ export class DeploymentUpdateService {
       }
 
       if (deployedVersion !== this.currentVersion) {
+        this.availableDeployment.set(deployment);
         this.updateAvailable.set(true);
       }
     } catch {

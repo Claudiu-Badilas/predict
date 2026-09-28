@@ -20,6 +20,19 @@
   font-weight: 600;
 }
 
+.deployment-banner__details {
+  display: grid;
+  gap: 2px;
+}
+
+.deployment-banner__metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--theme-text-secondary);
+  font-size: 0.75rem;
+}
+
 .deployment-banner__button {
   padding: 5px 10px;
   border: 1px solid var(--theme-accent);

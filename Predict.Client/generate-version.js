@@ -21,6 +21,7 @@ try {
 const versionFile = {
   version: version,
   timestamp: new Date().toISOString(),
+  workflowRunNumber: process.env.GITHUB_RUN_NUMBER || null,
 };
 
 // The browser folder is the root of the GitHub Pages artifact.

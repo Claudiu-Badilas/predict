@@ -12,7 +12,7 @@ The Angular build uses `/predict/` as its base path, matching the GitHub Pages p
 4. Upload the contents of `dist/predict.client/browser/` as the Pages artifact. This folder contains both the app and `version.json`.
 5. In the repository settings, open **Pages** and choose **GitHub Actions** as the source. After the workflow deploys, open `https://<owner>.github.io/predict/`.
 
-The app uses hash-based routes, so page navigation works on static hosting without server rewrite rules. It checks `version.json` once when opened and then once per minute. When it detects a different deployment version, it displays a **New version available** banner with a refresh button. Make sure the workflow runs `node generate-version.js` after building; without that step the marker will be missing and open tabs cannot detect deployments.
+The app uses hash-based routes, so page navigation works on static hosting without server rewrite rules. It checks `version.json` once when opened and then every 10 seconds. When it detects a different deployment version, it displays a **New version available** banner with the version, GitHub Actions workflow run number, deployment time, and a refresh button. Make sure the workflow runs `node generate-version.js` after building; without that step the marker will be missing and open tabs cannot detect deployments.
 
 ## Static hosting limitations
 
