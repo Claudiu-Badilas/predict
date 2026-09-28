@@ -165,9 +165,11 @@ export class TopBarComponent implements OnInit {
   }
 
   getUploadIconPath(): string {
-    const iconTheme =
-      this.themeService.getCurrentTheme() === 'light' ? 'light' : 'dark';
-    return `assets/icons/${iconTheme}/upload.svg`;
+    return this.getThemeIconPath('upload');
+  }
+
+  getThemeIconPath(icon: string): string {
+    return `assets/icons/${this.themeService.theme()}/${icon}.svg`;
   }
 
   onUploadRequested(): void {

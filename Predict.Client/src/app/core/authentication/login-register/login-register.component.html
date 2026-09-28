@@ -35,7 +35,7 @@
           'is-invalid': isInvalidInput('password'),
         }"
       /><img
-        src="assets/icons/eye.svg"
+        [src]="getEyeIconPath()"
         (click)="onChangePasswordInputType()"
         alt="no-image"
         width="25"
@@ -60,7 +60,7 @@
               'is-invalid': isInvalidInput('confirmPassword'),
             }"
           /><img
-            src="assets/icons/eye.svg"
+            [src]="getEyeIconPath()"
             (click)="onChangePasswordInputType()"
             alt="no-image"
             width="25"

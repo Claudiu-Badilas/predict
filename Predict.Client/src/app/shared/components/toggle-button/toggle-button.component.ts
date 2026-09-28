@@ -37,7 +37,8 @@ export class ToggleButtonComponent {
 
   getThemeIconPath(iconPath: string): string {
     const theme = this.themeService.theme() === 'light' ? 'light' : 'dark';
-    return iconPath.replace(/\/icons\//i, `/icons/${theme}/`);
+    const themedPath = iconPath.replace(/\/icons\//i, `/icons/${theme}/`);
+    return themedPath;
   }
 
   get gradientStyle(): string {

@@ -13,6 +13,7 @@ import * as fromLoan from 'src/app/modules/loan/reducers/loan.reducer';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import { Calculator } from 'src/app/shared/utils/calculator.utils';
+import { ThemeService } from 'src/app/core/services/theme.service';
 import {
   LoanSimulatorInstalment,
   MonthlyInstalmentManager,
@@ -30,14 +31,14 @@ import {
                 <img
                   width="20"
                   height="20"
-                  src="assets/icons/collapse.svg"
+                  [src]="getThemeIconPath('collapse')"
                   alt="collapse"
                   (click)="onCollapseAll()"
                 />
                 <img
                   width="20"
                   height="20"
-                  src="assets/icons/expand.svg"
+                  [src]="getThemeIconPath('expand')"
                   alt="expand"
                   (click)="onExpandAll()"
                 />
@@ -1157,6 +1158,11 @@ export class LoanSimulatorBodyTableComponent {
   );
 
   store = inject(Store<fromLoan.LoanState>);
+  private readonly themeService = inject(ThemeService);
+
+  getThemeIconPath(icon: string): string {
+    return `assets/icons/${this.themeService.theme()}/${icon}.svg`;
+  }
 
   toggleGroup(group: MonthlyInstalmentManager) {
     group.expanded = !group.expanded;

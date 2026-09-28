@@ -16,6 +16,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
 import { StorageSettingsService } from 'src/app/shared/services/storage-settings.service';
 import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 export interface StorageManagerConfig {
   title: string;
@@ -53,11 +54,16 @@ export class StorageManagerModalComponent implements OnInit {
   private readonly settingsService = inject(StorageSettingsService);
   private readonly actions = inject(Actions);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly themeService = inject(ThemeService);
   readonly activeModal = inject(NgbActiveModal, { optional: true });
 
   readonly errorMessage = signal<string | null>(null);
   readonly storageItems = signal<StorageItem[]>([]);
   readonly viewedData = signal<ViewedStorageData | null>(null);
+
+  getEyeIconPath(): string {
+    return `assets/icons/${this.themeService.theme()}/eye.svg`;
+  }
 
   ngOnInit(): void {
     this.config.obsoleteStorageKeys?.forEach((key) =>

@@ -16,6 +16,7 @@ import * as fromAppStore from 'src/app/store/app-state.reducer';
 import * as fromState from 'src/app/store/app-state.reducer';
 import * as AuthActions from '../actions/authentication.actions';
 import { AuthenticationAction } from './models/authentication-actions.enum';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 @Component({
   selector: 'p-login-register',
@@ -55,6 +56,7 @@ export class LoginRegisterComponent implements OnDestroy {
   constructor(
     private store: Store<fromAppStore.AppState>,
     private formBuilder: FormBuilder,
+    private readonly themeService: ThemeService,
   ) {
     combineLatest([
       this.store.pipe(select(fromState.getRouterUrl)),
@@ -153,6 +155,10 @@ export class LoginRegisterComponent implements OnDestroy {
 
   onChangePasswordInputType() {
     this.isVisiblePassword = !this.isVisiblePassword;
+  }
+
+  getEyeIconPath(): string {
+    return `assets/icons/${this.themeService.theme()}/eye.svg`;
   }
 
   ngOnDestroy(): void {

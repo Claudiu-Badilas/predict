@@ -1,7 +1,7 @@
 <header class="topbar" #topbarRef>
   <div class="topbar__inner">
     <div class="brand">
-      <img src="assets/icons/logo.svg" alt="no-image" />
+      <img [src]="getThemeIconPath('logo')" alt="Predict" />
       <span class="brand__name">Predict</span>
     </div>
 
@@ -18,7 +18,7 @@
         [class.active]="isFilterPanelOpen"
         (click)="toggleFilterPanel()"
       >
-        <img src="assets/icons/filter.svg" alt="filter" />
+        <img [src]="getThemeIconPath('filter')" alt="filter" />
       </button>
     }
 
@@ -35,7 +35,7 @@
           [class.active]="isActiveRoute(option.url)"
           (click)="onNavigateTo(option.url)"
         >
-          <img [src]="'assets/icons/' + option.icon + '.svg'" />
+          <img [src]="getThemeIconPath(option.icon)" [alt]="option.label" />
           <span class="action-label">{{ option.label }}</span>
         </button>
       }
@@ -49,7 +49,7 @@
           [class.active]="isActiveRoute(option.url)"
           (click)="onNavigateTo(option.url); closeMenu()"
         >
-          <img [src]="'assets/icons/' + option.icon + '.svg'" />
+          <img [src]="getThemeIconPath(option.icon)" [alt]="option.label" />
           <span class="mobile-extended-menu__label">{{ option.label }}</span>
         </button>
       }
@@ -66,7 +66,7 @@
         aria-label="Open navigation and filters"
         (click)="toggleMobileControls()"
       >
-        <img src="assets/icons/filter.svg" alt="" aria-hidden="true" />
+        <img [src]="getThemeIconPath('filter')" alt="" aria-hidden="true" />
         <span aria-hidden="true">☰</span>
       </button>
     </div>
@@ -95,7 +95,7 @@
           [class.active]="isActiveRoute(option.url)"
           (click)="onNavigateTo(option.url); closeMenu()"
         >
-          <img [src]="'assets/icons/' + option.icon + '.svg'" />
+          <img [src]="getThemeIconPath(option.icon)" [alt]="option.label" />
           <span class="mobile-extended-menu__label">{{ option.label }}</span>
         </button>
       }
@@ -127,7 +127,7 @@
       </div>
       <!-- Double arrow to close filter panel -->
       <div class="filter-panel__close-btn" (click)="closeFilterPanel()">
-        <img src="assets/icons/double-arrows.svg" alt="" />
+        <img [src]="getThemeIconPath('double-arrows')" alt="" />
       </div>
     </div>
   }
