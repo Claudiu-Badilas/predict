@@ -50,6 +50,9 @@ jobs:
       - name: Build Angular app
         run: npm run build -- --configuration production
 
+      - name: Generate deployment version marker
+        run: node generate-version.js
+
       - name: List build output
         run: ls -la ./dist/predict.client/browser || echo "Build directory not found"
 

@@ -7,8 +7,10 @@ const { execSync } = require('child_process');
 let version;
 
 try {
-  // Try to get git commit hash
-  version = execSync('git rev-parse --short HEAD').toString().trim();
+  // Prefer the commit that triggered the deployment.
+  version = process.env.GITHUB_SHA
+    ? process.env.GITHUB_SHA.slice(0, 7)
+    : execSync('git rev-parse --short HEAD').toString().trim();
 } catch (error) {
   // Fallback to package.json version + timestamp
   const pkg = require('./package.json');
@@ -21,11 +23,12 @@ const versionFile = {
   timestamp: new Date().toISOString(),
 };
 
-// Write to dist folder - matches your angular.json outputPath
+// The browser folder is the root of the GitHub Pages artifact.
 const outputPath = path.join(
   process.cwd(),
   'dist',
   'predict.client',
+  'browser',
   'version.json',
 );
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
