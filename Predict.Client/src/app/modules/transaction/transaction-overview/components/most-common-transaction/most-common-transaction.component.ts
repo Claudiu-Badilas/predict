@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import {
   TransactionCategorizer,
   TransactionCategory,
@@ -58,6 +59,7 @@ interface PeriodGroup {
   imports: [
     CommonModule,
     NumberFormatPipe,
+    ScrollableDirective,
     NgbTooltip,
     TransactionOverviewHeaderComponent,
   ],
