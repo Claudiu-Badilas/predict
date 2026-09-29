@@ -2,31 +2,29 @@
   <div class="summary-grid">
     <div class="summary-row">
       <div class="summary-section stat-item stat-item--green">
-        <div class="stat-row">
-          <span class="stat-item__label">Cheltuieli</span>
-          <span class="stat-item__label">Items </span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-item__value positive">{{
-            totalRevenue() | numberFormat: '0.00'
-          }}</span>
-          <span class="stat-item__value">{{
-            totalItemsSold() | numberFormat: '0.00'
-          }}</span>
-        </div>
+        <span class="stat-item__label">Expenses</span>
+        <span class="stat-item__value positive">
+          {{ totalRevenue() | numberFormat: '0.00' }} RON
+        </span>
+      </div>
+
+      <div class="summary-section stat-item stat-item--red">
+        <span class="stat-item__label">Items</span>
+        <span class="stat-item__value">
+          {{ totalItemsSold() | numberFormat: '0.00' }}
+        </span>
       </div>
 
       <div class="summary-section stat-item stat-item--blue">
-        <div class="stat-row">
-          <span class="stat-item__label"> Products</span>
-          <span class="stat-item__label">Avg. Price</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-item__value">{{ uniqueProductsCount() }}</span>
-          <span class="stat-item__value">{{
-            averagePrice() | numberFormat: '0.00'
-          }}</span>
-        </div>
+        <span class="stat-item__label">Products</span>
+        <span class="stat-item__value">{{ uniqueProductsCount() }}</span>
+      </div>
+
+      <div class="summary-section stat-item stat-item--blue">
+        <span class="stat-item__label">Average price</span>
+        <span class="stat-item__value">
+          {{ averagePrice() | numberFormat: '0.00' }} RON
+        </span>
       </div>
     </div>
   </div>

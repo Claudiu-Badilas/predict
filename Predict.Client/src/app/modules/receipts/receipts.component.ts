@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import * as ReceiptsActions from 'src/app/modules/receipts/actions/receipts.actions';
@@ -10,16 +9,17 @@ import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-b
 import { SearchInputComponent } from 'src/app/shared/components/search-input/search-input.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import { ReceiptsSettingsComponent } from './components/receipts-settings/receipts-settings.component';
+import { MostCommonProductsComponent } from './receipts-products/components/most-common-products/most-common-products.component';
 
 @Component({
   selector: 'p-receipts',
   imports: [
-    RouterModule,
     CommonModule,
     RangeSelectorComponent,
     ToggleButtonActionsComponent,
     SearchInputComponent,
     TopBarComponent,
+    MostCommonProductsComponent,
   ],
   templateUrl: './receipts.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -30,6 +30,7 @@ export class ReceiptsComponent {
   startDate = this.receiptsStore.startDate;
   endDate = this.receiptsStore.endDate;
   viewMode = this.receiptsStore.receiptsProducts.viewMode;
+  receipts = this.receiptsStore.availableProducts;
 
   minDate = new Date('2016-01-01');
   now = new Date();

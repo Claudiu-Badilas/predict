@@ -1,0 +1,42 @@
+ .receipts-toolbar {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid var(--theme-border);
+  border-radius: 14px;
+  background: var(--theme-surface);
+  box-shadow: var(--theme-shadow);
+}
+
+.receipts-toolbar p-toggle-button-actions,
+.receipts-toolbar p-search-input {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .receipts-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 8px;
+  }
+
+  .receipts-toolbar p-toggle-button-actions,
+  .receipts-toolbar p-search-input {
+    width: 100%;
+  }
+
+  .receipts-toolbar ::ng-deep .tabs {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .receipts-toolbar ::ng-deep .tabs__btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: 6px;
+  }
+}
