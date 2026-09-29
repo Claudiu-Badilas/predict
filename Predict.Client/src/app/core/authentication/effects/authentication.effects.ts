@@ -64,7 +64,7 @@ export class AuthenticationEffects {
         map(({ token }) => {
           if (AuthenticationUtils.isTokenValid(token)) {
             AuthenticationUtils.saveToken(token);
-            return NavigationAction.navigateTo({ route: 'transactions/1' });
+            return NavigationAction.navigateTo({ route: 'transactions' });
           }
 
           return NavigationAction.navigateTo({

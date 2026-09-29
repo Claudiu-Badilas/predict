@@ -18,4 +18,10 @@
   </ng-container>
 </p-top-bar>
 
-<router-outlet></router-outlet>
+<div class="p-2">
+  <p-most-common-transaction
+    [viewMode]="viewMode()"
+    [transactions]="validTransactions()"
+    (viewModeChange)="onViewModeChange($event)"
+  />
+</div>
