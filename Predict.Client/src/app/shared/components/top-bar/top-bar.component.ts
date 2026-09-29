@@ -33,7 +33,7 @@ export class TopBarComponent implements OnInit {
 
   modules = [
     { label: 'Loan', icon: 'wallet', url: '/loan' },
-    { label: 'Transactions', icon: 'trending', url: '/transactions' },
+    { label: 'Transac.', icon: 'trending', url: '/transactions' },
     { label: 'Receipts', icon: 'receipt', url: '/receipts' },
   ];
 
