@@ -22,11 +22,6 @@
       </button>
     }
 
-    <div class="topbar__custom-actions">
-      <ng-content select="[topbar-actions]"></ng-content>
-      <p-theme-toggle />
-    </div>
-
     <div class="actions actions--desktop">
       @for (option of modules; track option) {
         <button
@@ -80,6 +75,11 @@
         <img [src]="getUploadIconPath()" alt="" aria-hidden="true" />
       </button>
     }
+
+    <div class="topbar__custom-actions">
+      <ng-content select="[topbar-actions]"></ng-content>
+      <p-theme-toggle />
+    </div>
   </div>
 
   <!-- Extended Menu - Single row with icons below top bar -->
