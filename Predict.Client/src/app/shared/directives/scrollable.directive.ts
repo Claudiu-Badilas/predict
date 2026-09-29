@@ -22,6 +22,7 @@ export class ScrollableDirective implements AfterViewInit, OnDestroy {
   private removeResizeListener?: () => void;
   private resizeObserver?: ResizeObserver;
   private mutationObserver?: MutationObserver;
+  private frameRequest?: number;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,
@@ -57,17 +58,30 @@ export class ScrollableDirective implements AfterViewInit, OnDestroy {
     this.removeResizeListener?.();
     this.resizeObserver?.disconnect();
     this.mutationObserver?.disconnect();
+    if (this.frameRequest !== undefined) {
+      cancelAnimationFrame(this.frameRequest);
+    }
   }
 
   private createThumb(axis: 'vertical' | 'horizontal'): HTMLElement {
     const thumb = this.renderer.createElement('span') as HTMLElement;
     this.renderer.addClass(thumb, 'scrollable-thumb');
     this.renderer.addClass(thumb, `scrollable-thumb--${axis}`);
+    this.renderer.setStyle(thumb, 'overflow-anchor', 'none');
     this.renderer.appendChild(this.element, thumb);
     return thumb;
   }
 
   private updateThumbs(): void {
+    if (this.frameRequest !== undefined) return;
+
+    this.frameRequest = requestAnimationFrame(() => {
+      this.frameRequest = undefined;
+      this.updateThumbsImmediately();
+    });
+  }
+
+  private updateThumbsImmediately(): void {
     this.updateThumb(
       this.verticalThumb,
       this.element.clientHeight,
@@ -102,9 +116,19 @@ export class ScrollableDirective implements AfterViewInit, OnDestroy {
     const thumbSize = Math.max(24, (viewportSize * viewportSize) / contentSize);
     const travel = viewportSize - thumbSize;
     const maxScroll = contentSize - viewportSize;
+    // The thumbs are children of the scrolling element. Keep them visually
+    // attached to the viewport by compensating for the content's scroll
+    // offset when positioning them.
     const position = maxScroll > 0 ? (scrollOffset / maxScroll) * travel : 0;
 
     this.renderer.setStyle(thumb, sizeProperty, `${thumbSize}px`);
-    this.renderer.setStyle(thumb, positionProperty, `${position}px`);
+    const translation = `${scrollOffset + position}px`;
+    this.renderer.setStyle(
+      thumb,
+      'transform',
+      positionProperty === 'top'
+        ? `translate3d(0, ${translation}, 0)`
+        : `translate3d(${translation}, 0, 0)`,
+    );
   }
 }

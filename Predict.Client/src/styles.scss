@@ -35,6 +35,7 @@ body {
 .scrollable-container {
   position: relative;
   overflow: auto;
+  overflow-anchor: none;
   overscroll-behavior: contain;
   scrollbar-gutter: auto;
   scrollbar-width: none;
