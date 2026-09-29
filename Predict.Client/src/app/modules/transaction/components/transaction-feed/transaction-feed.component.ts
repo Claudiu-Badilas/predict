@@ -1,15 +1,11 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import {
   TransactionCategorizer,
   TransactionCategory,
   TransactionDomain,
-} from '../../../models/transactions.model';
+} from '../../models/transactions.model';
 
 @Component({
   selector: 'p-transaction-feed',

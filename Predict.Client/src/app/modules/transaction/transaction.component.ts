@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  inject,
+} from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Store } from '@ngrx/store';
@@ -10,7 +15,7 @@ import * as TransactionsActions from 'src/app/modules/transaction/actions/transa
 import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
 import { TransactionsStore } from 'src/app/modules/transaction/reducers/transactions.reducer';
 import { TransactionsSettingsComponent } from './components/transaction-settings/transaction-settings.component';
-import { MostCommonTransactionComponent } from './transaction-overview/components/most-common-transaction/most-common-transaction.component';
+import { MostCommonTransactionComponent } from './components/most-common-transaction/most-common-transaction.component';
 
 @Component({
   selector: 'p-transaction',

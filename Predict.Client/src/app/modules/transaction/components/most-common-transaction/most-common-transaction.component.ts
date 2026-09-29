@@ -8,12 +8,9 @@ import {
   signal,
 } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
-import {
-  TransactionDomain,
-} from '../../../models/transactions.model';
-import { TransactionOverviewHeaderComponent } from '../transaction-overview-header/transaction-overview-header.component';
+import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
+import { TransactionDomain } from '../../models/transactions.model';
 import { TransactionFeedComponent } from '../transaction-feed/transaction-feed.component';
 
 type TransactionSort = 'amount' | 'recent' | 'oldest';
@@ -39,7 +36,6 @@ interface PeriodGroup {
     NumberFormatPipe,
     ScrollableDirective,
     NgbTooltip,
-    TransactionOverviewHeaderComponent,
     TransactionFeedComponent,
   ],
   templateUrl: './most-common-transaction.component.html',
@@ -59,7 +55,9 @@ export class MostCommonTransactionComponent {
   );
 
   selectedTransaction = computed(() =>
-    this.transactions().filter((transaction) => this.matchesSearch(transaction)),
+    this.transactions().filter((transaction) =>
+      this.matchesSearch(transaction),
+    ),
   );
 
   allTransactions = computed(() =>
@@ -249,5 +247,4 @@ export class MostCommonTransactionComponent {
   clearSearch() {
     this.searchTerm.set('');
   }
-
 }
