@@ -2,5 +2,6 @@
   <p-most-common-transaction
     [viewMode]="viewMode()"
     [transactions]="validTransactions()"
+    (viewModeChange)="onViewModeChange($event)"
   />
 </div>

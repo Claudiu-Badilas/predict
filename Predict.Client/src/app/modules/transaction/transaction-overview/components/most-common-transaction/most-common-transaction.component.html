@@ -1,622 +1,889 @@
-    <div class="dashboard-container">
-      <!-- Header -->
-      <p-transaction-overview-header
-        class="header-section"
-        [totalIncome]="totalIncome()"
-        [totalExpense]="totalExpense()"
-        [totalTransactions]="totalTransactions()"
-      ></p-transaction-overview-header>
+<div class="dashboard-container">
+  <p-transaction-overview-header
+    class="header-section"
+    [totalIncome]="totalIncome()"
+    [totalExpense]="totalExpense()"
+    [totalTransactions]="totalTransactions()"
+  />
 
-      <!-- Main Content -->
-      <div class="content-area">
-        <div scrollable class="scroll-container">
-          @if (viewMode() === 'all') {
-            <!-- All View -->
-            <div class="view-all">
-              <!-- Category Spending Bar (desktop only) -->
-              @if (
-                categoryBarSegments().length > 1 && selectedCategory() === null
-              ) {
-                <div class="category-bar-section desktop-only">
-                  <div class="category-bar-header">
-                    <span class="category-bar-title">Spending by category</span>
-                    <span class="category-bar-total">
-                      {{ totalExpense() | numberFormat: '0.00' }}
-                    </span>
-                  </div>
-                  <div class="category-bar">
-                    @for (seg of categoryBarSegments(); track seg.category) {
-                      <div
-                        class="category-bar-segment"
-                        [style.width.%]="seg.percentage"
-                        [style.background]="seg.color"
-                        [ngbTooltip]="
-                          seg.label +
-                          ': ' +
-                          (seg.total | numberFormat: '0.00') +
-                          ' (' +
-                          (seg.percentage | numberFormat: '0.0') +
-                          '%)'
-                        "
-                        container="body"
-                      ></div>
-                    }
-                  </div>
+  <!-- Main Content -->
+  <div class="content-area">
+    <div scrollable class="scroll-container">
+      <div class="insights-toolbar" aria-label="Transaction view controls">
+        <div class="period-control">
+          <div
+            class="period-switch"
+            role="group"
+            aria-label="Choose transaction period"
+          >
+            <button
+              type="button"
+              [class.active]="viewMode() === 'all'"
+              [attr.aria-pressed]="viewMode() === 'all'"
+              (click)="setViewMode('all')"
+            >
+              All
+            </button>
+            <button
+              type="button"
+              [class.active]="viewMode() === 'monthly'"
+              [attr.aria-pressed]="viewMode() === 'monthly'"
+              (click)="setViewMode('monthly')"
+            >
+              Month
+            </button>
+            <button
+              type="button"
+              [class.active]="viewMode() === 'yearly'"
+              [attr.aria-pressed]="viewMode() === 'yearly'"
+              (click)="setViewMode('yearly')"
+            >
+              Year
+            </button>
+          </div>
+        </div>
+
+        <div class="search-field">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle
+              cx="8.8"
+              cy="8.8"
+              r="5.8"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+            <path
+              d="m13.2 13.2 4 4"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+            />
+          </svg>
+          <input
+            type="search"
+            placeholder="Search merchants, details, or categories"
+            aria-label="Search transactions"
+            [value]="searchTerm()"
+            (input)="onSearchInput($event)"
+          />
+          @if (searchTerm()) {
+            <button
+              type="button"
+              class="clear-search"
+              aria-label="Clear search"
+              (click)="clearSearch()"
+            >
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="m4 4 8 8m0-8-8 8"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          }
+        </div>
+
+        <div class="toggle-field group-field">
+          <div
+            class="choice-toggle"
+            role="group"
+            aria-label="Group transactions by"
+          >
+            <button
+              type="button"
+              [class.active]="grouping() === 'none'"
+              [attr.aria-pressed]="grouping() === 'none'"
+              (click)="setGrouping('none')"
+            >
+              None
+            </button>
+            <button
+              type="button"
+              [class.active]="grouping() === 'category'"
+              [attr.aria-pressed]="grouping() === 'category'"
+              (click)="setGrouping('category')"
+            >
+              Category
+            </button>
+          </div>
+        </div>
+
+        <div class="toggle-field sort-field--order">
+          @if (grouping() === 'category' && selectedCategory() === null) {
+            <div
+              class="choice-toggle"
+              role="group"
+              aria-label="Sort transactions"
+            >
+              <button
+                type="button"
+                [class.active]="sortMode() === 'frequency'"
+                [attr.aria-pressed]="sortMode() === 'frequency'"
+                (click)="setSortMode('frequency')"
+                aria-label="Most frequent"
+              >
+                Frequent
+              </button>
+              <button
+                type="button"
+                [class.active]="sortMode() === 'amount'"
+                [attr.aria-pressed]="sortMode() === 'amount'"
+                (click)="setSortMode('amount')"
+                aria-label="Highest amount"
+              >
+                Amount
+              </button>
+              <button
+                type="button"
+                [class.active]="sortMode() === 'recent'"
+                [attr.aria-pressed]="sortMode() === 'recent'"
+                (click)="setSortMode('recent')"
+                aria-label="Most recent"
+              >
+                Recent
+              </button>
+            </div>
+          } @else {
+            <div
+              class="choice-toggle"
+              role="group"
+              aria-label="Sort transactions"
+            >
+              <button
+                type="button"
+                [class.active]="sortMode() === 'recent'"
+                [attr.aria-pressed]="sortMode() === 'recent'"
+                (click)="setSortMode('recent')"
+              >
+                Newest
+              </button>
+              <button
+                type="button"
+                [class.active]="sortMode() === 'amount'"
+                [attr.aria-pressed]="sortMode() === 'amount'"
+                (click)="setSortMode('amount')"
+                aria-label="Highest amount"
+              >
+                Amount
+              </button>
+              <button
+                type="button"
+                [class.active]="sortMode() === 'oldest'"
+                [attr.aria-pressed]="sortMode() === 'oldest'"
+                (click)="setSortMode('oldest')"
+              >
+                Oldest
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (viewMode() === 'all') {
+        <!-- All View -->
+        <div class="view-all">
+          <!-- Category Spending Bar (desktop only) -->
+          @if (
+            categoryBarSegments().length > 1 &&
+            selectedCategory() === null &&
+            grouping() === 'category'
+          ) {
+            <div class="category-bar-section desktop-only">
+              <div class="category-bar-header">
+                <span class="category-bar-title">Spending by category</span>
+                <span class="category-bar-total">
+                  {{ totalExpense() | numberFormat: '0.00' }}
+                </span>
+              </div>
+              <div class="category-bar">
+                @for (seg of categoryBarSegments(); track seg.category) {
+                  <div
+                    class="category-bar-segment"
+                    [style.width.%]="seg.percentage"
+                    [style.background]="seg.color"
+                    [ngbTooltip]="
+                      seg.label +
+                      ': ' +
+                      (seg.total | numberFormat: '0.00') +
+                      ' (' +
+                      (seg.percentage | numberFormat: '0.0') +
+                      '%)'
+                    "
+                    container="body"
+                  ></div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Mobile-only category bar (below header, before filters) -->
+          @if (
+            categoryBarSegments().length > 1 &&
+            selectedCategory() === null &&
+            grouping() === 'category'
+          ) {
+            <div class="category-bar-section mobile-only">
+              <div class="category-bar">
+                @for (seg of categoryBarSegments(); track seg.category) {
+                  <div
+                    class="category-bar-segment"
+                    [style.width.%]="seg.percentage"
+                    [style.background]="seg.color"
+                    [ngbTooltip]="
+                      seg.label +
+                      ': ' +
+                      (seg.total | numberFormat: '0.00') +
+                      ' (' +
+                      (seg.percentage | numberFormat: '0.0') +
+                      '%)'
+                    "
+                    container="body"
+                  ></div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Active filter indicator -->
+          @if (selectedCategory() !== null) {
+            <div class="filter-active">
+              <span class="filter-label">Filtered by:</span>
+              <button
+                type="button"
+                class="category-pill filter-pill"
+                [style.background]="getCategoryColor(selectedCategory()!)"
+                (click)="clearCategory()"
+              >
+                <span>{{ getCategoryLabel(selectedCategory()!) }}</span>
+                <svg
+                  class="pill-close"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 3l6 6M9 3l-6 6"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          }
+
+          <!-- Transactions List -->
+          @if (grouping() === 'category' && selectedCategory() === null) {
+            <div class="transactions-section">
+              <div class="section-header">
+                <div class="section-heading">
+                  <span class="section-title">
+                    {{ selectedCategory() ? 'Transactions' : 'Most common' }}
+                  </span>
+                  <span class="section-caption">
+                    {{
+                      selectedCategory()
+                        ? getCategoryLabel(selectedCategory()!)
+                        : 'Grouped by category'
+                    }}
+                  </span>
                 </div>
-              }
+                <span class="section-badge">{{
+                  getAllGroupedTransactions().length
+                }}</span>
+              </div>
 
-              <!-- Mobile-only category bar (below header, before filters) -->
-              @if (
-                categoryBarSegments().length > 1 && selectedCategory() === null
-              ) {
-                <div class="category-bar-section mobile-only">
-                  <div class="category-bar">
-                    @for (seg of categoryBarSegments(); track seg.category) {
-                      <div
-                        class="category-bar-segment"
-                        [style.width.%]="seg.percentage"
-                        [style.background]="seg.color"
-                        [ngbTooltip]="
-                          seg.label +
-                          ': ' +
-                          (seg.total | numberFormat: '0.00') +
-                          ' (' +
-                          (seg.percentage | numberFormat: '0.0') +
-                          '%)'
-                        "
-                        container="body"
-                      ></div>
-                    }
-                  </div>
-                </div>
-              }
+              <!-- Transactions Grid -->
+              <div class="transactions-grid">
+                @for (
+                  item of getAllGroupedTransactions();
+                  track item.provider + '-' + item.description + '-' + $index
+                ) {
+                  <div class="transaction-card highlight-card">
+                    @if (selectedCategory() === null) {
+                      <!-- Compact mode: category name, count, amount, percent in one row -->
+                      <div class="card-row compact-row">
+                        <button
+                          type="button"
+                          class="category-pill category-name"
+                          (click)="onSelectCategory(item.category)"
+                          [style.background]="getCategoryColor(item.category)"
+                          [ngbTooltip]="getCategoryLabel(item.category)"
+                          container="body"
+                        >
+                          {{ getCategoryLabel(item.category) }}
+                        </button>
 
-              <!-- Active filter indicator -->
-              @if (selectedCategory() !== null) {
-                <div class="filter-active">
-                  <span class="filter-label">Filtered by:</span>
-                  <button
-                    type="button"
-                    class="category-pill filter-pill"
-                    [style.background]="getCategoryColor(selectedCategory()!)"
-                    (click)="clearCategory()"
-                  >
-                    <span>{{ getCategoryLabel(selectedCategory()!) }}</span>
-                    <svg
-                      class="pill-close"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M3 3l6 6M9 3l-6 6"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              }
+                        <span class="tx-count">{{ item.count }} tx</span>
 
-              <!-- Transactions List -->
-              <div class="transactions-section">
-                <div class="section-header">
-                  <span class="section-title">Top</span>
-                  <span class="section-badge">{{
-                    getAllGroupedTransactions().length
-                  }}</span>
-                </div>
-
-                <!-- Transactions Grid -->
-                <div class="transactions-grid">
-                  @for (
-                    item of getAllGroupedTransactions();
-                    track item.provider + '-' + item.description + '-' + $index
-                  ) {
-                    <div class="transaction-card highlight-card">
-                      @if (selectedCategory() === null) {
-                        <!-- Compact mode: category name, count, amount, percent in one row -->
-                        <div class="card-row compact-row">
-                          <button
-                            type="button"
-                            class="category-pill category-name"
-                            (click)="onSelectCategory(item.category)"
-                            [style.background]="getCategoryColor(item.category)"
-                            [ngbTooltip]="getCategoryLabel(item.category)"
+                        <div class="amount-group">
+                          <span
+                            class="amount-text"
+                            [class.positive]="item.total > 0"
+                            [class.negative]="item.total < 0"
+                          >
+                            {{ item.total | numberFormat: '0.00' }}
+                          </span>
+                          @if (item.total > 0 && totalIncome() > 0) {
+                            <span class="percentage-badge income-badge">
+                              {{
+                                item.percentageOfIncome | numberFormat: '0.0'
+                              }}%
+                            </span>
+                          } @else if (item.total < 0 && totalExpense() > 0) {
+                            <span class="percentage-badge expense-badge">
+                              {{
+                                item.percentageOfExpense | numberFormat: '0.0'
+                              }}%
+                            </span>
+                          }
+                        </div>
+                      </div>
+                    } @else {
+                      <!-- Detailed mode when a category is selected -->
+                      <!-- Row 1: provider -->
+                      <div class="card-row">
+                        <div class="provider-group">
+                          <span
+                            class="provider-name"
+                            [ngbTooltip]="item.description"
                             container="body"
                           >
-                            {{ getCategoryLabel(item.category) }}
-                          </button>
-
-                          <span class="tx-count">{{ item.count }}x</span>
-
-                          <div class="amount-group">
-                            <span
-                              class="amount-text"
-                              [class.positive]="item.total > 0"
-                              [class.negative]="item.total < 0"
-                            >
-                              {{ item.total | numberFormat: '0.00' }}
-                            </span>
-                            @if (item.total > 0 && totalIncome() > 0) {
-                              <span class="percentage-badge income-badge">
-                                {{
-                                  item.percentageOfIncome | numberFormat: '0.0'
-                                }}%
-                              </span>
-                            } @else if (item.total < 0 && totalExpense() > 0) {
-                              <span class="percentage-badge expense-badge">
-                                {{
-                                  item.percentageOfExpense
-                                    | numberFormat: '0.0'
-                                }}%
-                              </span>
-                            }
-                          </div>
+                            {{ item.provider }}
+                          </span>
                         </div>
-                      } @else {
-                        <!-- Detailed mode when a category is selected -->
-                        <!-- Row 1: provider -->
-                        <div class="card-row">
-                          <div class="provider-group">
-                            <span
-                              class="provider-name"
-                              [ngbTooltip]="item.description"
-                              container="body"
-                            >
-                              {{ item.provider }}
-                            </span>
-                          </div>
-                        </div>
+                      </div>
 
-                        <!-- Divider + Details row: only when 5 or fewer cards -->
-                        @if (getAllGroupedTransactions().length <= 5) {
-                          <div class="card-divider"></div>
-                          <div class="card-row details-row">
-                            <span
-                              class="details-text"
-                              [ngbTooltip]="item.description || item.provider"
-                              container="body"
-                            >
-                              {{ item.description || item.provider }}
-                            </span>
-                          </div>
-                        }
-
-                        <!-- Middle row: date + amount -->
-                        <div class="card-row middle">
-                          <span class="date-text">{{
-                            formatDay(item.latestDate)
-                          }}</span>
-                          <div class="amount-group">
-                            <span
-                              class="amount-text"
-                              [class.positive]="item.total > 0"
-                              [class.negative]="item.total < 0"
-                            >
-                              {{ item.total | numberFormat: '0.00' }}
-                            </span>
-                            @if (item.total > 0 && totalIncome() > 0) {
-                              <span class="percentage-badge income-badge">
-                                {{
-                                  item.percentageOfIncome | numberFormat: '0.0'
-                                }}%
-                              </span>
-                            } @else if (item.total < 0 && totalExpense() > 0) {
-                              <span class="percentage-badge expense-badge">
-                                {{
-                                  item.percentageOfExpense
-                                    | numberFormat: '0.0'
-                                }}%
-                              </span>
-                            }
-                          </div>
+                      <!-- Divider + Details row: only when 5 or fewer cards -->
+                      @if (getAllGroupedTransactions().length <= 5) {
+                        <div class="card-divider"></div>
+                        <div class="card-row details-row">
+                          <span
+                            class="details-text"
+                            [ngbTooltip]="item.description || item.provider"
+                            container="body"
+                          >
+                            {{ item.description || item.provider }}
+                          </span>
                         </div>
                       }
-                    </div>
-                  }
 
-                  @if (!getAllGroupedTransactions().length) {
-                    <div class="empty-state">
-                      <div class="empty-icon">📭</div>
-                      <span>No transactions</span>
-                    </div>
-                  }
-                </div>
+                      <!-- Middle row: date + amount -->
+                      <div class="card-row middle">
+                        <span class="date-text">{{
+                          formatDay(item.latestDate)
+                        }}</span>
+                        <div class="amount-group">
+                          <span
+                            class="amount-text"
+                            [class.positive]="item.total > 0"
+                            [class.negative]="item.total < 0"
+                          >
+                            {{ item.total | numberFormat: '0.00' }}
+                          </span>
+                          @if (item.total > 0 && totalIncome() > 0) {
+                            <span class="percentage-badge income-badge">
+                              {{
+                                item.percentageOfIncome | numberFormat: '0.0'
+                              }}%
+                            </span>
+                          } @else if (item.total < 0 && totalExpense() > 0) {
+                            <span class="percentage-badge expense-badge">
+                              {{
+                                item.percentageOfExpense | numberFormat: '0.0'
+                              }}%
+                            </span>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+
+                @if (!getAllGroupedTransactions().length) {
+                  <div class="empty-state">
+                    <div class="empty-icon">⌕</div>
+                    <span>
+                      {{
+                        searchTerm()
+                          ? 'No matching transactions'
+                          : 'No transactions for this selection'
+                      }}
+                    </span>
+                  </div>
+                }
               </div>
             </div>
           } @else {
-            <!-- Period View -->
-            <div class="view-periods">
-              @for (period of currentPeriods(); track period.id) {
-                <div
-                  class="period-container"
-                  [class.expanded]="period.isExpanded"
-                >
-                  <!-- Period Header -->
-                  <button
-                    type="button"
-                    class="period-header"
-                    (click)="togglePeriod(period)"
-                    [attr.aria-expanded]="period.isExpanded"
-                  >
-                    <!-- Main top row -->
-                    <div class="header-row-main">
-                      <div class="header-left">
-                        <span class="header-title">{{ period.title }}</span>
-                        <span class="header-count">{{
-                          period.transactionCount
-                        }}</span>
-                      </div>
-
-                      <!-- Inline category bar between left and right (desktop) -->
-                      @if (
-                        period.categorySegments.length > 1 &&
-                        selectedCategory() === null
-                      ) {
-                        <div class="header-bar desktop-only">
-                          <div class="category-bar slim">
-                            @for (
-                              seg of period.categorySegments;
-                              track seg.category
-                            ) {
-                              <div
-                                class="category-bar-segment"
-                                [style.width.%]="seg.percentage"
-                                [style.background]="seg.color"
-                                [ngbTooltip]="
-                                  seg.label +
-                                  ': ' +
-                                  (seg.total | numberFormat: '0.00') +
-                                  ' (' +
-                                  (seg.percentage | numberFormat: '0.0') +
-                                  '%)'
-                                "
-                                container="body"
-                              ></div>
-                            }
-                          </div>
-                        </div>
-                      }
-
-                      <div class="header-right">
-                        @if (period.totalIncome > 0) {
-                          <span
-                            class="stat-tag stat-income"
-                            [ngbTooltip]="'Total income'"
-                            container="body"
-                          >
-                            <svg
-                              class="stat-icon"
-                              viewBox="0 0 12 12"
-                              fill="none"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M6 9V3M6 3L3 6M6 3l3 3"
-                                stroke="currentColor"
-                                stroke-width="1.6"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                            <span class="stat-value">{{
-                              period.totalIncome | numberFormat: '0.00'
-                            }}</span>
-                          </span>
-                        }
-
-                        @if (period.totalExpense > 0) {
-                          <span
-                            class="stat-tag stat-expense"
-                            [ngbTooltip]="'Total expense'"
-                            container="body"
-                          >
-                            <svg
-                              class="stat-icon"
-                              viewBox="0 0 12 12"
-                              fill="none"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M6 3v6M6 9l3-3M6 9L3 6"
-                                stroke="currentColor"
-                                stroke-width="1.6"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                            <span class="stat-value">{{
-                              period.totalExpense | numberFormat: '0.00'
-                            }}</span>
-                          </span>
-                        }
-
-                        @if (period.difference !== 0) {
-                          <span
-                            class="stat-tag stat-diff"
-                            [class.is-positive]="period.difference > 0"
-                            [class.is-negative]="period.difference < 0"
-                            [ngbTooltip]="'Net difference'"
-                            container="body"
-                          >
-                            <svg
-                              class="stat-icon"
-                              viewBox="0 0 12 12"
-                              fill="none"
-                              aria-hidden="true"
-                            >
-                              @if (period.difference > 0) {
-                                <path
-                                  d="M6 9V3M6 3L3 6M6 3l3 3"
-                                  stroke="currentColor"
-                                  stroke-width="1.6"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                              } @else {
-                                <path
-                                  d="M6 3v6M6 9l3-3M6 9L3 6"
-                                  stroke="currentColor"
-                                  stroke-width="1.6"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                              }
-                            </svg>
-                            <span class="stat-value">{{
-                              period.difference | numberFormat: '0.00'
-                            }}</span>
-                          </span>
-                        }
-
-                        <span class="expand-chevron" aria-hidden="true">
-                          <svg
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            [class.rotated]="period.isExpanded"
-                          >
-                            <path
-                              d="M4 6l4 4 4-4"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                    </div>
-
-                    <!-- Mobile-only bar: second row, always visible (even collapsed) -->
-                    @if (
-                      period.categorySegments.length > 1 &&
-                      selectedCategory() === null
-                    ) {
-                      <div class="header-bar-mobile mobile-only">
-                        <div class="category-bar slim">
-                          @for (
-                            seg of period.categorySegments;
-                            track seg.category
-                          ) {
-                            <div
-                              class="category-bar-segment"
-                              [style.width.%]="seg.percentage"
-                              [style.background]="seg.color"
-                              [ngbTooltip]="
-                                seg.label +
-                                ': ' +
-                                (seg.total | numberFormat: '0.00') +
-                                ' (' +
-                                (seg.percentage | numberFormat: '0.0') +
-                                '%)'
-                              "
-                              container="body"
-                            ></div>
-                          }
-                        </div>
-                      </div>
-                    }
-                  </button>
-
-                  <!-- Period Content -->
-                  @if (period.isExpanded) {
-                    <div class="period-content">
-                      <!-- Active filter indicator -->
-                      @if (selectedCategory() !== null) {
-                        <div class="filter-active">
-                          <span class="filter-label">Filtered by:</span>
-                          <button
-                            type="button"
-                            class="category-pill filter-pill"
-                            [style.background]="
-                              getCategoryColor(selectedCategory()!)
-                            "
-                            (click)="clearCategory()"
-                          >
-                            <span>{{
-                              getCategoryLabel(selectedCategory()!)
-                            }}</span>
-                            <svg
-                              class="pill-close"
-                              viewBox="0 0 12 12"
-                              fill="none"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M3 3l6 6M9 3l-6 6"
-                                stroke="currentColor"
-                                stroke-width="1.6"
-                                stroke-linecap="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      }
-
-                      <div class="transactions-section compact">
-                        <!-- Transactions Grid -->
-                        <div class="transactions-grid">
-                          @for (
-                            item of period.multiple;
-                            track item.provider +
-                              '-' +
-                              item.description +
-                              '-' +
-                              $index
-                          ) {
-                            <div class="transaction-card highlight-card">
-                              @if (selectedCategory() === null) {
-                                <!-- Compact mode: category name, count, amount, percent in one row -->
-                                <div class="card-row compact-row">
-                                  <button
-                                    type="button"
-                                    class="category-pill category-name"
-                                    (click)="onSelectCategory(item.category)"
-                                    [style.background]="
-                                      getCategoryColor(item.category)
-                                    "
-                                    [ngbTooltip]="
-                                      getCategoryLabel(item.category)
-                                    "
-                                    container="body"
-                                  >
-                                    {{ getCategoryLabel(item.category) }}
-                                  </button>
-
-                                  <span class="tx-count"
-                                    >{{ item.count }}x</span
-                                  >
-
-                                  <div class="amount-group">
-                                    <span
-                                      class="amount-text"
-                                      [class.positive]="item.total > 0"
-                                      [class.negative]="item.total < 0"
-                                    >
-                                      {{ item.total | numberFormat: '0.00' }}
-                                    </span>
-                                    @if (
-                                      item.total > 0 && period.totalIncome > 0
-                                    ) {
-                                      <span
-                                        class="percentage-badge income-badge"
-                                      >
-                                        {{
-                                          item.percentageOfIncome
-                                            | numberFormat: '0.0'
-                                        }}%
-                                      </span>
-                                    } @else if (
-                                      item.total < 0 && period.totalExpense > 0
-                                    ) {
-                                      <span
-                                        class="percentage-badge expense-badge"
-                                      >
-                                        {{
-                                          item.percentageOfExpense
-                                            | numberFormat: '0.0'
-                                        }}%
-                                      </span>
-                                    }
-                                  </div>
-                                </div>
-                              } @else {
-                                <!-- Detailed mode when a category is selected -->
-                                <!-- Row 1: provider -->
-                                <div class="card-row">
-                                  <div class="provider-group">
-                                    <span
-                                      class="provider-name"
-                                      [ngbTooltip]="item.description"
-                                      container="body"
-                                    >
-                                      {{ item.provider }}
-                                    </span>
-                                  </div>
-                                </div>
-
-                                <!-- Divider + Details row: only when 5 or fewer cards -->
-                                @if (period.multiple.length <= 5) {
-                                  <div class="card-divider"></div>
-                                  <div class="card-row details-row">
-                                    <span
-                                      class="details-text"
-                                      [ngbTooltip]="
-                                        item.description || item.provider
-                                      "
-                                      container="body"
-                                    >
-                                      {{ item.description || item.provider }}
-                                    </span>
-                                  </div>
-                                }
-
-                                <!-- Middle row: date + amount -->
-                                <div class="card-row middle">
-                                  <span class="date-text">{{
-                                    formatDay(item.latestDate)
-                                  }}</span>
-                                  <div class="amount-group">
-                                    <span
-                                      class="amount-text"
-                                      [class.positive]="item.total > 0"
-                                      [class.negative]="item.total < 0"
-                                    >
-                                      {{ item.total | numberFormat: '0.00' }}
-                                    </span>
-                                    @if (
-                                      item.total > 0 && period.totalIncome > 0
-                                    ) {
-                                      <span
-                                        class="percentage-badge income-badge"
-                                      >
-                                        {{
-                                          item.percentageOfIncome
-                                            | numberFormat: '0.0'
-                                        }}%
-                                      </span>
-                                    } @else if (
-                                      item.total < 0 && period.totalExpense > 0
-                                    ) {
-                                      <span
-                                        class="percentage-badge expense-badge"
-                                      >
-                                        {{
-                                          item.percentageOfExpense
-                                            | numberFormat: '0.0'
-                                        }}%
-                                      </span>
-                                    }
-                                  </div>
-                                </div>
-                              }
-                            </div>
-                          }
-
-                          @if (!period.multiple.length) {
-                            <div class="empty-state">
-                              <div class="empty-icon">📭</div>
-                              <span>No transactions</span>
-                            </div>
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  }
-                </div>
-              }
-
-              @if (!currentPeriods().length) {
-                <div class="empty-state-large">
-                  <div class="empty-icon-lg">📊</div>
-                  <span>No data available</span>
+            <div class="transactions-section transaction-feed-section">
+              @if (allTransactions().length) {
+                <p-transaction-feed
+                  [transactions]="allTransactions()"
+                  (categorySelected)="onSelectCategory($event)"
+                />
+              } @else {
+                <div class="empty-state">
+                  <div class="empty-icon">⌕</div>
+                  <span>
+                    {{
+                      searchTerm()
+                        ? 'No matching transactions'
+                        : 'No transactions for this selection'
+                    }}
+                  </span>
                 </div>
               }
             </div>
           }
         </div>
-      </div>
+      } @else {
+        <!-- Period View -->
+        <div class="view-periods">
+          @for (period of currentPeriods(); track period.id) {
+            <div class="period-container" [class.expanded]="period.isExpanded">
+              <!-- Period Header -->
+              <button
+                type="button"
+                class="period-header"
+                (click)="togglePeriod(period)"
+                [attr.aria-expanded]="period.isExpanded"
+                [attr.aria-controls]="'period-content-' + period.id"
+              >
+                <!-- Main top row -->
+                <div class="header-row-main">
+                  <div class="header-left">
+                    <span class="header-title">{{ period.title }}</span>
+                    <span class="header-count">{{
+                      period.transactionCount
+                    }}</span>
+                  </div>
+
+                  <!-- Inline category bar between left and right (desktop) -->
+                  @if (
+                    period.categorySegments.length > 1 &&
+                    selectedCategory() === null &&
+                    grouping() === 'category'
+                  ) {
+                    <div class="header-bar desktop-only">
+                      <div class="category-bar slim">
+                        @for (
+                          seg of period.categorySegments;
+                          track seg.category
+                        ) {
+                          <div
+                            class="category-bar-segment"
+                            [style.width.%]="seg.percentage"
+                            [style.background]="seg.color"
+                            [ngbTooltip]="
+                              seg.label +
+                              ': ' +
+                              (seg.total | numberFormat: '0.00') +
+                              ' (' +
+                              (seg.percentage | numberFormat: '0.0') +
+                              '%)'
+                            "
+                            container="body"
+                          ></div>
+                        }
+                      </div>
+                    </div>
+                  }
+
+                  <div class="header-right">
+                    @if (period.totalIncome > 0) {
+                      <span
+                        class="stat-tag stat-income"
+                        [ngbTooltip]="'Total income'"
+                        container="body"
+                      >
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M6 9V3M6 3L3 6M6 3l3 3"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <span class="stat-value">{{
+                          period.totalIncome | numberFormat: '0.00'
+                        }}</span>
+                      </span>
+                    }
+
+                    @if (period.totalExpense > 0) {
+                      <span
+                        class="stat-tag stat-expense"
+                        [ngbTooltip]="'Total expense'"
+                        container="body"
+                      >
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M6 3v6M6 9l3-3M6 9L3 6"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <span class="stat-value">{{
+                          period.totalExpense | numberFormat: '0.00'
+                        }}</span>
+                      </span>
+                    }
+
+                    @if (period.difference !== 0) {
+                      <span
+                        class="stat-tag stat-diff"
+                        [class.is-positive]="period.difference > 0"
+                        [class.is-negative]="period.difference < 0"
+                        [ngbTooltip]="'Net difference'"
+                        container="body"
+                      >
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          @if (period.difference > 0) {
+                            <path
+                              d="M6 9V3M6 3L3 6M6 3l3 3"
+                              stroke="currentColor"
+                              stroke-width="1.6"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          } @else {
+                            <path
+                              d="M6 3v6M6 9l3-3M6 9L3 6"
+                              stroke="currentColor"
+                              stroke-width="1.6"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          }
+                        </svg>
+                        <span class="stat-value">{{
+                          period.difference | numberFormat: '0.00'
+                        }}</span>
+                      </span>
+                    }
+
+                    <span class="expand-chevron" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        [class.rotated]="period.isExpanded"
+                      >
+                        <path
+                          d="M4 6l4 4 4-4"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Mobile-only bar: second row, always visible (even collapsed) -->
+                @if (
+                  period.categorySegments.length > 1 &&
+                  selectedCategory() === null &&
+                  grouping() === 'category'
+                ) {
+                  <div class="header-bar-mobile mobile-only">
+                    <div class="category-bar slim">
+                      @for (
+                        seg of period.categorySegments;
+                        track seg.category
+                      ) {
+                        <div
+                          class="category-bar-segment"
+                          [style.width.%]="seg.percentage"
+                          [style.background]="seg.color"
+                          [ngbTooltip]="
+                            seg.label +
+                            ': ' +
+                            (seg.total | numberFormat: '0.00') +
+                            ' (' +
+                            (seg.percentage | numberFormat: '0.0') +
+                            '%)'
+                          "
+                          container="body"
+                        ></div>
+                      }
+                    </div>
+                  </div>
+                }
+              </button>
+
+              <!-- Period Content -->
+              @if (period.isExpanded) {
+                <div
+                  class="period-content"
+                  [id]="'period-content-' + period.id"
+                  role="region"
+                  [attr.aria-label]="period.title + ' transaction details'"
+                >
+                  <!-- Active filter indicator -->
+                  @if (selectedCategory() !== null) {
+                    <div class="filter-active">
+                      <span class="filter-label">Filtered by:</span>
+                      <button
+                        type="button"
+                        class="category-pill filter-pill"
+                        [style.background]="
+                          getCategoryColor(selectedCategory()!)
+                        "
+                        (click)="clearCategory()"
+                      >
+                        <span>{{ getCategoryLabel(selectedCategory()!) }}</span>
+                        <svg
+                          class="pill-close"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M3 3l6 6M9 3l-6 6"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  }
+
+                  @if (
+                    grouping() === 'category' && selectedCategory() === null
+                  ) {
+                    <div class="transactions-section compact">
+                      <div class="section-header">
+                        <div class="section-heading">
+                          <span class="section-title">
+                            {{
+                              selectedCategory()
+                                ? 'Transactions'
+                                : 'Most common'
+                            }}
+                          </span>
+                          <span class="section-caption">
+                            {{
+                              selectedCategory()
+                                ? getCategoryLabel(selectedCategory()!)
+                                : 'Grouped by category'
+                            }}
+                          </span>
+                        </div>
+                        <span class="section-badge">{{
+                          period.multiple.length
+                        }}</span>
+                      </div>
+                      <!-- Transactions Grid -->
+                      <div class="transactions-grid">
+                        @for (
+                          item of period.multiple;
+                          track item.provider +
+                            '-' +
+                            item.description +
+                            '-' +
+                            $index
+                        ) {
+                          <div class="transaction-card highlight-card">
+                            @if (selectedCategory() === null) {
+                              <!-- Compact mode: category name, count, amount, percent in one row -->
+                              <div class="card-row compact-row">
+                                <button
+                                  type="button"
+                                  class="category-pill category-name"
+                                  (click)="onSelectCategory(item.category)"
+                                  [style.background]="
+                                    getCategoryColor(item.category)
+                                  "
+                                  [ngbTooltip]="getCategoryLabel(item.category)"
+                                  container="body"
+                                >
+                                  {{ getCategoryLabel(item.category) }}
+                                </button>
+
+                                <span class="tx-count"
+                                  >{{ item.count }} tx</span
+                                >
+
+                                <div class="amount-group">
+                                  <span
+                                    class="amount-text"
+                                    [class.positive]="item.total > 0"
+                                    [class.negative]="item.total < 0"
+                                  >
+                                    {{ item.total | numberFormat: '0.00' }}
+                                  </span>
+                                  @if (
+                                    item.total > 0 && period.totalIncome > 0
+                                  ) {
+                                    <span class="percentage-badge income-badge">
+                                      {{
+                                        item.percentageOfIncome
+                                          | numberFormat: '0.0'
+                                      }}%
+                                    </span>
+                                  } @else if (
+                                    item.total < 0 && period.totalExpense > 0
+                                  ) {
+                                    <span
+                                      class="percentage-badge expense-badge"
+                                    >
+                                      {{
+                                        item.percentageOfExpense
+                                          | numberFormat: '0.0'
+                                      }}%
+                                    </span>
+                                  }
+                                </div>
+                              </div>
+                            } @else {
+                              <!-- Detailed mode when a category is selected -->
+                              <!-- Row 1: provider -->
+                              <div class="card-row">
+                                <div class="provider-group">
+                                  <span
+                                    class="provider-name"
+                                    [ngbTooltip]="item.description"
+                                    container="body"
+                                  >
+                                    {{ item.provider }}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <!-- Divider + Details row: only when 5 or fewer cards -->
+                              @if (period.multiple.length <= 5) {
+                                <div class="card-divider"></div>
+                                <div class="card-row details-row">
+                                  <span
+                                    class="details-text"
+                                    [ngbTooltip]="
+                                      item.description || item.provider
+                                    "
+                                    container="body"
+                                  >
+                                    {{ item.description || item.provider }}
+                                  </span>
+                                </div>
+                              }
+
+                              <!-- Middle row: date + amount -->
+                              <div class="card-row middle">
+                                <span class="date-text">{{
+                                  formatDay(item.latestDate)
+                                }}</span>
+                                <div class="amount-group">
+                                  <span
+                                    class="amount-text"
+                                    [class.positive]="item.total > 0"
+                                    [class.negative]="item.total < 0"
+                                  >
+                                    {{ item.total | numberFormat: '0.00' }}
+                                  </span>
+                                  @if (
+                                    item.total > 0 && period.totalIncome > 0
+                                  ) {
+                                    <span class="percentage-badge income-badge">
+                                      {{
+                                        item.percentageOfIncome
+                                          | numberFormat: '0.0'
+                                      }}%
+                                    </span>
+                                  } @else if (
+                                    item.total < 0 && period.totalExpense > 0
+                                  ) {
+                                    <span
+                                      class="percentage-badge expense-badge"
+                                    >
+                                      {{
+                                        item.percentageOfExpense
+                                          | numberFormat: '0.0'
+                                      }}%
+                                    </span>
+                                  }
+                                </div>
+                              </div>
+                            }
+                          </div>
+                        }
+
+                        @if (!period.multiple.length) {
+                          <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <span>No transactions</span>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  } @else {
+                    <div
+                      class="transactions-section compact transaction-feed-section"
+                    >
+                      <div class="section-header">
+                        <div class="section-heading">
+                          <span class="section-title">Transactions</span>
+                          <span class="section-caption"
+                            >{{ period.transactionCount }} records in this
+                            period</span
+                          >
+                        </div>
+                        <span class="section-badge">{{
+                          period.transactions.length
+                        }}</span>
+                      </div>
+                      @if (period.transactions.length) {
+                        <p-transaction-feed
+                          [transactions]="period.transactions"
+                          (categorySelected)="onSelectCategory($event)"
+                        />
+                      } @else {
+                        <div class="empty-state">
+                          <div class="empty-icon">⌕</div>
+                          <span>No transactions for this period</span>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (!currentPeriods().length) {
+            <div class="empty-state-large">
+              <div class="empty-icon-lg">📊</div>
+              <span>
+                {{
+                  searchTerm()
+                    ? 'No matching transactions'
+                    : 'No data available'
+                }}
+              </span>
+            </div>
+          }
+        </div>
+      }
     </div>
-  
+  </div>
+</div>

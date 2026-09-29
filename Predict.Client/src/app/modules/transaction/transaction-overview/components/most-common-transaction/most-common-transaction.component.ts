@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
@@ -15,6 +16,7 @@ import {
   TransactionDomain,
 } from '../../../models/transactions.model';
 import { TransactionOverviewHeaderComponent } from '../transaction-overview-header/transaction-overview-header.component';
+import { TransactionFeedComponent } from '../transaction-feed/transaction-feed.component';
 
 interface GroupedTransaction {
   provider: string;
@@ -29,6 +31,9 @@ interface GroupedTransaction {
   percentageOfIncome: number;
   percentageOfExpense: number;
 }
+
+type TransactionSort = 'frequency' | 'amount' | 'recent' | 'oldest';
+type TransactionGrouping = 'none' | 'category';
 
 interface CategoryBarSegment {
   category: TransactionCategory;
@@ -62,6 +67,7 @@ interface PeriodGroup {
     ScrollableDirective,
     NgbTooltip,
     TransactionOverviewHeaderComponent,
+    TransactionFeedComponent,
   ],
   templateUrl: './most-common-transaction.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -70,15 +76,27 @@ interface PeriodGroup {
 export class MostCommonTransactionComponent {
   transactions = input<TransactionDomain[]>([]);
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
+  viewModeChange = output<'all' | 'monthly' | 'yearly'>();
 
   selectedCategory = signal<TransactionCategory | null>(null);
+  grouping = signal<TransactionGrouping>('none');
+  searchTerm = signal('');
+  sortMode = signal<TransactionSort>('recent');
+
+  private normalizedSearch = computed(() =>
+    this.searchTerm().trim().toLowerCase(),
+  );
 
   selectedTransaction = computed(() =>
     this.transactions().filter(
       (t) =>
         this.selectedCategory() === null ||
         t.category === this.selectedCategory(),
-    ),
+    ).filter((transaction) => this.matchesSearch(transaction)),
+  );
+
+  allTransactions = computed(() =>
+    this.sortTransactionRecords(this.selectedTransaction()),
   );
 
   private expandedPeriodId = signal<string | null>(null);
@@ -89,7 +107,11 @@ export class MostCommonTransactionComponent {
    * while drilling into a specific category.
    */
   categoryBarSegments = computed((): CategoryBarSegment[] =>
-    this.buildCategorySegments(this.transactions()),
+    this.buildCategorySegments(
+      this.transactions().filter((transaction) =>
+        this.matchesSearch(transaction),
+      ),
+    ),
   );
 
   /**
@@ -153,7 +175,13 @@ export class MostCommonTransactionComponent {
   });
 
   getAllGroupedTransactions = computed((): GroupedTransaction[] => {
-    if (this.viewMode() !== 'all') return [];
+    if (
+      this.viewMode() !== 'all' ||
+      this.grouping() !== 'category' ||
+      this.selectedCategory() !== null
+    ) {
+      return [];
+    }
 
     const txs = this.selectedTransaction();
     if (!txs?.length) return [];
@@ -186,42 +214,36 @@ export class MostCommonTransactionComponent {
   private sortGroupedTransactions(
     transactions: GroupedTransaction[],
   ): GroupedTransaction[] {
-    if (this.selectedCategory() !== null) {
-      return [...transactions].sort((a, b) => {
-        const dateA = a.latestDate?.getTime() ?? 0;
-        const dateB = b.latestDate?.getTime() ?? 0;
-        return dateB - dateA;
-      });
-    }
+    const dateValue = (item: GroupedTransaction) =>
+      item.latestDate?.getTime() ?? 0;
 
-    const incomeItems = transactions.filter((t) => t.total > 0);
-    const expenseItems = transactions.filter((t) => t.total < 0);
-
-    const sortedIncome = incomeItems.sort((a, b) => b.total - a.total);
-
-    const expenseMap = new Map<TransactionCategory, GroupedTransaction[]>();
-    expenseItems.forEach((item) => {
-      if (!expenseMap.has(item.category)) {
-        expenseMap.set(item.category, []);
+    return [...transactions].sort((a, b) => {
+      if (this.sortMode() === 'recent') {
+        return dateValue(b) - dateValue(a);
       }
-      expenseMap.get(item.category)!.push(item);
-    });
 
-    const sortedCategories = Array.from(expenseMap.entries()).sort((a, b) => {
-      const totalA = a[1].reduce((sum, item) => sum + Math.abs(item.total), 0);
-      const totalB = b[1].reduce((sum, item) => sum + Math.abs(item.total), 0);
-      return totalB - totalA;
-    });
+      if (this.sortMode() === 'oldest') {
+        return dateValue(a) - dateValue(b);
+      }
 
-    const sortedExpenses: GroupedTransaction[] = [];
-    sortedCategories.forEach(([, items]) => {
-      const sortedItems = items.sort(
-        (a, b) => Math.abs(b.total) - Math.abs(a.total),
+      if (this.sortMode() === 'amount') {
+        const amountDifference = Math.abs(b.total) - Math.abs(a.total);
+        if (amountDifference !== 0) return amountDifference;
+      } else {
+        const countDifference = b.count - a.count;
+        if (countDifference !== 0) return countDifference;
+
+        const amountDifference = Math.abs(b.total) - Math.abs(a.total);
+        if (amountDifference !== 0) return amountDifference;
+      }
+
+      return (
+        dateValue(b) - dateValue(a) ||
+        this.getCategoryLabel(a.category).localeCompare(
+          this.getCategoryLabel(b.category),
+        )
       );
-      sortedExpenses.push(...sortedItems);
     });
-
-    return [...sortedIncome, ...sortedExpenses];
   }
 
   private groupedByMonth = computed((): PeriodGroup[] => {
@@ -323,9 +345,27 @@ export class MostCommonTransactionComponent {
       difference: totalIncome - totalExpense,
       transactionCount: txs.length,
       multiple: sortedGroups,
-      transactions: txs,
+      transactions: this.sortTransactionRecords(txs),
       categorySegments: this.buildCategorySegments(txs),
     };
+  }
+
+  private sortTransactionRecords(
+    transactions: TransactionDomain[],
+  ): TransactionDomain[] {
+    const dateValue = (transaction: TransactionDomain) =>
+      (transaction.completionDate || transaction.registrationDate)?.getTime() ??
+      0;
+
+    return [...transactions].sort((a, b) => {
+      if (this.sortMode() === 'amount') {
+        return Math.abs(b.amount ?? 0) - Math.abs(a.amount ?? 0);
+      }
+      if (this.sortMode() === 'oldest') {
+        return dateValue(a) - dateValue(b);
+      }
+      return dateValue(b) - dateValue(a);
+    });
   }
 
   totalIncome = computed(
@@ -395,14 +435,58 @@ export class MostCommonTransactionComponent {
     );
   }
 
+  private matchesSearch(transaction: TransactionDomain): boolean {
+    const query = this.normalizedSearch();
+    if (!query) return true;
+
+    return [
+      transaction.serviceProvider,
+      transaction.merchantName,
+      transaction.description,
+      transaction.categoryLabel,
+      transaction.transactionType,
+    ]
+      .filter(Boolean)
+      .some(
+        (value) =>
+          typeof value === 'string' && value.toLowerCase().includes(query),
+      );
+  }
+
+  onSearchInput(event: Event) {
+    this.searchTerm.set((event.target as HTMLInputElement).value);
+  }
+
+  setSortMode(sortMode: TransactionSort) {
+    this.sortMode.set(sortMode);
+  }
+
+  setGrouping(grouping: TransactionGrouping) {
+    this.grouping.set(grouping);
+    this.sortMode.set(grouping === 'category' ? 'frequency' : 'recent');
+  }
+
+  setViewMode(viewMode: 'all' | 'monthly' | 'yearly') {
+    this.viewModeChange.emit(viewMode);
+  }
+
+  clearSearch() {
+    this.searchTerm.set('');
+  }
+
   onSelectCategory(category: TransactionCategory) {
-    this.selectedCategory.set(
-      this.selectedCategory() === category ? null : category,
+    const selected = this.selectedCategory() === category ? null : category;
+    this.selectedCategory.set(selected);
+    this.sortMode.set(
+      selected === null && this.grouping() === 'category'
+        ? 'frequency'
+        : 'recent',
     );
   }
 
   clearCategory() {
     this.selectedCategory.set(null);
+    this.sortMode.set(this.grouping() === 'category' ? 'frequency' : 'recent');
   }
 
   getCategoryColor = (category: TransactionCategory): string =>

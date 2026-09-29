@@ -1119,4 +1119,471 @@
         transition-duration: 0.01ms !important;
       }
     }
-  
+
+    /* Search, sorting, and clearer transaction summaries */
+    .insights-toolbar {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr) 150px 180px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .period-control {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .period-control > span {
+      padding-left: 2px;
+      color: var(--text-muted);
+      font-size: 0.66rem;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    .period-switch {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      height: 44px;
+      padding: 3px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      background: var(--bg-subtle);
+    }
+
+    .period-switch button {
+      min-width: 0;
+      padding: 0 8px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.77rem;
+      font-weight: 650;
+      transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .period-switch button:hover {
+      color: var(--text-primary);
+    }
+
+    .period-switch button.active {
+      background: var(--bg-card);
+      color: var(--accent-blue);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .period-switch button:focus-visible {
+      position: relative;
+      outline: 2px solid var(--accent-blue);
+      outline-offset: -2px;
+    }
+
+    .search-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      height: 44px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast);
+    }
+
+    .search-field {
+      gap: 10px;
+      padding: 0 12px;
+    }
+
+    .search-field:focus-within {
+      border-color: var(--accent-blue);
+      box-shadow: var(--theme-focus-ring);
+      background: var(--bg-card);
+    }
+
+    .search-field > svg {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+    }
+
+    .search-field input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 0.86rem;
+    }
+
+    .search-field input::placeholder {
+      color: var(--text-muted);
+      opacity: 1;
+    }
+
+    .search-field input::-webkit-search-cancel-button {
+      display: none;
+    }
+
+    .clear-search {
+      display: inline-flex;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .clear-search:hover {
+      background: var(--bg-muted);
+      color: var(--text-primary);
+    }
+
+    .clear-search:focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+
+    .clear-search svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .toggle-field {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toggle-field > span {
+      padding-left: 2px;
+      color: var(--text-muted);
+      font-size: 0.66rem;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    .choice-toggle {
+      display: flex;
+      min-width: 0;
+      height: 44px;
+      gap: 2px;
+      padding: 3px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      background: var(--bg-subtle);
+    }
+
+    .choice-toggle button {
+      min-width: 0;
+      flex: 1 1 0;
+      padding: 0 7px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 650;
+      white-space: nowrap;
+      transition:
+        background var(--transition-fast),
+        color var(--transition-fast),
+        box-shadow var(--transition-fast);
+    }
+
+    .choice-toggle button:hover {
+      color: var(--text-primary);
+    }
+
+    .choice-toggle button.active {
+      background: var(--bg-card);
+      color: var(--accent-blue);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .choice-toggle button:focus-visible {
+      position: relative;
+      outline: 2px solid var(--accent-blue);
+      outline-offset: -2px;
+    }
+
+    .section-heading {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .section-caption {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .transactions-grid {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+      gap: 10px;
+    }
+
+    .transactions-section {
+      padding: 16px;
+      border-radius: 16px;
+    }
+
+    .transactions-section.compact {
+      padding: 0;
+    }
+
+    .transaction-card,
+    .transaction-card.highlight-card {
+      padding: 13px 14px;
+      border: 1px solid var(--border-subtle);
+      border-inline-start: 3px solid var(--accent-blue);
+      border-radius: 14px;
+      background: var(--bg-card);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .transaction-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-row.compact-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .card-row.compact-row .category-name {
+      justify-self: start;
+      max-width: 100%;
+      min-height: 30px;
+      padding: 5px 10px;
+      font-size: 0.72rem;
+    }
+
+    .tx-count {
+      padding: 4px 8px;
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+      font-size: 0.68rem;
+      font-weight: 650;
+    }
+
+    .amount-text {
+      font-size: 1rem;
+      letter-spacing: -0.025em;
+    }
+
+    .amount-group {
+      gap: 8px;
+    }
+
+    .percentage-badge {
+      padding: 3px 8px;
+      font-size: 0.66rem;
+    }
+
+    .category-pill:focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+      box-shadow: var(--theme-focus-ring);
+    }
+
+    .category-pill {
+      min-height: 36px;
+    }
+
+    .period-container {
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    .period-header {
+      min-height: 60px;
+      padding: 14px 16px;
+    }
+
+    .period-header:hover {
+      background: var(--bg-subtle);
+    }
+
+    .period-content {
+      padding: 14px 16px 16px;
+    }
+
+    @media (max-width: 1024px) {
+      .insights-toolbar {
+        grid-template-columns: minmax(180px, 1fr) 150px 180px;
+        grid-template-areas:
+          'period group sort'
+          'search search search';
+      }
+
+      .period-control { grid-area: period; }
+      .search-field { grid-area: search; }
+      .group-field { grid-area: group; }
+      .sort-field--order { grid-area: sort; }
+    }
+
+    @media (max-width: 768px) {
+      .insights-toolbar {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+          'period period'
+          'search search'
+          'group sort';
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 8px;
+        border-radius: 14px;
+      }
+
+      .period-control {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .period-control > span {
+        padding-left: 4px;
+        font-size: 0.72rem;
+      }
+
+      .period-switch {
+        width: min(100%, 290px);
+        height: 40px;
+      }
+
+      .period-switch button {
+        font-size: 0.74rem;
+      }
+
+      .search-field {
+        height: 46px;
+      }
+
+      .toggle-field {
+        width: 100%;
+      }
+
+      .toggle-field > span {
+        font-size: 0.72rem;
+      }
+
+      .choice-toggle {
+        width: 100%;
+        height: 40px;
+      }
+
+      .choice-toggle button {
+        font-size: 0.76rem;
+      }
+
+      .transactions-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .transactions-section {
+        padding: 12px;
+      }
+
+      .section-caption {
+        font-size: 0.68rem;
+      }
+
+      .transaction-card,
+      .transaction-card.highlight-card {
+        padding: 12px;
+      }
+
+      .card-row.compact-row {
+        gap: 8px;
+      }
+
+      .period-header {
+        min-height: 56px;
+        padding: 12px;
+      }
+
+      .header-row-main {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .header-left {
+        flex: 1 1 100%;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .header-right .stat-diff {
+        display: none;
+      }
+
+      .period-content {
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .period-control {
+        gap: 6px;
+      }
+
+      .period-switch {
+        width: 100%;
+      }
+
+      .period-switch button {
+        padding: 0 4px;
+        font-size: 0.68rem;
+      }
+
+      .card-row.compact-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .card-row.compact-row .amount-group {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+        width: 100%;
+        padding-top: 7px;
+        border-top: 1px solid var(--border-subtle);
+      }
+    }

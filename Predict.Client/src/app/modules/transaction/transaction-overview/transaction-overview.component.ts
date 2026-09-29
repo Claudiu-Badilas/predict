@@ -33,10 +33,6 @@ export class TransactionOverviewComponent {
     this.transactions().filter((t) => !t.ignored),
   );
 
-  selectedProvider = this.transactionsStore.selectedProvider;
-
-  selectedServiceProvider = this.transactionsStore.selectedServiceProvider;
-
   minDate = new Date('2018-01-01');
   maxDate = new Date('2030-01-01');
 
@@ -52,5 +48,9 @@ export class TransactionOverviewComponent {
         route: `/transactions/${module.toLowerCase()}`,
       }),
     );
+  }
+
+  onViewModeChange(viewMode: 'all' | 'monthly' | 'yearly') {
+    this.store.dispatch(TransactionsActions.viewModeChanged({ viewMode }));
   }
 }

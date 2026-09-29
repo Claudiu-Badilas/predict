@@ -29,9 +29,6 @@ export class TransactionsEffects {
         ofType(
           TransactionsActions.setTransactionsSuccess,
           TransactionsActions.dateRangeChanged,
-          TransactionsActions.selectedProviderChanged,
-          TransactionsActions.selectedServiceProviderChanged,
-          TransactionsActions.searchTermChanged,
           TransactionsActions.viewModeChanged,
         ),
         tap((action) => {
@@ -42,14 +39,6 @@ export class TransactionsEffects {
               action.startDate,
               action.endDate,
             );
-          if ('provider' in action)
-            this.transactionsStore.setSelectedProvider(action.provider);
-          if ('serviceProvider' in action)
-            this.transactionsStore.setSelectedServiceProvider(
-              action.serviceProvider,
-            );
-          if ('searchTerm' in action)
-            this.transactionsStore.setSearchTerm(action.searchTerm);
           if ('viewMode' in action)
             this.transactionsStore.setViewMode(action.viewMode);
         }),
