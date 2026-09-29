@@ -22,13 +22,8 @@
               merchantLabel(transaction)
             }}</strong>
             <div class="merchant-category-row">
-              <button
-                type="button"
+              <span
                 class="category-chip"
-                (click)="categorySelected.emit(transaction.category)"
-                [attr.aria-label]="
-                  'Filter by ' + getCategoryLabel(transaction.category)
-                "
               >
                 <span
                   class="category-dot"
@@ -36,7 +31,7 @@
                   aria-hidden="true"
                 ></span>
                 {{ getCategoryLabel(transaction.category) }}
-              </button>
+              </span>
               <span class="transaction-date-mobile">
                 {{
                   formatDate(

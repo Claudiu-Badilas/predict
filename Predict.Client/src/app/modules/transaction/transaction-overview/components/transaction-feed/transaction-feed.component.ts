@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   input,
-  output,
 } from '@angular/core';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import {
@@ -21,7 +20,6 @@ import {
 })
 export class TransactionFeedComponent {
   transactions = input<TransactionDomain[]>([]);
-  categorySelected = output<TransactionCategory>();
 
   merchantLabel(transaction: TransactionDomain): string {
     return (

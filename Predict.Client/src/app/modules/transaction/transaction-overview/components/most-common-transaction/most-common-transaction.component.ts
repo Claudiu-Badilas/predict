@@ -11,37 +11,12 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import {
-  TransactionCategorizer,
-  TransactionCategory,
   TransactionDomain,
 } from '../../../models/transactions.model';
 import { TransactionOverviewHeaderComponent } from '../transaction-overview-header/transaction-overview-header.component';
 import { TransactionFeedComponent } from '../transaction-feed/transaction-feed.component';
 
-interface GroupedTransaction {
-  provider: string;
-  description: string;
-  count: number;
-  total: number;
-  currency: string | null;
-  latestDate: Date | null;
-  dates: Date[];
-  category: TransactionCategory;
-  percentageOfTotal: number;
-  percentageOfIncome: number;
-  percentageOfExpense: number;
-}
-
-type TransactionSort = 'frequency' | 'amount' | 'recent' | 'oldest';
-type TransactionGrouping = 'none' | 'category';
-
-interface CategoryBarSegment {
-  category: TransactionCategory;
-  label: string;
-  color: string;
-  total: number;
-  percentage: number;
-}
+type TransactionSort = 'amount' | 'recent' | 'oldest';
 
 interface PeriodGroup {
   id: string;
@@ -53,8 +28,6 @@ interface PeriodGroup {
   difference: number;
   transactionCount: number;
   transactions: TransactionDomain[];
-  multiple: GroupedTransaction[];
-  categorySegments: CategoryBarSegment[];
   isExpanded: boolean;
   month?: string;
 }
@@ -78,8 +51,6 @@ export class MostCommonTransactionComponent {
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
   viewModeChange = output<'all' | 'monthly' | 'yearly'>();
 
-  selectedCategory = signal<TransactionCategory | null>(null);
-  grouping = signal<TransactionGrouping>('none');
   searchTerm = signal('');
   sortMode = signal<TransactionSort>('recent');
 
@@ -88,11 +59,7 @@ export class MostCommonTransactionComponent {
   );
 
   selectedTransaction = computed(() =>
-    this.transactions().filter(
-      (t) =>
-        this.selectedCategory() === null ||
-        t.category === this.selectedCategory(),
-    ).filter((transaction) => this.matchesSearch(transaction)),
+    this.transactions().filter((transaction) => this.matchesSearch(transaction)),
   );
 
   allTransactions = computed(() =>
@@ -100,54 +67,6 @@ export class MostCommonTransactionComponent {
   );
 
   private expandedPeriodId = signal<string | null>(null);
-
-  /**
-   * Global expense distribution across categories (used in the "All" view).
-   * Based on the unfiltered list so the user keeps the full picture even
-   * while drilling into a specific category.
-   */
-  categoryBarSegments = computed((): CategoryBarSegment[] =>
-    this.buildCategorySegments(
-      this.transactions().filter((transaction) =>
-        this.matchesSearch(transaction),
-      ),
-    ),
-  );
-
-  /**
-   * Builds the per-category expense distribution for a given set of
-   * transactions, sorted from largest to smallest spend.
-   */
-  private buildCategorySegments(
-    txs: TransactionDomain[],
-  ): CategoryBarSegment[] {
-    if (!txs?.length) return [];
-
-    const expenseTxs = txs.filter((t) => (t.amount ?? 0) < 0);
-    if (!expenseTxs.length) return [];
-
-    const totalExpense = expenseTxs.reduce(
-      (sum, t) => sum + Math.abs(t.amount ?? 0),
-      0,
-    );
-    if (totalExpense === 0) return [];
-
-    const byCategory = new Map<TransactionCategory, number>();
-    for (const tx of expenseTxs) {
-      const amount = Math.abs(tx.amount ?? 0);
-      byCategory.set(tx.category, (byCategory.get(tx.category) ?? 0) + amount);
-    }
-
-    return Array.from(byCategory.entries())
-      .map(([category, total]) => ({
-        category,
-        label: this.getCategoryLabel(category),
-        color: this.getCategoryColor(category),
-        total,
-        percentage: (total / totalExpense) * 100,
-      }))
-      .sort((a, b) => b.total - a.total);
-  }
 
   togglePeriod(period: PeriodGroup) {
     const currentExpanded = this.expandedPeriodId();
@@ -173,78 +92,6 @@ export class MostCommonTransactionComponent {
     }
     return [];
   });
-
-  getAllGroupedTransactions = computed((): GroupedTransaction[] => {
-    if (
-      this.viewMode() !== 'all' ||
-      this.grouping() !== 'category' ||
-      this.selectedCategory() !== null
-    ) {
-      return [];
-    }
-
-    const txs = this.selectedTransaction();
-    if (!txs?.length) return [];
-
-    const grouped = this.groupLocal(txs);
-
-    const totalIncome = txs
-      .filter((t) => (t.amount ?? 0) > 0)
-      .reduce((s, t) => s + (t.amount ?? 0), 0);
-
-    const totalExpense = Math.abs(
-      txs
-        .filter((t) => (t.amount ?? 0) < 0)
-        .reduce((s, t) => s + (t.amount ?? 0), 0),
-    );
-
-    const groupedWithPercentages = grouped.map((g) => ({
-      ...g,
-      percentageOfIncome:
-        g.total > 0 && totalIncome > 0 ? (g.total / totalIncome) * 100 : 0,
-      percentageOfExpense:
-        g.total < 0 && totalExpense > 0
-          ? (Math.abs(g.total) / totalExpense) * 100
-          : 0,
-    }));
-
-    return this.sortGroupedTransactions(groupedWithPercentages);
-  });
-
-  private sortGroupedTransactions(
-    transactions: GroupedTransaction[],
-  ): GroupedTransaction[] {
-    const dateValue = (item: GroupedTransaction) =>
-      item.latestDate?.getTime() ?? 0;
-
-    return [...transactions].sort((a, b) => {
-      if (this.sortMode() === 'recent') {
-        return dateValue(b) - dateValue(a);
-      }
-
-      if (this.sortMode() === 'oldest') {
-        return dateValue(a) - dateValue(b);
-      }
-
-      if (this.sortMode() === 'amount') {
-        const amountDifference = Math.abs(b.total) - Math.abs(a.total);
-        if (amountDifference !== 0) return amountDifference;
-      } else {
-        const countDifference = b.count - a.count;
-        if (countDifference !== 0) return countDifference;
-
-        const amountDifference = Math.abs(b.total) - Math.abs(a.total);
-        if (amountDifference !== 0) return amountDifference;
-      }
-
-      return (
-        dateValue(b) - dateValue(a) ||
-        this.getCategoryLabel(a.category).localeCompare(
-          this.getCategoryLabel(b.category),
-        )
-      );
-    });
-  }
 
   private groupedByMonth = computed((): PeriodGroup[] => {
     const txs = this.selectedTransaction();
@@ -315,8 +162,6 @@ export class MostCommonTransactionComponent {
   });
 
   private processTransactions(txs: TransactionDomain[]) {
-    const grouped = this.groupLocal(txs);
-
     const totalIncome = txs
       .filter((t) => (t.amount ?? 0) > 0)
       .reduce((s, t) => s + (t.amount ?? 0), 0);
@@ -327,26 +172,12 @@ export class MostCommonTransactionComponent {
         .reduce((s, t) => s + (t.amount ?? 0), 0),
     );
 
-    const groupsWithPercentages = grouped.map((g) => ({
-      ...g,
-      percentageOfIncome:
-        g.total > 0 && totalIncome > 0 ? (g.total / totalIncome) * 100 : 0,
-      percentageOfExpense:
-        g.total < 0 && totalExpense > 0
-          ? (Math.abs(g.total) / totalExpense) * 100
-          : 0,
-    }));
-
-    const sortedGroups = this.sortGroupedTransactions(groupsWithPercentages);
-
     return {
       totalIncome,
       totalExpense,
       difference: totalIncome - totalExpense,
       transactionCount: txs.length,
-      multiple: sortedGroups,
       transactions: this.sortTransactionRecords(txs),
-      categorySegments: this.buildCategorySegments(txs),
     };
   }
 
@@ -385,56 +216,6 @@ export class MostCommonTransactionComponent {
 
   totalTransactions = computed(() => this.selectedTransaction()?.length ?? 0);
 
-  private groupLocal(txs: TransactionDomain[]): GroupedTransaction[] {
-    const isFiltered = this.selectedCategory() !== null;
-    const map = new Map<string, GroupedTransaction>();
-    let counter = 0;
-
-    for (const tx of txs) {
-      const date = tx.completionDate || tx.registrationDate;
-
-      const key = isFiltered
-        ? `${tx.serviceProvider}||${tx.description ?? ''}||${
-            date?.getTime() ?? 0
-          }||${tx.amount ?? 0}||${counter++}`
-        : tx.category;
-
-      if (!map.has(key)) {
-        map.set(key, {
-          provider: tx.serviceProvider,
-          description: tx.description || '',
-          count: 0,
-          total: 0,
-          currency: tx.currency,
-          latestDate: null,
-          dates: [],
-          category: tx.category,
-          percentageOfTotal: 0,
-          percentageOfIncome: 0,
-          percentageOfExpense: 0,
-        });
-      }
-
-      const g = map.get(key)!;
-      g.count++;
-      g.total += tx.amount ?? 0;
-      g.category = tx.category;
-
-      if (date) {
-        g.dates.push(date);
-        if (!g.latestDate || date > g.latestDate) {
-          g.latestDate = date;
-        }
-      }
-    }
-
-    return Array.from(map.values()).sort((a, b) =>
-      b.count !== a.count
-        ? b.count - a.count
-        : Math.abs(b.total) - Math.abs(a.total),
-    );
-  }
-
   private matchesSearch(transaction: TransactionDomain): boolean {
     const query = this.normalizedSearch();
     if (!query) return true;
@@ -461,11 +242,6 @@ export class MostCommonTransactionComponent {
     this.sortMode.set(sortMode);
   }
 
-  setGrouping(grouping: TransactionGrouping) {
-    this.grouping.set(grouping);
-    this.sortMode.set(grouping === 'category' ? 'frequency' : 'recent');
-  }
-
   setViewMode(viewMode: 'all' | 'monthly' | 'yearly') {
     this.viewModeChange.emit(viewMode);
   }
@@ -474,24 +250,4 @@ export class MostCommonTransactionComponent {
     this.searchTerm.set('');
   }
 
-  onSelectCategory(category: TransactionCategory) {
-    const selected = this.selectedCategory() === category ? null : category;
-    this.selectedCategory.set(selected);
-    this.sortMode.set(
-      selected === null && this.grouping() === 'category'
-        ? 'frequency'
-        : 'recent',
-    );
-  }
-
-  clearCategory() {
-    this.selectedCategory.set(null);
-    this.sortMode.set(this.grouping() === 'category' ? 'frequency' : 'recent');
-  }
-
-  getCategoryColor = (category: TransactionCategory): string =>
-    TransactionCategorizer.getCategoryColor(category);
-
-  getCategoryLabel = (category: TransactionCategory): string =>
-    TransactionCategorizer.getCategoryLabel(category);
 }
