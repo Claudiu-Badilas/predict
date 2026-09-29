@@ -459,40 +459,49 @@
 /* ===== PERIOD CONTAINER ===== */
 .period-container {
   background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  margin-bottom: 8px;
+  border-radius: 14px;
+  margin-bottom: 10px;
   border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 2px 8px rgb(15 23 42 / 0.04);
   transition:
     box-shadow var(--transition-base),
     border-color var(--transition-base);
 }
 
 .period-container.expanded {
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-md);
+  border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+  box-shadow: 0 8px 20px rgb(15 23 42 / 0.08);
 }
 
 .period-header {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
-  padding: 12px 14px;
+  align-items: center;
+  padding: 11px 14px;
   cursor: pointer;
-  transition: background var(--transition-fast);
-  gap: 0;
-  min-height: 40px;
+  min-height: 54px;
   width: 100%;
   border: none;
+  border-radius: 14px;
   background: transparent;
   font-family: inherit;
   text-align: left;
-  border-radius: var(--radius-lg);
+  transition: background var(--transition-fast);
 }
 
 .period-container.expanded .period-header {
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: 14px 14px 0 0;
+}
+
+.period-header:hover {
+  background: var(--bg-subtle);
+}
+
+.all-period-header {
+  cursor: default;
+}
+
+.all-period-header:hover {
+  background: transparent;
 }
 
 .period-header:focus-visible {
@@ -503,17 +512,21 @@
 /* Top row inside the period header */
 .header-row-main {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   flex-wrap: nowrap;
 }
 
 .header-title {
+  min-width: 0;
+  margin-right: auto;
+  overflow: hidden;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: var(--text-primary);
+  text-overflow: ellipsis;
   white-space: nowrap;
   letter-spacing: -0.015em;
 }
@@ -523,7 +536,7 @@
   font-weight: 600;
   color: var(--text-secondary);
   background: var(--bg-muted);
-  padding: 2px 9px;
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
   line-height: 1.5;
   flex-shrink: 0;
@@ -535,7 +548,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 10px 4px 8px;
+  padding: 4px 9px 4px 7px;
   border-radius: var(--radius-pill);
   font-size: 0.72rem;
   font-weight: 600;
@@ -639,8 +652,9 @@
 }
 
 .period-content {
-  padding: 12px 14px 14px 14px;
+  padding: 12px 14px 14px;
   border-top: 1px solid var(--border-subtle);
+  background: color-mix(in srgb, var(--bg-subtle) 28%, transparent);
   animation: slideDown 0.25s var(--ease-out);
 }
 
@@ -1529,6 +1543,81 @@
 
   .period-content {
     padding: 12px;
+  }
+}
+
+/* Final period-header treatment shared by monthly, yearly, and all views. */
+.period-container {
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 0.04);
+}
+
+.period-container.expanded {
+  border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+  box-shadow: 0 8px 20px rgb(15 23 42 / 0.08);
+}
+
+.period-header {
+  min-height: 54px;
+  padding: 11px 14px;
+  border-radius: 14px;
+}
+
+.period-header:hover {
+  background: var(--bg-subtle);
+}
+
+.all-period-header {
+  cursor: default;
+}
+
+.all-period-header:hover {
+  background: transparent;
+}
+
+.header-row-main {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.header-title {
+  min-width: 0;
+  margin-right: auto;
+  overflow: hidden;
+  font-size: 0.88rem;
+  text-overflow: ellipsis;
+}
+
+.period-content {
+  padding: 12px 14px 14px;
+  background: color-mix(in srgb, var(--bg-subtle) 28%, transparent);
+}
+
+@media (max-width: 768px) {
+  .period-header {
+    min-height: 48px;
+    padding: 10px 12px;
+  }
+
+  .period-header .stat-tag {
+    gap: 3px;
+    padding: 3px 6px;
+    font-size: 0.62rem;
+  }
+
+  .all-period-header .header-row-main {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 380px) {
+  .period-header {
+    padding: 8px 10px;
+  }
+
+  .period-header .stat-tag {
+    padding-inline: 4px;
+    font-size: 0.56rem;
   }
 }
 
