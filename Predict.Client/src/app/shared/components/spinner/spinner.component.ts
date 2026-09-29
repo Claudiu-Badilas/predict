@@ -7,8 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromLayout from 'src/app/store/reducers/layout.reducer';
+import { LayoutStore } from 'src/app/store/reducers/layout.reducer';
 
 @Component({
   selector: 'p-spinner',
@@ -18,12 +17,10 @@ import * as fromLayout from 'src/app/store/reducers/layout.reducer';
   styleUrls: ['./spinner.component.scss'],
 })
 export class SpinnerComponent {
-  private readonly store = inject(Store<fromLayout.State>);
+  private readonly layoutStore = inject(LayoutStore);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly isLoading = this.store.selectSignal(fromLayout.getIsLoading);
-  private readonly minimumVisibleMs = this.store.selectSignal(
-    fromLayout.getSpinnerMinimumVisibleMs,
-  );
+  private readonly isLoading = this.layoutStore.loading;
+  private readonly minimumVisibleMs = this.layoutStore.minimumVisibleMs;
   readonly isVisible = signal(false);
   private shownAt = 0;
   private hideTimer?: ReturnType<typeof setTimeout>;

@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Store } from '@ngrx/store';
-import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
+import { Component, inject, signal } from '@angular/core';
+import { TransactionsStore } from 'src/app/modules/transaction/reducers/transactions.reducer';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
 import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
 
@@ -13,14 +11,10 @@ import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/t
   styleUrls: ['./transaction-charts.component.scss'],
 })
 export class MostCommonTransactionComponent {
-  constructor(private readonly store: Store<fromTransactions.State>) {}
+  private readonly transactionsStore = inject(TransactionsStore);
 
-  dailyTransactionsChart = toSignal(
-    this.store.select(fromTransactions.getDailyTransactionsChart),
-  );
-  monthlyTransactionsChart = toSignal(
-    this.store.select(fromTransactions.getMonthlyTransactionsChart),
-  );
+  dailyTransactionsChart = this.transactionsStore.dailyTransactionsChart;
+  monthlyTransactionsChart = this.transactionsStore.monthlyTransactionsChart;
 
   transactionType = signal<'Daily' | 'Monthly'>('Daily');
 

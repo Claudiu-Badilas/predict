@@ -1,11 +1,11 @@
+import { computed } from '@angular/core';
 import {
-  Action,
-  createFeatureSelector,
-  createReducer,
-  createSelector,
-  on,
-} from '@ngrx/store';
-import * as TransactionsActions from 'src/app/modules/transaction/actions/transactions.actions';
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { TransactionDomain } from '../models/transactions.model';
 import { DailyTransactionChartUtils } from '../transaction-overview/utils/daily-transactions.chart.util';
 import { MonthlyTransactionChartUtils } from '../transaction-overview/utils/monthly-transactions.chart.util';
@@ -30,138 +30,84 @@ const initialState: State = {
   viewMode: 'monthly',
 };
 
-const transactionsReducer = createReducer(
-  initialState,
-  on(TransactionsActions.setTransactionsSuccess, (state, { transactions }) => ({
-    ...state,
-    transactions,
-  })),
-  on(TransactionsActions.dateRangeChanged, (state, { startDate, endDate }) => ({
-    ...state,
-    startDate,
-    endDate,
-  })),
-  on(TransactionsActions.selectedProviderChanged, (state, { provider }) => ({
-    ...state,
-    selectedProvider: provider,
-  })),
-  on(
-    TransactionsActions.selectedServiceProviderChanged,
-    (state, { serviceProvider }) => ({
-      ...state,
-      selectedServiceProvider: serviceProvider,
-    }),
-  ),
-  on(TransactionsActions.searchTermChanged, (state, { searchTerm }) => ({
-    ...state,
-    searchTerm,
-  })),
-  on(TransactionsActions.viewModeChanged, (state, { viewMode }) => ({
-    ...state,
-    viewMode,
-  })),
-);
-
-export function reducer(state: State, action: Action) {
-  return transactionsReducer(state, action);
-}
-
-const getTransactionsState = createFeatureSelector<State>('TransactionsState');
-
-export const getStartDate = createSelector(
-  getTransactionsState,
-  (state) => state.startDate,
-);
-
-export const getEndDate = createSelector(
-  getTransactionsState,
-  (state) => state.endDate,
-);
-
-export const getTransactions = createSelector(getTransactionsState, (state) =>
-  state.transactions.filter((t) => !t.ignored),
-);
-
-export const getSelectedProvider = createSelector(
-  getTransactionsState,
-  (state) => state.selectedProvider,
-);
-
-export const getSelectedServiceProvider = createSelector(
-  getTransactionsState,
-  (state) => state.selectedServiceProvider,
-);
-
-export const getSearchTerm = createSelector(
-  getTransactionsState,
-  (state) => state.searchTerm,
-);
-
-export const getAvailableTransactionsByProvider = createSelector(
-  getTransactions,
-  getSelectedProvider,
-  (transactions, selectedProvider) =>
-    transactions.filter(
-      (t) =>
-        selectedProvider === 'No Selection' || t.provider === selectedProvider,
-    ),
-);
-
-export const getAvailableTransactionsByServiceProvider = createSelector(
-  getAvailableTransactionsByProvider,
-  getSelectedServiceProvider,
-  (transactions, selectedServiceProvider) =>
-    transactions.filter(
-      (t) =>
-        selectedServiceProvider === 'No Selection' ||
-        t.serviceProvider === selectedServiceProvider,
-    ),
-);
-
-export const getAvailableTransactionsBySearchTerm = createSelector(
-  getAvailableTransactionsByServiceProvider,
-  getSearchTerm,
-  (transactions, searchTerm) =>
-    transactions.filter((t) =>
-      !!searchTerm
-        ? searchTerm
-            .toLowerCase()
-            .split(',')
-            .map((t) => t.trim())
-            .filter((t) => !!t && t !== '')
-            .some((term) => t.description.toLowerCase().includes(term))
-        : transactions,
-    ),
-);
-
-export const getAvailableTransactions = createSelector(
-  getAvailableTransactionsBySearchTerm,
-  (transactions) => {
-    const seen = new Set<string>();
-    return transactions.filter((tx) => {
-      const sig = JSON.stringify(tx);
-      if (seen.has(sig)) return false;
-      seen.add(sig);
-      return true;
+export const TransactionsStore = signalStore(
+  { providedIn: 'root' },
+  withState(initialState),
+  withComputed((state) => {
+    const filteredTransactions = computed(() =>
+      state.transactions().filter((transaction) => !transaction.ignored),
+    );
+    const byProvider = computed(() =>
+      filteredTransactions().filter(
+        (transaction) =>
+          state.selectedProvider() === 'No Selection' ||
+          transaction.provider === state.selectedProvider(),
+      ),
+    );
+    const byServiceProvider = computed(() =>
+      byProvider().filter(
+        (transaction) =>
+          state.selectedServiceProvider() === 'No Selection' ||
+          transaction.serviceProvider === state.selectedServiceProvider(),
+      ),
+    );
+    const bySearchTerm = computed(() =>
+      byServiceProvider().filter((transaction) => {
+        const searchTerm = state.searchTerm();
+        if (!searchTerm) return true;
+        return searchTerm
+          .toLowerCase()
+          .split(',')
+          .map((term) => term.trim())
+          .filter(Boolean)
+          .some((term) => transaction.description.toLowerCase().includes(term));
+      }),
+    );
+    const availableTransactions = computed(() => {
+      const seen = new Set<string>();
+      return bySearchTerm().filter((transaction) => {
+        const signature = JSON.stringify(transaction);
+        if (seen.has(signature)) return false;
+        seen.add(signature);
+        return true;
+      });
     });
-  },
-);
-
-export const getDailyTransactionsChart = createSelector(
-  getStartDate,
-  getEndDate,
-  getAvailableTransactionsBySearchTerm,
-  DailyTransactionChartUtils.getChart,
-);
-
-export const getMonthlyTransactionsChart = createSelector(
-  getStartDate,
-  getEndDate,
-  getAvailableTransactionsBySearchTerm,
-  MonthlyTransactionChartUtils.getChart,
-);
-
-export const getViewMode = createSelector(
-  getTransactionsState,
-  (state) => state.viewMode,
+    return {
+      availableTransactions,
+      dailyTransactionsChart: computed(() =>
+        DailyTransactionChartUtils.getChart(
+          state.startDate(),
+          state.endDate(),
+          bySearchTerm(),
+        ),
+      ),
+      monthlyTransactionsChart: computed(() =>
+        MonthlyTransactionChartUtils.getChart(
+          state.startDate(),
+          state.endDate(),
+          bySearchTerm(),
+        ),
+      ),
+    };
+  }),
+  withMethods((state) => ({
+    setTransactions(transactions: TransactionDomain[]): void {
+      patchState(state, { transactions });
+    },
+    setDateRange(startDate: Date, endDate: Date): void {
+      patchState(state, { startDate, endDate });
+    },
+    setSelectedProvider(selectedProvider: string): void {
+      patchState(state, { selectedProvider });
+    },
+    setSelectedServiceProvider(selectedServiceProvider: string): void {
+      patchState(state, { selectedServiceProvider });
+    },
+    setSearchTerm(searchTerm: string): void {
+      patchState(state, { searchTerm });
+    },
+    setViewMode(viewMode: State['viewMode']): void {
+      patchState(state, { viewMode });
+    },
+  })),
 );

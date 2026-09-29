@@ -1,11 +1,11 @@
+import { computed } from '@angular/core';
 import {
-  Action,
-  createFeatureSelector,
-  createReducer,
-  createSelector,
-  on,
-} from '@ngrx/store';
-import * as ReceiptsActions from 'src/app/modules/receipts/actions/receipts.actions';
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { ReceiptDomain } from '../models/receipts-domain.model';
 import { ReceiptsProductDomain } from '../receipts-products/models/receipts-products.model';
@@ -27,102 +27,58 @@ const initialState: State = {
   receipts: [],
   startDate: DateUtils.getStartOfTheYear({ subtractYears: 1 }),
   endDate: new Date(),
-  receiptsProducts: {
-    searchTerm: null,
-    viewMode: 'monthly',
-  },
+  receiptsProducts: { searchTerm: null, viewMode: 'monthly' },
 };
 
-const receiptsReducer = createReducer(
-  initialState,
-  on(ReceiptsActions.setReceiptsSuccess, (state, { receipts }) => ({
-    ...state,
-    receipts,
-  })),
-  on(ReceiptsActions.dateRangeChanged, (state, { startDate, endDate }) => ({
-    ...state,
-    startDate,
-    endDate,
-  })),
-  on(ReceiptsActions.searchTermChanged, (state, { searchTerm }) => ({
-    ...state,
-    receiptsProducts: {
-      ...state.receiptsProducts,
-      searchTerm,
-    },
-  })),
-  on(ReceiptsActions.productsViewModeChanged, (state, { viewMode }) => ({
-    ...state,
-    receiptsProducts: {
-      ...state.receiptsProducts,
-      viewMode,
-    },
-  })),
-);
-
-export function reducer(state: State, action: Action) {
-  return receiptsReducer(state, action);
-}
-
-const getReceiptsState = createFeatureSelector<State>('ReceiptsState');
-
-export const getStartDate = createSelector(
-  getReceiptsState,
-  (state) => state.startDate,
-);
-
-export const getEndDate = createSelector(
-  getReceiptsState,
-  (state) => state.endDate,
-);
-
-export const getReceipts = createSelector(
-  getReceiptsState,
-  (state) => state.receipts,
-);
-
-export const getReceiptsProducts = createSelector(
-  getReceiptsState,
-  (state) => state.receiptsProducts,
-);
-
-export const getReceiptsProductDomain = createSelector(
-  getReceiptsState,
-  (state) =>
-    state.receipts.flatMap((receipt) =>
-      receipt.products.map(
-        (product) => new ReceiptsProductDomain(receipt, product),
+export const ReceiptsStore = signalStore(
+  { providedIn: 'root' },
+  withState(initialState),
+  withComputed((state) => {
+    const productDomain = computed(() =>
+      state
+        .receipts()
+        .flatMap((receipt) =>
+          receipt.products.map(
+            (product) => new ReceiptsProductDomain(receipt, product),
+          ),
+        ),
+    );
+    const availableProducts = computed(() =>
+      productDomain().filter((product) => {
+        const searchTerm = state.receiptsProducts.searchTerm();
+        if (!searchTerm) return true;
+        return searchTerm
+          .toLowerCase()
+          .split(',')
+          .map((term) => term.trim())
+          .filter(Boolean)
+          .some((term) => product.name.toLowerCase().includes(term));
+      }),
+    );
+    return {
+      productDomain,
+      availableProducts,
+      productPriceTrendChart: computed(() =>
+        ProductPriceTrendChartUtils.getChart(availableProducts()),
       ),
-    ),
-);
-
-export const getProductsSearchTerm = createSelector(
-  getReceiptsProducts,
-  (state) => state.searchTerm,
-);
-
-export const getProductsViewMode = createSelector(
-  getReceiptsProducts,
-  (state) => state.viewMode,
-);
-
-export const getAvailableReceiptsProductBySearchTerm = createSelector(
-  getReceiptsProductDomain,
-  getProductsSearchTerm,
-  (receiptsProduct, searchTerm) =>
-    receiptsProduct.filter((product) =>
-      !!searchTerm
-        ? searchTerm
-            .toLowerCase()
-            .split(',')
-            .map((term) => term.trim())
-            .filter((term) => !!term && term !== '')
-            .some((term) => product.name.toLowerCase().includes(term))
-        : receiptsProduct,
-    ),
-);
-
-export const getProductPriceTrendChartUtils = createSelector(
-  getAvailableReceiptsProductBySearchTerm,
-  ProductPriceTrendChartUtils.getChart,
+    };
+  }),
+  withMethods((state) => ({
+    setReceipts(receipts: ReceiptDomain[]): void {
+      patchState(state, { receipts });
+    },
+    setDateRange(startDate: Date, endDate: Date): void {
+      patchState(state, { startDate, endDate });
+    },
+    setSearchTerm(searchTerm: string): void {
+      patchState(state, (current) => ({
+        receiptsProducts: { ...current.receiptsProducts, searchTerm },
+      }));
+    },
+    setProductsViewMode(viewMode: State['receiptsProducts']['viewMode']): void {
+      patchState(state, (current) => ({
+        receiptsProducts: { ...current.receiptsProducts, viewMode },
+      }));
+    },
+  })),
 );

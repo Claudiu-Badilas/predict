@@ -1,44 +1,19 @@
-import {
-  Action,
-  createFeatureSelector,
-  createReducer,
-  createSelector,
-  on,
-} from '@ngrx/store';
-import * as LayoutActions from 'src/app/store/actions/layout.actions';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
 export interface State {
   loading: boolean;
   minimumVisibleMs: number;
 }
 
-const initialState: State = {
-  loading: false,
-  minimumVisibleMs: 500,
-};
-
-const layoutReducer = createReducer(
-  initialState,
-  on(LayoutActions.spinnerOn, (state, { minimumVisibleMs }) => ({
-    ...state,
-    loading: true,
-    minimumVisibleMs,
+export const LayoutStore = signalStore(
+  { providedIn: 'root' },
+  withState<State>({ loading: false, minimumVisibleMs: 500 }),
+  withMethods((state) => ({
+    spinnerOn(minimumVisibleMs = 500): void {
+      patchState(state, { loading: true, minimumVisibleMs });
+    },
+    spinnerOff(): void {
+      patchState(state, { loading: false });
+    },
   })),
-  on(LayoutActions.spinnerOff, (state) => ({ ...state, loading: false })),
-);
-
-export function reducer(state: State, action: Action) {
-  return layoutReducer(state, action);
-}
-
-const getLayoutReducer = createFeatureSelector<State>('layout');
-
-export const getIsLoading = createSelector(
-  getLayoutReducer,
-  (state) => state.loading,
-);
-
-export const getSpinnerMinimumVisibleMs = createSelector(
-  getLayoutReducer,
-  (state) => state.minimumVisibleMs,
 );

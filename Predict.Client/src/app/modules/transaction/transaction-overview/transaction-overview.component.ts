@@ -1,10 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, ChangeDetectionStrategy } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  Component,
+  computed,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import * as TransactionsActions from 'src/app/modules/transaction/actions/transactions.actions';
-import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
+import { TransactionsStore } from 'src/app/modules/transaction/reducers/transactions.reducer';
 import { Colors } from 'src/app/shared/styles/colors';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { MostCommonTransactionComponent } from './components/most-common-transaction/most-common-transaction.component';
@@ -17,32 +21,26 @@ import { MostCommonTransactionComponent } from './components/most-common-transac
   styleUrls: ['./transaction-overview.component.scss'],
 })
 export class TransactionOverviewComponent {
-  startDate = toSignal(this.store.select(fromTransactions.getStartDate));
-  endDate = toSignal(this.store.select(fromTransactions.getEndDate));
+  private readonly transactionsStore = inject(TransactionsStore);
+  startDate = this.transactionsStore.startDate;
+  endDate = this.transactionsStore.endDate;
 
-  viewMode = toSignal(this.store.select(fromTransactions.getViewMode));
+  viewMode = this.transactionsStore.viewMode;
 
-  transactions = toSignal(
-    this.store.select(fromTransactions.getAvailableTransactions),
-    { initialValue: [] },
-  );
+  transactions = this.transactionsStore.availableTransactions;
 
   readonly validTransactions = computed(() =>
     this.transactions().filter((t) => !t.ignored),
   );
 
-  selectedProvider = toSignal(
-    this.store.select(fromTransactions.getSelectedProvider),
-  );
+  selectedProvider = this.transactionsStore.selectedProvider;
 
-  selectedServiceProvider = toSignal(
-    this.store.select(fromTransactions.getSelectedServiceProvider),
-  );
+  selectedServiceProvider = this.transactionsStore.selectedServiceProvider;
 
   minDate = new Date('2018-01-01');
   maxDate = new Date('2030-01-01');
 
-  constructor(private readonly store: Store<fromTransactions.State>) {
+  constructor(private readonly store: Store) {
     this.store.dispatch(TransactionsActions.loadTransactions());
   }
 

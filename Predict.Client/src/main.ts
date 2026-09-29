@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { AuthenticationEffects } from 'src/app/core/authentication/effects/authentication.effects';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 import { NavigationEffects } from 'src/app/store/effects/navigation.effects';
+import { SignalStateEffects } from 'src/app/store/effects/signal-state.effects';
 import { AppComponent } from './app/app.component';
 import { AppRouting } from './app/app.routing';
 import { environment } from './environments/environment';
@@ -21,9 +22,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationInterceptor } from 'src/app/core/authentication/interceptor/authentication.interceptor';
 import { LoanEffects } from 'src/app/modules/loan/effects/loan.effects';
 import { ReceiptsEffects } from 'src/app/modules/receipts/effects/receipts.effects';
-import * as fromReceipts from 'src/app/modules/receipts/reducers/receipts.reducer';
 import { TransactionsEffects } from 'src/app/modules/transaction/effects/transactions.effects';
-import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
 
 if (environment.production) {
   enableProdMode();
@@ -35,7 +34,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(AppRouting),
     importProvidersFrom(StoreModule.forRoot(fromAppStore.appReducer)),
     importProvidersFrom(
-      EffectsModule.forRoot([NavigationEffects, AuthenticationEffects]),
+      EffectsModule.forRoot([NavigationEffects, AuthenticationEffects, SignalStateEffects]),
     ),
     importProvidersFrom(StoreRouterConnectingModule.forRoot()),
     importProvidersFrom(NgbModule),
@@ -47,11 +46,6 @@ bootstrapApplication(AppComponent, {
         LoanEffects,
       ]),
     ),
-
-    importProvidersFrom([
-      StoreModule.forFeature('TransactionsState', fromTransactions.reducer),
-      StoreModule.forFeature('ReceiptsState', fromReceipts.reducer),
-    ]),
 
     {
       provide: HTTP_INTERCEPTORS,

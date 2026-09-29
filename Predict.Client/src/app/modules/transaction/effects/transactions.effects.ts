@@ -1,12 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import * as TransactionsActions from 'src/app/modules/transaction/actions/transactions.actions';
-import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
+import { TransactionsStore } from 'src/app/modules/transaction/reducers/transactions.reducer';
 import * as LayoutActions from 'src/app/store/actions/layout.actions';
 import * as ToastActions from 'src/app/core/toast-notifications/actions/toast-notification.actions';
 import { ToastType } from 'src/app/core/toast-notifications/models/toast-type.model';
@@ -16,17 +17,53 @@ import { TransactionService } from '../services/transaction.service';
 export class TransactionsEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly store: Store<fromTransactions.State>,
+    private readonly store: Store,
     private readonly _transactionService: TransactionService,
   ) {}
+
+  private readonly transactionsStore = inject(TransactionsStore);
+
+  syncState$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(
+          TransactionsActions.setTransactionsSuccess,
+          TransactionsActions.dateRangeChanged,
+          TransactionsActions.selectedProviderChanged,
+          TransactionsActions.selectedServiceProviderChanged,
+          TransactionsActions.searchTermChanged,
+          TransactionsActions.viewModeChanged,
+        ),
+        tap((action) => {
+          if ('transactions' in action)
+            this.transactionsStore.setTransactions(action.transactions);
+          if ('startDate' in action)
+            this.transactionsStore.setDateRange(
+              action.startDate,
+              action.endDate,
+            );
+          if ('provider' in action)
+            this.transactionsStore.setSelectedProvider(action.provider);
+          if ('serviceProvider' in action)
+            this.transactionsStore.setSelectedServiceProvider(
+              action.serviceProvider,
+            );
+          if ('searchTerm' in action)
+            this.transactionsStore.setSearchTerm(action.searchTerm);
+          if ('viewMode' in action)
+            this.transactionsStore.setViewMode(action.viewMode);
+        }),
+      ),
+    { dispatch: false },
+  );
 
   loadTransactions$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TransactionsActions.loadTransactions),
       tap(() => this.store.dispatch(LayoutActions.spinnerOn())),
       withLatestFrom(
-        this.store.select(fromTransactions.getStartDate),
-        this.store.select(fromTransactions.getEndDate),
+        toObservable(this.transactionsStore.startDate),
+        toObservable(this.transactionsStore.endDate),
       ),
       switchMap(([, startDate, endDate]) =>
         this._transactionService.getTransactions(startDate, endDate).pipe(

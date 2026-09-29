@@ -1,4 +1,4 @@
-@if (toast$ | async; as toast) {
+@if (toast(); as toast) {
   <div class="toast-stack" aria-live="polite" aria-relevant="additions">
     @for (item of toast; track item.id) {
       <div

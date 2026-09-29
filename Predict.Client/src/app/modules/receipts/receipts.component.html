@@ -15,8 +15,8 @@
   <ng-container filter-content>
     <div class="mb-2">
       <p-date-range-picker
-        [startDate]="startDate$ | async"
-        [endDate]="endDate$ | async"
+        [startDate]="startDate()"
+        [endDate]="endDate()"
         [minDate]="minDate"
         [maxDate]="now"
         (valueChanged)="handleRangeChange($event)"

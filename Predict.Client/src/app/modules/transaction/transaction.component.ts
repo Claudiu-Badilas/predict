@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { computed, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { computed, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
@@ -13,6 +12,7 @@ import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.compo
 
 import * as TransactionsActions from 'src/app/modules/transaction/actions/transactions.actions';
 import * as fromTransactions from 'src/app/modules/transaction/reducers/transactions.reducer';
+import { TransactionsStore } from 'src/app/modules/transaction/reducers/transactions.reducer';
 import { Colors } from 'src/app/shared/styles/colors';
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
 import { TransactionsSettingsComponent } from './components/transaction-settings/transaction-settings.component';
@@ -37,26 +37,18 @@ import { TransactionsSettingsComponent } from './components/transaction-settings
   styleUrls: ['./transaction.component.scss'],
 })
 export class TransactionComponent {
-  startDate = toSignal(this.store.select(fromTransactions.getStartDate));
-  endDate = toSignal(this.store.select(fromTransactions.getEndDate));
-  viewMode = toSignal(this.store.select(fromTransactions.getViewMode));
+  private readonly transactionsStore = inject(TransactionsStore);
+  startDate = this.transactionsStore.startDate;
+  endDate = this.transactionsStore.endDate;
+  viewMode = this.transactionsStore.viewMode;
 
-  transactions = toSignal(
-    this.store.select(fromTransactions.getAvailableTransactions),
-    { initialValue: [] },
-  );
+  transactions = this.transactionsStore.availableTransactions;
 
-  selectedProvider = toSignal(
-    this.store.select(fromTransactions.getSelectedProvider),
-  );
+  selectedProvider = this.transactionsStore.selectedProvider;
 
-  selectedServiceProvider = toSignal(
-    this.store.select(fromTransactions.getSelectedServiceProvider),
-  );
+  selectedServiceProvider = this.transactionsStore.selectedServiceProvider;
 
-  monthlyTransactionsChart = toSignal(
-    this.store.select(fromTransactions.getMonthlyTransactionsChart),
-  );
+  monthlyTransactionsChart = this.transactionsStore.monthlyTransactionsChart;
 
   // 🔹 Derived signals (replace pipe(map()))
   providerDropDownSelectOptions = computed(() => {
