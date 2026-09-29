@@ -7,8 +7,6 @@ import {
   withState,
 } from '@ngrx/signals';
 import { TransactionDomain } from '../models/transactions.model';
-import { DailyTransactionChartUtils } from '../transaction-overview/utils/daily-transactions.chart.util';
-import { MonthlyTransactionChartUtils } from '../transaction-overview/utils/monthly-transactions.chart.util';
 
 export interface State {
   transactions: TransactionDomain[];
@@ -40,23 +38,7 @@ export const TransactionsStore = signalStore(
         return true;
       });
     });
-    return {
-      availableTransactions,
-      dailyTransactionsChart: computed(() =>
-        DailyTransactionChartUtils.getChart(
-          state.startDate(),
-          state.endDate(),
-          filteredTransactions(),
-        ),
-      ),
-      monthlyTransactionsChart: computed(() =>
-        MonthlyTransactionChartUtils.getChart(
-          state.startDate(),
-          state.endDate(),
-          filteredTransactions(),
-        ),
-      ),
-    };
+    return { availableTransactions };
   }),
   withMethods((state) => ({
     setTransactions(transactions: TransactionDomain[]): void {
