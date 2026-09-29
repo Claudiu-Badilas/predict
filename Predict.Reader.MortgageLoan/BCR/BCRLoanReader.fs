@@ -12,7 +12,7 @@ module BCRLoanReader =
     let getLocalPdfs path =
         Directory.EnumerateFiles(path, "*.pdf")
         |> Seq.toArray
-        |> Array.map (fun f -> (Path.GetFileNameWithoutExtension(f), new PdfReader(f)))
+        |> Array.map (fun f -> (Path.GetFileNameWithoutExtension(f), f))
 
 
     let tryGetDouble (value: string option) =
@@ -78,28 +78,32 @@ module BCRLoanReader =
 
         rate
 
-    let loadDetails path =
+    let loadDetails path (existingFileNames: string array) =
         getLocalPdfs path
-        |> Array.Parallel.map (fun (fileName, pdf) ->
+        |> Array.filter (fun (fileName, _) -> not (existingFileNames |> Array.contains fileName))
+        |> Array.Parallel.map (fun (fileName, filePath) ->
+            use pdf = new PdfReader(filePath)
             { defaultGraficRambursare with
                 Name = fileName
                 MonthlyInstalments = getLoanDetails pdf
                 Date = DateTime.ParseExact(fileName, "dd-MMM-yyyy", CultureInfo.InvariantCulture) })
         |> Array.toList
 
-    let getBcrLoanDetails () =
+    let getBcrLoanDetailsForFiles (existingFileNames: string array) =
         let basePath = @"D:\Projects\PredictFiles\Loan\BCR"
 
         let basePayments =
-            loadDetails $"{basePath}\BasePayment"
+            loadDetails $"{basePath}\BasePayment" existingFileNames
             |> List.map (fun file -> { file with IsBasePayment = true })
 
         let normalPayments =
-            loadDetails $"{basePath}\NormalPayment"
+            loadDetails $"{basePath}\NormalPayment" existingFileNames
             |> List.map (fun file -> { file with IsNormalPayment = true })
 
         let extraPayments =
-            loadDetails $"{basePath}\ExtraPayment"
+            loadDetails $"{basePath}\ExtraPayment" existingFileNames
             |> List.map (fun file -> { file with IsExtraPayment = true })
 
         basePayments @ normalPayments @ extraPayments |> List.sortByDescending _.Date
+
+    let getBcrLoanDetails () = getBcrLoanDetailsForFiles [||]

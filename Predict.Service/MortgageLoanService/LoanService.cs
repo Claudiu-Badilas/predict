@@ -1,18 +1,16 @@
 ﻿using Predict.Reader.MortgageLoan.BCR;
-using Predict.Service.CacheServicel;
+using Predict.Repository.LoanRepo;
 using static Predict.Reader.MortgageLoan.BCR.Types.BCRLoanTypes;
 
 namespace Predict.Service;
 
-public class LoanService(ICacheService cache) : ILoanService
+public class LoanService(IBcrLoanRepository repository) : ILoanService
 {
-    public List<GraficRambursare> GetBcrMortgageLoans()
+    public async Task<List<GraficRambursare>> GetBcrMortgageLoansAsync()
     {
-        var loanDetailss = cache.GetOrSet(
-            "getBcrLoanDetails",
-            BCRLoanReader.getBcrLoanDetails,
-            TimeSpan.FromMinutes(15));
-
-        return [.. loanDetailss];
+        var existingFileNames = await repository.GetFileNamesAsync();
+        var newLoans = BCRLoanReader.getBcrLoanDetailsForFiles(existingFileNames.ToArray());
+        await repository.StoreAsync(newLoans);
+        return await repository.GetAllAsync();
     }
 }

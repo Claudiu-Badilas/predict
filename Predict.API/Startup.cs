@@ -3,6 +3,7 @@ using Predict.Configuration.Context;
 using Predict.Extensions;
 using Predict.Middleware;
 using Predict.Repository.ReceiptRepo;
+using Predict.Repository.LoanRepo;
 using Predict.Repository.TransactionRepo;
 using Predict.Repository.UserRepo;
 using Predict.Service;
@@ -32,6 +33,7 @@ public class Startup(IConfiguration config)
         services.AddSingleton<IUserRepository, UserRepository>();
         services.AddSingleton<ITransactionRepo, TransactionRepo>();
         services.AddSingleton<IReceiptRepo, ReceiptRepo>();
+        services.AddSingleton<IBcrLoanRepository, BcrLoanRepository>();
 
         services.AddSingleton<ITokenService, TokenService>();
         services.AddSingleton<IAccountService, AccountService>();

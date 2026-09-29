@@ -4,6 +4,6 @@ namespace Predict.Service;
 
 public interface ILoanService
 {
-    List<GraficRambursare> GetBcrMortgageLoans();
+    Task<List<GraficRambursare>> GetBcrMortgageLoansAsync();
 
 }

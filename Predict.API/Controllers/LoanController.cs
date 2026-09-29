@@ -9,5 +9,5 @@ public class LoanController(ILoanService mortgageLoanService) : BaseController
 
     [HttpGet("loan/bcr")]
     public async Task<ActionResult> GetMortgageLoanDetails() 
-        => Ok(mortgageLoanService.GetBcrMortgageLoans());
+        => Ok(await mortgageLoanService.GetBcrMortgageLoansAsync());
 }

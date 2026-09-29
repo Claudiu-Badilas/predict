@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Predict.Common\Predict.Common.csproj" />
+		<ProjectReference Include="..\Predict.Reader.MortgageLoan\Predict.Reader.MortgageLoan.fsproj" />
 	</ItemGroup>
 
 </Project>
