@@ -38,16 +38,18 @@
 
     <!-- Mobile Actions (Icons only) - Only shown when NO module navigation content -->
     <div class="actions actions--mobile" *ngIf="!hasModuleNavContent">
-      <button
-        type="button"
-        class="mobile-extended-menu__item"
-        style="border: none"
-        [class.active]="isFilterPanelOpen"
-        (click)="toggleFilterPanel()"
-      >
-        <img [src]="getThemeIconPath('filter')" alt="filter" />
-        <span class="mobile-extended-menu__label">Filter</span>
-      </button>
+      @if (hasFiltersContent) {
+        <button
+          type="button"
+          class="mobile-extended-menu__item"
+          style="border: none"
+          [class.active]="isFilterPanelOpen"
+          (click)="toggleFilterPanel()"
+        >
+          <img [src]="getThemeIconPath('filter')" alt="filter" />
+          <span class="mobile-extended-menu__label">Filter</span>
+        </button>
+      }
 
       @for (option of modules; track option) {
         <button

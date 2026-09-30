@@ -125,129 +125,27 @@
 
       @if (selectedCategory() || selectedProvider()) {
         <div class="active-transaction-filter">
-          <span>Showing transactions for {{ selectedCategory() ? 'category ' + selectedCategoryLabel() : 'provider ' + selectedProvider() }}</span>
-          <button type="button" (click)="clearTransactionFilter()">Clear filter</button>
+          <span>
+            {{
+              selectedCategory() ? selectedCategoryLabel() : selectedProvider()
+            }}</span
+          >
+          <button type="button" (click)="clearTransactionFilter()">
+            Clear filter
+          </button>
         </div>
       }
 
       <div scrollable class="transactions-scroll">
-      @if (viewMode() === 'all') {
-        <div class="view-all">
-          <div class="period-container all-period-container expanded">
-            <div class="period-header all-period-header">
-              <div class="header-row-main">
-                <span class="header-title">All transactions</span>
-                <span class="header-count">{{ totalTransactions() }}</span>
-
-                @if (totalIncome() > 0) {
-                  <span
-                    class="stat-tag stat-income"
-                    [ngbTooltip]="'Total income'"
-                    container="body"
-                  >
-                    <svg
-                      class="stat-icon"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M6 9V3M6 3L3 6M6 3l3 3"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    <span class="stat-value">{{
-                      totalIncome() | numberFormat: '0.00'
-                    }}</span>
-                  </span>
-                }
-
-                @if (totalExpense() > 0) {
-                  <span
-                    class="stat-tag stat-expense"
-                    [ngbTooltip]="'Total expense'"
-                    container="body"
-                  >
-                    <svg
-                      class="stat-icon"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M6 3v6M6 9l3-3M6 9L3 6"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    <span class="stat-value">{{
-                      totalExpense() | numberFormat: '0.00'
-                    }}</span>
-                  </span>
-                }
-
-                @if (totalIncome() - totalExpense() !== 0) {
-                  <span
-                    class="stat-tag stat-diff"
-                    [class.is-positive]="totalIncome() - totalExpense() > 0"
-                    [class.is-negative]="totalIncome() - totalExpense() < 0"
-                    [ngbTooltip]="'Net difference'"
-                    container="body"
-                  >
-                    <span class="stat-value">
-                      {{
-                        totalIncome() - totalExpense() | numberFormat: '0.00'
-                      }}
-                    </span>
-                  </span>
-                }
-              </div>
-            </div>
-
-            <div class="period-content all-period-content">
-              @if (allTransactions().length) {
-                <p-transaction-feed [transactions]="allTransactions()" (categorySelected)="selectCategory($event)" (providerSelected)="selectProvider($event)" />
-              } @else {
-                <div class="empty-state">
-                  <div class="empty-icon">⌕</div>
-                  <span>
-                    {{
-                      searchTerm()
-                        ? 'No matching transactions'
-                        : 'No transactions for this selection'
-                    }}
-                  </span>
-                </div>
-              }
-            </div>
-          </div>
-        </div>
-      } @else {
-        <!-- Period View -->
-        <div class="view-periods">
-          @for (period of currentPeriods(); track period.id) {
-            <div class="period-container" [class.expanded]="period.isExpanded">
-              <!-- Period Header -->
-              <button
-                type="button"
-                class="period-header"
-                (click)="togglePeriod(period)"
-                [attr.aria-expanded]="period.isExpanded"
-                [attr.aria-controls]="'period-content-' + period.id"
-              >
-                <!-- Main top row -->
+        @if (viewMode() === 'all') {
+          <div class="view-all">
+            <div class="period-container all-period-container expanded">
+              <div class="period-header all-period-header">
                 <div class="header-row-main">
-                  <span class="header-title">{{ period.title }}</span>
-                  <span class="header-count">{{
-                    period.transactionCount
-                  }}</span>
+                  <span class="header-title">Transactions</span>
+                  <span class="header-count">{{ totalTransactions() }}</span>
 
-                  @if (period.totalIncome > 0) {
+                  @if (totalIncome() > 0) {
                     <span
                       class="stat-tag stat-income"
                       [ngbTooltip]="'Total income'"
@@ -268,12 +166,12 @@
                         />
                       </svg>
                       <span class="stat-value">{{
-                        period.totalIncome | numberFormat: '0.00'
+                        totalIncome() | numberFormat: '0.00'
                       }}</span>
                     </span>
                   }
 
-                  @if (period.totalExpense > 0) {
+                  @if (totalExpense() > 0) {
                     <span
                       class="stat-tag stat-expense"
                       [ngbTooltip]="'Total expense'"
@@ -294,26 +192,86 @@
                         />
                       </svg>
                       <span class="stat-value">{{
-                        period.totalExpense | numberFormat: '0.00'
+                        totalExpense() | numberFormat: '0.00'
                       }}</span>
                     </span>
                   }
 
-                  @if (period.difference !== 0) {
+                  @if (totalIncome() - totalExpense() !== 0) {
                     <span
                       class="stat-tag stat-diff"
-                      [class.is-positive]="period.difference > 0"
-                      [class.is-negative]="period.difference < 0"
+                      [class.is-positive]="totalIncome() - totalExpense() > 0"
+                      [class.is-negative]="totalIncome() - totalExpense() < 0"
                       [ngbTooltip]="'Net difference'"
                       container="body"
                     >
-                      <svg
-                        class="stat-icon"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        aria-hidden="true"
+                      <span class="stat-value">
+                        {{
+                          totalIncome() - totalExpense() | numberFormat: '0.00'
+                        }}
+                      </span>
+                    </span>
+                  }
+                </div>
+              </div>
+
+              <div class="period-content all-period-content">
+                @if (allTransactions().length) {
+                  <p-transaction-feed
+                    [transactions]="allTransactions()"
+                    (categorySelected)="selectCategory($event)"
+                    (providerSelected)="selectProvider($event)"
+                  />
+                } @else {
+                  <div class="empty-state">
+                    <div class="empty-icon">⌕</div>
+                    <span>
+                      {{
+                        searchTerm()
+                          ? 'No matching transactions'
+                          : 'No transactions for this selection'
+                      }}
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        } @else {
+          <!-- Period View -->
+          <div class="view-periods">
+            @for (period of currentPeriods(); track period.id) {
+              <div
+                class="period-container"
+                [class.expanded]="period.isExpanded"
+              >
+                <!-- Period Header -->
+                <button
+                  type="button"
+                  class="period-header"
+                  (click)="togglePeriod(period)"
+                  [attr.aria-expanded]="period.isExpanded"
+                  [attr.aria-controls]="'period-content-' + period.id"
+                >
+                  <!-- Main top row -->
+                  <div class="header-row-main">
+                    <span class="header-title">{{ period.title }}</span>
+                    <span class="header-count">{{
+                      period.transactionCount
+                    }}</span>
+
+                    @if (period.totalIncome > 0) {
+                      <span
+                        class="stat-tag stat-income"
+                        [ngbTooltip]="'Total income'"
+                        container="body"
                       >
-                        @if (period.difference > 0) {
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
                           <path
                             d="M6 9V3M6 3L3 6M6 3l3 3"
                             stroke="currentColor"
@@ -321,7 +279,25 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           />
-                        } @else {
+                        </svg>
+                        <span class="stat-value">{{
+                          period.totalIncome | numberFormat: '0.00'
+                        }}</span>
+                      </span>
+                    }
+
+                    @if (period.totalExpense > 0) {
+                      <span
+                        class="stat-tag stat-expense"
+                        [ngbTooltip]="'Total expense'"
+                        container="body"
+                      >
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
                           <path
                             d="M6 3v6M6 9l3-3M6 9L3 6"
                             stroke="currentColor"
@@ -329,75 +305,112 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           />
-                        }
-                      </svg>
-                      <span class="stat-value">{{
-                        period.difference | numberFormat: '0.00'
-                      }}</span>
-                    </span>
-                  }
-
-                  <span class="expand-chevron" aria-hidden="true">
-                    <svg
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      [class.rotated]="period.isExpanded"
-                    >
-                      <path
-                        d="M4 6l4 4 4-4"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </button>
-
-              <!-- Period Content -->
-              @if (period.isExpanded) {
-                <div
-                  class="period-content"
-                  [id]="'period-content-' + period.id"
-                  role="region"
-                  [attr.aria-label]="period.title + ' transaction details'"
-                >
-                  <div
-                    class="transactions-section compact transaction-feed-section"
-                  >
-                    @if (period.transactions.length) {
-                      <p-transaction-feed
-                        [transactions]="period.transactions"
-                        (categorySelected)="selectCategory($event)"
-                        (providerSelected)="selectProvider($event)"
-                      />
-                    } @else {
-                      <div class="empty-state">
-                        <div class="empty-icon">⌕</div>
-                        <span>No transactions for this period</span>
-                      </div>
+                        </svg>
+                        <span class="stat-value">{{
+                          period.totalExpense | numberFormat: '0.00'
+                        }}</span>
+                      </span>
                     }
-                  </div>
-                </div>
-              }
-            </div>
-          }
 
-          @if (!currentPeriods().length) {
-            <div class="empty-state-large">
-              <div class="empty-icon-lg">📊</div>
-              <span>
-                {{
-                  searchTerm()
-                    ? 'No matching transactions'
-                    : 'No data available'
-                }}
-              </span>
-            </div>
-          }
-        </div>
-      }
+                    @if (period.difference !== 0) {
+                      <span
+                        class="stat-tag stat-diff"
+                        [class.is-positive]="period.difference > 0"
+                        [class.is-negative]="period.difference < 0"
+                        [ngbTooltip]="'Net difference'"
+                        container="body"
+                      >
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          @if (period.difference > 0) {
+                            <path
+                              d="M6 9V3M6 3L3 6M6 3l3 3"
+                              stroke="currentColor"
+                              stroke-width="1.6"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          } @else {
+                            <path
+                              d="M6 3v6M6 9l3-3M6 9L3 6"
+                              stroke="currentColor"
+                              stroke-width="1.6"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          }
+                        </svg>
+                        <span class="stat-value">{{
+                          period.difference | numberFormat: '0.00'
+                        }}</span>
+                      </span>
+                    }
+
+                    <span class="expand-chevron" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        [class.rotated]="period.isExpanded"
+                      >
+                        <path
+                          d="M4 6l4 4 4-4"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </button>
+
+                <!-- Period Content -->
+                @if (period.isExpanded) {
+                  <div
+                    class="period-content"
+                    [id]="'period-content-' + period.id"
+                    role="region"
+                    [attr.aria-label]="period.title + ' transaction details'"
+                  >
+                    <div
+                      class="transactions-section compact transaction-feed-section"
+                    >
+                      @if (period.transactions.length) {
+                        <p-transaction-feed
+                          [transactions]="period.transactions"
+                          (categorySelected)="selectCategory($event)"
+                          (providerSelected)="selectProvider($event)"
+                        />
+                      } @else {
+                        <div class="empty-state">
+                          <div class="empty-icon">⌕</div>
+                          <span>No transactions for this period</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            @if (!currentPeriods().length) {
+              <div class="empty-state-large">
+                <div class="empty-icon-lg">📊</div>
+                <span>
+                  {{
+                    searchTerm()
+                      ? 'No matching transactions'
+                      : 'No data available'
+                  }}
+                </span>
+              </div>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
