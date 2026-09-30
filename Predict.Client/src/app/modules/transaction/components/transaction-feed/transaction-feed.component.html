@@ -3,10 +3,7 @@
     transaction of transactions();
     track transactionKey(transaction, $index)
   ) {
-    <article
-      class="transaction-row"
-      role="listitem"
-    >
+    <article class="transaction-row" role="listitem">
       <div class="transaction-row__main">
         <button
           type="button"
@@ -24,7 +21,14 @@
               {{ merchantLabel(transaction) }}
             </strong>
             <div class="merchant-category-row">
-              <button type="button" class="category-chip" (click)="categorySelected.emit(transaction.category)" [attr.aria-label]="'Filter by category ' + getCategoryLabel(transaction.category)">
+              <button
+                type="button"
+                class="category-chip"
+                (click)="categorySelected.emit(transaction.category)"
+                [attr.aria-label]="
+                  'Filter by category ' + getCategoryLabel(transaction.category)
+                "
+              >
                 <span
                   class="category-dot"
                   [style.background]="getCategoryColor(transaction.category)"

@@ -26,10 +26,7 @@ export class ThemeService {
   constructor() {
     const savedTheme = this.view?.localStorage.getItem(THEME_STORAGE_KEY);
 
-    if (
-      savedTheme === 'light' ||
-      savedTheme === 'dark'
-    ) {
+    if (savedTheme === 'light' || savedTheme === 'dark') {
       // A saved selection is explicit and must not be overridden by OS changes.
       this.manuallyChosen = true;
       this.applyTheme(savedTheme);

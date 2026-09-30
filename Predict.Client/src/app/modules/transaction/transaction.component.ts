@@ -18,11 +18,7 @@ import { MostCommonTransactionComponent } from './components/most-common-transac
 
 @Component({
   selector: 'p-transaction',
-  imports: [
-    CommonModule,
-    TopBarComponent,
-    MostCommonTransactionComponent,
-  ],
+  imports: [CommonModule, TopBarComponent, MostCommonTransactionComponent],
   templateUrl: './transaction.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./transaction.component.scss'],

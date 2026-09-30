@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import {
   TransactionCategorizer,
@@ -29,7 +34,10 @@ export class TransactionFeedComponent {
   }
 
   selectProvider(transaction: TransactionDomain): void {
-    const provider = transaction.serviceProvider?.trim() || transaction.merchantName?.trim() || transaction.provider?.trim();
+    const provider =
+      transaction.serviceProvider?.trim() ||
+      transaction.merchantName?.trim() ||
+      transaction.provider?.trim();
     if (provider) this.providerSelected.emit(provider);
   }
 

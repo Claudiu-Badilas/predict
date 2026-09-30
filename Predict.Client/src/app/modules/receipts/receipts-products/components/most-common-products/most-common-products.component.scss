@@ -613,7 +613,11 @@
 
 .products-analytics .summary-section {
   border-color: color-mix(in srgb, var(--theme-border) 78%, transparent);
-  background: color-mix(in srgb, var(--theme-surface) 96%, var(--theme-accent-subtle));
+  background: color-mix(
+    in srgb,
+    var(--theme-surface) 96%,
+    var(--theme-accent-subtle)
+  );
   box-shadow: 0 3px 12px rgb(15 23 42 / 0.05);
 }
 
@@ -627,18 +631,30 @@
 .products-analytics .mobile-card {
   border-color: color-mix(in srgb, var(--theme-border) 82%, transparent);
   border-radius: 16px;
-  background: color-mix(in srgb, var(--theme-surface) 98%, var(--theme-accent-subtle));
+  background: color-mix(
+    in srgb,
+    var(--theme-surface) 98%,
+    var(--theme-accent-subtle)
+  );
   box-shadow: 0 3px 12px rgb(15 23 42 / 0.045);
 }
 
 .products-analytics .receipt-card:hover,
 .products-analytics .mobile-card:hover {
-  border-color: color-mix(in srgb, var(--theme-accent) 45%, var(--theme-border));
+  border-color: color-mix(
+    in srgb,
+    var(--theme-accent) 45%,
+    var(--theme-border)
+  );
   box-shadow: 0 10px 24px rgb(15 23 42 / 0.1);
 }
 
 .products-analytics .receipt-card.expanded {
-  border-color: color-mix(in srgb, var(--theme-accent) 52%, var(--theme-border));
+  border-color: color-mix(
+    in srgb,
+    var(--theme-accent) 52%,
+    var(--theme-border)
+  );
 }
 
 .products-analytics .card-header,
@@ -692,7 +708,8 @@
 
 .products-analytics .chart-btn,
 .products-analytics .action-btn-mobile {
-  border: 1px solid color-mix(in srgb, var(--theme-accent) 35%, var(--theme-border));
+  border: 1px solid
+    color-mix(in srgb, var(--theme-accent) 35%, var(--theme-border));
   border-radius: 9px;
   background: var(--theme-accent-subtle);
   color: var(--theme-accent);
@@ -712,7 +729,11 @@
 
 .products-analytics .modal-header {
   padding: 16px 20px;
-  background: color-mix(in srgb, var(--theme-surface) 94%, var(--theme-accent-subtle));
+  background: color-mix(
+    in srgb,
+    var(--theme-surface) 94%,
+    var(--theme-accent-subtle)
+  );
 }
 
 .products-analytics .chart-container {

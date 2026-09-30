@@ -502,7 +502,11 @@
 }
 
 .period-container.expanded {
-  border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--accent-blue) 28%,
+    var(--border-subtle)
+  );
   box-shadow: 0 8px 20px rgb(15 23 42 / 0.08);
 }
 
@@ -1142,7 +1146,10 @@
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-columns: minmax(230px, 1.2fr) minmax(180px, 0.9fr) minmax(200px, 1fr) 210px;
+  grid-template-columns: minmax(230px, 1.2fr) minmax(180px, 0.9fr) minmax(
+      200px,
+      1fr
+    ) 210px;
   grid-template-areas: 'dates period search sort';
   align-items: center;
   gap: 10px;
@@ -1598,7 +1605,11 @@
 }
 
 .period-container.expanded {
-  border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--accent-blue) 28%,
+    var(--border-subtle)
+  );
   box-shadow: 0 8px 20px rgb(15 23 42 / 0.08);
 }
 

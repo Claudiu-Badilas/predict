@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { Router, NavigationCancel, NavigationEnd, NavigationError, NavigationStart } from '@angular/router';
+import {
+  Router,
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+} from '@angular/router';
 import { filter, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 

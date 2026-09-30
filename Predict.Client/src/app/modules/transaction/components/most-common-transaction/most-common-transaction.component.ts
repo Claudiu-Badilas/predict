@@ -80,7 +80,12 @@ export class MostCommonTransactionComponent {
     return this.selectedTransaction().filter((transaction) => {
       if (category && transaction.category !== category) return false;
       if (provider) {
-        const transactionProvider = (transaction.serviceProvider?.trim() || transaction.merchantName?.trim() || transaction.provider?.trim() || '').toLocaleLowerCase();
+        const transactionProvider = (
+          transaction.serviceProvider?.trim() ||
+          transaction.merchantName?.trim() ||
+          transaction.provider?.trim() ||
+          ''
+        ).toLocaleLowerCase();
         if (transactionProvider !== provider) return false;
       }
       return true;
@@ -242,13 +247,17 @@ export class MostCommonTransactionComponent {
   totalTransactions = computed(() => this.filteredTransactions().length);
 
   selectCategory(category: TransactionCategory): void {
-    this.selectedCategory.set(this.selectedCategory() === category ? null : category);
+    this.selectedCategory.set(
+      this.selectedCategory() === category ? null : category,
+    );
     this.selectedProvider.set(null);
   }
 
   selectProvider(provider: string): void {
     const selected = this.selectedProvider()?.toLocaleLowerCase();
-    this.selectedProvider.set(selected === provider.toLocaleLowerCase() ? null : provider);
+    this.selectedProvider.set(
+      selected === provider.toLocaleLowerCase() ? null : provider,
+    );
     this.selectedCategory.set(null);
   }
 

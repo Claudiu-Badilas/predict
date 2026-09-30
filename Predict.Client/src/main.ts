@@ -34,7 +34,11 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(AppRouting),
     importProvidersFrom(StoreModule.forRoot(fromAppStore.appReducer)),
     importProvidersFrom(
-      EffectsModule.forRoot([NavigationEffects, AuthenticationEffects, SignalStateEffects]),
+      EffectsModule.forRoot([
+        NavigationEffects,
+        AuthenticationEffects,
+        SignalStateEffects,
+      ]),
     ),
     importProvidersFrom(StoreRouterConnectingModule.forRoot()),
     importProvidersFrom(NgbModule),
