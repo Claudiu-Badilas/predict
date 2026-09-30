@@ -9,7 +9,7 @@
             [endDate]="endDate()"
             [minDate]="minDate()"
             [maxDate]="maxDate()"
-            (valueChanged)="dateRangeChange.emit($event)"
+            (valueChanged)="onDateRangeChange($event)"
           />
         </div>
 
@@ -136,7 +136,7 @@
         </div>
       }
 
-      <div scrollable class="transactions-scroll">
+      <div #transactionsScroll scrollable class="transactions-scroll">
         @if (viewMode() === 'all') {
           <div class="view-all">
             <div class="period-container all-period-container expanded">

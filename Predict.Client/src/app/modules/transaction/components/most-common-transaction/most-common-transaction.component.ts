@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ElementRef,
+  ViewChild,
   Component,
   computed,
   input,
@@ -50,6 +52,8 @@ interface PeriodGroup {
   styleUrl: './most-common-transaction.component.scss',
 })
 export class MostCommonTransactionComponent {
+  @ViewChild('transactionsScroll')
+  private transactionsScroll?: ElementRef<HTMLElement>;
   transactions = input<TransactionDomain[]>([]);
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
   viewModeChange = output<'all' | 'monthly' | 'yearly'>();
@@ -251,6 +255,7 @@ export class MostCommonTransactionComponent {
       this.selectedCategory() === category ? null : category,
     );
     this.selectedProvider.set(null);
+    this.scrollTransactionsToTop();
   }
 
   selectProvider(provider: string): void {
@@ -259,11 +264,13 @@ export class MostCommonTransactionComponent {
       selected === provider.toLocaleLowerCase() ? null : provider,
     );
     this.selectedCategory.set(null);
+    this.scrollTransactionsToTop();
   }
 
   clearTransactionFilter(): void {
     this.selectedCategory.set(null);
     this.selectedProvider.set(null);
+    this.scrollTransactionsToTop();
   }
 
   selectedCategoryLabel(): string {
@@ -291,17 +298,35 @@ export class MostCommonTransactionComponent {
 
   onSearchInput(event: Event) {
     this.searchTerm.set((event.target as HTMLInputElement).value);
+    this.scrollTransactionsToTop();
   }
 
   setSortMode(sortMode: TransactionSort) {
     this.sortMode.set(sortMode);
+    this.scrollTransactionsToTop();
   }
 
   setViewMode(viewMode: 'all' | 'monthly' | 'yearly') {
     this.viewModeChange.emit(viewMode);
+    this.scrollTransactionsToTop();
   }
 
   clearSearch() {
     this.searchTerm.set('');
+    this.scrollTransactionsToTop();
+  }
+
+  onDateRangeChange(range: DateRangePicker): void {
+    this.dateRangeChange.emit(range);
+    this.scrollTransactionsToTop();
+  }
+
+  private scrollTransactionsToTop(): void {
+    requestAnimationFrame(() => {
+      this.transactionsScroll?.nativeElement.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    });
   }
 }

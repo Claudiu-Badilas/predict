@@ -4,6 +4,8 @@ import {
   Component,
   input,
   output,
+  signal,
+  computed,
 } from '@angular/core';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import {
@@ -20,10 +22,22 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransactionFeedComponent {
+  private readonly pageSize = 100;
+  private readonly visibleCount = signal(this.pageSize);
   transactions = input<TransactionDomain[]>([]);
+  visibleTransactions = computed(() =>
+    this.transactions().slice(0, this.visibleCount()),
+  );
+  hasMoreTransactions = computed(
+    () => this.transactions().length > this.visibleCount(),
+  );
   searchTerm = input('');
   categorySelected = output<TransactionCategory>();
   providerSelected = output<string>();
+
+  showMore(): void {
+    this.visibleCount.update((count) => count + this.pageSize);
+  }
 
   merchantLabel(transaction: TransactionDomain): string {
     return (

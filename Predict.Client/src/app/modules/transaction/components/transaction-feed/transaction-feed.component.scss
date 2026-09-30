@@ -8,6 +8,26 @@
   gap: 8px;
 }
 
+.show-more-transactions {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 16px;
+  border: 1px solid var(--theme-border);
+  border-radius: 12px;
+  background: var(--theme-surface-muted);
+  color: var(--theme-text-primary);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.show-more-transactions:hover {
+  border-color: var(--theme-border-strong);
+  background: var(--theme-surface);
+}
+
 .transaction-row {
   min-width: 0;
   overflow: hidden;
