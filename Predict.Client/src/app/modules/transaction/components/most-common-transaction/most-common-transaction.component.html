@@ -219,6 +219,7 @@
                 @if (allTransactions().length) {
                   <p-transaction-feed
                     [transactions]="allTransactions()"
+                    [searchTerm]="searchTerm()"
                     (categorySelected)="selectCategory($event)"
                     (providerSelected)="selectProvider($event)"
                   />
@@ -382,6 +383,7 @@
                       @if (period.transactions.length) {
                         <p-transaction-feed
                           [transactions]="period.transactions"
+                          [searchTerm]="searchTerm()"
                           (categorySelected)="selectCategory($event)"
                           (providerSelected)="selectProvider($event)"
                         />

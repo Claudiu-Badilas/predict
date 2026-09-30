@@ -21,6 +21,7 @@ import {
 })
 export class TransactionFeedComponent {
   transactions = input<TransactionDomain[]>([]);
+  searchTerm = input('');
   categorySelected = output<TransactionCategory>();
   providerSelected = output<string>();
 
@@ -64,5 +65,17 @@ export class TransactionFeedComponent {
 
   getCategoryLabel(category: TransactionCategory): string {
     return TransactionCategorizer.getCategoryLabel(category);
+  }
+
+  highlightParts(value: string): { text: string; match: boolean }[] {
+    const query = this.searchTerm().trim();
+    if (!query || !value) return [{ text: value, match: false }];
+
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const parts = value.split(new RegExp(`(${escapedQuery})`, 'gi'));
+    return parts.map((text) => ({
+      text,
+      match: text.toLocaleLowerCase() === query.toLocaleLowerCase(),
+    }));
   }
 }

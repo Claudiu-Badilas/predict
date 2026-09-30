@@ -18,7 +18,13 @@
         <div class="transaction-copy">
           <div class="merchant-line">
             <strong class="merchant-name">
-              {{ merchantLabel(transaction) }}
+              @for (part of highlightParts(merchantLabel(transaction)); track $index) {
+                @if (part.match) {
+                  <mark class="search-match">{{ part.text }}</mark>
+                } @else {
+                  {{ part.text }}
+                }
+              }
             </strong>
             <div class="merchant-category-row">
               <button
@@ -34,7 +40,13 @@
                   [style.background]="getCategoryColor(transaction.category)"
                   aria-hidden="true"
                 ></span>
-                {{ getCategoryLabel(transaction.category) }}
+                @for (part of highlightParts(getCategoryLabel(transaction.category)); track $index) {
+                  @if (part.match) {
+                    <mark class="search-match">{{ part.text }}</mark>
+                  } @else {
+                    {{ part.text }}
+                  }
+                }
               </button>
               <span class="transaction-date-mobile">
                 {{
@@ -46,7 +58,13 @@
             </div>
           </div>
           <div class="transaction-description">
-            {{ transaction.description || 'No additional description' }}
+            @for (part of highlightParts(transaction.description || 'No additional description'); track $index) {
+              @if (part.match) {
+                <mark class="search-match">{{ part.text }}</mark>
+              } @else {
+                {{ part.text }}
+              }
+            }
           </div>
           <div class="transaction-meta">
             <span class="transaction-date-desktop">{{
@@ -56,7 +74,15 @@
             }}</span>
             @if (transaction.transactionType) {
               <span class="meta-separator" aria-hidden="true">·</span>
-              <span>{{ transaction.transactionType }}</span>
+              <span>
+                @for (part of highlightParts(transaction.transactionType); track $index) {
+                  @if (part.match) {
+                    <mark class="search-match">{{ part.text }}</mark>
+                  } @else {
+                    {{ part.text }}
+                  }
+                }
+              </span>
             }
           </div>
         </div>

@@ -137,6 +137,20 @@
   font-size: 0.7rem;
 }
 
+.search-match {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: #ffe28a;
+  color: #3d2b00;
+  font-weight: 800;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.category-chip .search-match {
+  background: #ffd45c;
+}
+
 .meta-separator {
   font-size: 1rem;
   line-height: 0.5;
