@@ -1,26 +1,19 @@
 <p-top-bar
-  [hasFiltersContent]="true"
   [hasUploadAction]="true"
   (uploadRequested)="openStorageSettings()"
 >
   <ng-container module-navigation> </ng-container>
-  <ng-container filter-content>
-    <div class="mb-2">
-      <p-date-range-picker
-        [startDate]="startDate()"
-        [endDate]="endDate()"
-        [minDate]="minDate"
-        [maxDate]="maxDate"
-        (valueChanged)="handleRangeChange($event)"
-      />
-    </div>
-  </ng-container>
 </p-top-bar>
 
 <div class="p-2">
   <p-most-common-transaction
     [viewMode]="viewMode()"
     [transactions]="validTransactions()"
+    [startDate]="startDate()"
+    [endDate]="endDate()"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    (dateRangeChange)="handleRangeChange($event)"
     (viewModeChange)="onViewModeChange($event)"
   />
 </div>

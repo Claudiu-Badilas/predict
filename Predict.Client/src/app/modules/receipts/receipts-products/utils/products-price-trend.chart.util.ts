@@ -21,26 +21,11 @@ export namespace ProductPriceTrendChartUtils {
     }
 
     const prices = validProducts.map((p) => Number(p.price!.toFixed(2)));
-    const isUpwardTrend = prices[prices.length - 1] > prices[0];
-
     const series: Highcharts.SeriesLineOptions = {
       type: 'line',
       name: 'Price Trend',
-      color: {
-        linearGradient: { x1: 0, x2: 1, y1: 0, y2: 0 },
-        stops: isUpwardTrend
-          ? [
-              [0, '#6BCB77'],
-              [0.5, '#FFD93D'],
-              [1, '#FF6B6B'],
-            ]
-          : [
-              [0, '#FF6B6B'],
-              [0.5, '#FFD93D'],
-              [1, '#6BCB77'],
-            ],
-      },
-      lineWidth: 3,
+      color: '#5b8def',
+      lineWidth: 2.5,
       data: validProducts.map((p) => ({
         x: p.purchasedDate.getTime(),
         y: Number(p.price!.toFixed(2)),
@@ -70,10 +55,10 @@ export namespace ProductPriceTrendChartUtils {
         pointFormatter: function () {
           const point = this as any;
           return `
-            <strong>${point.productName}</strong><br/>
-            <strong>${point.provider}</strong><br/>
-            <span style="color: var(--theme-text-secondary); font-size: 12px;">${point.date}</span><br/>
-            <span style="font-size: 16px; font-weight: bold;">${point.y.toFixed(2)}</span>
+            <span style="font-weight: 700;">${point.productName}</span><br/>
+            <span>${point.provider}</span><br/>
+            <span style="font-size: 12px;">${point.date}</span><br/>
+            <span style="font-size: 16px; font-weight: 700;">${point.y.toFixed(2)} RON</span>
           `;
         },
       },
@@ -82,9 +67,9 @@ export namespace ProductPriceTrendChartUtils {
     return {
       chart: {
         type: 'spline',
-        height: 300,
+        height: 286,
         backgroundColor: 'transparent',
-        spacing: [10, 10, 10, 10],
+        spacing: [12, 16, 8, 8],
       },
       title: { text: null },
       subtitle: { text: null },
@@ -110,30 +95,37 @@ export namespace ProductPriceTrendChartUtils {
       xAxis: {
         type: 'datetime',
         title: { text: null },
-        gridLineWidth: 0,
+        gridLineWidth: 1,
+        gridLineColor: 'rgb(148 163 184 / 0.16)',
         tickWidth: 0,
-        lineWidth: 1,
+        lineWidth: 0,
         labels: {
-          enabled: false,
+          enabled: true,
           style: {
-            fontSize: '11px',
+            fontSize: '10px',
           },
         },
       },
       yAxis: {
         title: { text: null },
-        gridLineWidth: 0,
+        gridLineWidth: 1,
+        gridLineColor: 'rgb(148 163 184 / 0.16)',
         lineWidth: 0,
         tickWidth: 0,
         labels: {
-          enabled: false,
+          enabled: true,
           style: {
-            fontSize: '11px',
+            fontSize: '10px',
           },
         },
       },
       legend: { enabled: false },
       credits: { enabled: false },
+      plotOptions: {
+        series: {
+          animation: { duration: 350 },
+        },
+      },
       series: [series],
     };
   }

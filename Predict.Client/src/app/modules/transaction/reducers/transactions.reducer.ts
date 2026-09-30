@@ -17,9 +17,9 @@ export interface State {
 
 const initialState: State = {
   transactions: [],
-  startDate: new Date('2017-12-10'),
+  startDate: new Date('2026-01-01'),
   endDate: new Date(),
-  viewMode: 'all',
+  viewMode: 'monthly',
 };
 
 export const TransactionsStore = signalStore(

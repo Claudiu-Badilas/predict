@@ -10,8 +10,14 @@ import {
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { ScrollableDirective } from 'src/app/shared/directives/scrollable.directive';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
-import { TransactionDomain } from '../../models/transactions.model';
+import {
+  TransactionCategorizer,
+  TransactionCategory,
+  TransactionDomain,
+} from '../../models/transactions.model';
 import { TransactionFeedComponent } from '../transaction-feed/transaction-feed.component';
+import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
+import { DateRangePicker } from 'src/app/shared/components/date-range-picker/models/date-range-picker.model';
 
 type TransactionSort = 'amount' | 'recent' | 'oldest';
 
@@ -37,6 +43,7 @@ interface PeriodGroup {
     ScrollableDirective,
     NgbTooltip,
     TransactionFeedComponent,
+    RangeSelectorComponent,
   ],
   templateUrl: './most-common-transaction.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -46,9 +53,16 @@ export class MostCommonTransactionComponent {
   transactions = input<TransactionDomain[]>([]);
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
   viewModeChange = output<'all' | 'monthly' | 'yearly'>();
+  startDate = input.required<Date>();
+  endDate = input.required<Date>();
+  minDate = input.required<Date>();
+  maxDate = input.required<Date>();
+  dateRangeChange = output<DateRangePicker>();
 
   searchTerm = signal('');
   sortMode = signal<TransactionSort>('recent');
+  selectedCategory = signal<TransactionCategory | null>(null);
+  selectedProvider = signal<string | null>(null);
 
   private normalizedSearch = computed(() =>
     this.searchTerm().trim().toLowerCase(),
@@ -60,8 +74,21 @@ export class MostCommonTransactionComponent {
     ),
   );
 
+  filteredTransactions = computed(() => {
+    const category = this.selectedCategory();
+    const provider = this.selectedProvider()?.toLocaleLowerCase();
+    return this.selectedTransaction().filter((transaction) => {
+      if (category && transaction.category !== category) return false;
+      if (provider) {
+        const transactionProvider = (transaction.serviceProvider?.trim() || transaction.merchantName?.trim() || transaction.provider?.trim() || '').toLocaleLowerCase();
+        if (transactionProvider !== provider) return false;
+      }
+      return true;
+    });
+  });
+
   allTransactions = computed(() =>
-    this.sortTransactionRecords(this.selectedTransaction()),
+    this.sortTransactionRecords(this.filteredTransactions()),
   );
 
   private expandedPeriodId = signal<string | null>(null);
@@ -92,7 +119,7 @@ export class MostCommonTransactionComponent {
   });
 
   private groupedByMonth = computed((): PeriodGroup[] => {
-    const txs = this.selectedTransaction();
+    const txs = this.filteredTransactions();
     if (!txs?.length) return [];
 
     const map = new Map<string, TransactionDomain[]>();
@@ -131,7 +158,7 @@ export class MostCommonTransactionComponent {
   });
 
   private groupedByYear = computed((): PeriodGroup[] => {
-    const txs = this.selectedTransaction();
+    const txs = this.filteredTransactions();
     if (!txs?.length) return [];
 
     const map = new Map<number, TransactionDomain[]>();
@@ -199,20 +226,41 @@ export class MostCommonTransactionComponent {
 
   totalIncome = computed(
     () =>
-      this.selectedTransaction()
+      this.filteredTransactions()
         ?.filter((tx) => (tx.amount ?? 0) > 0)
         .reduce((s, tx) => s + (tx.amount ?? 0), 0) ?? 0,
   );
 
   totalExpense = computed(() =>
     Math.abs(
-      this.selectedTransaction()
+      this.filteredTransactions()
         ?.filter((tx) => (tx.amount ?? 0) < 0)
         .reduce((s, tx) => s + (tx.amount ?? 0), 0) ?? 0,
     ),
   );
 
-  totalTransactions = computed(() => this.selectedTransaction()?.length ?? 0);
+  totalTransactions = computed(() => this.filteredTransactions().length);
+
+  selectCategory(category: TransactionCategory): void {
+    this.selectedCategory.set(this.selectedCategory() === category ? null : category);
+    this.selectedProvider.set(null);
+  }
+
+  selectProvider(provider: string): void {
+    const selected = this.selectedProvider()?.toLocaleLowerCase();
+    this.selectedProvider.set(selected === provider.toLocaleLowerCase() ? null : provider);
+    this.selectedCategory.set(null);
+  }
+
+  clearTransactionFilter(): void {
+    this.selectedCategory.set(null);
+    this.selectedProvider.set(null);
+  }
+
+  selectedCategoryLabel(): string {
+    const category = this.selectedCategory();
+    return category ? TransactionCategorizer.getCategoryLabel(category) : '';
+  }
 
   private matchesSearch(transaction: TransactionDomain): boolean {
     const query = this.normalizedSearch();

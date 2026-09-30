@@ -8,30 +8,30 @@
       role="listitem"
     >
       <div class="transaction-row__main">
-        <span
+        <button
+          type="button"
           class="merchant-mark"
           [style.--category-color]="getCategoryColor(transaction.category)"
-          aria-hidden="true"
+          (click)="selectProvider(transaction)"
+          [attr.aria-label]="'Filter by provider ' + merchantLabel(transaction)"
         >
           {{ merchantLabel(transaction).slice(0, 1).toUpperCase() }}
-        </span>
+        </button>
 
         <div class="transaction-copy">
           <div class="merchant-line">
-            <strong class="merchant-name">{{
-              merchantLabel(transaction)
-            }}</strong>
+            <strong class="merchant-name">
+              {{ merchantLabel(transaction) }}
+            </strong>
             <div class="merchant-category-row">
-              <span
-                class="category-chip"
-              >
+              <button type="button" class="category-chip" (click)="categorySelected.emit(transaction.category)" [attr.aria-label]="'Filter by category ' + getCategoryLabel(transaction.category)">
                 <span
                   class="category-dot"
                   [style.background]="getCategoryColor(transaction.category)"
                   aria-hidden="true"
                 ></span>
                 {{ getCategoryLabel(transaction.category) }}
-              </span>
+              </button>
               <span class="transaction-date-mobile">
                 {{
                   formatDate(

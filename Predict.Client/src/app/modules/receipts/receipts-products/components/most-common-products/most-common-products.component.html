@@ -2,22 +2,17 @@
   <div class="summary-grid">
     <div class="summary-row">
       <div class="summary-section stat-item stat-item--green">
-        <span class="stat-item__label">Expenses</span>
+        <span class="stat-item__label">Total</span>
         <span class="stat-item__value positive">
           {{ totalRevenue() | numberFormat: '0.00' }} RON
         </span>
       </div>
 
-      <div class="summary-section stat-item stat-item--red">
-        <span class="stat-item__label">Items</span>
-        <span class="stat-item__value">
-          {{ totalItemsSold() | numberFormat: '0.00' }}
-        </span>
-      </div>
-
       <div class="summary-section stat-item stat-item--blue">
-        <span class="stat-item__label">Products</span>
-        <span class="stat-item__value">{{ uniqueProductsCount() }}</span>
+        <span class="stat-item__label">Frequency</span>
+        <span class="stat-item__value">
+          {{ receiptFrequency() }} receipts
+        </span>
       </div>
 
     </div>

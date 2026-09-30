@@ -8,7 +8,6 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Store } from '@ngrx/store';
-import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 
 import * as TransactionsActions from 'src/app/modules/transaction/actions/transactions.actions';
@@ -22,7 +21,6 @@ import { MostCommonTransactionComponent } from './components/most-common-transac
   imports: [
     CommonModule,
     TopBarComponent,
-    RangeSelectorComponent,
     MostCommonTransactionComponent,
   ],
   templateUrl: './transaction.component.html',

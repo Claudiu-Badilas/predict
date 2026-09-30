@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import { of, timeout } from 'rxjs';
 import { catchError, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
@@ -55,33 +55,36 @@ export class TransactionsEffects {
         toObservable(this.transactionsStore.endDate),
       ),
       switchMap(([, startDate, endDate]) =>
-        this._transactionService.getTransactions(startDate, endDate).pipe(
-          switchMap((transactions) =>
-            of(
-              TransactionsActions.setTransactionsSuccess({ transactions }),
-              LayoutActions.spinnerOff(),
+        this._transactionService
+          .getTransactions(startDate, endDate)
+          .pipe(
+            timeout({ first: 15000 }),
+            switchMap((transactions) =>
+              of(
+                TransactionsActions.setTransactionsSuccess({ transactions }),
+                LayoutActions.spinnerOff(),
+              ),
+            ),
+            catchError((error: unknown) =>
+              of(
+                TransactionsActions.loadTransactionsFailure({
+                  message:
+                    error instanceof HttpErrorResponse
+                      ? error.status === 0
+                        ? 'Could not reach the transactions API.'
+                        : `Transactions API request failed (${error.status}).`
+                      : error instanceof Error
+                        ? error.message
+                        : 'Failed to load transactions.',
+                }),
+                ToastActions.showToast({
+                  message: 'Something went wrong. Please try again.',
+                  toastType: ToastType.Error,
+                }),
+                LayoutActions.spinnerOff(),
+              ),
             ),
           ),
-          catchError((error: unknown) =>
-            of(
-              TransactionsActions.loadTransactionsFailure({
-                message:
-                  error instanceof HttpErrorResponse
-                    ? error.status === 0
-                      ? 'Could not reach the transactions API.'
-                      : `Transactions API request failed (${error.status}).`
-                    : error instanceof Error
-                      ? error.message
-                      : 'Failed to load transactions.',
-              }),
-              ToastActions.showToast({
-                message: 'Something went wrong. Please try again.',
-                toastType: ToastType.Error,
-              }),
-              LayoutActions.spinnerOff(),
-            ),
-          ),
-        ),
       ),
     ),
   );

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
 import {
   TransactionCategorizer,
@@ -16,6 +16,8 @@ import {
 })
 export class TransactionFeedComponent {
   transactions = input<TransactionDomain[]>([]);
+  categorySelected = output<TransactionCategory>();
+  providerSelected = output<string>();
 
   merchantLabel(transaction: TransactionDomain): string {
     return (
@@ -24,6 +26,11 @@ export class TransactionFeedComponent {
       transaction.provider?.trim() ||
       'Transaction'
     );
+  }
+
+  selectProvider(transaction: TransactionDomain): void {
+    const provider = transaction.serviceProvider?.trim() || transaction.merchantName?.trim() || transaction.provider?.trim();
+    if (provider) this.providerSelected.emit(provider);
   }
 
   formatDate(date: Date | null): string {

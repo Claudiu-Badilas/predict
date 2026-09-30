@@ -544,19 +544,8 @@ export class MostCommonProductsComponent implements OnChanges {
     );
   });
 
-  totalItemsSold = computed(() => {
-    return this.receipts().reduce((sum, p) => sum + (p.quantity ?? 0), 0);
-  });
-
-  uniqueProductsCount = computed(() => {
-    return new Set(this.receipts().map((p) => p.id)).size;
-  });
-
-  averagePrice = computed(() => {
-    const products = this.receipts();
-    if (products.length === 0) return 0;
-    const total = products.reduce((sum, p) => sum + (p.price ?? 0), 0);
-    return total / products.length;
+  receiptFrequency = computed(() => {
+    return new Set(this.receipts().map((product) => product.receiptId)).size;
   });
 
   private groupProducts(products: ReceiptsProductDomain[]): GroupedProduct[] {
