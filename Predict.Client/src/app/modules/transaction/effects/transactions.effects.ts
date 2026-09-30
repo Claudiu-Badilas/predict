@@ -48,14 +48,22 @@ export class TransactionsEffects {
 
   loadTransactions$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(TransactionsActions.loadTransactions),
+      ofType(
+        TransactionsActions.loadTransactions,
+        TransactionsActions.dateRangeChanged,
+      ),
       tap(() => this.store.dispatch(LayoutActions.spinnerOn())),
       withLatestFrom(
         toObservable(this.transactionsStore.startDate),
         toObservable(this.transactionsStore.endDate),
       ),
-      switchMap(([, startDate, endDate]) =>
-        this._transactionService
+      switchMap(([action, currentStartDate, currentEndDate]) => {
+        const { startDate, endDate } =
+          'startDate' in action
+            ? action
+            : { startDate: currentStartDate, endDate: currentEndDate };
+
+        return this._transactionService
           .getTransactions(startDate, endDate)
           .pipe(
             timeout({ first: 15000 }),
@@ -84,8 +92,8 @@ export class TransactionsEffects {
                 LayoutActions.spinnerOff(),
               ),
             ),
-          ),
-      ),
+          );
+      }),
     ),
   );
 }

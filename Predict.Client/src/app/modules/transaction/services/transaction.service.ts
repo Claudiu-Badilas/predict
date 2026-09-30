@@ -23,6 +23,10 @@ export class TransactionService {
     startDate: Date,
     endDate: Date,
   ): Observable<TransactionDomain[]> {
+    const rangeStart = new Date(startDate);
+    rangeStart.setHours(0, 0, 0, 0);
+    const rangeEnd = new Date(endDate);
+    rangeEnd.setHours(23, 59, 59, 999);
     const manuallyUploadedDtos = this.localStorage.getItem<
       TransactionResponse[]
     >(TransactionService_MANUAL_STORAGE_KEY);
@@ -50,8 +54,8 @@ export class TransactionService {
         transactions.filter(
           ({ completionDate }) =>
             JsDateUtils.isValidDate(completionDate) &&
-            completionDate >= startDate &&
-            completionDate <= endDate,
+            completionDate >= rangeStart &&
+            completionDate <= rangeEnd,
         ),
       ),
     );

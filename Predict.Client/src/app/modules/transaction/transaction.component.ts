@@ -61,7 +61,6 @@ export class TransactionComponent {
         endDate: value.endDate,
       }),
     );
-    this.store.dispatch(TransactionsActions.loadTransactions());
   }
 
   onViewModeChange(viewMode: 'all' | 'monthly' | 'yearly') {
