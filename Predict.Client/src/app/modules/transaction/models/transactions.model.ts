@@ -84,6 +84,15 @@ export class TransactionDomain {
   constructor(res: any) {
     Object.assign(this, res);
 
+    const descriptionParts = this.description?.split('|');
+    if (descriptionParts?.some((part) => /\bCard\s+nr\.?/i.test(part))) {
+      this.description = descriptionParts
+        .filter((part) => !/\bCard\s+nr\.?/i.test(part))
+        .map((part) => part.trim())
+        .filter(Boolean)
+        .join(' | ');
+    }
+
     this.registrationDate = DateUtils.fromSplittedStringToJsDate(
       res.registrationDate,
     );
@@ -92,11 +101,11 @@ export class TransactionDomain {
     );
 
     // Extract merchant name from description
-    const descParts = res.description?.split('|') || [];
+    const descParts = this.description?.split('|') || [];
     this.serviceProvider = descParts[0]?.trim() || '';
 
     // Extract merchant from various patterns
-    this.merchantName = this.extractMerchantName(res.description || '');
+    this.merchantName = this.extractMerchantName(this.description || '');
 
     this.category = TransactionCategorizer.categorize(this);
     this.categoryLabel = TransactionCategorizer.getCategoryLabel(this.category);
