@@ -78,7 +78,6 @@ export class TransactionDomain {
 
   serviceProvider: string;
   merchantName: string;
-  ignored: boolean;
   category: TransactionCategory;
   categoryLabel: string;
 
@@ -98,14 +97,6 @@ export class TransactionDomain {
 
     // Extract merchant from various patterns
     this.merchantName = this.extractMerchantName(res.description || '');
-
-    this.ignored = [
-      'Transfer intre conturile proprii',
-      'Transfer intre conturi proprii',
-      'Trz IB conturi proprii',
-      //--------------------------------------
-      'WWW.ORANGE.RO CONTUL-MEU',
-    ].some((x) => this.description?.includes(x));
 
     this.category = TransactionCategorizer.categorize(this);
     this.categoryLabel = TransactionCategorizer.getCategoryLabel(this.category);
@@ -680,11 +671,6 @@ export class TransactionCategorizer {
   ];
 
   static categorize(transaction: TransactionDomain): TransactionCategory {
-    // If transaction is ignored
-    if (transaction.ignored) {
-      return TransactionCategory.OTHER;
-    }
-
     const description = transaction.description?.toLowerCase() || '';
     const serviceProvider = transaction.serviceProvider?.toLowerCase() || '';
     const amount = transaction.amount || 0;

@@ -1,4 +1,3 @@
-import { computed } from '@angular/core';
 import {
   patchState,
   signalStore,
@@ -25,21 +24,7 @@ const initialState: State = {
 export const TransactionsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed((state) => {
-    const filteredTransactions = computed(() =>
-      state.transactions().filter((transaction) => !transaction.ignored),
-    );
-    const availableTransactions = computed(() => {
-      const seen = new Set<string>();
-      return filteredTransactions().filter((transaction) => {
-        const signature = JSON.stringify(transaction);
-        if (seen.has(signature)) return false;
-        seen.add(signature);
-        return true;
-      });
-    });
-    return { availableTransactions };
-  }),
+  withComputed((state) => ({ availableTransactions: state.transactions })),
   withMethods((state) => ({
     setTransactions(transactions: TransactionDomain[]): void {
       patchState(state, { transactions });

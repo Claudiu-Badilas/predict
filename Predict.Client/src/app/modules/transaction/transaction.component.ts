@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ChangeDetectionStrategy,
-  computed,
-  inject,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Store } from '@ngrx/store';
@@ -29,9 +24,6 @@ export class TransactionComponent {
   endDate = this.transactionsStore.endDate;
   viewMode = this.transactionsStore.viewMode;
   transactions = this.transactionsStore.availableTransactions;
-  validTransactions = computed(() =>
-    this.transactions().filter((transaction) => !transaction.ignored),
-  );
   minDate = new Date('2016-01-01');
   maxDate = new Date('2030-01-01');
 
