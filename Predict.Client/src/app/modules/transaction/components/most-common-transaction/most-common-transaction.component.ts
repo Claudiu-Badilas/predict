@@ -55,6 +55,7 @@ export class MostCommonTransactionComponent {
   @ViewChild('transactionsScroll')
   private transactionsScroll?: ElementRef<HTMLElement>;
   transactions = input<TransactionDomain[]>([]);
+  economiiTransactions = input<TransactionDomain[]>([]);
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
   viewModeChange = output<'all' | 'monthly' | 'yearly'>();
   startDate = input.required<Date>();
@@ -64,6 +65,7 @@ export class MostCommonTransactionComponent {
   dateRangeChange = output<DateRangePicker>();
 
   searchTerm = signal('');
+  showEconomii = signal(false);
   sortMode = signal<TransactionSort>('recent');
   selectedCategory = signal<TransactionCategory | null>(null);
   selectedProvider = signal<string | null>(null);
@@ -73,10 +75,26 @@ export class MostCommonTransactionComponent {
   );
 
   selectedTransaction = computed(() =>
-    this.transactions().filter((transaction) =>
-      this.matchesSearch(transaction),
+    (this.showEconomii()
+      ? this.economiiTransactions()
+      : this.transactions()
+    ).filter((transaction) => this.matchesSearch(transaction)),
+  );
+
+  economiiTotal = computed(() =>
+    this.filteredTransactions().reduce(
+      (total, transaction) => total + (transaction.amount ?? 0),
+      0,
     ),
   );
+
+  setDataset(showEconomii: boolean): void {
+    this.showEconomii.set(showEconomii);
+    this.selectedCategory.set(null);
+    this.selectedProvider.set(null);
+    this.clearSearch();
+    this.scrollTransactionsToTop();
+  }
 
   filteredTransactions = computed(() => {
     const category = this.selectedCategory();

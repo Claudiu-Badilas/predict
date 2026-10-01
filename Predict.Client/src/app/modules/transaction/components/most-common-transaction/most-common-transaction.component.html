@@ -11,6 +11,28 @@
             [maxDate]="maxDate()"
             (valueChanged)="onDateRangeChange($event)"
           />
+          <div
+            class="dataset-toggle"
+            role="group"
+            aria-label="Transaction dataset"
+          >
+            <button
+              type="button"
+              [class.active]="!showEconomii()"
+              [attr.aria-pressed]="!showEconomii()"
+              (click)="setDataset(false)"
+            >
+              Transactions
+            </button>
+            <button
+              type="button"
+              [class.active]="showEconomii()"
+              [attr.aria-pressed]="showEconomii()"
+              (click)="setDataset(true)"
+            >
+              Economii
+            </button>
+          </div>
         </div>
 
         <div class="period-control">
@@ -142,75 +164,91 @@
             <div class="period-container all-period-container expanded">
               <div class="period-header all-period-header">
                 <div class="header-row-main">
-                  <span class="header-title">Transactions</span>
-                  <span class="header-count">{{ totalTransactions() }}</span>
-
-                  @if (totalIncome() > 0) {
+                  <span class="header-title">
+                    {{ showEconomii() ? 'Economii' : 'Transactions' }}
+                  </span>
+                  @if (showEconomii()) {
                     <span
-                      class="stat-tag stat-income"
-                      [ngbTooltip]="'Total income'"
-                      container="body"
+                      class="stat-tag stat-economii-total"
+                      [class.is-positive]="economiiTotal() > 0"
+                      [class.is-negative]="economiiTotal() < 0"
+                      aria-label="Economii net total"
                     >
-                      <svg
-                        class="stat-icon"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M6 9V3M6 3L3 6M6 3l3 3"
-                          stroke="currentColor"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
                       <span class="stat-value">{{
-                        totalIncome() | numberFormat: '0.00'
+                        economiiTotal() | numberFormat: '0.00'
                       }}</span>
                     </span>
-                  }
+                  } @else {
+                    <span class="header-count">{{ totalTransactions() }}</span>
 
-                  @if (totalExpense() > 0) {
-                    <span
-                      class="stat-tag stat-expense"
-                      [ngbTooltip]="'Total expense'"
-                      container="body"
-                    >
-                      <svg
-                        class="stat-icon"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        aria-hidden="true"
+                    @if (totalIncome() > 0) {
+                      <span
+                        class="stat-tag stat-income"
+                        [ngbTooltip]="'Total income'"
+                        container="body"
                       >
-                        <path
-                          d="M6 3v6M6 9l3-3M6 9L3 6"
-                          stroke="currentColor"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      <span class="stat-value">{{
-                        totalExpense() | numberFormat: '0.00'
-                      }}</span>
-                    </span>
-                  }
-
-                  @if (totalIncome() - totalExpense() !== 0) {
-                    <span
-                      class="stat-tag stat-diff"
-                      [class.is-positive]="totalIncome() - totalExpense() > 0"
-                      [class.is-negative]="totalIncome() - totalExpense() < 0"
-                      [ngbTooltip]="'Net difference'"
-                      container="body"
-                    >
-                      <span class="stat-value">
-                        {{
-                          totalIncome() - totalExpense() | numberFormat: '0.00'
-                        }}
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M6 9V3M6 3L3 6M6 3l3 3"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <span class="stat-value">{{
+                          totalIncome() | numberFormat: '0.00'
+                        }}</span>
                       </span>
-                    </span>
+                    }
+
+                    @if (totalExpense() > 0) {
+                      <span
+                        class="stat-tag stat-expense"
+                        [ngbTooltip]="'Total expense'"
+                        container="body"
+                      >
+                        <svg
+                          class="stat-icon"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M6 3v6M6 9l3-3M6 9L3 6"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <span class="stat-value">{{
+                          totalExpense() | numberFormat: '0.00'
+                        }}</span>
+                      </span>
+                    }
+
+                    @if (totalIncome() - totalExpense() !== 0) {
+                      <span
+                        class="stat-tag stat-diff"
+                        [class.is-positive]="totalIncome() - totalExpense() > 0"
+                        [class.is-negative]="totalIncome() - totalExpense() < 0"
+                        [ngbTooltip]="'Net difference'"
+                        container="body"
+                      >
+                        <span class="stat-value">
+                          {{
+                            totalIncome() - totalExpense()
+                              | numberFormat: '0.00'
+                          }}
+                        </span>
+                      </span>
+                    }
                   }
                 </div>
               </div>
@@ -257,77 +295,34 @@
                   <!-- Main top row -->
                   <div class="header-row-main">
                     <span class="header-title">{{ period.title }}</span>
-                    <span class="header-count">{{
-                      period.transactionCount
-                    }}</span>
-
-                    @if (period.totalIncome > 0) {
+                    @if (showEconomii()) {
                       <span
-                        class="stat-tag stat-income"
-                        [ngbTooltip]="'Total income'"
-                        container="body"
-                      >
-                        <svg
-                          class="stat-icon"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M6 9V3M6 3L3 6M6 3l3 3"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                        <span class="stat-value">{{
-                          period.totalIncome | numberFormat: '0.00'
-                        }}</span>
-                      </span>
-                    }
-
-                    @if (period.totalExpense > 0) {
-                      <span
-                        class="stat-tag stat-expense"
-                        [ngbTooltip]="'Total expense'"
-                        container="body"
-                      >
-                        <svg
-                          class="stat-icon"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M6 3v6M6 9l3-3M6 9L3 6"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                        <span class="stat-value">{{
-                          period.totalExpense | numberFormat: '0.00'
-                        }}</span>
-                      </span>
-                    }
-
-                    @if (period.difference !== 0) {
-                      <span
-                        class="stat-tag stat-diff"
+                        class="stat-tag stat-economii-total"
                         [class.is-positive]="period.difference > 0"
                         [class.is-negative]="period.difference < 0"
-                        [ngbTooltip]="'Net difference'"
-                        container="body"
+                        aria-label="Economii net total"
                       >
-                        <svg
-                          class="stat-icon"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                          aria-hidden="true"
+                        <span class="stat-value">{{
+                          period.difference | numberFormat: '0.00'
+                        }}</span>
+                      </span>
+                    } @else {
+                      <span class="header-count">{{
+                        period.transactionCount
+                      }}</span>
+
+                      @if (period.totalIncome > 0) {
+                        <span
+                          class="stat-tag stat-income"
+                          [ngbTooltip]="'Total income'"
+                          container="body"
                         >
-                          @if (period.difference > 0) {
+                          <svg
+                            class="stat-icon"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            aria-hidden="true"
+                          >
                             <path
                               d="M6 9V3M6 3L3 6M6 3l3 3"
                               stroke="currentColor"
@@ -335,7 +330,25 @@
                               stroke-linecap="round"
                               stroke-linejoin="round"
                             />
-                          } @else {
+                          </svg>
+                          <span class="stat-value">{{
+                            period.totalIncome | numberFormat: '0.00'
+                          }}</span>
+                        </span>
+                      }
+
+                      @if (period.totalExpense > 0) {
+                        <span
+                          class="stat-tag stat-expense"
+                          [ngbTooltip]="'Total expense'"
+                          container="body"
+                        >
+                          <svg
+                            class="stat-icon"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            aria-hidden="true"
+                          >
                             <path
                               d="M6 3v6M6 9l3-3M6 9L3 6"
                               stroke="currentColor"
@@ -343,12 +356,50 @@
                               stroke-linecap="round"
                               stroke-linejoin="round"
                             />
-                          }
-                        </svg>
-                        <span class="stat-value">{{
-                          period.difference | numberFormat: '0.00'
-                        }}</span>
-                      </span>
+                          </svg>
+                          <span class="stat-value">{{
+                            period.totalExpense | numberFormat: '0.00'
+                          }}</span>
+                        </span>
+                      }
+
+                      @if (period.difference !== 0) {
+                        <span
+                          class="stat-tag stat-diff"
+                          [class.is-positive]="period.difference > 0"
+                          [class.is-negative]="period.difference < 0"
+                          [ngbTooltip]="'Net difference'"
+                          container="body"
+                        >
+                          <svg
+                            class="stat-icon"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            aria-hidden="true"
+                          >
+                            @if (period.difference > 0) {
+                              <path
+                                d="M6 9V3M6 3L3 6M6 3l3 3"
+                                stroke="currentColor"
+                                stroke-width="1.6"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            } @else {
+                              <path
+                                d="M6 3v6M6 9l3-3M6 9L3 6"
+                                stroke="currentColor"
+                                stroke-width="1.6"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            }
+                          </svg>
+                          <span class="stat-value">{{
+                            period.difference | numberFormat: '0.00'
+                          }}</span>
+                        </span>
+                      }
                     }
 
                     <span class="expand-chevron" aria-hidden="true">

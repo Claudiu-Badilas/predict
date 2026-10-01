@@ -9,6 +9,7 @@ import { TransactionDomain } from '../models/transactions.model';
 
 export interface State {
   transactions: TransactionDomain[];
+  economii: TransactionDomain[];
   startDate: Date;
   endDate: Date;
   viewMode: 'all' | 'monthly' | 'yearly';
@@ -16,7 +17,8 @@ export interface State {
 
 const initialState: State = {
   transactions: [],
-  startDate: new Date('2025-01-01'),
+  economii: [],
+  startDate: new Date('2016-01-01'),
   endDate: new Date(),
   viewMode: 'all',
 };
@@ -24,10 +26,16 @@ const initialState: State = {
 export const TransactionsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed((state) => ({ availableTransactions: state.transactions })),
+  withComputed((state) => ({
+    availableTransactions: state.transactions,
+    availableEconomii: state.economii,
+  })),
   withMethods((state) => ({
-    setTransactions(transactions: TransactionDomain[]): void {
-      patchState(state, { transactions });
+    setTransactions(
+      transactions: TransactionDomain[],
+      economii: TransactionDomain[],
+    ): void {
+      patchState(state, { transactions, economii });
     },
     setDateRange(startDate: Date, endDate: Date): void {
       patchState(state, { startDate, endDate });

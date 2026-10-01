@@ -7,7 +7,10 @@ export const loadTransactions = createAction(
 
 export const setTransactionsSuccess = createAction(
   '[Transactions] Set Transactions Success',
-  props<{ transactions: TransactionDomain[] }>(),
+  props<{
+    transactions: TransactionDomain[];
+    economii: TransactionDomain[];
+  }>(),
 );
 
 export const loadTransactionsFailure = createAction(

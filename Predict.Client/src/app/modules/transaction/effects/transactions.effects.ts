@@ -33,7 +33,10 @@ export class TransactionsEffects {
         ),
         tap((action) => {
           if ('transactions' in action)
-            this.transactionsStore.setTransactions(action.transactions);
+            this.transactionsStore.setTransactions(
+              action.transactions,
+              action.economii,
+            );
           if ('startDate' in action)
             this.transactionsStore.setDateRange(
               action.startDate,
@@ -67,9 +70,12 @@ export class TransactionsEffects {
           .getTransactions(startDate, endDate)
           .pipe(
             timeout({ first: 15000 }),
-            switchMap((transactions) =>
+            switchMap(({ transactions, economii }) =>
               of(
-                TransactionsActions.setTransactionsSuccess({ transactions }),
+                TransactionsActions.setTransactionsSuccess({
+                  transactions,
+                  economii,
+                }),
                 LayoutActions.spinnerOff(),
               ),
             ),

@@ -24,6 +24,7 @@ export class TransactionComponent {
   endDate = this.transactionsStore.endDate;
   viewMode = this.transactionsStore.viewMode;
   transactions = this.transactionsStore.availableTransactions;
+  economii = this.transactionsStore.availableEconomii;
   minDate = new Date('2016-01-01');
   maxDate = new Date('2030-01-01');
 

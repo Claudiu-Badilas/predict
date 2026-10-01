@@ -648,6 +648,61 @@
   border-color: var(--accent-red-border);
 }
 
+.stat-economii-total {
+  background: #e8f2ff;
+  color: #1769c2;
+  border-color: #9cc8f5;
+  font-size: 0.9rem;
+  padding: 7px 13px;
+}
+
+.stat-economii-total.is-positive {
+  background: var(--accent-green-bg);
+  color: var(--accent-green);
+  border-color: var(--accent-green-border);
+}
+
+.stat-economii-total.is-negative {
+  background: var(--accent-red-bg);
+  color: var(--accent-red);
+  border-color: var(--accent-red-border);
+}
+
+.dataset-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  height: 44px;
+  padding: 3px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: var(--bg-subtle);
+}
+
+.dataset-toggle button {
+  min-width: 0;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 9px;
+  color: var(--text-secondary);
+  background: transparent;
+  font: inherit;
+  font-size: 0.77rem;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.dataset-toggle button.active {
+  color: var(--accent-blue);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-xs);
+}
+
 /* ===== EXPAND CHEVRON ===== */
 .expand-chevron {
   display: inline-flex;
@@ -1146,10 +1201,9 @@
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-columns: minmax(230px, 1.2fr) minmax(180px, 0.9fr) minmax(
-      200px,
-      1fr
-    ) 210px;
+  grid-template-columns:
+    minmax(360px, 1.8fr) minmax(180px, 0.9fr) minmax(200px, 1fr)
+    210px;
   grid-template-areas: 'dates period search sort';
   align-items: center;
   gap: 10px;
@@ -1163,6 +1217,15 @@
 
 .transaction-date-range {
   grid-area: dates;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.transaction-date-range p-date-range-picker {
+  display: block;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -1484,7 +1547,7 @@
 
 @media (max-width: 1024px) {
   .insights-toolbar {
-    grid-template-columns: minmax(220px, 1.2fr) minmax(180px, 1fr) 210px;
+    grid-template-columns: minmax(340px, 1.5fr) minmax(170px, 1fr) 210px;
     grid-template-areas:
       'dates period sort'
       'search search search';
@@ -1526,6 +1589,15 @@
   .period-switch {
     width: min(100%, 290px);
     height: 40px;
+  }
+
+  .dataset-toggle {
+    height: 40px;
+  }
+
+  .dataset-toggle button {
+    padding: 0 5px;
+    font-size: 0.68rem;
   }
 
   .transaction-date-range {
@@ -1689,6 +1761,15 @@
   .period-switch button {
     padding: 0 4px;
     font-size: 0.68rem;
+  }
+
+  .transaction-date-range {
+    gap: 4px;
+  }
+
+  .dataset-toggle button {
+    padding-inline: 3px;
+    font-size: 0.62rem;
   }
 
   .card-row.compact-row {

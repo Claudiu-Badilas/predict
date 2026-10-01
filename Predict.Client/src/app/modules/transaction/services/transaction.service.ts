@@ -12,6 +12,18 @@ import { TransactionService_MANUAL_STORAGE_KEY } from './transaction-settings.co
 
 export const TransactionService_STORAGE_KEY = 'Transactions_Cache_Jul_2026';
 
+interface TransactionsApiResponse {
+  transactions?: TransactionResponse[];
+  economii?: TransactionResponse[];
+  Transactions?: TransactionResponse[];
+  Economii?: TransactionResponse[];
+}
+
+export interface TransactionData {
+  transactions: TransactionDomain[];
+  economii: TransactionDomain[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
   constructor(
@@ -19,10 +31,7 @@ export class TransactionService {
     private readonly localStorage: LocalStorageService,
   ) {}
 
-  getTransactions(
-    startDate: Date,
-    endDate: Date,
-  ): Observable<TransactionDomain[]> {
+  getTransactions(startDate: Date, endDate: Date): Observable<TransactionData> {
     const rangeStart = new Date(startDate);
     rangeStart.setHours(0, 0, 0, 0);
     const rangeEnd = new Date(endDate);
@@ -30,34 +39,57 @@ export class TransactionService {
     const manuallyUploadedDtos = this.localStorage.getItem<
       TransactionResponse[]
     >(TransactionService_MANUAL_STORAGE_KEY);
-    const cachedDtos =
-      manuallyUploadedDtos ??
-      this.localStorage.getItem<TransactionResponse[]>(
-        TransactionService_STORAGE_KEY,
-      );
+    const cachedData = this.localStorage.getItem<
+      TransactionResponse[] | TransactionsApiResponse
+    >(TransactionService_STORAGE_KEY);
 
-    const source$ = cachedDtos
-      ? of(cachedDtos)
-      : this.httpClient
-          .get<TransactionResponse[]>(
-            'https://localhost:8080/api/v1/transactions',
-          )
-          .pipe(
-            tap((dtos) =>
-              this.localStorage.setItem(TransactionService_STORAGE_KEY, dtos),
-            ),
-          );
+    const source$: Observable<TransactionsApiResponse | TransactionResponse[]> =
+      manuallyUploadedDtos
+        ? of<TransactionsApiResponse>({
+            transactions: manuallyUploadedDtos,
+            economii: [],
+          })
+        : cachedData && !Array.isArray(cachedData)
+          ? of(cachedData)
+          : this.httpClient
+              .get<TransactionsApiResponse>(
+                'https://localhost:8080/api/v1/transactions',
+              )
+              .pipe(
+                tap((data) =>
+                  this.localStorage.setItem(
+                    TransactionService_STORAGE_KEY,
+                    data,
+                  ),
+                ),
+              );
 
     return source$.pipe(
-      map((dtos) => this.convertToModels(dtos)),
-      map((transactions) =>
-        transactions.filter(
-          ({ completionDate }) =>
-            JsDateUtils.isValidDate(completionDate) &&
-            completionDate >= rangeStart &&
-            completionDate <= rangeEnd,
-        ),
-      ),
+      map((data) => {
+        const response = Array.isArray(data)
+          ? { transactions: data, economii: [] }
+          : data;
+        const transactions =
+          response.transactions ?? response.Transactions ?? [];
+        const economii = response.economii ?? response.Economii ?? [];
+        return {
+          transactions: this.filterByDate(transactions, rangeStart, rangeEnd),
+          economii: this.filterByDate(economii, rangeStart, rangeEnd),
+        };
+      }),
+    );
+  }
+
+  private filterByDate(
+    dtos: TransactionResponse[],
+    rangeStart: Date,
+    rangeEnd: Date,
+  ): TransactionDomain[] {
+    return this.convertToModels(dtos).filter(
+      ({ completionDate }) =>
+        JsDateUtils.isValidDate(completionDate) &&
+        completionDate >= rangeStart &&
+        completionDate <= rangeEnd,
     );
   }
 

@@ -18,7 +18,10 @@
         <div class="transaction-copy">
           <div class="merchant-line">
             <strong class="merchant-name">
-              @for (part of highlightParts(merchantLabel(transaction)); track $index) {
+              @for (
+                part of highlightParts(merchantLabel(transaction));
+                track $index
+              ) {
                 @if (part.match) {
                   <mark class="search-match">{{ part.text }}</mark>
                 } @else {
@@ -40,7 +43,12 @@
                   [style.background]="getCategoryColor(transaction.category)"
                   aria-hidden="true"
                 ></span>
-                @for (part of highlightParts(getCategoryLabel(transaction.category)); track $index) {
+                @for (
+                  part of highlightParts(
+                    getCategoryLabel(transaction.category)
+                  );
+                  track $index
+                ) {
                   @if (part.match) {
                     <mark class="search-match">{{ part.text }}</mark>
                   } @else {
@@ -58,7 +66,12 @@
             </div>
           </div>
           <div class="transaction-description">
-            @for (part of highlightParts(transaction.description || 'No additional description'); track $index) {
+            @for (
+              part of highlightParts(
+                transaction.description || 'No additional description'
+              );
+              track $index
+            ) {
               @if (part.match) {
                 <mark class="search-match">{{ part.text }}</mark>
               } @else {
@@ -75,7 +88,10 @@
             @if (transaction.transactionType) {
               <span class="meta-separator" aria-hidden="true">·</span>
               <span>
-                @for (part of highlightParts(transaction.transactionType); track $index) {
+                @for (
+                  part of highlightParts(transaction.transactionType);
+                  track $index
+                ) {
                   @if (part.match) {
                     <mark class="search-match">{{ part.text }}</mark>
                   } @else {
@@ -105,6 +121,9 @@
 </div>
 @if (hasMoreTransactions()) {
   <button type="button" class="show-more-transactions" (click)="showMore()">
-    Show more transactions ({{ transactions().length - visibleTransactions().length }} remaining)
+    Show more transactions ({{
+      transactions().length - visibleTransactions().length
+    }}
+    remaining)
   </button>
 }
