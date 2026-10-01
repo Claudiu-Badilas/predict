@@ -23,6 +23,15 @@ export class TransactionsSettingsComponent {
     manualStorageKey: TransactionService_MANUAL_STORAGE_KEY,
     automaticStorageKey: TransactionService_STORAGE_KEY,
     loadFailureActionType: TransactionsActions.loadTransactionsFailure.type,
+    uploadValidator: (data) => {
+      if (Array.isArray(data)) return true;
+      if (!data || typeof data !== 'object') return false;
+
+      const response = data as Record<string, unknown>;
+      return ['transactions', 'Transactions', 'economii', 'Economii'].some(
+        (key) => Array.isArray(response[key]),
+      );
+    },
   };
 
   reloadData(): void {

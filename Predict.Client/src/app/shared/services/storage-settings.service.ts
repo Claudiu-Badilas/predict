@@ -5,7 +5,11 @@ import { LocalStorageService } from 'src/app/core/services/local-storage.service
 export class StorageSettingsService {
   constructor(private readonly localStorage: LocalStorageService) {}
 
-  uploadStorageItemFromJson(storageKey: string, file: File): Promise<boolean> {
+  uploadStorageItemFromJson(
+    storageKey: string,
+    file: File,
+    uploadValidator?: (data: unknown) => boolean,
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (file.type !== 'application/json') {
         reject(new Error('Invalid file type. Please upload a JSON file.'));
@@ -19,8 +23,8 @@ export class StorageSettingsService {
           const jsonContent = event.target?.result as string;
           const data: unknown = JSON.parse(jsonContent);
 
-          if (!Array.isArray(data)) {
-            reject(new Error('JSON file must contain an array.'));
+          if (uploadValidator ? !uploadValidator(data) : !Array.isArray(data)) {
+            reject(new Error('JSON file has an unsupported format.'));
             return;
           }
 

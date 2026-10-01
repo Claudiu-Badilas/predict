@@ -36,19 +36,20 @@ export class TransactionService {
     rangeStart.setHours(0, 0, 0, 0);
     const rangeEnd = new Date(endDate);
     rangeEnd.setHours(23, 59, 59, 999);
-    const manuallyUploadedDtos = this.localStorage.getItem<
-      TransactionResponse[]
+    const manuallyUploadedData = this.localStorage.getItem<
+      TransactionResponse[] | TransactionsApiResponse
     >(TransactionService_MANUAL_STORAGE_KEY);
     const cachedData = this.localStorage.getItem<
       TransactionResponse[] | TransactionsApiResponse
     >(TransactionService_STORAGE_KEY);
 
     const source$: Observable<TransactionsApiResponse | TransactionResponse[]> =
-      manuallyUploadedDtos
-        ? of<TransactionsApiResponse>({
-            transactions: manuallyUploadedDtos,
-            economii: [],
-          })
+      manuallyUploadedData
+        ? of<TransactionsApiResponse | TransactionResponse[]>(
+            Array.isArray(manuallyUploadedData)
+              ? { transactions: manuallyUploadedData, economii: [] }
+              : manuallyUploadedData,
+          )
         : cachedData && !Array.isArray(cachedData)
           ? of(cachedData)
           : this.httpClient

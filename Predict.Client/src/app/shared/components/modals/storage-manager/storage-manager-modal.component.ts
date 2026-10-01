@@ -26,6 +26,7 @@ export interface StorageManagerConfig {
   showAllStorage?: boolean;
   ignoredStorageKeys?: string[];
   obsoleteStorageKeys?: string[];
+  uploadValidator?: (data: unknown) => boolean;
 }
 
 type StorageItem = {
@@ -91,7 +92,11 @@ export class StorageManagerModalComponent implements OnInit {
     input.value = '';
     this.errorMessage.set(null);
     this.settingsService
-      .uploadStorageItemFromJson(this.config.manualStorageKey, file)
+      .uploadStorageItemFromJson(
+        this.config.manualStorageKey,
+        file,
+        this.config.uploadValidator,
+      )
       .then(() => {
         this.viewedData.set(null);
         this.loadItems();
