@@ -375,11 +375,38 @@ tbody tr:hover td {
   }
 
   .mobile-group-header {
+    position: relative;
     padding: 10px;
     background: var(--group-bg);
     cursor: pointer;
     transition: background 0.2s ease;
     border-bottom: 1px solid var(--border) !important;
+  }
+
+  .gesture-feedback {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 6px;
+    background: var(--surface);
+    border-top: 1px solid currentColor;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .gesture-feedback.remove-early {
+    color: var(--red);
+  }
+
+  .gesture-feedback.add-early {
+    color: var(--green);
+  }
+
+  .gesture-feedback.dispatch-instalment {
+    color: var(--blue);
   }
 
   .mobile-group-header:active {

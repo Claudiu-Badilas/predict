@@ -26,6 +26,19 @@ import {
 })
 export class LoanSimulatorBodyTableComponent {
   monthlyInstalmentGroups = input<MonthlyInstalmentManager[]>([]);
+  gestureFeedback: {
+    group: MonthlyInstalmentManager;
+    direction: 'left' | 'right' | 'down';
+    label: string;
+  } | null = null;
+
+  private touchStart: {
+    x: number;
+    y: number;
+    group: MonthlyInstalmentManager;
+    index: number;
+  } | null = null;
+  private suppressGroupClickUntil = 0;
 
   completedMonthlyInstalmentGroupsCount = computed(
     () =>
@@ -40,7 +53,127 @@ export class LoanSimulatorBodyTableComponent {
   }
 
   toggleGroup(group: MonthlyInstalmentManager) {
+    if (Date.now() < this.suppressGroupClickUntil) {
+      return;
+    }
     group.expanded = !group.expanded;
+  }
+
+  onMobileTouchStart(
+    event: TouchEvent,
+    group: MonthlyInstalmentManager,
+    index: number,
+  ) {
+    if (index + 1 !== this.completedMonthlyInstalmentGroupsCount()) {
+      this.touchStart = null;
+      return;
+    }
+
+    const touch = event.touches[0];
+    if (touch) {
+      this.touchStart = { x: touch.clientX, y: touch.clientY, group, index };
+    }
+  }
+
+  onMobileTouchMove(event: TouchEvent) {
+    if (!this.touchStart) {
+      return;
+    }
+
+    const touch = event.touches[0];
+    if (!touch) {
+      return;
+    }
+
+    const deltaX = touch.clientX - this.touchStart.x;
+    const deltaY = touch.clientY - this.touchStart.y;
+    let direction: 'left' | 'right' | 'down' | null = null;
+
+    if (Math.abs(deltaX) > 24 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      direction = deltaX < 0 ? 'left' : 'right';
+    } else if (deltaY > 32 && deltaY > Math.abs(deltaX) * 1.2) {
+      direction = 'down';
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+    }
+
+    if (direction) {
+      this.showGestureFeedback(this.touchStart.group, direction);
+    }
+  }
+
+  onMobileTouchEnd(event: TouchEvent) {
+    const start = this.touchStart;
+    this.touchStart = null;
+    if (
+      !start ||
+      start.index + 1 !== this.completedMonthlyInstalmentGroupsCount()
+    ) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    if (!touch) {
+      return;
+    }
+
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+    let direction: 'left' | 'right' | 'down' | null = null;
+
+    if (Math.abs(deltaX) >= 56 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      direction = deltaX < 0 ? 'left' : 'right';
+    } else if (deltaY >= 64 && deltaY > Math.abs(deltaX) * 1.2) {
+      direction = 'down';
+    }
+
+    if (!direction) {
+      this.gestureFeedback = null;
+      return;
+    }
+
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+    this.suppressGroupClickUntil = Date.now() + 500;
+
+    if (direction === 'left') {
+      this.onRemoveEarlyPayment(start.group, event);
+    } else if (direction === 'right') {
+      this.onAddEarlyPayment(start.group, event);
+    } else {
+      this.onDispatchInstalment(start.group, event);
+    }
+
+    this.showGestureFeedback(start.group, direction, true);
+  }
+
+  onMobileTouchCancel() {
+    this.touchStart = null;
+    this.gestureFeedback = null;
+  }
+
+  private showGestureFeedback(
+    group: MonthlyInstalmentManager,
+    direction: 'left' | 'right' | 'down',
+    clearAfter = false,
+  ) {
+    const labels = {
+      left: 'Elimină rata anticipată',
+      right: 'Adaugă rata anticipată',
+      down: 'Marchează rata ca plătită',
+    };
+    const feedback = { group, direction, label: labels[direction] };
+    this.gestureFeedback = feedback;
+
+    if (clearAfter) {
+      setTimeout(() => {
+        if (this.gestureFeedback === feedback) {
+          this.gestureFeedback = null;
+        }
+      }, 650);
+    }
   }
 
   toggleRow(row: LoanSimulatorInstalment) {
