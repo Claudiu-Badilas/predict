@@ -28,7 +28,7 @@ export class LoanSimulatorBodyTableComponent {
   monthlyInstalmentGroups = input<MonthlyInstalmentManager[]>([]);
   gestureFeedback: {
     group: MonthlyInstalmentManager;
-    direction: 'left' | 'right' | 'down';
+    direction: 'left' | 'right' | 'down' | 'up';
     label: string;
   } | null = null;
 
@@ -87,18 +87,20 @@ export class LoanSimulatorBodyTableComponent {
 
     const deltaX = touch.clientX - this.touchStart.x;
     const deltaY = touch.clientY - this.touchStart.y;
-    let direction: 'left' | 'right' | 'down' | null = null;
+    let direction: 'left' | 'right' | 'down' | 'up' | null = null;
 
     if (Math.abs(deltaX) > 24 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
       direction = deltaX < 0 ? 'left' : 'right';
     } else if (deltaY > 32 && deltaY > Math.abs(deltaX) * 1.2) {
       direction = 'down';
-      if (event.cancelable) {
-        event.preventDefault();
-      }
+    } else if (deltaY < -32 && Math.abs(deltaY) > Math.abs(deltaX) * 1.2) {
+      direction = 'up';
     }
 
     if (direction) {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
       this.showGestureFeedback(this.touchStart.group, direction);
     }
   }
@@ -120,12 +122,14 @@ export class LoanSimulatorBodyTableComponent {
 
     const deltaX = touch.clientX - start.x;
     const deltaY = touch.clientY - start.y;
-    let direction: 'left' | 'right' | 'down' | null = null;
+    let direction: 'left' | 'right' | 'down' | 'up' | null = null;
 
     if (Math.abs(deltaX) >= 56 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
       direction = deltaX < 0 ? 'left' : 'right';
     } else if (deltaY >= 64 && deltaY > Math.abs(deltaX) * 1.2) {
       direction = 'down';
+    } else if (deltaY <= -64 && Math.abs(deltaY) > Math.abs(deltaX) * 1.2) {
+      direction = 'up';
     }
 
     if (!direction) {
@@ -142,7 +146,7 @@ export class LoanSimulatorBodyTableComponent {
       this.onRemoveEarlyPayment(start.group, event);
     } else if (direction === 'right') {
       this.onAddEarlyPayment(start.group, event);
-    } else {
+    } else if (direction === 'down') {
       this.onDispatchInstalment(start.group, event);
     }
 
@@ -156,13 +160,14 @@ export class LoanSimulatorBodyTableComponent {
 
   private showGestureFeedback(
     group: MonthlyInstalmentManager,
-    direction: 'left' | 'right' | 'down',
+    direction: 'left' | 'right' | 'down' | 'up',
     clearAfter = false,
   ) {
     const labels = {
       left: 'Elimină rata anticipată',
       right: 'Adaugă rata anticipată',
       down: 'Marchează rata ca plătită',
+      up: 'Gest anulat',
     };
     const feedback = { group, direction, label: labels[direction] };
     this.gestureFeedback = feedback;
