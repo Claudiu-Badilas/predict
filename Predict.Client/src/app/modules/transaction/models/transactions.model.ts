@@ -84,10 +84,14 @@ export class TransactionDomain {
   constructor(res: any) {
     Object.assign(this, res);
 
-    const descriptionParts = this.description?.split('|');
-    if (descriptionParts?.some((part) => /\bCard\s+nr\.?/i.test(part))) {
-      this.description = descriptionParts
-        .filter((part) => !/\bCard\s+nr\.?/i.test(part))
+    // Extract merchant name from description
+    const descParts = this.description.split('|') || [];
+    this.serviceProvider = descParts.shift().trim();
+
+    const metadataPattern = /\bCard\s+nr\.?|\bData utilizarii cardului\b/i;
+    if (descParts.some((part) => metadataPattern.test(part))) {
+      this.description = descParts
+        .filter((part) => !metadataPattern.test(part))
         .map((part) => part.trim())
         .filter(Boolean)
         .join(' | ');
@@ -99,10 +103,6 @@ export class TransactionDomain {
     this.completionDate = DateUtils.fromSplittedStringToJsDate(
       res.completionDate,
     );
-
-    // Extract merchant name from description
-    const descParts = this.description?.split('|') || [];
-    this.serviceProvider = descParts[0]?.trim() || '';
 
     // Extract merchant from various patterns
     this.merchantName = this.extractMerchantName(this.description || '');

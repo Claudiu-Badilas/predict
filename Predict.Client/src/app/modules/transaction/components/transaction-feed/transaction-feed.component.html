@@ -65,20 +65,20 @@
               </span>
             </div>
           </div>
-          <div class="transaction-description">
-            @for (
-              part of highlightParts(
-                transaction.description || 'No additional description'
-              );
-              track $index
-            ) {
-              @if (part.match) {
-                <mark class="search-match">{{ part.text }}</mark>
-              } @else {
-                {{ part.text }}
+          @if (transaction.description?.trim()) {
+            <div class="transaction-description">
+              @for (
+                part of highlightParts(transaction.description ?? '');
+                track $index
+              ) {
+                @if (part.match) {
+                  <mark class="search-match">{{ part.text }}</mark>
+                } @else {
+                  {{ part.text }}
+                }
               }
-            }
-          </div>
+            </div>
+          }
           <div class="transaction-meta">
             <span class="transaction-date-desktop">{{
               formatDate(
