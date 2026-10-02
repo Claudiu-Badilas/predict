@@ -8,61 +8,51 @@ import {
 } from '@ngrx/signals';
 import { DateUtils } from 'src/app/shared/utils/date.utils';
 import { ReceiptDomain } from '../models/receipts-domain.model';
-import { ReceiptsProductDomain } from '../receipts-products/models/receipts-products.model';
-import { ProductPriceTrendChartUtils } from '../receipts-products/utils/products-price-trend.chart.util';
 
-interface ReceiptsProductsState {
+interface ReceiptsViewState {
   searchTerm: string;
-  viewMode: 'all' | 'monthly' | 'yearly' | 'receipts';
+  viewMode: 'all' | 'monthly' | 'yearly';
 }
 
 export interface State {
   receipts: ReceiptDomain[];
   startDate: Date;
   endDate: Date;
-  receiptsProducts: ReceiptsProductsState;
+  receiptsView: ReceiptsViewState;
 }
 
 const initialState: State = {
   receipts: [],
   startDate: DateUtils.getStartOfTheYear({ subtractYears: 1 }),
   endDate: new Date(),
-  receiptsProducts: { searchTerm: null, viewMode: 'monthly' },
+  receiptsView: { searchTerm: '', viewMode: 'all' },
 };
 
 export const ReceiptsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed((state) => {
-    const productDomain = computed(() =>
-      state
+  withComputed((state) => ({
+    availableReceipts: computed(() => {
+      const searchTerm = state.receiptsView.searchTerm().trim().toLowerCase();
+      if (!searchTerm) return state.receipts();
+
+      const terms = searchTerm
+        .split(',')
+        .map((term) => term.trim())
+        .filter(Boolean);
+      return state
         .receipts()
-        .flatMap((receipt) =>
-          receipt.products.map(
-            (product) => new ReceiptsProductDomain(receipt, product),
+        .filter((receipt) =>
+          terms.some(
+            (term) =>
+              receipt.provider?.toLowerCase().includes(term) ||
+              receipt.products.some((product) =>
+                product.name.toLowerCase().includes(term),
+              ),
           ),
-        ),
-    );
-    const availableProducts = computed(() =>
-      productDomain().filter((product) => {
-        const searchTerm = state.receiptsProducts.searchTerm();
-        if (!searchTerm) return true;
-        return searchTerm
-          .toLowerCase()
-          .split(',')
-          .map((term) => term.trim())
-          .filter(Boolean)
-          .some((term) => product.name.toLowerCase().includes(term));
-      }),
-    );
-    return {
-      productDomain,
-      availableProducts,
-      productPriceTrendChart: computed(() =>
-        ProductPriceTrendChartUtils.getChart(availableProducts()),
-      ),
-    };
-  }),
+        );
+    }),
+  })),
   withMethods((state) => ({
     setReceipts(receipts: ReceiptDomain[]): void {
       patchState(state, { receipts });
@@ -72,12 +62,12 @@ export const ReceiptsStore = signalStore(
     },
     setSearchTerm(searchTerm: string): void {
       patchState(state, (current) => ({
-        receiptsProducts: { ...current.receiptsProducts, searchTerm },
+        receiptsView: { ...current.receiptsView, searchTerm },
       }));
     },
-    setProductsViewMode(viewMode: State['receiptsProducts']['viewMode']): void {
+    setReceiptsViewMode(viewMode: State['receiptsView']['viewMode']): void {
       patchState(state, (current) => ({
-        receiptsProducts: { ...current.receiptsProducts, viewMode },
+        receiptsView: { ...current.receiptsView, viewMode },
       }));
     },
   })),

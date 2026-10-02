@@ -30,7 +30,7 @@ export class ReceiptsEffects {
           ReceiptsActions.setReceiptsSuccess,
           ReceiptsActions.dateRangeChanged,
           ReceiptsActions.searchTermChanged,
-          ReceiptsActions.productsViewModeChanged,
+          ReceiptsActions.receiptsViewModeChanged,
         ),
         tap((action) => {
           if ('receipts' in action)
@@ -40,7 +40,7 @@ export class ReceiptsEffects {
           if ('searchTerm' in action)
             this.receiptsStore.setSearchTerm(action.searchTerm);
           if ('viewMode' in action)
-            this.receiptsStore.setProductsViewMode(action.viewMode);
+            this.receiptsStore.setReceiptsViewMode(action.viewMode);
         }),
       ),
     { dispatch: false },

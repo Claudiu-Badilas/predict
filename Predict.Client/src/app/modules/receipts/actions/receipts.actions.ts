@@ -18,13 +18,12 @@ export const dateRangeChanged = createAction(
   props<{ startDate: Date; endDate: Date }>(),
 );
 
-// Receipts Products
 export const searchTermChanged = createAction(
-  '[Receipts Products] Search Term Changed',
+  '[Receipts] Search Term Changed',
   props<{ searchTerm: string }>(),
 );
 
-export const productsViewModeChanged = createAction(
-  '[Receipts Products] View Mode Changed',
-  props<{ viewMode: 'all' | 'monthly' | 'yearly' | 'receipts' }>(),
+export const receiptsViewModeChanged = createAction(
+  '[Receipts] View Mode Changed',
+  props<{ viewMode: 'all' | 'monthly' | 'yearly' }>(),
 );

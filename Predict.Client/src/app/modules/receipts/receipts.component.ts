@@ -29,8 +29,8 @@ export class ReceiptsComponent {
   private readonly receiptsStore = inject(ReceiptsStore);
   startDate = this.receiptsStore.startDate;
   endDate = this.receiptsStore.endDate;
-  viewMode = this.receiptsStore.receiptsProducts.viewMode;
-  receipts = this.receiptsStore.availableProducts;
+  viewMode = this.receiptsStore.receiptsView.viewMode;
+  receipts = this.receiptsStore.availableReceipts;
 
   minDate = new Date('2016-01-01');
   now = new Date();
@@ -52,9 +52,8 @@ export class ReceiptsComponent {
 
   onToggle(value: string): void {
     this.store.dispatch(
-      ReceiptsActions.productsViewModeChanged({
-        viewMode: value.toLowerCase() as
-          'all' | 'monthly' | 'yearly' | 'receipts',
+      ReceiptsActions.receiptsViewModeChanged({
+        viewMode: value.toLowerCase() as 'all' | 'monthly' | 'yearly',
       }),
     );
   }
@@ -62,7 +61,6 @@ export class ReceiptsComponent {
   getSelectedViewLabel(): string {
     if (this.viewMode() === 'all') return 'All';
     if (this.viewMode() === 'yearly') return 'Yearly';
-    if (this.viewMode() === 'receipts') return 'Receipts';
     return 'Monthly';
   }
 

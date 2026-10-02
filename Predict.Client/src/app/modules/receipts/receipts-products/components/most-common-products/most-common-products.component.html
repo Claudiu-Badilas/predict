@@ -1,794 +1,186 @@
-<div class="products-analytics mt-2">
-  <div class="summary-grid">
-    <div class="summary-row">
-      <div class="summary-section stat-item stat-item--green">
-        <span class="stat-item__label">Total</span>
-        <span class="stat-item__value positive">
-          {{ totalRevenue() | numberFormat: '0.00' }} RON
-        </span>
-      </div>
-
-      <div class="summary-section stat-item stat-item--blue">
-        <span class="stat-item__label">Frequency</span>
-        <span class="stat-item__value">
-          {{ receiptFrequency() }} receipts
-        </span>
-      </div>
+<div class="receipt-view">
+  <div class="receipt-summary" aria-label="Receipt totals">
+    <div class="summary-item">
+      <span class="summary-label">Total</span>
+      <strong class="summary-value">
+        {{ totalRevenue() | numberFormat: '0.00' }} RON
+      </strong>
+    </div>
+    <div class="summary-item">
+      <span class="summary-label">Receipts</span>
+      <strong class="summary-value">{{ receiptFrequency() }}</strong>
     </div>
   </div>
 
-  <div class="table-container">
-    <div class="period-view">
-      @if (viewMode() === 'all') {
-        <!-- All View - Modern Card Design -->
-        <div class="receipts-container">
-          <div class="desktop-view m-2">
-            <div class="receipts-grid">
-              <div class="receipt-card expanded">
-                <div class="card-expanded">
-                  <div class="products-section">
-                    <div scrollable class="products-table-wrapper">
-                      <table class="products-table">
-                        <thead>
-                          <tr>
-                            <th>Provider</th>
-                            <th>Last Purchase</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @for (
-                            item of getAllGroupedProducts();
-                            let first = $first;
-                            track item.id
-                          ) {
-                            <tr class="product-row">
-                              <td class="provider-cell">
-                                <div
-                                  class="provider-icon-small"
-                                  [style.background]="
-                                    getProviderGradient(item.provider)
-                                  "
-                                >
-                                  <span>{{
-                                    getProviderInitial(item.provider)
-                                  }}</span>
-                                </div>
-                              </td>
-                              <td class="date-cell">
-                                {{ formatDay(item.latestDate) }}
-                              </td>
-                              <td class="product-name-cell">
-                                <div class="product-name">
-                                  {{ item.count }}x {{ item.name }}
-                                </div>
-                              </td>
-                              <td class="product-quantity">
-                                <span class="quantity-badge">{{
-                                  item.totalQuantity
-                                }}</span>
-                              </td>
-                              <td class="product-total">
-                                <strong
-                                  >{{
-                                    item.totalRevenue | numberFormat: '0.00'
-                                  }}
-                                  RON</strong
-                                >
-                              </td>
-                              <td class="actions-cell">
-                                @if (hasPriceTrendChart(item.name)) {
-                                  <button
-                                    class="action-btn chart-btn"
-                                    (click)="openProductModal(item)"
-                                    title="View price trend chart"
-                                  >
-                                    <svg
-                                      width="16"
-                                      height="16"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      stroke-width="2"
-                                    >
-                                      <path d="M4 20h16M6 16l4-4 4 4 4-4" />
-                                      <path d="M18 12l-4-4-4 4-4-4" />
-                                    </svg>
-                                    <span>Chart</span>
-                                  </button>
-                                }
-                              </td>
-                            </tr>
-                          }
+  <ng-template #receiptRow let-receipt="receipt">
+    <article
+      class="receipt-row"
+      [class.receipt-row--expanded]="expandedReceiptId() === receipt.id"
+    >
+      <button
+        type="button"
+        class="receipt-row__main"
+        (click)="toggleReceipt(receipt.id)"
+        [attr.aria-expanded]="expandedReceiptId() === receipt.id"
+        [attr.aria-controls]="'receipt-details-' + receipt.id"
+      >
+        <span class="receipt-mark" aria-hidden="true">
+          {{ providerInitial(receipt.provider) }}
+        </span>
+        <span class="receipt-copy">
+          <span class="receipt-heading">
+            <strong class="receipt-provider">
+              {{ receipt.provider || 'Receipt' }}
+            </strong>
+            <span class="receipt-count">
+              {{ receipt.products.length }} items
+            </span>
+          </span>
+          <span class="receipt-description">
+            {{ productSummary(receipt) }}
+          </span>
+        </span>
+        <span class="receipt-date">
+          @if (receipt.date) {
+            <strong>{{ receipt.date | date: 'dd' }}</strong>
+            <span>{{ receipt.date | date: 'MMM yyyy' }}</span>
+          } @else {
+            <span>Date unavailable</span>
+          }
+        </span>
+        <strong class="receipt-total">
+          {{ receiptTotal(receipt) | numberFormat: '0.00' }}
+          <span>{{ receipt.currency || 'RON' }}</span>
+        </strong>
+      </button>
 
-                          @if (!getAllGroupedProducts().length) {
-                            <tr>
-                              <td colspan="6" class="empty-cell">
-                                No products available
-                              </td>
-                            </tr>
-                          }
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      @if (expandedReceiptId() === receipt.id) {
+        <div
+          class="receipt-details"
+          [id]="'receipt-details-' + receipt.id"
+          role="region"
+          [attr.aria-label]="receipt.provider + ' receipt details'"
+        >
+          <div class="receipt-details__heading">
+            <span>Product</span>
+            <span>Quantity</span>
+            <span>Unit price</span>
+            <span>Line total</span>
           </div>
-
-          <!-- Mobile View for All -->
-          <div class="mobile-view">
-            <div class="mobile-card expanded">
-              <div class="mobile-card-body">
-                <div class="mobile-products-list">
-                  @for (item of getAllGroupedProducts(); track item.id) {
-                    <div class="mobile-product-item">
-                      <div class="mobile-product-header">
-                        <div class="product-header-left">
-                          <div
-                            class="provider-icon-small-mobile"
-                            [style.background]="
-                              getProviderGradient(item.provider)
-                            "
-                          >
-                            <span>{{ getProviderInitial(item.provider) }}</span>
-                          </div>
-                          <span class="product-name"
-                            >{{ item.count }}x {{ item.name }}</span
-                          >
-                        </div>
-                        <div class="mobile-actions">
-                          <span class="product-quantity-badge"
-                            >Qty: {{ item.totalQuantity }}</span
-                          >
-                          @if (hasPriceTrendChart(item.name)) {
-                            <button
-                              class="action-btn-mobile chart-btn"
-                              (click)="openProductModal(item)"
-                            >
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                              >
-                                <path d="M4 20h16M6 16l4-4 4 4 4-4" />
-                                <path d="M18 12l-4-4-4 4-4-4" />
-                              </svg>
-                            </button>
-                          }
-                        </div>
-                      </div>
-                      <div class="mobile-product-details">
-                        <div class="detail-item">
-                          <span class="detail-value">{{
-                            formatDay(item.latestDate)
-                          }}</span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-value total"
-                            >{{
-                              item.totalRevenue | numberFormat: '0.00'
-                            }}
-                            RON</span
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  }
-
-                  @if (!getAllGroupedProducts().length) {
-                    <div class="empty-mobile">No products available</div>
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      } @else if (viewMode() === 'receipts') {
-        <!-- Receipts View with Modern Styling -->
-        <div class="receipts-container">
-          <!-- Desktop View -->
-          <div class="desktop-view m-2">
-            <div class="receipts-grid">
-              @for (receipt of receiptGroups(); track receipt.id) {
-                <div
-                  class="receipt-card"
-                  [class.expanded]="expandedReceiptId() === receipt.id"
-                >
-                  <div class="card-header" (click)="toggleReceipt(receipt.id)">
-                    <div class="header-left">
-                      <div
-                        class="provider-icon"
-                        [style.background]="receipt.providerColor"
-                      >
-                        <span class="provider-initial">{{
-                          receipt.providerIcon
-                        }}</span>
-                      </div>
-                      <div class="provider-details">
-                        {{ receipt.provider }}
-                      </div>
-                      <div class="receipt-date-small">
-                        {{ receipt.date | date: 'dd MMM yyyy' }}
-                      </div>
-                      <span class="products-count">{{
-                        receipt.products.length
-                      }}</span>
-                    </div>
-                    <div class="header-right">
-                      <div class="price-summary">
-                        <div class="total-price">
-                          <span class="price-value"
-                            >{{
-                              receipt.totalPrice | numberFormat: '0.00'
-                            }}
-                            RON</span
-                          >
-                        </div>
-                        @if (receipt.totalDiscount) {
-                          <div class="discount-badge">
-                            <span
-                              >-{{
-                                receipt.totalDiscount | numberFormat: '0.00'
-                              }}
-                              RON</span
-                            >
-                          </div>
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  @if (expandedReceiptId() === receipt.id) {
-                    <div class="card-expanded">
-                      <div class="products-section">
-                        <div class="products-table-wrapper">
-                          <table class="products-table">
-                            <thead>
-                              <tr>
-                                <th>Provider</th>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th>Actions</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @for (
-                                product of receipt.products;
-                                track product.id
-                              ) {
-                                <tr class="product-row">
-                                  <td class="provider-cell">
-                                    <div
-                                      class="provider-icon-small"
-                                      [style.background]="receipt.providerColor"
-                                    >
-                                      <span>{{ receipt.providerIcon }}</span>
-                                    </div>
-                                  </td>
-                                  <td class="product-name-cell">
-                                    <div class="product-name">
-                                      {{ product.name }}
-                                    </div>
-                                  </td>
-                                  <td class="product-price">
-                                    {{
-                                      product.price ?? 0 | numberFormat: '0.00'
-                                    }}
-                                    RON
-                                  </td>
-                                  <td class="product-quantity">
-                                    <span class="quantity-badge"
-                                      >x{{ product.quantity }}</span
-                                    >
-                                  </td>
-                                  <td class="product-total">
-                                    <strong
-                                      >{{
-                                        (product.price ?? 0) *
-                                          (product.quantity ?? 0)
-                                          | numberFormat: '0.00'
-                                      }}
-                                      RON</strong
-                                    >
-                                  </td>
-                                  <td class="actions-cell">
-                                    @if (hasPriceTrendChart(product.name)) {
-                                      <button
-                                        class="action-btn chart-btn"
-                                        (click)="
-                                          openProductModalFromReceipt(
-                                            product,
-                                            receipt
-                                          )
-                                        "
-                                        title="View price trend chart"
-                                      >
-                                        <svg
-                                          width="16"
-                                          height="16"
-                                          viewBox="0 0 24 24"
-                                          fill="none"
-                                          stroke="currentColor"
-                                          stroke-width="2"
-                                        >
-                                          <path d="M4 20h16M6 16l4-4 4 4 4-4" />
-                                          <path d="M18 12l-4-4-4 4-4-4" />
-                                        </svg>
-                                        <span>Chart</span>
-                                      </button>
-                                    }
-                                  </td>
-                                </tr>
-                              }
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-          </div>
-
-          <!-- Mobile View -->
-          <div class="mobile-view">
-            @for (receipt of receiptGroups(); track receipt.id) {
-              <div class="mobile-card">
-                <div
-                  class="mobile-card-header"
-                  (click)="toggleReceipt(receipt.id)"
-                >
-                  <div class="mobile-header-left">
-                    <div
-                      class="provider-initial"
-                      [style.background]="receipt.providerColor"
-                    >
-                      {{ receipt.providerIcon }}
-                    </div>
-                    <div class="mobile-provider-info">
-                      <div class="mobile-provider-name">
-                        {{ receipt.provider }}
-                      </div>
-                      <div class="mobile-date">
-                        {{ receipt.date | date: 'dd MMM yyyy' }}
-                      </div>
-                    </div>
-                    <span class="products-count">{{
-                      receipt.products.length
-                    }}</span>
-                  </div>
-                  <div class="mobile-header-right">
-                    <div class="mobile-total">
-                      <span class="total-value"
-                        >{{
-                          receipt.totalPrice | numberFormat: '0.00'
-                        }}
-                        RON</span
-                      >
-                    </div>
-                    @if (receipt.totalDiscount) {
-                      <div class="mobile-discount">
-                        -{{ receipt.totalDiscount | numberFormat: '0.00' }}
-                        RON
-                      </div>
-                    }
-                  </div>
-                </div>
-
-                @if (expandedReceiptId() === receipt.id) {
-                  <div class="mobile-card-body">
-                    <div class="mobile-products-list">
-                      @for (product of receipt.products; track product.id) {
-                        <div class="mobile-product-item">
-                          <div class="mobile-product-header">
-                            <div class="product-header-left">
-                              <div
-                                class="provider-icon-small-mobile"
-                                [style.background]="receipt.providerColor"
-                              >
-                                <span>{{ receipt.providerIcon }}</span>
-                              </div>
-                              <span class="product-name">{{
-                                product.name
-                              }}</span>
-                            </div>
-                            <div class="mobile-actions">
-                              <span class="product-quantity-badge"
-                                >x{{ product.quantity }}</span
-                              >
-                              @if (hasPriceTrendChart(product.name)) {
-                                <button
-                                  class="action-btn-mobile chart-btn"
-                                  (click)="
-                                    openProductModalFromReceipt(
-                                      product,
-                                      receipt
-                                    )
-                                  "
-                                >
-                                  <svg
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                  >
-                                    <path d="M4 20h16M6 16l4-4 4 4 4-4" />
-                                    <path d="M18 12l-4-4-4 4-4-4" />
-                                  </svg>
-                                </button>
-                              }
-                            </div>
-                          </div>
-                          <div class="mobile-product-details">
-                            <div class="detail-item">
-                              <span class="detail-label">Price</span>
-                              <span class="detail-value"
-                                >{{
-                                  product.price ?? 0 | numberFormat: '0.00'
-                                }}
-                                RON</span
-                              >
-                            </div>
-                            <div class="detail-item">
-                              <span class="detail-label">Total</span>
-                              <span class="detail-value total"
-                                >{{
-                                  (product.price ?? 0) * (product.quantity ?? 0)
-                                    | numberFormat: '0.00'
-                                }}
-                                RON</span
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        </div>
-
-        @if (!receiptGroups().length) {
-          <div class="empty-state">No receipts available</div>
-        }
-      } @else {
-        <!-- Monthly/Yearly View - Modern Card Design -->
-        <div class="receipts-container">
-          <div class="desktop-view m-2">
-            <div class="receipts-grid">
-              @for (period of currentPeriods(); track period.id) {
-                <div
-                  class="receipt-card"
-                  [class.expanded]="expandedPeriodId() === period.id"
-                >
-                  <div class="card-header" (click)="togglePeriod(period.id)">
-                    <div class="header-left">
-                      <div class="provider-details">
-                        {{ period.title }}
-                      </div>
-                      <span class="products-count">{{
-                        period.multiple.length
-                      }}</span>
-                    </div>
-                    <div class="header-right">
-                      <div class="price-summary">
-                        <div class="total-price">
-                          <span class="price-value"
-                            >{{
-                              period.totalRevenue | numberFormat: '0.00'
-                            }}
-                            RON</span
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  @if (expandedPeriodId() === period.id) {
-                    <div class="card-expanded">
-                      <div class="products-section">
-                        <div class="products-table-wrapper">
-                          <table class="products-table">
-                            <thead>
-                              <tr>
-                                <th>Provider</th>
-                                <th>Last Purchase</th>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th>Actions</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @for (item of period.multiple; track item.id) {
-                                <tr class="product-row">
-                                  <td class="provider-cell">
-                                    <div
-                                      class="provider-icon-small"
-                                      [style.background]="
-                                        getProviderGradient(item.provider)
-                                      "
-                                    >
-                                      <span>{{
-                                        getProviderInitial(item.provider)
-                                      }}</span>
-                                    </div>
-                                  </td>
-                                  <td class="date-cell">
-                                    {{ formatDay(item.latestDate) }}
-                                  </td>
-                                  <td class="product-name-cell">
-                                    <div class="product-name">
-                                      {{ item.count }}x {{ item.name }}
-                                    </div>
-                                  </td>
-                                  <td class="product-quantity">
-                                    <span class="quantity-badge">{{
-                                      item.totalQuantity
-                                    }}</span>
-                                  </td>
-                                  <td class="product-total">
-                                    <strong
-                                      >{{
-                                        item.totalRevenue | numberFormat: '0.00'
-                                      }}
-                                      RON</strong
-                                    >
-                                  </td>
-                                  <td class="actions-cell">
-                                    @if (hasPriceTrendChart(item.name)) {
-                                      <button
-                                        class="action-btn chart-btn"
-                                        (click)="openProductModal(item)"
-                                        title="View price trend chart"
-                                      >
-                                        <svg
-                                          width="16"
-                                          height="16"
-                                          viewBox="0 0 24 24"
-                                          fill="none"
-                                          stroke="currentColor"
-                                          stroke-width="2"
-                                        >
-                                          <path d="M4 20h16M6 16l4-4 4 4 4-4" />
-                                          <path d="M18 12l-4-4-4 4-4-4" />
-                                        </svg>
-                                        <span>Chart</span>
-                                      </button>
-                                    }
-                                  </td>
-                                </tr>
-                              }
-
-                              @if (!period.multiple.length) {
-                                <tr>
-                                  <td colspan="6" class="empty-cell">
-                                    No products this period
-                                  </td>
-                                </tr>
-                              }
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-          </div>
-
-          <!-- Mobile View for Monthly/Yearly -->
-          <div class="mobile-view">
-            @for (period of currentPeriods(); track period.id) {
-              <div class="mobile-card">
-                <div
-                  class="mobile-card-header"
-                  (click)="togglePeriod(period.id)"
-                >
-                  <div class="mobile-header-left">
-                    <div class="mobile-provider-info">
-                      <div class="mobile-date">{{ period.title }}</div>
-                    </div>
-                    <span class="products-count">{{
-                      period.multiple.length
-                    }}</span>
-                  </div>
-                  <div class="mobile-header-right">
-                    <div class="mobile-total">
-                      <span class="total-value"
-                        >{{
-                          period.totalRevenue | numberFormat: '0.00'
-                        }}
-                        RON</span
-                      >
-                    </div>
-                  </div>
-                </div>
-
-                @if (expandedPeriodId() === period.id) {
-                  <div class="mobile-card-body">
-                    <div class="mobile-products-list">
-                      @for (item of period.multiple; track item.id) {
-                        <div class="mobile-product-item">
-                          <div class="mobile-product-header">
-                            <div class="product-header-left">
-                              <div
-                                class="provider-icon-small-mobile"
-                                [style.background]="
-                                  getProviderGradient(item.provider)
-                                "
-                              >
-                                <span>{{
-                                  getProviderInitial(item.provider)
-                                }}</span>
-                              </div>
-                              <span class="product-name"
-                                >{{ item.count }}x {{ item.name }}</span
-                              >
-                            </div>
-                            <div class="mobile-actions">
-                              <span class="product-quantity-badge"
-                                >Qty: {{ item.totalQuantity }}</span
-                              >
-                              @if (hasPriceTrendChart(item.name)) {
-                                <button
-                                  class="action-btn-mobile chart-btn"
-                                  (click)="openProductModal(item)"
-                                >
-                                  <svg
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                  >
-                                    <path d="M4 20h16M6 16l4-4 4 4 4-4" />
-                                    <path d="M18 12l-4-4-4 4-4-4" />
-                                  </svg>
-                                </button>
-                              }
-                            </div>
-                          </div>
-                          <div class="mobile-product-details">
-                            <div class="detail-item">
-                              <span class="detail-value">{{
-                                formatDay(item.latestDate)
-                              }}</span>
-                            </div>
-                            <div class="detail-item">
-                              <span class="detail-value total"
-                                >{{
-                                  item.totalRevenue | numberFormat: '0.00'
-                                }}
-                                RON</span
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      }
-
-                      @if (!period.multiple.length) {
-                        <div class="empty-mobile">No products this period</div>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        </div>
-
-        @if (!currentPeriods().length) {
-          <div class="empty-state">No product data available</div>
-        }
-      }
-    </div>
-  </div>
-</div>
-
-<!-- Product Detail Modal -->
-@if (isModalOpen()) {
-  <div class="modal-overlay" (click)="closeModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>{{ selectedProduct()?.name }} - Price Trend</h3>
-        <button class="modal-close" (click)="closeModal()">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="product-summary">
-          <div class="summary-item">
-            <span class="label">Total Purchases</span>
-            <span class="value">{{ getProductTotalPurchases() }}</span>
-          </div>
-          <div class="summary-item">
-            <span class="label">Total Quantity</span>
-            <span class="value">{{ getProductTotalQuantity() }}</span>
-          </div>
-          <div class="summary-item">
-            <span class="label">Total</span>
-            <span class="value total"
-              >{{ getProductTotalRevenue() | numberFormat: '0.00' }} RON</span
-            >
-          </div>
-        </div>
-        <div class="chart-container">
-          <!-- Performance Optimized Chart Loading -->
-          @defer (on viewport; prefetch on idle) {
-            <p-highcharts-wrapper
-              class="modal-chart-wrapper"
-              [chartOptions]="getModalChartOptions()"
-            />
-          } @placeholder {
-            <div
-              class="chart-placeholder modal-placeholder"
-              style="
-                height: 300px;
-                background: #f3f4f6;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <span style="font-size: 14px; color: #9ca3af"
-                >Loading chart...</span
-              >
-            </div>
-          } @loading (minimum 500ms) {
-            <div
-              class="chart-placeholder modal-placeholder"
-              style="
-                height: 300px;
-                background: #f3f4f6;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <div
-                class="loading-spinner"
-                style="
-                  width: 30px;
-                  height: 30px;
-                  border: 3px solid #e5e7eb;
-                  border-top-color: #3b82f6;
-                  border-radius: 50%;
-                  animation: spin 0.8s linear infinite;
-                "
-              ></div>
+          @for (product of receipt.products; track product.id) {
+            <div class="receipt-product">
+              <strong class="receipt-product__name">{{ product.name }}</strong>
+              <span class="receipt-product__quantity">
+                {{ product.quantity }} {{ product.quantityType }}
+              </span>
+              <span class="receipt-product__price">
+                {{ product.price ?? 0 | numberFormat: '0.00' }}
+                {{ receipt.currency || 'RON' }}
+              </span>
+              <strong class="receipt-product__total">
+                {{
+                  (product.price ?? 0) * (product.quantity ?? 0)
+                    | numberFormat: '0.00'
+                }}
+                {{ receipt.currency || 'RON' }}
+              </strong>
             </div>
           }
+          @if (!receipt.products.length) {
+            <div class="receipt-empty">No product details available.</div>
+          }
+          @if (receipt.totalDiscount > 0) {
+            <div class="receipt-adjustment">
+              <span>Discount</span>
+              <strong>
+                -{{ receipt.totalDiscount | numberFormat: '0.00' }}
+                {{ receipt.currency || 'RON' }}
+              </strong>
+            </div>
+          }
+          <div class="receipt-details__total">
+            <span>Receipt total</span>
+            <strong>
+              {{ receiptTotal(receipt) | numberFormat: '0.00' }}
+              {{ receipt.currency || 'RON' }}
+            </strong>
+          </div>
         </div>
-      </div>
+      }
+    </article>
+  </ng-template>
+
+  @if (viewMode() === 'all') {
+    <div class="receipt-feed" aria-label="All receipts">
+      @for (receipt of allReceipts(); track receipt.id) {
+        <ng-container
+          *ngTemplateOutlet="receiptRow; context: { receipt: receipt }"
+        />
+      }
     </div>
-  </div>
-}
+    @if (!allReceipts().length) {
+      <div class="empty-state">No receipts available</div>
+    }
+  } @else {
+    <div class="receipt-periods">
+      @for (period of currentPeriods(); track period.id) {
+        <section class="receipt-period">
+          <button
+            type="button"
+            class="period-header"
+            (click)="togglePeriod(period.id)"
+            [attr.aria-expanded]="expandedPeriodId() === period.id"
+            [attr.aria-controls]="'period-content-' + period.id"
+          >
+            <span class="period-title">{{ period.title }}</span>
+            <span class="period-count"
+              >{{ period.receipts.length }} receipts</span
+            >
+            <strong class="period-total">
+              {{ period.total | numberFormat: '0.00' }} RON
+            </strong>
+            <svg
+              class="period-chevron"
+              [class.period-chevron--expanded]="
+                expandedPeriodId() === period.id
+              "
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 6l4 4 4-4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          @if (expandedPeriodId() === period.id) {
+            <div
+              class="period-content"
+              [id]="'period-content-' + period.id"
+              role="region"
+              [attr.aria-label]="period.title + ' receipt details'"
+            >
+              <div class="receipt-feed">
+                @for (receipt of period.receipts; track receipt.id) {
+                  <ng-container
+                    *ngTemplateOutlet="
+                      receiptRow;
+                      context: { receipt: receipt }
+                    "
+                  />
+                }
+              </div>
+            </div>
+          }
+        </section>
+      }
+    </div>
+    @if (!currentPeriods().length) {
+      <div class="empty-state">No receipts available</div>
+    }
+  }
+</div>
