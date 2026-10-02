@@ -23,7 +23,7 @@ export interface State {
 
 const initialState: State = {
   receipts: [],
-  startDate: DateUtils.getStartOfTheYear({ subtractYears: 1 }),
+  startDate: new Date('2019-01-01'),
   endDate: new Date(),
   receiptsView: { searchTerm: '', viewMode: 'all' },
 };
