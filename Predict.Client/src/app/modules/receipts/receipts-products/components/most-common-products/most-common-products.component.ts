@@ -16,6 +16,9 @@ interface ReceiptPeriod {
   total: number;
 }
 
+export type ReceiptSortMode =
+  'newest' | 'oldest' | 'amount-asc' | 'amount-desc';
+
 @Component({
   selector: 'p-most-common-products',
   imports: [CommonModule, NumberFormatPipe],
@@ -26,6 +29,7 @@ interface ReceiptPeriod {
 export class MostCommonProductsComponent {
   receipts = input<ReceiptDomain[]>([]);
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
+  sortMode = input<ReceiptSortMode>('newest');
   expandedPeriodId = signal<string | null>(null);
   expandedReceiptId = signal<number | null>(null);
 
@@ -128,9 +132,19 @@ export class MostCommonProductsComponent {
   }
 
   private sortReceipts(receipts: ReceiptDomain[]): ReceiptDomain[] {
-    return [...receipts].sort(
-      (first, second) =>
-        (second.date?.getTime() ?? 0) - (first.date?.getTime() ?? 0),
-    );
+    const mode = this.sortMode();
+    return [...receipts].sort((first, second) => {
+      if (mode === 'amount-asc' || mode === 'amount-desc') {
+        const amountDifference =
+          this.receiptTotal(first) - this.receiptTotal(second);
+        if (amountDifference !== 0) {
+          return mode === 'amount-asc' ? amountDifference : -amountDifference;
+        }
+      }
+
+      const dateDifference =
+        (second.date?.getTime() ?? 0) - (first.date?.getTime() ?? 0);
+      return mode === 'oldest' ? -dateDifference : dateDifference;
+    });
   }
 }

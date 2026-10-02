@@ -1,4 +1,9 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
@@ -9,7 +14,10 @@ import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-b
 import { SearchInputComponent } from 'src/app/shared/components/search-input/search-input.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import { ReceiptsSettingsComponent } from './components/receipts-settings/receipts-settings.component';
-import { MostCommonProductsComponent } from './receipts-products/components/most-common-products/most-common-products.component';
+import {
+  MostCommonProductsComponent,
+  ReceiptSortMode,
+} from './receipts-products/components/most-common-products/most-common-products.component';
 
 @Component({
   selector: 'p-receipts',
@@ -31,6 +39,7 @@ export class ReceiptsComponent {
   endDate = this.receiptsStore.endDate;
   viewMode = this.receiptsStore.receiptsView.viewMode;
   receipts = this.receiptsStore.availableReceipts;
+  receiptSortMode = signal<ReceiptSortMode>('newest');
 
   minDate = new Date('2016-01-01');
   now = new Date();
@@ -55,6 +64,18 @@ export class ReceiptsComponent {
       ReceiptsActions.receiptsViewModeChanged({
         viewMode: value.toLowerCase() as 'all' | 'monthly' | 'yearly',
       }),
+    );
+  }
+
+  toggleDateSort(): void {
+    this.receiptSortMode.update((mode) =>
+      mode === 'newest' ? 'oldest' : 'newest',
+    );
+  }
+
+  toggleAmountSort(): void {
+    this.receiptSortMode.update((mode) =>
+      mode === 'amount-desc' ? 'amount-asc' : 'amount-desc',
     );
   }
 
