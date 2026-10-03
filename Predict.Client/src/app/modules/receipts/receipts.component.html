@@ -7,7 +7,10 @@
     title="Receipt insights"
     (click)="openInsights()"
   >
-    <img src="assets/icons/pie-chart.svg" alt="" aria-hidden="true" />
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5m0-8h.01" />
+    </svg>
   </button>
 </p-top-bar>
 
@@ -116,6 +119,7 @@
   <div class="insights-backdrop" (click)="closeInsights()">
     <section
       class="insights-story"
+      [attr.data-tone]="activeStory() % 4"
       role="dialog"
       aria-modal="true"
       aria-label="Receipt insights stories"
@@ -138,7 +142,10 @@
       <header class="insights-story__header">
         <span class="insights-story__identity">
           <span class="insights-story__mark" aria-hidden="true">
-            <img src="assets/icons/pie-chart.svg" alt="" />
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 11v5m0-8h.01" />
+            </svg>
           </span>
           <span>Receipt insights</span>
         </span>
@@ -184,6 +191,24 @@
           {{ insightStories()[activeStory()].value }}
         </strong>
         <p>{{ insightStories()[activeStory()].detail }}</p>
+        @if (insightStories()[activeStory()].monthlySpend; as monthlySpend) {
+          <div class="insights-monthly" aria-label="Monthly spending breakdown">
+            @for (month of monthlySpend; track month.label) {
+              <div class="insights-monthly__row">
+                <div class="insights-monthly__labels">
+                  <span>{{ month.label }}</span>
+                  <strong>{{ month.amount }}</strong>
+                </div>
+                <div class="insights-monthly__track" aria-hidden="true">
+                  <span
+                    class="insights-monthly__bar"
+                    [style.width.%]="month.barWidth"
+                  ></span>
+                </div>
+              </div>
+            }
+          </div>
+        }
         <span class="insights-story__index">
           {{ activeStory() + 1 }} / {{ insightStories().length }}
         </span>
