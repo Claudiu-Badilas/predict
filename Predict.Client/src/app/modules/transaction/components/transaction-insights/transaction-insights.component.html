@@ -13,9 +13,17 @@
 
 <ng-template #storyOverlay>
   @if (showInsights()) {
-    <div class="transactions-insights-backdrop" (click)="closeInsights()">
+    <div
+      class="transactions-insights-backdrop"
+      (click)="closeInsights()"
+      (pointerdown)="pauseStory($event)"
+      (pointerup)="resumeStory()"
+      (pointercancel)="resumeStory(true)"
+      (pointerleave)="resumeStory(true)"
+    >
       <section
         class="transactions-insights-story"
+        [class.transactions-insights-story--paused]="isStoryPaused()"
         [attr.data-tone]="activeStory() % 4"
         role="dialog"
         aria-modal="true"
@@ -62,7 +70,7 @@
             class="transactions-insights-tap transactions-insights-tap--previous"
             aria-label="Previous insight"
             [disabled]="activeStory() === 0"
-            (click)="previousStory()"
+            (click)="previousStory(true)"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="m15 18-6-6 6-6" />
@@ -72,7 +80,7 @@
             type="button"
             class="transactions-insights-tap transactions-insights-tap--next"
             aria-label="Next insight"
-            (click)="nextStory()"
+            (click)="nextStory(true)"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="m9 18 6-6-6-6" />

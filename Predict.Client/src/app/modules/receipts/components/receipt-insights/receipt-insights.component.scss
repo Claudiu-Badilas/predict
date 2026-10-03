@@ -114,6 +114,10 @@
   animation: story-progress 5s linear forwards;
 }
 
+.insights-story--paused .insights-progress__segment--current::after {
+  animation-play-state: paused;
+}
+
 .insights-story__header,
 .insights-story__identity {
   display: flex;

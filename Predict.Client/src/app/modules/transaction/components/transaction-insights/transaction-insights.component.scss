@@ -110,6 +110,11 @@
   animation: transaction-story-progress 5s linear forwards;
 }
 
+.transactions-insights-story--paused
+  .transactions-insights-progress__segment--current::after {
+  animation-play-state: paused;
+}
+
 .transactions-insights-header,
 .transactions-insights-identity {
   display: flex;

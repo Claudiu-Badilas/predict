@@ -43,13 +43,19 @@ export class ReceiptInsightsComponent implements OnDestroy {
 
   showInsights = signal(false);
   activeStory = signal(0);
+  isStoryPaused = signal(false);
   insightStories = computed(() => this.createInsightStories(this.receipts()));
   private storyTimer: ReturnType<typeof setTimeout> | null = null;
   private overlayRef: OverlayRef | null = null;
+  private storyTimerDeadline = 0;
+  private remainingStoryTime = 5000;
+  private pointerHoldStartedAt = 0;
+  private suppressStoryTap = false;
 
   openInsights(): void {
     if (this.overlayRef?.hasAttached()) return;
     this.activeStory.set(0);
+    this.suppressStoryTap = false;
     this.showInsights.set(true);
     this.overlayRef = this.overlay.create({
       positionStrategy: this.overlay
@@ -70,24 +76,52 @@ export class ReceiptInsightsComponent implements OnDestroy {
 
   closeInsights(): void {
     this.clearStoryTimer();
+    this.isStoryPaused.set(false);
+    this.suppressStoryTap = false;
     this.showInsights.set(false);
     this.overlayRef?.dispose();
     this.overlayRef = null;
   }
 
-  previousStory(): void {
+  previousStory(fromTap = false): void {
+    if (fromTap && this.consumeSuppressedTap()) return;
     if (this.activeStory() === 0) return;
     this.activeStory.update((index) => index - 1);
     this.scheduleNextStory();
   }
 
-  nextStory(): void {
+  nextStory(fromTap = false): void {
+    if (fromTap && this.consumeSuppressedTap()) return;
     if (this.activeStory() >= this.insightStories().length - 1) {
       this.closeInsights();
       return;
     }
     this.activeStory.update((index) => index + 1);
     this.scheduleNextStory();
+  }
+
+  pauseStory(event: PointerEvent): void {
+    if (
+      !this.showInsights() ||
+      this.storyTimer === null ||
+      event.button !== 0
+    ) {
+      return;
+    }
+
+    this.suppressStoryTap = false;
+    this.pointerHoldStartedAt = performance.now();
+    this.remainingStoryTime = Math.max(0, this.storyTimerDeadline - Date.now());
+    this.clearStoryTimer();
+    this.isStoryPaused.set(true);
+  }
+
+  resumeStory(cancelled = false): void {
+    if (!this.isStoryPaused()) return;
+    this.suppressStoryTap =
+      !cancelled && performance.now() - this.pointerHoldStartedAt >= 250;
+    this.isStoryPaused.set(false);
+    this.startStoryTimer();
   }
 
   ngOnDestroy(): void {
@@ -105,7 +139,22 @@ export class ReceiptInsightsComponent implements OnDestroy {
 
   private scheduleNextStory(): void {
     this.clearStoryTimer();
-    this.storyTimer = setTimeout(() => this.nextStory(), 5000);
+    this.remainingStoryTime = 5000;
+    this.startStoryTimer();
+  }
+
+  private startStoryTimer(): void {
+    this.storyTimerDeadline = Date.now() + this.remainingStoryTime;
+    this.storyTimer = setTimeout(() => {
+      this.storyTimer = null;
+      this.nextStory();
+    }, this.remainingStoryTime);
+  }
+
+  private consumeSuppressedTap(): boolean {
+    if (!this.suppressStoryTap) return false;
+    this.suppressStoryTap = false;
+    return true;
   }
 
   private clearStoryTimer(): void {
