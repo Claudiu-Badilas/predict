@@ -620,9 +620,9 @@ button.period-header:hover {
   }
 
   .receipt-row__toggle {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: max-content max-content auto minmax(8px, 1fr) auto;
     grid-template-rows: auto auto;
-    gap: 1px 7px;
+    gap: 1px 5px;
   }
 
   .receipt-mark {
@@ -642,19 +642,25 @@ button.period-header:hover {
   }
 
   .receipt-heading {
-    grid-column: 1;
-    grid-row: 1;
-    flex-wrap: wrap;
-    gap: 4px;
+    display: contents;
   }
 
   .receipt-provider {
-    max-width: 100%;
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 110px;
     font-size: 0.8rem;
   }
 
+  .receipt-count {
+    grid-column: 3;
+    grid-row: 1;
+    padding: 2px 5px;
+    font-size: 0.6rem;
+  }
+
   .receipt-description {
-    grid-column: 1;
+    grid-column: 1 / -1;
     grid-row: 2;
     display: block;
     margin-top: 0;
@@ -667,11 +673,11 @@ button.period-header:hover {
     grid-column: 2;
     grid-row: 1;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 3px;
     margin: 0;
     font-size: 0.6rem;
-    text-align: right;
+    text-align: left;
   }
 
   .receipt-date strong {
@@ -679,8 +685,8 @@ button.period-header:hover {
   }
 
   .receipt-total {
-    grid-column: 2;
-    grid-row: 2;
+    grid-column: 5;
+    grid-row: 1;
     align-self: center;
     font-size: 0.74rem;
   }
