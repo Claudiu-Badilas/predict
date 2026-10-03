@@ -92,28 +92,74 @@
         </div>
 
         <div class="toggle-field sort-field--order">
-          <p-platform-toggle
-            class="choice-toggle"
-            [config]="{
-              type: 'toolbar',
-              options: ['Newest', 'Amount', 'Oldest'],
-              selected:
-                sortMode() === 'recent'
-                  ? 'Newest'
-                  : sortMode() === 'amount'
-                    ? 'Amount'
-                    : 'Oldest',
-              ariaLabel: 'Sort transactions',
-              fullWidth: true,
-            }"
-            (selectionChange)="
-              setSortModeFromToggle(
-                $event.toLowerCase() === 'newest'
-                  ? 'recent'
-                  : $event.toLowerCase()
-              )
-            "
-          />
+          <div
+            class="transaction-sort-controls"
+            role="group"
+            aria-label="Sort transactions"
+          >
+            <button
+              type="button"
+              class="transaction-sort-button"
+              [class.transaction-sort-button--active]="
+                sortMode() === 'recent' || sortMode() === 'oldest'
+              "
+              [attr.aria-pressed]="
+                sortMode() === 'recent' || sortMode() === 'oldest'
+              "
+              [attr.aria-label]="
+                sortMode() === 'oldest'
+                  ? 'Date sorted oldest first. Click to sort newest first.'
+                  : 'Date sorted newest first. Click to sort oldest first.'
+              "
+              [title]="
+                sortMode() === 'oldest' ? 'Oldest first' : 'Newest first'
+              "
+              (click)="toggleDateSort()"
+            >
+              <span>Date</span>
+              @if (sortMode() === 'oldest') {
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 13V3m0 0L4 7m4-4 4 4" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 3v10m0 0 4-4m-4 4-4-4" />
+                </svg>
+              }
+            </button>
+            <button
+              type="button"
+              class="transaction-sort-button"
+              [class.transaction-sort-button--active]="
+                sortMode() === 'amount-asc' || sortMode() === 'amount-desc'
+              "
+              [attr.aria-pressed]="
+                sortMode() === 'amount-asc' || sortMode() === 'amount-desc'
+              "
+              [attr.aria-label]="
+                sortMode() === 'amount-asc'
+                  ? 'Amount sorted ascending. Click to sort descending.'
+                  : 'Amount sorted descending. Click to sort ascending.'
+              "
+              [title]="
+                sortMode() === 'amount-asc'
+                  ? 'Amount ascending'
+                  : 'Amount descending'
+              "
+              (click)="toggleAmountSort()"
+            >
+              <span>Amount</span>
+              @if (sortMode() === 'amount-asc') {
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 13V3m0 0L4 7m4-4 4 4" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 3v10m0 0 4-4m-4 4-4-4" />
+                </svg>
+              }
+            </button>
+          </div>
         </div>
       </div>
 

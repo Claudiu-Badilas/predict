@@ -22,7 +22,7 @@ import { RangeSelectorComponent } from 'src/app/shared/components/date-range-pic
 import { DateRangePicker } from 'src/app/shared/components/date-range-picker/models/date-range-picker.model';
 import { PlatformToggleComponent } from 'src/app/shared/components/platform-toggle/platform-toggle.component';
 
-type TransactionSort = 'amount' | 'recent' | 'oldest';
+type TransactionSort = 'recent' | 'oldest' | 'amount-asc' | 'amount-desc';
 
 interface PeriodGroup {
   id: string;
@@ -243,13 +243,17 @@ export class MostCommonTransactionComponent {
       0;
 
     return [...transactions].sort((a, b) => {
-      if (this.sortMode() === 'amount') {
-        return Math.abs(b.amount ?? 0) - Math.abs(a.amount ?? 0);
+      const mode = this.sortMode();
+      if (mode === 'amount-asc' || mode === 'amount-desc') {
+        const amountDifference =
+          Math.abs(a.amount ?? 0) - Math.abs(b.amount ?? 0);
+        if (amountDifference !== 0) {
+          return mode === 'amount-asc' ? amountDifference : -amountDifference;
+        }
       }
-      if (this.sortMode() === 'oldest') {
-        return dateValue(a) - dateValue(b);
-      }
-      return dateValue(b) - dateValue(a);
+
+      const dateDifference = dateValue(b) - dateValue(a);
+      return mode === 'oldest' ? -dateDifference : dateDifference;
     });
   }
 
@@ -321,8 +325,15 @@ export class MostCommonTransactionComponent {
     this.scrollTransactionsToTop();
   }
 
-  setSortMode(sortMode: TransactionSort) {
-    this.sortMode.set(sortMode);
+  toggleDateSort(): void {
+    this.sortMode.update((mode) => (mode === 'oldest' ? 'recent' : 'oldest'));
+    this.scrollTransactionsToTop();
+  }
+
+  toggleAmountSort(): void {
+    this.sortMode.update((mode) =>
+      mode === 'amount-desc' ? 'amount-asc' : 'amount-desc',
+    );
     this.scrollTransactionsToTop();
   }
 
@@ -334,12 +345,6 @@ export class MostCommonTransactionComponent {
   setViewModeFromToggle(value: string): void {
     if (value === 'all' || value === 'monthly' || value === 'yearly') {
       this.setViewMode(value);
-    }
-  }
-
-  setSortModeFromToggle(value: string): void {
-    if (value === 'recent' || value === 'amount' || value === 'oldest') {
-      this.setSortMode(value);
     }
   }
 
