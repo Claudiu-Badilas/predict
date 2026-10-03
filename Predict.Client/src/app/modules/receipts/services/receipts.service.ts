@@ -9,8 +9,6 @@ import { LoanEncryptionKeyBase64 } from '../../loan/services/loan.service';
 import { ReceiptDomain } from '../models/receipts-domain.model';
 import { ReceiptDto } from '../models/receipts-dto.model';
 
-export const ReceiptsService_STORAGE_KEY = 'Receipts_Cache_May_2025';
-
 @Injectable({ providedIn: 'root' })
 export class ReceiptsService {
   constructor(
@@ -39,7 +37,7 @@ export class ReceiptsService {
                 ),
               ).pipe(
                 map((encoded) => {
-                  console.warn('🚀 ~ encoded', JSON.stringify(encoded));
+                  // console.warn('🚀 ~ encoded', JSON.stringify(encoded));
                   return dtos.map((dto) => new ReceiptDomain(dto));
                 }),
               ),

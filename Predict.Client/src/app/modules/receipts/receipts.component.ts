@@ -13,7 +13,6 @@ import { RangeSelectorComponent } from 'src/app/shared/components/date-range-pic
 import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
 import { SearchInputComponent } from 'src/app/shared/components/search-input/search-input.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
-import { ReceiptsSettingsComponent } from './components/receipts-settings/receipts-settings.component';
 import {
   MostCommonProductsComponent,
   ReceiptSortMode,
@@ -50,14 +49,6 @@ export class ReceiptsComponent {
     private readonly modalService: NgbModal,
   ) {
     this.store.dispatch(ReceiptsActions.loadReceipts());
-  }
-
-  openStorageSettings(): void {
-    this.modalService.open(ReceiptsSettingsComponent, {
-      centered: true,
-      size: 'lg',
-      scrollable: true,
-    });
   }
 
   onToggle(value: string): void {
