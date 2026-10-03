@@ -71,6 +71,7 @@ export class MostCommonTransactionComponent {
   sortMode = signal<TransactionSort>('recent');
   selectedCategory = signal<TransactionCategory | null>(null);
   selectedProvider = signal<string | null>(null);
+  datasetChanged = output<boolean>();
 
   private normalizedSearch = computed(() =>
     this.searchTerm().trim().toLowerCase(),
@@ -92,6 +93,7 @@ export class MostCommonTransactionComponent {
 
   setDataset(showEconomii: boolean): void {
     this.showEconomii.set(showEconomii);
+    this.datasetChanged.emit(showEconomii);
     this.selectedCategory.set(null);
     this.selectedProvider.set(null);
     this.clearSearch();
