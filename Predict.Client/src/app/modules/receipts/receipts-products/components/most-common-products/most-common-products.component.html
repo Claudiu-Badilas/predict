@@ -203,9 +203,14 @@
             </div>
             @for (product of receipt.products; track product.id) {
               <div class="receipt-product">
-                <strong class="receipt-product__name">{{
-                  product.name
-                }}</strong>
+                <button
+                  type="button"
+                  class="receipt-product__name receipt-product__select"
+                  (click)="selectProduct(product.name)"
+                  [attr.aria-label]="'Search for products like ' + product.name"
+                >
+                  {{ product.name }}
+                </button>
                 <span class="receipt-product__quantity">
                   {{ product.quantity }} {{ product.quantityType }}
                 </span>

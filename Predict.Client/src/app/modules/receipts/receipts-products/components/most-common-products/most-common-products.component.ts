@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { NumberFormatPipe } from 'src/app/shared/pipes/number-format.pipe';
@@ -43,6 +44,7 @@ export class MostCommonProductsComponent {
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
   sortMode = input<ReceiptSortMode>('newest');
   searchTerm = input('');
+  productSelected = output<string>();
   expandedPeriods = signal<Record<string, boolean>>({});
   expandedReceiptId = signal<number | null>(null);
 
@@ -241,6 +243,10 @@ export class MostCommonProductsComponent {
     this.expandedReceiptId.update((current) =>
       current === receiptId ? null : receiptId,
     );
+  }
+
+  selectProduct(productName: string): void {
+    this.productSelected.emit(productName);
   }
 
   receiptTotal(receipt: ReceiptDomain): number {

@@ -351,6 +351,21 @@
   overflow-wrap: anywhere;
 }
 
+.receipt-product__select {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.receipt-product__select:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--receipt-accent);
+  outline-offset: 2px;
+}
+
 .receipt-product__quantity,
 .receipt-product__date,
 .receipt-product__price,
