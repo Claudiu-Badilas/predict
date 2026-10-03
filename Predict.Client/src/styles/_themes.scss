@@ -31,31 +31,32 @@
 
 [data-theme='dark'] {
   color-scheme: dark;
-  --theme-background: #111827;
-  --theme-surface: #1f2937;
-  --theme-text-primary: #f1f5f9;
-  --theme-text-secondary: #cbd5e1;
-  --theme-text-muted: #94a3b8;
-  --theme-border: #374151;
-  --theme-border-strong: #64748b;
-  --theme-accent: #38bdf8;
-  --theme-accent-hover: #0ea5e9;
-  --theme-accent-contrast: #082f49;
+  --theme-background: #00141e;
+  --theme-surface: #001e28;
+  --theme-text-primary: #eaf4f7;
+  --theme-text-secondary: #b8d2dd;
+  --theme-text-muted: #829ca8;
+  --theme-border: #0f2d37;
+  --theme-border-strong: #555e61;
+  --theme-accent: #0787fa;
+  --theme-accent-hover: #23669d;
+  --theme-accent-contrast: #ffffff;
   --theme-icon-filter: brightness(0) invert(1);
-  --theme-accent-gradient: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
-  --theme-accent-subtle: #164e63;
-  --theme-hover: #334155;
-  --theme-surface-muted: #273449;
-  --theme-focus-ring: 0 0 0 3px rgb(56 189 248 / 0.24);
-  --theme-overlay: rgb(0 0 0 / 0.62);
-  --theme-success: #34d399;
-  --theme-success-subtle: #064e3b;
-  --theme-warning: #fbbf24;
-  --theme-warning-subtle: #422006;
-  --theme-danger: #f87171;
-  --theme-danger-subtle: #451a1a;
-  --theme-shadow: 0 1px 2px rgb(0 0 0 / 0.28);
-  --theme-shadow-raised: 0 4px 6px -1px rgb(0 0 0 / 0.36);
-  --theme-accent-icon-filter: brightness(0) saturate(100%) invert(69%)
-    sepia(68%) saturate(597%) hue-rotate(163deg) brightness(101%) contrast(101%);
+  --theme-accent-gradient: linear-gradient(135deg, #0787fa 0%, #14dc4b 100%);
+  --theme-accent-subtle: #01203e;
+  --theme-hover: #0f2d37;
+  --theme-surface-muted: #010a0f;
+  --theme-focus-ring: 0 0 0 3px rgb(7 135 250 / 0.24);
+  --theme-overlay: rgb(0 0 0 / 0.68);
+  --theme-success: #14dc4b;
+  --theme-success-subtle: #001e28;
+  --theme-warning: #ffcd00;
+  --theme-warning-subtle: #001e28;
+  --theme-danger: #dc0000;
+  --theme-danger-subtle: #3d0314;
+  --theme-shadow: 0 1px 2px rgb(0 0 0 / 0.32);
+  --theme-shadow-raised: 0 4px 6px -1px rgb(0 0 0 / 0.42);
+  --theme-accent-icon-filter: brightness(0) saturate(100%) invert(37%)
+    sepia(99%) saturate(3293%) hue-rotate(199deg) brightness(101%)
+    contrast(103%);
 }
