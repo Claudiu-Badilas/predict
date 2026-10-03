@@ -141,7 +141,7 @@
       <div class="summary-section stat-item stat-item--violet">
         <div class="stat-row">
           <span class="stat-item__label">{{ nextPayment }}</span>
-          <span class="stat-item__value">
+          <span class="stat-item__label">
             {{ paidMonthlyInstalments() | numberFormat: '0' : 0 }} /
             {{ monthlyInstalments() | numberFormat: '0' : 0 }} ({{
               simulatedPeriod()
