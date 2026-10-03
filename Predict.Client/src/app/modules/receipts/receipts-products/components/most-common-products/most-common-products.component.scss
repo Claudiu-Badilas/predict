@@ -199,6 +199,13 @@
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
 }
 
+.receipt-mark--product {
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
+  font-size: 0.84rem;
+}
+
 .receipt-mark--lidl {
   background: color-mix(in srgb, #0050aa 14%, var(--receipt-surface));
   color: #0050aa;
@@ -357,7 +364,7 @@
 
 .receipt-product--search {
   grid-template-columns:
-    minmax(0, 1fr) minmax(90px, auto) minmax(70px, 0.35fr)
+    32px minmax(0, 1fr) minmax(90px, auto) minmax(70px, 0.35fr)
     minmax(90px, 0.45fr) minmax(100px, 0.5fr);
 }
 
@@ -430,12 +437,16 @@
   cursor: pointer;
 }
 
-.period-header:hover {
+button.period-header:hover {
   background: color-mix(
     in srgb,
     var(--receipt-accent) 10%,
     var(--receipt-surface)
   );
+}
+
+.period-header--static {
+  cursor: default;
 }
 
 .period-title {
@@ -506,6 +517,12 @@
     width: 38px;
     height: 38px;
     border-radius: 12px;
+  }
+
+  .receipt-mark--product {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
   }
 
   .receipt-copy {
@@ -617,7 +634,12 @@
   }
 
   .receipt-product--search .receipt-product__name {
-    grid-column: 1 / -1;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .receipt-product--search .receipt-mark--product {
+    grid-column: 1;
     grid-row: 1;
   }
 

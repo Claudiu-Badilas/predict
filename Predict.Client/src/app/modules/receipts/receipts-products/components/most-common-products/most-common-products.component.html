@@ -2,6 +2,22 @@
   @if (searchTerm().trim()) {
     <ng-template #matchingProductRow let-result="result">
       <div class="receipt-product receipt-product--search">
+        <span
+          class="receipt-mark receipt-mark--product"
+          [class.receipt-mark--lidl]="
+            providerBrand(result.receipt.provider) === 'lidl'
+          "
+          [class.receipt-mark--carrefour]="
+            providerBrand(result.receipt.provider) === 'carrefour'
+          "
+          [class.receipt-mark--kaufland]="
+            providerBrand(result.receipt.provider) === 'kaufland'
+          "
+          [style.--provider-hue]="providerHue(result.receipt.provider)"
+          aria-hidden="true"
+        >
+          {{ providerInitial(result.receipt.provider) }}
+        </span>
         <strong class="receipt-product__name">
           @for (part of highlightParts(result.product.name); track $index) {
             @if (part.match) {
@@ -37,13 +53,7 @@
     <div class="receipt-periods" aria-label="Matching products">
       @if (viewMode() === 'all') {
         <section class="receipt-period">
-          <button
-            type="button"
-            class="period-header"
-            (click)="togglePeriod('search-all')"
-            [attr.aria-expanded]="isPeriodExpanded('search-all')"
-            aria-controls="search-all-content"
-          >
+          <div class="period-header period-header--static">
             <span class="period-title">All</span>
             <span class="period-count"
               >{{ matchingProducts().length }} products</span
@@ -51,24 +61,22 @@
             <strong class="period-total">
               {{ matchingProductsTotal() | numberFormat: '0.00' }} RON
             </strong>
-          </button>
-          @if (isPeriodExpanded('search-all')) {
-            <div class="period-content" id="search-all-content">
-              <div class="receipt-feed">
-                @for (result of matchingProducts(); track result.product.id) {
-                  <ng-container
-                    *ngTemplateOutlet="
-                      matchingProductRow;
-                      context: { result: result }
-                    "
-                  />
-                }
-                @if (!matchingProducts().length) {
-                  <div class="empty-state">No matching products</div>
-                }
-              </div>
+          </div>
+          <div class="period-content">
+            <div class="receipt-feed">
+              @for (result of matchingProducts(); track result.product.id) {
+                <ng-container
+                  *ngTemplateOutlet="
+                    matchingProductRow;
+                    context: { result: result }
+                  "
+                />
+              }
+              @if (!matchingProducts().length) {
+                <div class="empty-state">No matching products</div>
+              }
             </div>
-          }
+          </div>
         </section>
       } @else {
         @for (period of matchingProductPeriods(); track period.id) {
@@ -240,30 +248,22 @@
 
     @if (viewMode() === 'all') {
       <section class="receipt-period" aria-label="All receipts">
-        <button
-          type="button"
-          class="period-header"
-          (click)="togglePeriod('receipts-all')"
-          [attr.aria-expanded]="isPeriodExpanded('receipts-all')"
-          aria-controls="receipts-all-content"
-        >
+        <div class="period-header period-header--static">
           <span class="period-title">All</span>
           <span class="period-count">{{ allReceipts().length }} receipts</span>
           <strong class="period-total">
             {{ totalRevenue() | numberFormat: '0.00' }} RON
           </strong>
-        </button>
-        @if (isPeriodExpanded('receipts-all')) {
-          <div class="period-content" id="receipts-all-content">
-            <div class="receipt-feed">
-              @for (receipt of allReceipts(); track receipt.id) {
-                <ng-container
-                  *ngTemplateOutlet="receiptRow; context: { receipt: receipt }"
-                />
-              }
-            </div>
+        </div>
+        <div class="period-content">
+          <div class="receipt-feed">
+            @for (receipt of allReceipts(); track receipt.id) {
+              <ng-container
+                *ngTemplateOutlet="receiptRow; context: { receipt: receipt }"
+              />
+            }
           </div>
-        }
+        </div>
       </section>
       @if (!allReceipts().length) {
         <div class="empty-state">No receipts available</div>
