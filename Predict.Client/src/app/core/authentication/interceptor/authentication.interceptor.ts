@@ -22,12 +22,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     if (httpRequest.url.includes(`server/api/v1/account/user/register`))
       return httpHandler.handle(httpRequest);
 
-    if (httpRequest.url.includes('/api/v1/transactions'))
-      return httpHandler.handle(httpRequest);
-
     const token = AuthenticationUtils.getToken();
-    if (!token) return httpHandler.handle(httpRequest);
-
     return httpHandler.handle(
       httpRequest.clone({
         setHeaders: { Authorization: `Bearer ${token}` },

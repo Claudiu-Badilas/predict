@@ -14,7 +14,7 @@ public class TransactionController(ITransactionRepo transactionRepo, IAuthServic
 {    
 
     [HttpGet("transactions")]
-    public async Task<ActionResult> GetTransactions()
+    public async Task<ActionResult> GetTransactions([FromHeader] string Authorization)
     {
         var transactions = cache.GetOrSet(
             "GetTransactions",
