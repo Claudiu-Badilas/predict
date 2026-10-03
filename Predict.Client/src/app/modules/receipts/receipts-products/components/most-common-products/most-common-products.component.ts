@@ -45,8 +45,19 @@ export class MostCommonProductsComponent {
   sortMode = input<ReceiptSortMode>('newest');
   searchTerm = input('');
   productSelected = output<string>();
+  selectedProvider = signal<string | null>(null);
   expandedPeriods = signal<Record<string, boolean>>({});
   expandedReceiptId = signal<number | null>(null);
+
+  filteredReceipts = computed(() => {
+    const selectedProvider = this.selectedProvider()?.toLocaleLowerCase();
+    if (!selectedProvider) return this.receipts();
+
+    return this.receipts().filter(
+      (receipt) =>
+        receipt.provider?.trim().toLocaleLowerCase() === selectedProvider,
+    );
+  });
 
   matchingProducts = computed(() => {
     const terms = this.searchTerm()
@@ -55,7 +66,7 @@ export class MostCommonProductsComponent {
       .filter(Boolean);
     if (!terms.length) return [];
 
-    const matches = this.receipts().flatMap((receipt) =>
+    const matches = this.filteredReceipts().flatMap((receipt) =>
       receipt.products
         .filter((product) =>
           terms.some((term) => product.name.toLocaleLowerCase().includes(term)),
@@ -137,15 +148,40 @@ export class MostCommonProductsComponent {
   });
 
   totalRevenue = computed(() =>
-    this.receipts().reduce(
+    this.filteredReceipts().reduce(
       (total, receipt) => total + this.receiptTotal(receipt),
       0,
     ),
   );
 
-  receiptFrequency = computed(() => this.receipts().length);
+  receiptFrequency = computed(() => this.filteredReceipts().length);
 
-  allReceipts = computed(() => this.sortReceipts(this.receipts()));
+  allReceipts = computed(() => this.sortReceipts(this.filteredReceipts()));
+
+  selectProvider(provider: string): void {
+    const normalizedProvider = provider.trim().toLocaleLowerCase();
+    if (!normalizedProvider) return;
+
+    this.selectedProvider.update((current) =>
+      current?.toLocaleLowerCase() === normalizedProvider
+        ? null
+        : provider.trim(),
+    );
+    this.expandedReceiptId.set(null);
+  }
+
+  clearProviderSelection(): void {
+    this.selectedProvider.set(null);
+    this.expandedReceiptId.set(null);
+  }
+
+  isProviderSelected(provider: string | null | undefined): boolean {
+    return (
+      !!provider?.trim() &&
+      this.selectedProvider()?.toLocaleLowerCase() ===
+        provider.trim().toLocaleLowerCase()
+    );
+  }
 
   providerInitial(provider: string | null | undefined): string {
     return provider?.trim().charAt(0).toLocaleUpperCase() || 'R';
@@ -203,7 +239,7 @@ export class MostCommonProductsComponent {
     const groups = new Map<string, ReceiptDomain[]>();
     const groupByYear = this.viewMode() === 'yearly';
 
-    for (const receipt of this.receipts()) {
+    for (const receipt of this.filteredReceipts()) {
       if (!receipt.date) continue;
       const year = receipt.date.getFullYear();
       const month = receipt.date.getMonth();

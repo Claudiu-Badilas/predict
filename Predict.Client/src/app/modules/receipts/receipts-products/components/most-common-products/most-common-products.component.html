@@ -1,23 +1,51 @@
 <div class="receipt-view">
+  @if (selectedProvider()) {
+    <div class="provider-filter__active" aria-live="polite">
+      <span>Showing receipts from {{ selectedProvider() }}</span>
+      <button
+        type="button"
+        class="provider-filter__clear"
+        (click)="clearProviderSelection()"
+      >
+        Clear selection
+      </button>
+    </div>
+  }
+
   @if (searchTerm().trim()) {
     <ng-template #matchingProductRow let-result="result">
       <div class="receipt-product receipt-product--search">
-        <span
-          class="receipt-mark receipt-mark--product"
-          [class.receipt-mark--lidl]="
-            providerBrand(result.receipt.provider) === 'lidl'
+        <button
+          type="button"
+          class="provider-logo-button provider-logo-button--product"
+          [class.provider-logo-button--active]="
+            isProviderSelected(result.receipt.provider)
           "
-          [class.receipt-mark--carrefour]="
-            providerBrand(result.receipt.provider) === 'carrefour'
+          [attr.aria-pressed]="isProviderSelected(result.receipt.provider)"
+          [attr.aria-label]="
+            'Show receipts from ' +
+            (result.receipt.provider || 'unknown provider')
           "
-          [class.receipt-mark--kaufland]="
-            providerBrand(result.receipt.provider) === 'kaufland'
-          "
-          [style.--provider-hue]="providerHue(result.receipt.provider)"
-          aria-hidden="true"
+          [disabled]="!result.receipt.provider?.trim()"
+          (click)="selectProvider(result.receipt.provider)"
         >
-          {{ providerInitial(result.receipt.provider) }}
-        </span>
+          <span
+            class="receipt-mark receipt-mark--product"
+            [class.receipt-mark--lidl]="
+              providerBrand(result.receipt.provider) === 'lidl'
+            "
+            [class.receipt-mark--carrefour]="
+              providerBrand(result.receipt.provider) === 'carrefour'
+            "
+            [class.receipt-mark--kaufland]="
+              providerBrand(result.receipt.provider) === 'kaufland'
+            "
+            [style.--provider-hue]="providerHue(result.receipt.provider)"
+            aria-hidden="true"
+          >
+            {{ providerInitial(result.receipt.provider) }}
+          </span>
+        </button>
         <strong class="receipt-product__name">
           @for (part of highlightParts(result.product.name); track $index) {
             @if (part.match) {
@@ -138,55 +166,71 @@
         class="receipt-row"
         [class.receipt-row--expanded]="expandedReceiptId() === receipt.id"
       >
-        <button
-          type="button"
-          class="receipt-row__main"
-          (click)="toggleReceipt(receipt.id)"
-          [attr.aria-expanded]="expandedReceiptId() === receipt.id"
-          [attr.aria-controls]="'receipt-details-' + receipt.id"
-        >
-          <span
-            class="receipt-mark"
-            [class.receipt-mark--lidl]="
-              providerBrand(receipt.provider) === 'lidl'
+        <div class="receipt-row__main">
+          <button
+            type="button"
+            class="provider-logo-button"
+            [class.provider-logo-button--active]="
+              isProviderSelected(receipt.provider)
             "
-            [class.receipt-mark--carrefour]="
-              providerBrand(receipt.provider) === 'carrefour'
+            [attr.aria-pressed]="isProviderSelected(receipt.provider)"
+            [attr.aria-label]="
+              'Show receipts from ' + (receipt.provider || 'unknown provider')
             "
-            [class.receipt-mark--kaufland]="
-              providerBrand(receipt.provider) === 'kaufland'
-            "
-            [style.--provider-hue]="providerHue(receipt.provider)"
-            aria-hidden="true"
+            [disabled]="!receipt.provider?.trim()"
+            (click)="selectProvider(receipt.provider)"
           >
-            {{ providerInitial(receipt.provider) }}
-          </span>
-          <span class="receipt-copy">
-            <span class="receipt-heading">
-              <strong class="receipt-provider">
-                {{ receipt.provider || 'Receipt' }}
-              </strong>
-              <span class="receipt-count">
-                {{ receipt.products.length }} items
+            <span
+              class="receipt-mark"
+              [class.receipt-mark--lidl]="
+                providerBrand(receipt.provider) === 'lidl'
+              "
+              [class.receipt-mark--carrefour]="
+                providerBrand(receipt.provider) === 'carrefour'
+              "
+              [class.receipt-mark--kaufland]="
+                providerBrand(receipt.provider) === 'kaufland'
+              "
+              [style.--provider-hue]="providerHue(receipt.provider)"
+              aria-hidden="true"
+            >
+              {{ providerInitial(receipt.provider) }}
+            </span>
+          </button>
+          <button
+            type="button"
+            class="receipt-row__toggle"
+            (click)="toggleReceipt(receipt.id)"
+            [attr.aria-expanded]="expandedReceiptId() === receipt.id"
+            [attr.aria-controls]="'receipt-details-' + receipt.id"
+          >
+            <span class="receipt-copy">
+              <span class="receipt-heading">
+                <strong class="receipt-provider">
+                  {{ receipt.provider || 'Receipt' }}
+                </strong>
+                <span class="receipt-count">
+                  {{ receipt.products.length }} items
+                </span>
+              </span>
+              <span class="receipt-description">
+                {{ productSummary(receipt) }}
               </span>
             </span>
-            <span class="receipt-description">
-              {{ productSummary(receipt) }}
+            <span class="receipt-date">
+              @if (receipt.date) {
+                <strong>{{ receipt.date | date: 'dd' }}</strong>
+                <span>{{ receipt.date | date: 'MMM yyyy' }}</span>
+              } @else {
+                <span>Date unavailable</span>
+              }
             </span>
-          </span>
-          <span class="receipt-date">
-            @if (receipt.date) {
-              <strong>{{ receipt.date | date: 'dd' }}</strong>
-              <span>{{ receipt.date | date: 'MMM yyyy' }}</span>
-            } @else {
-              <span>Date unavailable</span>
-            }
-          </span>
-          <strong class="receipt-total">
-            {{ receiptTotal(receipt) | numberFormat: '0.00' }}
-            <span>{{ receipt.currency || 'RON' }}</span>
-          </strong>
-        </button>
+            <strong class="receipt-total">
+              {{ receiptTotal(receipt) | numberFormat: '0.00' }}
+              <span>{{ receipt.currency || 'RON' }}</span>
+            </strong>
+          </button>
+        </div>
 
         @if (expandedReceiptId() === receipt.id) {
           <div
