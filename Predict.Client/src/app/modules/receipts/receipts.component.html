@@ -87,7 +87,7 @@
           }
         </button>
       </div>
-      <p-search-input (search)="onSearch($event)" />
+      <p-search-input [value]="searchTerm()" (search)="onSearch($event)" />
     </div>
   </div>
 

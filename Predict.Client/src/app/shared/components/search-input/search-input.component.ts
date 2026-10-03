@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   Output,
   signal,
   ChangeDetectionStrategy,
@@ -17,6 +18,11 @@ export class SearchInputComponent {
   @Output() search = new EventEmitter<string>();
 
   query = signal('');
+
+  @Input() set value(value: string) {
+    this.query.set(value);
+  }
+
   private debounceTimer: any;
 
   onInput(event: Event) {
