@@ -7,12 +7,16 @@
   --theme-text-muted: #94a3b8;
   --theme-border: #e2e8f0;
   --theme-border-strong: #cbd5e1;
-  --theme-accent: #0284c7;
-  --theme-accent-hover: #0369a1;
+  --theme-accent: #dfe4eb;
+  --theme-accent-hover: #c9d1da;
   --theme-accent-contrast: #ffffff;
   --theme-icon-filter: none;
-  --theme-accent-gradient: linear-gradient(135deg, #0284c7 0%, #0f766e 100%);
-  --theme-accent-subtle: #e0f2fe;
+  --theme-accent-gradient: linear-gradient(
+    135deg,
+    rgba(223, 228, 235, 0.96) 0%,
+    rgba(200, 210, 221, 0.86) 100%
+  );
+  --theme-accent-subtle: #f5f7fa;
   --theme-hover: #f1f5f9;
   --theme-surface-muted: #f8fafc;
   --theme-focus-ring: 0 0 0 3px rgb(2 132 199 / 0.16);
@@ -38,12 +42,16 @@
   --theme-text-muted: #829ca8;
   --theme-border: #0f2d37;
   --theme-border-strong: #555e61;
-  --theme-accent: #0787fa;
-  --theme-accent-hover: #23669d;
+  --theme-accent: #8a99a8;
+  --theme-accent-hover: #6f7f90;
   --theme-accent-contrast: #ffffff;
   --theme-icon-filter: brightness(0) invert(1);
-  --theme-accent-gradient: linear-gradient(135deg, #0787fa 0%, #14dc4b 100%);
-  --theme-accent-subtle: #01203e;
+  --theme-accent-gradient: linear-gradient(
+    135deg,
+    rgba(138, 153, 168, 0.92) 0%,
+    rgba(109, 124, 138, 0.78) 100%
+  );
+  --theme-accent-subtle: #162e3d;
   --theme-hover: #0f2d37;
   --theme-surface-muted: #010a0f;
   --theme-focus-ring: 0 0 0 3px rgb(7 135 250 / 0.24);
