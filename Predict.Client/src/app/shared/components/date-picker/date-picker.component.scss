@@ -209,3 +209,28 @@
 .day.empty {
   visibility: hidden;
 }
+
+@media (max-width: 768px) {
+  .date-input {
+    height: 38px;
+    padding: 5px 20px 5px 5px;
+    font-size: 0.7rem;
+  }
+
+  .calendar-icon {
+    right: 5px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .date-input {
+    padding-right: 17px;
+    font-size: 0.64rem;
+  }
+
+  .calendar-icon {
+    right: 4px;
+    font-size: 9px;
+  }
+}

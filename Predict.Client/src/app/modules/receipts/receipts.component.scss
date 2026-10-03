@@ -127,27 +127,6 @@
     flex: 0 1 220px;
   }
 
-  .receipts-date-range ::ng-deep .pickers {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-  }
-
-  .receipts-date-range ::ng-deep date-picker {
-    min-width: 0;
-  }
-
-  .receipts-date-range ::ng-deep .date-input {
-    height: 38px;
-    padding: 5px 20px 5px 5px;
-    font-size: 0.7rem;
-  }
-
-  .receipts-date-range ::ng-deep .calendar-icon {
-    right: 5px;
-    font-size: 10px;
-  }
-
   .receipts-toolbar ::ng-deep .tabs {
     width: auto;
     justify-content: center;
@@ -184,19 +163,5 @@
   .receipts-sort__button {
     padding-inline: 6px;
     font-size: 0.64rem;
-  }
-
-  .receipts-date-range ::ng-deep .pickers {
-    gap: 4px;
-  }
-
-  .receipts-date-range ::ng-deep .date-input {
-    padding-right: 17px;
-    font-size: 0.64rem;
-  }
-
-  .receipts-date-range ::ng-deep .calendar-icon {
-    right: 4px;
-    font-size: 9px;
   }
 }
