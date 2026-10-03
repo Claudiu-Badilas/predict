@@ -16,6 +16,18 @@ interface ReceiptPeriod {
   total: number;
 }
 
+interface MatchingProduct {
+  product: ReceiptDomain['products'][number];
+  receipt: ReceiptDomain;
+}
+
+interface MatchingProductPeriod {
+  id: string;
+  title: string;
+  products: MatchingProduct[];
+  total: number;
+}
+
 export type ReceiptSortMode =
   'newest' | 'oldest' | 'amount-asc' | 'amount-desc';
 
@@ -30,8 +42,79 @@ export class MostCommonProductsComponent {
   receipts = input<ReceiptDomain[]>([]);
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
   sortMode = input<ReceiptSortMode>('newest');
-  expandedPeriodId = signal<string | null>(null);
+  searchTerm = input('');
   expandedReceiptId = signal<number | null>(null);
+
+  matchingProducts = computed(() => {
+    const terms = this.searchTerm()
+      .split(',')
+      .map((term) => term.trim().toLocaleLowerCase())
+      .filter(Boolean);
+    if (!terms.length) return [];
+
+    return this.receipts().flatMap((receipt) =>
+      receipt.products
+        .filter((product) =>
+          terms.some((term) => product.name.toLocaleLowerCase().includes(term)),
+        )
+        .map((product) => ({ product, receipt })),
+    );
+  });
+
+  matchingProductsTotal = computed(() =>
+    this.matchingProducts().reduce(
+      (total, match) =>
+        total + (match.product.price ?? 0) * (match.product.quantity ?? 0),
+      0,
+    ),
+  );
+
+  matchingProductPeriods = computed((): MatchingProductPeriod[] => {
+    const groups = new Map<string, MatchingProduct[]>();
+    const groupByYear = this.viewMode() === 'yearly';
+
+    for (const match of this.matchingProducts()) {
+      const date = match.receipt.date;
+      const key = date
+        ? groupByYear
+          ? `${date.getFullYear()}`
+          : `${date.getFullYear()}-${date.getMonth()}`
+        : 'undated';
+      const group = groups.get(key) ?? [];
+      group.push(match);
+      groups.set(key, group);
+    }
+
+    return Array.from(groups.entries())
+      .map(([key, products]) => {
+        const [year, monthIndex] = key.split('-').map(Number);
+        const title =
+          key === 'undated'
+            ? 'Date unavailable'
+            : groupByYear
+              ? key
+              : new Date(year, monthIndex).toLocaleString('default', {
+                  month: 'short',
+                  year: 'numeric',
+                });
+
+        return {
+          id: `${groupByYear ? 'year' : 'month'}-${key}`,
+          title,
+          products,
+          total: products.reduce(
+            (sum, match) =>
+              sum + (match.product.price ?? 0) * (match.product.quantity ?? 0),
+            0,
+          ),
+        };
+      })
+      .sort((first, second) => {
+        const firstDate = first.products[0].receipt.date?.getTime() ?? -1;
+        const secondDate = second.products[0].receipt.date?.getTime() ?? -1;
+        return secondDate - firstDate;
+      });
+  });
 
   totalRevenue = computed(() =>
     this.receipts().reduce(
@@ -57,6 +140,26 @@ export class MostCommonProductsComponent {
 
     const remaining = receipt.products.length - names.length;
     return `${names.join(', ')}${remaining > 0 ? ` +${remaining} more` : ''}`;
+  }
+
+  highlightParts(value: string): { text: string; match: boolean }[] {
+    const terms = this.searchTerm()
+      .split(',')
+      .map((term) => term.trim())
+      .filter(Boolean)
+      .sort((first, second) => second.length - first.length);
+    if (!terms.length || !value) return [{ text: value, match: false }];
+
+    const escapedTerms = terms.map((term) =>
+      term.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'),
+    );
+    const parts = value.split(new RegExp(`(${escapedTerms.join('|')})`, 'gi'));
+    return parts.map((text) => ({
+      text,
+      match: terms.some(
+        (term) => text.toLocaleLowerCase() === term.toLocaleLowerCase(),
+      ),
+    }));
   }
 
   currentPeriods = computed((): ReceiptPeriod[] => {
@@ -98,12 +201,6 @@ export class MostCommonProductsComponent {
           first.receipts[0].date!.getTime(),
       );
   });
-
-  togglePeriod(periodId: string): void {
-    this.expandedPeriodId.update((current) =>
-      current === periodId ? null : periodId,
-    );
-  }
 
   toggleReceipt(receiptId: number): void {
     this.expandedReceiptId.update((current) =>

@@ -38,6 +38,7 @@ export class ReceiptsComponent {
   startDate = this.receiptsStore.startDate;
   endDate = this.receiptsStore.endDate;
   viewMode = this.receiptsStore.receiptsView.viewMode;
+  searchTerm = this.receiptsStore.receiptsView.searchTerm;
   receipts = this.receiptsStore.availableReceipts;
   receiptSortMode = signal<ReceiptSortMode>('newest');
 
