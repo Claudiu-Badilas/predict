@@ -669,38 +669,9 @@
 }
 
 .dataset-toggle {
-  display: inline-flex;
+  display: inline-block;
   flex: 0 0 auto;
-  gap: 2px;
   height: 44px;
-  padding: 3px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  background: var(--bg-subtle);
-}
-
-.dataset-toggle button {
-  min-width: 0;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 9px;
-  color: var(--text-secondary);
-  background: transparent;
-  font: inherit;
-  font-size: 0.77rem;
-  font-weight: 650;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    box-shadow var(--transition-fast);
-}
-
-.dataset-toggle button.active {
-  color: var(--accent-blue);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-xs);
 }
 
 /* ===== EXPAND CHEVRON ===== */
@@ -1246,47 +1217,9 @@
 }
 
 .period-switch {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2px;
+  display: block;
+  width: min(100%, 290px);
   height: 44px;
-  padding: 3px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  background: var(--bg-subtle);
-}
-
-.period-switch button {
-  min-width: 0;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.77rem;
-  font-weight: 650;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    box-shadow var(--transition-fast);
-}
-
-.period-switch button:hover {
-  color: var(--text-primary);
-}
-
-.period-switch button.active {
-  background: var(--bg-card);
-  color: var(--accent-blue);
-  box-shadow: var(--shadow-xs);
-}
-
-.period-switch button:focus-visible {
-  position: relative;
-  outline: 2px solid var(--accent-blue);
-  outline-offset: -2px;
 }
 
 .search-field {
@@ -1393,49 +1326,9 @@
 }
 
 .choice-toggle {
-  display: flex;
-  min-width: 0;
+  display: block;
+  width: 100%;
   height: 44px;
-  gap: 2px;
-  padding: 3px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  background: var(--bg-subtle);
-}
-
-.choice-toggle button {
-  min-width: 0;
-  flex: 1 1 0;
-  padding: 0 7px;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.72rem;
-  font-weight: 650;
-  white-space: nowrap;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    box-shadow var(--transition-fast);
-}
-
-.choice-toggle button:hover {
-  color: var(--text-primary);
-}
-
-.choice-toggle button.active {
-  background: var(--bg-card);
-  color: var(--accent-blue);
-  box-shadow: var(--shadow-xs);
-}
-
-.choice-toggle button:focus-visible {
-  position: relative;
-  outline: 2px solid var(--accent-blue);
-  outline-offset: -2px;
 }
 
 .section-heading {
@@ -1595,17 +1488,8 @@
     height: 40px;
   }
 
-  .dataset-toggle button {
-    padding: 0 5px;
-    font-size: 0.68rem;
-  }
-
   .transaction-date-range {
     grid-area: dates;
-  }
-
-  .period-switch button {
-    font-size: 0.74rem;
   }
 
   .search-field {
@@ -1623,10 +1507,6 @@
   .choice-toggle {
     width: 100%;
     height: 40px;
-  }
-
-  .choice-toggle button {
-    font-size: 0.76rem;
   }
 
   .transactions-grid {
@@ -1758,18 +1638,8 @@
     width: 100%;
   }
 
-  .period-switch button {
-    padding: 0 4px;
-    font-size: 0.68rem;
-  }
-
   .transaction-date-range {
     gap: 4px;
-  }
-
-  .dataset-toggle button {
-    padding-inline: 3px;
-    font-size: 0.62rem;
   }
 
   .card-row.compact-row {

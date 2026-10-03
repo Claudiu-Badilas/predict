@@ -9,8 +9,7 @@ import { Store } from '@ngrx/store';
 import * as LoanActions from 'src/app/modules/loan/actions/loan.actions';
 import { LoanStore } from 'src/app/modules/loan/stores/loan.store';
 import { DropdownSelectComponent } from 'src/app/shared/components/dropdown-select/dropdown-select.component';
-import { FooToggleComponent } from 'src/app/shared/components/foo-toggle/foo-toggle.component';
-import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
+import { PlatformToggleComponent } from 'src/app/shared/components/platform-toggle/platform-toggle.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import { AppState } from 'src/app/store/app-state.reducer';
@@ -25,8 +24,7 @@ import { LoanDetailedHeaderComponent } from './components/loan-detailed-header/l
     LoanDetailedBodyComponent,
     DropdownSelectComponent,
     TopBarComponent,
-    ToggleButtonActionsComponent,
-    FooToggleComponent,
+    PlatformToggleComponent,
   ],
   templateUrl: './loan-detailed.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

@@ -11,9 +11,13 @@
         [maxDate]="now"
         (valueChanged)="handleRangeChange($event)"
       />
-      <p-toggle-button-actions
-        [options]="['Monthly', 'Yearly', 'All']"
-        [selected]="getSelectedViewLabel()"
+      <p-platform-toggle
+        [config]="{
+          type: 'tabs',
+          options: ['Monthly', 'Yearly', 'All'],
+          selected: getSelectedViewLabel(),
+          ariaLabel: 'Receipt view',
+        }"
         (selectionChange)="onToggle($event)"
       />
     </div>

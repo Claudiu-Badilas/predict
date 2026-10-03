@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 import * as ReceiptsActions from 'src/app/modules/receipts/actions/receipts.actions';
 import { ReceiptsStore } from 'src/app/modules/receipts/reducers/receipts.reducer';
 import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
-import { ToggleButtonActionsComponent } from 'src/app/shared/components/toggle-button-actions/toggle-button-actions.component';
+import { PlatformToggleComponent } from 'src/app/shared/components/platform-toggle/platform-toggle.component';
 import { SearchInputComponent } from 'src/app/shared/components/search-input/search-input.component';
 import { TopBarComponent } from 'src/app/shared/components/top-bar/top-bar.component';
 import {
@@ -23,7 +23,7 @@ import {
   imports: [
     CommonModule,
     RangeSelectorComponent,
-    ToggleButtonActionsComponent,
+    PlatformToggleComponent,
     SearchInputComponent,
     TopBarComponent,
     MostCommonProductsComponent,

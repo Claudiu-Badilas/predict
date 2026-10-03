@@ -20,6 +20,7 @@ import {
 import { TransactionFeedComponent } from '../transaction-feed/transaction-feed.component';
 import { RangeSelectorComponent } from 'src/app/shared/components/date-range-picker/date-range-picker.component';
 import { DateRangePicker } from 'src/app/shared/components/date-range-picker/models/date-range-picker.model';
+import { PlatformToggleComponent } from 'src/app/shared/components/platform-toggle/platform-toggle.component';
 
 type TransactionSort = 'amount' | 'recent' | 'oldest';
 
@@ -46,6 +47,7 @@ interface PeriodGroup {
     NgbTooltip,
     TransactionFeedComponent,
     RangeSelectorComponent,
+    PlatformToggleComponent,
   ],
   templateUrl: './most-common-transaction.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -327,6 +329,18 @@ export class MostCommonTransactionComponent {
   setViewMode(viewMode: 'all' | 'monthly' | 'yearly') {
     this.viewModeChange.emit(viewMode);
     this.scrollTransactionsToTop();
+  }
+
+  setViewModeFromToggle(value: string): void {
+    if (value === 'all' || value === 'monthly' || value === 'yearly') {
+      this.setViewMode(value);
+    }
+  }
+
+  setSortModeFromToggle(value: string): void {
+    if (value === 'recent' || value === 'amount' || value === 'oldest') {
+      this.setSortMode(value);
+    }
   }
 
   clearSearch() {

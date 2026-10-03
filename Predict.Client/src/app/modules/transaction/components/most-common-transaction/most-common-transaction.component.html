@@ -11,61 +11,42 @@
             [maxDate]="maxDate()"
             (valueChanged)="onDateRangeChange($event)"
           />
-          <div
+          <p-platform-toggle
             class="dataset-toggle"
-            role="group"
-            aria-label="Transaction dataset"
-          >
-            <button
-              type="button"
-              [class.active]="!showEconomii()"
-              [attr.aria-pressed]="!showEconomii()"
-              (click)="setDataset(false)"
-            >
-              Main
-            </button>
-            <button
-              type="button"
-              [class.active]="showEconomii()"
-              [attr.aria-pressed]="showEconomii()"
-              (click)="setDataset(true)"
-            >
-              Economii
-            </button>
-          </div>
+            [config]="{
+              type: 'toolbar',
+              options: ['Main', 'Economii'],
+              selected: showEconomii() ? 'Economii' : 'Main',
+              ariaLabel: 'Transaction dataset',
+            }"
+            (selectionChange)="setDataset($event === 'Economii')"
+          />
         </div>
 
         <div class="period-control">
-          <div
+          <p-platform-toggle
             class="period-switch"
-            role="group"
-            aria-label="Choose transaction period"
-          >
-            <button
-              type="button"
-              [class.active]="viewMode() === 'all'"
-              [attr.aria-pressed]="viewMode() === 'all'"
-              (click)="setViewMode('all')"
-            >
-              All
-            </button>
-            <button
-              type="button"
-              [class.active]="viewMode() === 'monthly'"
-              [attr.aria-pressed]="viewMode() === 'monthly'"
-              (click)="setViewMode('monthly')"
-            >
-              Month
-            </button>
-            <button
-              type="button"
-              [class.active]="viewMode() === 'yearly'"
-              [attr.aria-pressed]="viewMode() === 'yearly'"
-              (click)="setViewMode('yearly')"
-            >
-              Year
-            </button>
-          </div>
+            [config]="{
+              type: 'toolbar',
+              options: ['All', 'Month', 'Year'],
+              selected:
+                viewMode() === 'all'
+                  ? 'All'
+                  : viewMode() === 'monthly'
+                    ? 'Month'
+                    : 'Year',
+              ariaLabel: 'Choose transaction period',
+            }"
+            (selectionChange)="
+              setViewModeFromToggle(
+                $event.toLowerCase() === 'all'
+                  ? 'all'
+                  : $event.toLowerCase() === 'month'
+                    ? 'monthly'
+                    : 'yearly'
+              )
+            "
+          />
         </div>
 
         <div class="search-field">
@@ -111,37 +92,28 @@
         </div>
 
         <div class="toggle-field sort-field--order">
-          <div
+          <p-platform-toggle
             class="choice-toggle"
-            role="group"
-            aria-label="Sort transactions"
-          >
-            <button
-              type="button"
-              [class.active]="sortMode() === 'recent'"
-              [attr.aria-pressed]="sortMode() === 'recent'"
-              (click)="setSortMode('recent')"
-            >
-              Newest
-            </button>
-            <button
-              type="button"
-              [class.active]="sortMode() === 'amount'"
-              [attr.aria-pressed]="sortMode() === 'amount'"
-              (click)="setSortMode('amount')"
-              aria-label="Highest amount"
-            >
-              Amount
-            </button>
-            <button
-              type="button"
-              [class.active]="sortMode() === 'oldest'"
-              [attr.aria-pressed]="sortMode() === 'oldest'"
-              (click)="setSortMode('oldest')"
-            >
-              Oldest
-            </button>
-          </div>
+            [config]="{
+              type: 'toolbar',
+              options: ['Newest', 'Amount', 'Oldest'],
+              selected:
+                sortMode() === 'recent'
+                  ? 'Newest'
+                  : sortMode() === 'amount'
+                    ? 'Amount'
+                    : 'Oldest',
+              ariaLabel: 'Sort transactions',
+              fullWidth: true,
+            }"
+            (selectionChange)="
+              setSortModeFromToggle(
+                $event.toLowerCase() === 'newest'
+                  ? 'recent'
+                  : $event.toLowerCase()
+              )
+            "
+          />
         </div>
       </div>
 

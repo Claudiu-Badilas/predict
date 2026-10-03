@@ -12,7 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ThemeService } from 'src/app/core/services/theme.service';
-import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
+import { PlatformToggleComponent } from '../platform-toggle/platform-toggle.component';
 import * as NavigationAction from 'src/app/store/actions/navigation.actions';
 import * as fromAppStore from 'src/app/store/app-state.reducer';
 
@@ -21,7 +21,7 @@ import * as fromAppStore from 'src/app/store/app-state.reducer';
   templateUrl: './top-bar.component.html',
   styleUrl: './top-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [CommonModule, ThemeToggleComponent],
+  imports: [CommonModule, PlatformToggleComponent],
 })
 export class TopBarComponent implements OnInit {
   @Input() hasModuleNavContent: boolean = false;

@@ -25,7 +25,7 @@
   flex: 0 1 320px;
 }
 
-.receipts-controls p-toggle-button-actions,
+.receipts-controls p-platform-toggle,
 .receipts-tools p-search-input {
   min-width: 0;
 }
@@ -107,7 +107,7 @@
     gap: 8px;
   }
 
-  .receipts-controls p-toggle-button-actions,
+  .receipts-controls p-platform-toggle,
   .receipts-tools p-search-input {
     width: 100%;
   }

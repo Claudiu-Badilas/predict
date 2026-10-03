@@ -49,30 +49,34 @@
 </div>
 
 <ng-template #chartTypeSelector>
-  <p-toggle-button
-    [options]="[
-      {
-        label: 'pie-chart',
-        iconPath: 'assets/icons/pie-chart.svg',
-      },
-      {
-        label: 'bars-chart',
-        iconPath: 'assets/icons/bar-chart.svg',
-      },
-      {
-        label: 'Prd. Fixa',
-        iconPath: 'assets/icons/column-chart.svg',
-      },
-      {
-        label: 'Prd. Totala',
-        iconPath: 'assets/icons/column-chart.svg',
-      },
-      {
-        label: 'dot-bar-chart',
-        iconPath: 'assets/icons/dot-bar-chart.svg',
-      },
-    ]"
-    [selected]="chartBasePaymentChange()"
+  <p-platform-toggle
+    [config]="{
+      type: 'sliding',
+      options: [
+        {
+          label: 'pie-chart',
+          iconPath: 'assets/icons/pie-chart.svg',
+        },
+        {
+          label: 'bars-chart',
+          iconPath: 'assets/icons/bar-chart.svg',
+        },
+        {
+          label: 'Prd. Fixa',
+          iconPath: 'assets/icons/column-chart.svg',
+        },
+        {
+          label: 'Prd. Totala',
+          iconPath: 'assets/icons/column-chart.svg',
+        },
+        {
+          label: 'dot-bar-chart',
+          iconPath: 'assets/icons/dot-bar-chart.svg',
+        },
+      ],
+      selected: chartBasePaymentChange(),
+      ariaLabel: 'Chart type',
+    }"
     (selectionChange)="onChartBasePaymentChange($event)"
   />
 </ng-template>

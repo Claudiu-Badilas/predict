@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { LoanStore } from 'src/app/modules/loan/stores/loan.store';
 import { HighchartWrapperComponent } from 'src/app/shared/components/highcharts-wrapper/highcharts-wrapper.component';
-import { ToggleButtonComponent } from 'src/app/shared/components/toggle-button/toggle-button.component';
+import { PlatformToggleComponent } from 'src/app/shared/components/platform-toggle/platform-toggle.component';
 import { Colors } from 'src/app/shared/styles/colors';
 import { CompareRatesTrendChartUtils } from '../../utils/charts/compare-loan-rates-trend.chart.util';
 import { InterestProgressChartBarUtils } from '../../utils/charts/interest-progress.bar-chart.util';
@@ -22,7 +22,7 @@ import { HistoricalInstalmentsTableComponent } from '../historical-instalments-t
     CommonModule,
     HighchartWrapperComponent,
     HistoricalInstalmentsTableComponent,
-    ToggleButtonComponent,
+    PlatformToggleComponent,
   ],
   templateUrl: './loan-detailed-body.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

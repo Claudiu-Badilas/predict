@@ -1,9 +1,13 @@
 <p-top-bar [hasFiltersContent]="true">
   <ng-container module-navigation>
     <div class="d-flex align-items-center justify-content-center">
-      <p-toggle-button-actions
-        [options]="['Overview', 'Detailed']"
-        [selected]="'Overview'"
+      <p-platform-toggle
+        [config]="{
+          type: 'tabs',
+          options: ['Overview', 'Detailed'],
+          selected: 'Overview',
+          ariaLabel: 'Loan view',
+        }"
         (selectionChange)="onSelectionChange($event)"
       />
     </div>
@@ -61,8 +65,12 @@
     <div class="pt-2 d-flex align-items-center justify-content-between">
       <div class="sidebar-label">Dobanda Fixa 5.79%</div>
       <div>
-        <p-foo-toggle
-          [toggle]="calculateRepaymentSchedules()"
+        <p-platform-toggle
+          [config]="{
+            type: 'switch',
+            value: calculateRepaymentSchedules(),
+            ariaLabel: 'Calculate repayment schedules',
+          }"
           (toggleChange)="onCalculateRepaymentSchedulesChanged($event)"
         />
       </div>
