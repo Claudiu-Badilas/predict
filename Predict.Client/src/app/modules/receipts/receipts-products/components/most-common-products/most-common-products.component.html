@@ -137,7 +137,20 @@
           [attr.aria-expanded]="expandedReceiptId() === receipt.id"
           [attr.aria-controls]="'receipt-details-' + receipt.id"
         >
-          <span class="receipt-mark" aria-hidden="true">
+          <span
+            class="receipt-mark"
+            [class.receipt-mark--lidl]="
+              providerBrand(receipt.provider) === 'lidl'
+            "
+            [class.receipt-mark--carrefour]="
+              providerBrand(receipt.provider) === 'carrefour'
+            "
+            [class.receipt-mark--kaufland]="
+              providerBrand(receipt.provider) === 'kaufland'
+            "
+            [style.--provider-hue]="providerHue(receipt.provider)"
+            aria-hidden="true"
+          >
             {{ providerInitial(receipt.provider) }}
           </span>
           <span class="receipt-copy">

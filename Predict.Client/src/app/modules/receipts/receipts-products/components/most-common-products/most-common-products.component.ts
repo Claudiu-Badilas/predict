@@ -149,6 +149,23 @@ export class MostCommonProductsComponent {
     return provider?.trim().charAt(0).toLocaleUpperCase() || 'R';
   }
 
+  providerHue(provider: string | null | undefined): number {
+    const normalized = provider?.trim().toLocaleLowerCase() || 'receipt';
+    let hash = 2166136261;
+    for (let index = 0; index < normalized.length; index++) {
+      hash = Math.imul(hash ^ normalized.charCodeAt(index), 16777619);
+    }
+    return (hash >>> 0) % 360;
+  }
+
+  providerBrand(provider: string | null | undefined): string | null {
+    const normalized = provider?.trim().toLocaleLowerCase() ?? '';
+    if (normalized.includes('lidl')) return 'lidl';
+    if (normalized.includes('carrefour')) return 'carrefour';
+    if (normalized.includes('kaufland')) return 'kaufland';
+    return null;
+  }
+
   productSummary(receipt: ReceiptDomain): string {
     const names = receipt.products
       .slice(0, 3)
