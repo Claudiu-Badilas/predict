@@ -1,11 +1,17 @@
 import { CommonModule } from '@angular/common';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
   HostListener,
+  inject,
   input,
   OnDestroy,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
   signal,
 } from '@angular/core';
 import { ReceiptDomain } from '../../models/receipts-domain.model';
@@ -26,6 +32,11 @@ interface ReceiptInsight {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReceiptInsightsComponent implements OnDestroy {
+  private readonly overlay = inject(Overlay);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  @ViewChild('storyOverlay', { static: true })
+  private storyOverlay!: TemplateRef<unknown>;
+
   receipts = input<ReceiptDomain[]>([]);
   startDate = input.required<Date>();
   endDate = input.required<Date>();
@@ -34,16 +45,34 @@ export class ReceiptInsightsComponent implements OnDestroy {
   activeStory = signal(0);
   insightStories = computed(() => this.createInsightStories(this.receipts()));
   private storyTimer: ReturnType<typeof setTimeout> | null = null;
+  private overlayRef: OverlayRef | null = null;
 
   openInsights(): void {
+    if (this.overlayRef?.hasAttached()) return;
     this.activeStory.set(0);
     this.showInsights.set(true);
+    this.overlayRef = this.overlay.create({
+      positionStrategy: this.overlay
+        .position()
+        .global()
+        .top('0')
+        .left('0')
+        .width('100vw')
+        .height('100dvh'),
+      scrollStrategy: this.overlay.scrollStrategies.block(),
+      panelClass: 'receipt-insights-overlay-pane',
+    });
+    this.overlayRef.attach(
+      new TemplatePortal(this.storyOverlay, this.viewContainerRef),
+    );
     this.scheduleNextStory();
   }
 
   closeInsights(): void {
     this.clearStoryTimer();
     this.showInsights.set(false);
+    this.overlayRef?.dispose();
+    this.overlayRef = null;
   }
 
   previousStory(): void {
@@ -63,6 +92,7 @@ export class ReceiptInsightsComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.clearStoryTimer();
+    this.overlayRef?.dispose();
   }
 
   @HostListener('document:keydown', ['$event'])

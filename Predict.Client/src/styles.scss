@@ -1,6 +1,11 @@
 @use './styles/themes';
 
+@import '@angular/cdk/overlay-prebuilt.css';
 @import 'bootstrap/dist/css/bootstrap.min.css';
+
+.cdk-overlay-container {
+  z-index: 2000;
+}
 
 .modal-backdrop {
   z-index: 1040 !important;
