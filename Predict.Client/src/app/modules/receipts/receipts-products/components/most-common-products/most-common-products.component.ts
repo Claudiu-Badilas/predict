@@ -43,6 +43,7 @@ export class MostCommonProductsComponent {
   viewMode = input<'all' | 'monthly' | 'yearly'>('monthly');
   sortMode = input<ReceiptSortMode>('newest');
   searchTerm = input('');
+  expandedPeriods = signal<Record<string, boolean>>({});
   expandedReceiptId = signal<number | null>(null);
 
   matchingProducts = computed(() => {
@@ -52,13 +53,30 @@ export class MostCommonProductsComponent {
       .filter(Boolean);
     if (!terms.length) return [];
 
-    return this.receipts().flatMap((receipt) =>
+    const matches = this.receipts().flatMap((receipt) =>
       receipt.products
         .filter((product) =>
           terms.some((term) => product.name.toLocaleLowerCase().includes(term)),
         )
         .map((product) => ({ product, receipt })),
     );
+
+    const mode = this.sortMode();
+    return matches.sort((first, second) => {
+      if (mode === 'amount-asc' || mode === 'amount-desc') {
+        const amountDifference =
+          (first.product.price ?? 0) * (first.product.quantity ?? 0) -
+          (second.product.price ?? 0) * (second.product.quantity ?? 0);
+        if (amountDifference !== 0) {
+          return mode === 'amount-asc' ? amountDifference : -amountDifference;
+        }
+      }
+
+      const dateDifference =
+        (second.receipt.date?.getTime() ?? 0) -
+        (first.receipt.date?.getTime() ?? 0);
+      return mode === 'oldest' ? -dateDifference : dateDifference;
+    });
   });
 
   matchingProductsTotal = computed(() =>
@@ -226,6 +244,17 @@ export class MostCommonProductsComponent {
           year: 'numeric',
         })
       : '';
+  }
+
+  isPeriodExpanded(periodId: string): boolean {
+    return this.expandedPeriods()[periodId] ?? false;
+  }
+
+  togglePeriod(periodId: string): void {
+    this.expandedPeriods.update((expanded) => ({
+      ...expanded,
+      [periodId]: !expanded[periodId],
+    }));
   }
 
   private sortReceipts(receipts: ReceiptDomain[]): ReceiptDomain[] {

@@ -402,6 +402,15 @@
   color: inherit;
   font: inherit;
   text-align: left;
+  cursor: pointer;
+}
+
+.period-header:hover {
+  background: color-mix(
+    in srgb,
+    var(--receipt-accent) 10%,
+    var(--receipt-surface)
+  );
 }
 
 .period-title {
@@ -416,17 +425,6 @@
   font-variant-numeric: tabular-nums;
   text-align: right;
   white-space: nowrap;
-}
-
-.period-chevron {
-  width: 16px;
-  height: 16px;
-  color: var(--receipt-muted);
-  transition: transform 0.16s ease;
-}
-
-.period-chevron--expanded {
-  transform: rotate(180deg);
 }
 
 .period-content {
